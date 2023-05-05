@@ -4,7 +4,7 @@
 	#ifdef EC_BUILD_DLL
 		#define ECLIPSE_API _declspec(dllexport)
 	#else
-		#define ECLIPSE_API _declspec(dllexport)
+		#define ECLIPSE_API _declspec(dllimport)
 	#endif
 #else
 	#error Eclipse only supports Windows!
