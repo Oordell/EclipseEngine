@@ -1,0 +1,12 @@
+#pragma once
+
+#include "eclipse/Core.h"
+
+namespace eclipse {
+
+	struct ECLIPSE_API MouseScrollOffset {
+		float x{ 0.0 };
+		float y{ 0.0 };
+	};
+
+}

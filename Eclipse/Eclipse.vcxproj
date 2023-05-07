@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EC_PLATFORM_WINDOWS;EC_BUILD_DLL;EC_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -100,7 +100,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EC_PLATFORM_WINDOWS;EC_BUILD_DLL;EC_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -125,7 +125,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EC_PLATFORM_WINDOWS;EC_BUILD_DLL;EC_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -150,7 +150,15 @@
     <ClInclude Include="src\eclipse\Application.h" />
     <ClInclude Include="src\eclipse\Core.h" />
     <ClInclude Include="src\eclipse\EntryPoint.h" />
+    <ClInclude Include="src\eclipse\Events\ApplicationEvents.h" />
+    <ClInclude Include="src\eclipse\Events\Event.h" />
+    <ClInclude Include="src\eclipse\Events\KeyEvents.h" />
+    <ClInclude Include="src\eclipse\Events\MouseEvents.h" />
+    <ClInclude Include="src\eclipse\Events\WindowEvents.h" />
     <ClInclude Include="src\eclipse\Log.h" />
+    <ClInclude Include="src\eclipse\Utils\Point2D.h" />
+    <ClInclude Include="src\eclipse\Utils\MouseScrollOffset.h" />
+    <ClInclude Include="src\eclipse\Utils\WindowSize.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\Application.cpp" />
