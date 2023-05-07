@@ -2,8 +2,6 @@
 
 #include "eclipse/Events/Event.h"
 
-#include <sstream>
-
 namespace eclipse {
 
 	class ECLIPSE_API AppTickEvent : public Event {

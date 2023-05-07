@@ -1,3 +1,4 @@
+#include "ecpch.h"
 #include "Application.h"
 
 #include "Log.h"

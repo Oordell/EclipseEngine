@@ -2,8 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
 namespace eclipse {
 
 	class ECLIPSE_API KeyEvent : public Event {

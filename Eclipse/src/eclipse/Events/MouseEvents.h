@@ -4,8 +4,6 @@
 #include "eclipse/Utils/Point2D.h"
 #include "eclipse/Utils/MouseScrollOffset.h"
 
-#include <sstream>
-
 namespace eclipse {
 
 	class ECLIPSE_API MouseMovedEvent : public Event {

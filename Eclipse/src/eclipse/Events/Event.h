@@ -2,8 +2,6 @@
 
 #include "eclipse/Core.h"
 
-#include <string>
-
 namespace eclipse {
 
 	enum class EventType {

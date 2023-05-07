@@ -7,8 +7,8 @@
     <Filter Include="eclipse\Events">
       <UniqueIdentifier>{4E0A2492-3AD8-1798-236C-88BE0FD9F3FC}</UniqueIdentifier>
     </Filter>
-    <Filter Include="eclipse\Events\KeyEvent">
-      <UniqueIdentifier>{28D7C6F7-940E-0F8F-9D18-73B209CF3588}</UniqueIdentifier>
+    <Filter Include="eclipse\Utils">
+      <UniqueIdentifier>{8A3AAD81-F6FA-28B8-BF35-72352BB56D94}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -22,15 +22,34 @@
     <ClInclude Include="src\eclipse\EntryPoint.h">
       <Filter>eclipse</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\Events\ApplicationEvents.h">
+      <Filter>eclipse\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\Events\Event.h">
       <Filter>eclipse\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\Events\KeyEvent\KeyEvents.h">
-      <Filter>eclipse\Events\KeyEvent</Filter>
+    <ClInclude Include="src\eclipse\Events\KeyEvents.h">
+      <Filter>eclipse\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\Events\MouseEvents.h">
+      <Filter>eclipse\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\Events\WindowEvents.h">
+      <Filter>eclipse\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\Log.h">
       <Filter>eclipse</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\Utils\MouseScrollOffset.h">
+      <Filter>eclipse\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\Utils\Point2D.h">
+      <Filter>eclipse\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\Utils\WindowSize.h">
+      <Filter>eclipse\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ecpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\Application.cpp">
@@ -39,5 +58,6 @@
     <ClCompile Include="src\eclipse\Log.cpp">
       <Filter>eclipse</Filter>
     </ClCompile>
+    <ClCompile Include="src\ecpch.cpp" />
   </ItemGroup>
 </Project>

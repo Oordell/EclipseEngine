@@ -3,8 +3,6 @@
 #include "eclipse/Events/Event.h"
 #include "eclipse/Utils/WindowSize.h"
 
-#include <sstream>
-
 namespace eclipse {
 
 	class ECLIPSE_API WindowResizeEvent : public Event {
