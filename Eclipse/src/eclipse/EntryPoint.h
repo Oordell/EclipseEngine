@@ -7,7 +7,6 @@ extern eclipse::Application* eclipse::create_application();
 int main(int argc, char** argv) {
 	eclipse::Log::init();
 	EC_CORE_WARN("Initialized Log!");
-	EC_DEBUG("Hello");
 
 	EC_TRACE("Trace");
 	EC_DEBUG("Debug");
