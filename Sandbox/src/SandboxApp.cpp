@@ -6,6 +6,6 @@ public:
 	~Sandbox() {}
 };
 
-eclipse::Application* eclipse::create_application() {
+eclipse::Application *eclipse::create_application() {
 	return new Sandbox();
 }

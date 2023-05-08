@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ecpch.h"
 #include "eclipse/Core.h"
 
 namespace eclipse {
@@ -31,12 +32,12 @@ namespace eclipse {
 	};
 
 	enum EventCategory : int {
-		None = 0,
-		Application = BIT(0),
-		Input = BIT(1),
-		Keyboard = BIT(1),
-		Mouse = BIT(1),
-		MouseButton = BIT(1)
+		EventCategoryNone = 0,
+		EventCategoryApplication = BIT(0),
+		EventCategoryInput = BIT(1),
+		EventCategoryKeyboard = BIT(1),
+		EventCategoryMouse = BIT(1),
+		EventCategoryMouseButton = BIT(1)
 	};
 
 #define EVENT_CLASS_TYPE(type) static EventType get_static_type() { return EventType::##type; }\
