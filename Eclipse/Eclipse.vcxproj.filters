@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
+    </Filter>
     <Filter Include="eclipse">
       <UniqueIdentifier>{AA214651-1601-C5EC-1F19-50C38B772B4E}</UniqueIdentifier>
     </Filter>
@@ -13,6 +19,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Eclipse.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\Application.h">
       <Filter>eclipse</Filter>
     </ClInclude>
@@ -49,9 +58,15 @@
     <ClInclude Include="src\eclipse\Utils\WindowSize.h">
       <Filter>eclipse\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\Window.h">
+      <Filter>eclipse</Filter>
+    </ClInclude>
     <ClInclude Include="src\ecpch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
     <ClCompile Include="src\eclipse\Application.cpp">
       <Filter>eclipse</Filter>
     </ClCompile>

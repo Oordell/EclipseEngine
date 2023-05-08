@@ -9,7 +9,7 @@ namespace eclipse {
 		AppTickEvent() {}
 
 		EVENT_CLASS_TYPE(AppTick)
-		EVENT_CLASS_CATEGORY(Application)
+		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
 	class ECLIPSE_API AppUpdateEvent : public Event {
@@ -17,7 +17,7 @@ namespace eclipse {
 		AppUpdateEvent() {}
 
 		EVENT_CLASS_TYPE(AppUpdate)
-		EVENT_CLASS_CATEGORY(Application)
+		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
 	class ECLIPSE_API AppRendereEvent : public Event {
@@ -25,6 +25,6 @@ namespace eclipse {
 		AppRendereEvent() {}
 
 		EVENT_CLASS_TYPE(AppRendere)
-		EVENT_CLASS_CATEGORY(Application)
+		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 }

@@ -13,7 +13,7 @@ namespace eclipse {
 		inline float get_x() const { return pose_.x; }
 		inline float get_y() const { return pose_.y; }
 
-		EVENT_CLASS_CATEGORY(Mouse | Input)
+		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 		EVENT_CLASS_TYPE(MouseMoved)
 
 		std::string to_string() const override {
@@ -33,7 +33,7 @@ namespace eclipse {
 		inline float get_x_offset() const { return offset_.x; }
 		inline float get_y_offset() const { return offset_.y; }
 
-		EVENT_CLASS_CATEGORY(Mouse | Input)
+		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 		EVENT_CLASS_TYPE(MouseScrolled)
 
 		std::string to_string() const override {
@@ -50,7 +50,7 @@ namespace eclipse {
 	public:
 		inline int get_mouse_button() const { return button; }
 
-		EVENT_CLASS_CATEGORY(Mouse | Input)
+		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 
 	protected:
 		explicit MouseButtonEvent(int button) : button(button) {}

@@ -11,7 +11,7 @@ namespace eclipse {
 
 		inline int get_key_code() const { return key_code; }
 
-		EVENT_CLASS_CATEGORY(Keyboard | Input)
+		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 
 	protected:
 		explicit KeyEvent(int keycode) : key_code(keycode) {}
