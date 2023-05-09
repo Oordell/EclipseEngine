@@ -35,4 +35,7 @@
 bin/
 bin-int/
 
+**/bin/
+**/bin-int/
+
 *.user
