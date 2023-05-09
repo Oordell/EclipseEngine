@@ -23,6 +23,7 @@ namespace eclipse {
     private:
         virtual void init(const WindowProps& props);
         virtual void shutdown();
+        void set_glfw_callbacks();
 
         GLFWwindow* window_;
 

@@ -59,7 +59,6 @@ namespace eclipse {
 			return static_cast<bool>(get_category_flags() & category);
 		}
 
-	protected:
 		bool handled{ false };
 	};
 
