@@ -11,9 +11,9 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
-IncludeDir["GLFW"] = "Eclipse/vendor/GLFW/include"
+IncludeDir["GLFW"] = "Eclipse/vendor/GLFW_fork/include"
 
-include "Eclipse/vendor/GLFW"
+include "Eclipse/vendor/GLFW_fork"
 
 project "Eclipse"
 	location "Eclipse"

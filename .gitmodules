@@ -1,3 +1,6 @@
 [submodule "Eclipse/vendor/spdlog"]
 	path = Eclipse/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "GLFW_fork"]
+	path = Eclipse/vendor/GLFW_fork
+	url = https://github.com/Oordell/glfw
