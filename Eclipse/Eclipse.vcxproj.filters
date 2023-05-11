@@ -46,6 +46,12 @@
     <ClInclude Include="src\eclipse\Events\WindowEvents.h">
       <Filter>eclipse\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\Layer.h">
+      <Filter>eclipse</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\LayerStack.h">
+      <Filter>eclipse</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\Log.h">
       <Filter>eclipse</Filter>
     </ClInclude>
@@ -62,8 +68,6 @@
       <Filter>eclipse</Filter>
     </ClInclude>
     <ClInclude Include="src\ecpch.h" />
-    <ClInclude Include="src\eclipse\Layer.h" />
-    <ClInclude Include="src\eclipse\LayerStack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
@@ -72,11 +76,15 @@
     <ClCompile Include="src\eclipse\Application.cpp">
       <Filter>eclipse</Filter>
     </ClCompile>
+    <ClCompile Include="src\eclipse\Layer.cpp">
+      <Filter>eclipse</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\LayerStack.cpp">
+      <Filter>eclipse</Filter>
+    </ClCompile>
     <ClCompile Include="src\eclipse\Log.cpp">
       <Filter>eclipse</Filter>
     </ClCompile>
     <ClCompile Include="src\ecpch.cpp" />
-    <ClCompile Include="src\eclipse\Layer.cpp" />
-    <ClCompile Include="src\eclipse\LayerStack.cpp" />
   </ItemGroup>
 </Project>

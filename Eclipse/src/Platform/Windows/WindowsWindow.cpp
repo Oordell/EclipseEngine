@@ -5,6 +5,7 @@
 #include "eclipse/Events/ApplicationEvents.h"
 #include "eclipse/Events/KeyEvents.h"
 #include "eclipse/Events/MouseEvents.h"
+#include <glad/glad.h>
 
 namespace eclipse {
 
@@ -40,6 +41,8 @@ namespace eclipse {
 
 		window_ = glfwCreateWindow(static_cast<int>(props.window_size.width), static_cast<int>(props.window_size.height), data_.props.title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(window_);
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		EC_CORE_ASSERT(status, "Failed to initialize Glad!")
 		glfwSetWindowUserPointer(window_, &data_);
 		set_v_sync(true);
 

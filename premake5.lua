@@ -12,8 +12,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "Eclipse/vendor/GLFW_fork/include"
+IncludeDir["Glad"] = "Eclipse/vendor/GLAD/include"
 
 include "Eclipse/vendor/GLFW_fork"
+include "Eclipse/vendor/Glad"
 
 project "Eclipse"
 	location "Eclipse"
@@ -34,11 +36,13 @@ project "Eclipse"
 	includedirs {
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}"
 	}
 
 	links {
 		"GLFW",
+		"Glad",
 		"user32.lib",
 		"gdi32.lib",
 		"opengl32.lib"
@@ -51,8 +55,9 @@ project "Eclipse"
 
 		defines {
 			"EC_PLATFORM_WINDOWS",
-			"EC_BUILD_DLL"
-			--"EC_ENABLE_ASSERTS"
+			"EC_BUILD_DLL",
+			"EC_ENABLE_ASSERTS",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands {
