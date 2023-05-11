@@ -18,12 +18,32 @@ namespace eclipse {
 		dispatcher.dispatch<WindowClosedEvent>(BIND_EVENT_FN(on_window_closed));
 
 		EC_CORE_INFO("{0}", e);
+
+		for (auto it = layer_stack_.end(); it != layer_stack_.begin(); ) {
+			(*--it)->on_event(e);
+			if (e.handled) {
+				break;
+			}
+		}
+	}
+
+	void Application::push_layer(Layer* layer) {
+		layer_stack_.push_layer(layer);
+	}
+
+	void Application::push_overlay(Layer* overlay) {
+		layer_stack_.push_overlay(overlay);
 	}
 
 	void Application::run() {
 		while (running_) {
 			glClearColor(1, 0, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			for (Layer* layer : layer_stack_) {
+				layer->on_update();
+			}
+
 			window_->on_update();
 		}
 	};

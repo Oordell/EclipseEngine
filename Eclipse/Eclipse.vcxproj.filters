@@ -62,6 +62,8 @@
       <Filter>eclipse</Filter>
     </ClInclude>
     <ClInclude Include="src\ecpch.h" />
+    <ClInclude Include="src\eclipse\Layer.h" />
+    <ClInclude Include="src\eclipse\LayerStack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
@@ -74,5 +76,7 @@
       <Filter>eclipse</Filter>
     </ClCompile>
     <ClCompile Include="src\ecpch.cpp" />
+    <ClCompile Include="src\eclipse\Layer.cpp" />
+    <ClCompile Include="src\eclipse\LayerStack.cpp" />
   </ItemGroup>
 </Project>

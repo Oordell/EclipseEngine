@@ -155,6 +155,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\eclipse\LayerStack.h" />
+    <ClInclude Include="src\eclipse\Layer.h" />
     <ClInclude Include="src\Eclipse.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\eclipse\Application.h" />
@@ -173,6 +175,8 @@
     <ClInclude Include="src\ecpch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\eclipse\LayerStack.cpp" />
+    <ClCompile Include="src\eclipse\Layer.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\eclipse\Application.cpp" />
     <ClCompile Include="src\eclipse\Log.cpp" />
