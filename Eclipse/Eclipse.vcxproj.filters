@@ -68,6 +68,8 @@
       <Filter>eclipse</Filter>
     </ClInclude>
     <ClInclude Include="src\ecpch.h" />
+    <ClInclude Include="src\eclipse\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
@@ -86,5 +88,7 @@
       <Filter>eclipse</Filter>
     </ClCompile>
     <ClCompile Include="src\ecpch.cpp" />
+    <ClCompile Include="src\eclipse\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
   </ItemGroup>
 </Project>

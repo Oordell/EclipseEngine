@@ -7,7 +7,11 @@ namespace eclipse {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
+	Application* Application::instance_ = nullptr;
+
 	Application::Application() {
+		EC_CORE_ASSERT(!instance_, "Application already exists!");
+		instance_ = this;
 		window_->set_event_callback(BIND_EVENT_FN(on_event));
 	};
 
@@ -29,10 +33,12 @@ namespace eclipse {
 
 	void Application::push_layer(Layer* layer) {
 		layer_stack_.push_layer(layer);
+		layer->on_attach();
 	}
 
 	void Application::push_overlay(Layer* overlay) {
 		layer_stack_.push_overlay(overlay);
+		overlay->on_attach();
 	}
 
 	void Application::run() {

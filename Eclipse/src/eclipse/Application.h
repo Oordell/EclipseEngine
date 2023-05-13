@@ -20,11 +20,17 @@ namespace eclipse {
 		void on_event(Event& e);
 
 		void push_layer(Layer* layer);
+
 		void push_overlay(Layer* overlay);
+
+		inline Window& get_window() { return *window_; }
+
+		inline static Application& get() { return *instance_; }
 
 	private:
 		bool on_window_closed(WindowClosedEvent& e);
 
+		static Application* instance_;
 		std::unique_ptr<Window> window_ = std::unique_ptr<Window>(Window::create());
 		bool running_ = true;
 		LayerStack layer_stack_;
