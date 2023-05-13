@@ -13,9 +13,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "Eclipse/vendor/GLFW_fork/include"
 IncludeDir["Glad"] = "Eclipse/vendor/GLAD/include"
+IncludeDir["ImGui"] = "Eclipse/vendor/imgui"
 
 include "Eclipse/vendor/GLFW_fork"
 include "Eclipse/vendor/Glad"
+include "Eclipse/vendor/imgui"
 
 project "Eclipse"
 	location "Eclipse"
@@ -37,12 +39,14 @@ project "Eclipse"
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.Glad}"
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGui}"
 	}
 
 	links {
 		"GLFW",
 		"Glad",
+		"ImGui",
 		"user32.lib",
 		"gdi32.lib",
 		"opengl32.lib"
