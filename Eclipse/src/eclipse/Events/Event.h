@@ -23,6 +23,7 @@ namespace eclipse {
 		// Keys
 		KeyPressed,
 		KeyReleased,
+		KeyTyped,
 
 		// Mouse
 		MouseButtonPressed,

@@ -57,4 +57,18 @@ namespace eclipse {
 		}
 	};
 
+	class ECLIPSE_API KeyTypedEvent : public KeyEvent {
+	public:
+		KeyTypedEvent(int keycode) : KeyEvent(keycode) {}
+		~KeyTypedEvent() override = default;
+
+		EVENT_CLASS_TYPE(KeyTyped)
+
+		std::string to_string() const override {
+			std::stringstream ss;
+			ss << "KeyTypedEvent. Code: " << key_code;
+			return ss.str();
+		}
+	};
+
 }
