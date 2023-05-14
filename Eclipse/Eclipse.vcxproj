@@ -156,7 +156,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Eclipse.h" />
-    <ClInclude Include="src\eclipse\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\eclipse\Application.h" />
@@ -167,20 +166,21 @@
     <ClInclude Include="src\eclipse\Events\KeyEvents.h" />
     <ClInclude Include="src\eclipse\Events\MouseEvents.h" />
     <ClInclude Include="src\eclipse\Events\WindowEvents.h" />
+    <ClInclude Include="src\eclipse\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\eclipse\Layer.h" />
     <ClInclude Include="src\eclipse\LayerStack.h" />
     <ClInclude Include="src\eclipse\Log.h" />
-    <ClInclude Include="src\eclipse\Utils\MouseScrollOffset.h" />
-    <ClInclude Include="src\eclipse\Utils\Point2D.h" />
-    <ClInclude Include="src\eclipse\Utils\WindowSize.h" />
+    <ClInclude Include="src\eclipse\CommonTypes\MouseScrollOffset.h" />
+    <ClInclude Include="src\eclipse\CommonTypes\Point2D.h" />
+    <ClInclude Include="src\eclipse\CommonTypes\WindowSize.h" />
     <ClInclude Include="src\eclipse\Window.h" />
     <ClInclude Include="src\ecpch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\eclipse\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\eclipse\Application.cpp" />
+    <ClCompile Include="src\eclipse\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\eclipse\Layer.cpp" />
     <ClCompile Include="src\eclipse\LayerStack.cpp" />
     <ClCompile Include="src\eclipse\Log.cpp" />

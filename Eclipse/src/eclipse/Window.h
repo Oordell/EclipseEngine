@@ -4,7 +4,7 @@
 
 #include "eclipse/Core.h"
 #include "eclipse/Events/Event.h"
-#include "eclipse/Utils/WindowSize.h"
+#include "eclipse/CommonTypes/WindowSize.h"
 
 namespace eclipse {
 

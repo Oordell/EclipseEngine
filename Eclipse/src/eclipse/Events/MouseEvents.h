@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Event.h"
-#include "eclipse/Utils/Point2D.h"
-#include "eclipse/Utils/MouseScrollOffset.h"
+#include "eclipse/CommonTypes/Point2D.h"
+#include "eclipse/CommonTypes/MouseScrollOffset.h"
 
 namespace eclipse {
 
