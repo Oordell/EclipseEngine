@@ -6,7 +6,7 @@ public:
 	~ExampleLayer() = default;
 
 	void on_update() override {
-		EC_INFO("ExampleLayer::on_update");
+		EC_INFO_THROTTLED(0.1, "ExampleLayer::on_update");
 	}
 
 	void on_event(eclipse::Event& event) {
