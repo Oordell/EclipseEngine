@@ -1,7 +1,7 @@
 #pragma once
 
-#include "eclipse/Events/Event.h"
-#include "eclipse/CommonTypes/WindowSize.h"
+#include "eclipse/events/event.h"
+#include "eclipse/common_types/window_size.h"
 
 namespace eclipse {
 

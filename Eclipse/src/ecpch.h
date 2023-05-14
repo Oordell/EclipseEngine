@@ -12,7 +12,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "eclipse/Log.h"
+#include "eclipse/log.h"
 
 #ifdef EC_PLATFORM_WINDOWS
 #include <Windows.h>

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "eclipse/Core.h"
-#include "Layer.h"
+#include "eclipse/core.h"
+#include "layer.h"
 
 #include <vector>
 

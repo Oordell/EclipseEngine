@@ -1,10 +1,10 @@
 #include "ecpch.h"
-#include "ImGuiLayer.h"
+#include "imgui_layer.h"
 
 #include "imgui.h"
 #include "GLFW/glfw3.h"
-#include "Platform/OpenGL/ImGuiOpenGLRenderer.h"
-#include "eclipse/Application.h"
+#include "platform/opengl/imgui_opengl_renderer.h"
+#include "eclipse/application.h"
 
 namespace eclipse {
 

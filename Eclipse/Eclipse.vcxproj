@@ -155,38 +155,38 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Eclipse.h" />
-    <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
-    <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
-    <ClInclude Include="src\eclipse\Application.h" />
-    <ClInclude Include="src\eclipse\Core.h" />
-    <ClInclude Include="src\eclipse\EntryPoint.h" />
-    <ClInclude Include="src\eclipse\Events\ApplicationEvents.h" />
-    <ClInclude Include="src\eclipse\Events\Event.h" />
-    <ClInclude Include="src\eclipse\Events\KeyEvents.h" />
-    <ClInclude Include="src\eclipse\Events\MouseEvents.h" />
-    <ClInclude Include="src\eclipse\Events\WindowEvents.h" />
-    <ClInclude Include="src\eclipse\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\eclipse\Layer.h" />
-    <ClInclude Include="src\eclipse\LayerStack.h" />
-    <ClInclude Include="src\eclipse\Log.h" />
-    <ClInclude Include="src\eclipse\CommonTypes\MouseScrollOffset.h" />
-    <ClInclude Include="src\eclipse\CommonTypes\Point2D.h" />
-    <ClInclude Include="src\eclipse\CommonTypes\WindowSize.h" />
-    <ClInclude Include="src\eclipse\Window.h" />
+    <ClInclude Include="src\eclipse.h" />
+    <ClInclude Include="src\eclipse\application.h" />
+    <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h" />
+    <ClInclude Include="src\eclipse\common_types\point_2d.h" />
+    <ClInclude Include="src\eclipse\common_types\window_size.h" />
+    <ClInclude Include="src\eclipse\core.h" />
+    <ClInclude Include="src\eclipse\entry_point.h" />
+    <ClInclude Include="src\eclipse\events\application_events.h" />
+    <ClInclude Include="src\eclipse\events\event.h" />
+    <ClInclude Include="src\eclipse\events\key_events.h" />
+    <ClInclude Include="src\eclipse\events\mouse_events.h" />
+    <ClInclude Include="src\eclipse\events\window_events.h" />
+    <ClInclude Include="src\eclipse\imgui\imgui_layer.h" />
+    <ClInclude Include="src\eclipse\layer.h" />
+    <ClInclude Include="src\eclipse\layer_stack.h" />
+    <ClInclude Include="src\eclipse\log.h" />
+    <ClInclude Include="src\eclipse\window.h" />
     <ClInclude Include="src\ecpch.h" />
+    <ClInclude Include="src\platform\opengl\imgui_opengl_renderer.h" />
+    <ClInclude Include="src\platform\windows\windows_window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
-    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
-    <ClCompile Include="src\eclipse\Application.cpp" />
-    <ClCompile Include="src\eclipse\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\eclipse\Layer.cpp" />
-    <ClCompile Include="src\eclipse\LayerStack.cpp" />
-    <ClCompile Include="src\eclipse\Log.cpp" />
+    <ClCompile Include="src\eclipse\application.cpp" />
+    <ClCompile Include="src\eclipse\imgui\imgui_layer.cpp" />
+    <ClCompile Include="src\eclipse\layer.cpp" />
+    <ClCompile Include="src\eclipse\layer_stack.cpp" />
+    <ClCompile Include="src\eclipse\log.cpp" />
     <ClCompile Include="src\ecpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\platform\opengl\imgui_opengl_renderer.cpp" />
+    <ClCompile Include="src\platform\windows\windows_window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW_fork\GLFW.vcxproj">

@@ -1,5 +1,5 @@
 #include "ecpch.h"
-#include "LayerStack.h"
+#include "layer_stack.h"
 
 namespace eclipse {
 

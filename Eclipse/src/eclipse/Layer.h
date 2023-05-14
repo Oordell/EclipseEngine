@@ -1,7 +1,7 @@
 #pragma once
 
-#include "eclipse/Core.h"
-#include "eclipse/Events/Event.h"
+#include "eclipse/core.h"
+#include "eclipse/events/event.h"
 
 namespace eclipse {
 

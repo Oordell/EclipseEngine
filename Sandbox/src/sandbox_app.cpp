@@ -1,4 +1,4 @@
-#include <Eclipse.h>
+#include <eclipse.h>
 
 class ExampleLayer : public eclipse::Layer {
 public:
