@@ -13,6 +13,9 @@
     <Filter Include="eclipse\imgui">
       <UniqueIdentifier>{94461383-0007-8FB9-C941-D83635C1D395}</UniqueIdentifier>
     </Filter>
+    <Filter Include="eclipse\layer">
+      <UniqueIdentifier>{16464383-8206-BFB9-4B41-0837B7C00396}</UniqueIdentifier>
+    </Filter>
     <Filter Include="platform">
       <UniqueIdentifier>{4A63C33C-3630-1E48-5F49-0CF04B7553D6}</UniqueIdentifier>
     </Filter>
@@ -61,11 +64,11 @@
     <ClInclude Include="src\eclipse\imgui\imgui_layer.h">
       <Filter>eclipse\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\layer.h">
-      <Filter>eclipse</Filter>
+    <ClInclude Include="src\eclipse\layer\layer.h">
+      <Filter>eclipse\layer</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\layer_stack.h">
-      <Filter>eclipse</Filter>
+    <ClInclude Include="src\eclipse\layer\layer_stack.h">
+      <Filter>eclipse\layer</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\log.h">
       <Filter>eclipse</Filter>
@@ -88,11 +91,11 @@
     <ClCompile Include="src\eclipse\imgui\imgui_layer.cpp">
       <Filter>eclipse\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\eclipse\layer.cpp">
-      <Filter>eclipse</Filter>
+    <ClCompile Include="src\eclipse\layer\layer.cpp">
+      <Filter>eclipse\layer</Filter>
     </ClCompile>
-    <ClCompile Include="src\eclipse\layer_stack.cpp">
-      <Filter>eclipse</Filter>
+    <ClCompile Include="src\eclipse\layer\layer_stack.cpp">
+      <Filter>eclipse\layer</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\log.cpp">
       <Filter>eclipse</Filter>
