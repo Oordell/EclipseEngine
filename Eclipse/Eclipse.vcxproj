@@ -165,12 +165,14 @@
     <ClInclude Include="src\eclipse\events\mouse_events.h" />
     <ClInclude Include="src\eclipse\events\window_events.h" />
     <ClInclude Include="src\eclipse\imgui\imgui_layer.h" />
+    <ClInclude Include="src\eclipse\input_manager.h" />
     <ClInclude Include="src\eclipse\layer\layer.h" />
     <ClInclude Include="src\eclipse\layer\layer_stack.h" />
     <ClInclude Include="src\eclipse\log.h" />
     <ClInclude Include="src\eclipse\window.h" />
     <ClInclude Include="src\ecpch.h" />
     <ClInclude Include="src\platform\opengl\imgui_opengl_renderer.h" />
+    <ClInclude Include="src\platform\windows\windows_input.h" />
     <ClInclude Include="src\platform\windows\windows_window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +185,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\platform\opengl\imgui_opengl_renderer.cpp" />
+    <ClCompile Include="src\platform\windows\windows_input.cpp" />
     <ClCompile Include="src\platform\windows\windows_window.cpp" />
   </ItemGroup>
   <ItemGroup>

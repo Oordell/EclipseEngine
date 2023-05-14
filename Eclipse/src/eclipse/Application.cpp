@@ -3,6 +3,8 @@
 
 #include <glad/glad.h>
 
+#include "input_manager.h"
+
 namespace eclipse {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -49,6 +51,9 @@ namespace eclipse {
 			for (Layer* layer : layer_stack_) {
 				layer->on_update();
 			}
+			
+			auto [x_pose, y_pose] = InputManager::get_mouse_pose();
+			EC_CORE_TRACE("{0}, {1}", x_pose, y_pose);
 
 			window_->on_update();
 		}

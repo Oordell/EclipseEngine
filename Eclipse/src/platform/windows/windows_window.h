@@ -20,6 +20,8 @@ namespace eclipse {
         void set_v_sync(bool enabled) override;
         bool is_v_sync() const override;
 
+        inline void* get_native_window() const override { return window_; }
+
     private:
         virtual void init(const WindowProps& props);
         virtual void shutdown();

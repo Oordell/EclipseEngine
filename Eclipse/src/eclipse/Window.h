@@ -25,6 +25,7 @@ namespace eclipse {
 		virtual void set_event_callback(const EventCallbackfn& callback) = 0;
 		virtual void set_v_sync(bool enabled) = 0;
 		virtual bool is_v_sync() const = 0;
+		virtual void* get_native_window() const = 0;
 
 		static Window* create(const WindowProps& props = {});
 	};
