@@ -10,6 +10,10 @@
 	#error Eclipse only supports Windows!
 #endif
 
+#ifdef EC_DEBUG
+	#define EC_ENABLE_ASSERTS
+#endif
+
 #ifdef EC_ENABLE_ASSERTS
 	#define EC_ASSERT(x, ...) { if(!(x)) { EC_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 	#define EC_CORE_ASSERT(x, ...) { if (!(x)) { EC_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }

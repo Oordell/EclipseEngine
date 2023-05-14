@@ -1,5 +1,6 @@
 workspace "Eclipse"
 	architecture "x64"
+	startproject "Sandbox"
 
 	configurations {
 		"Debug",
@@ -15,14 +16,17 @@ IncludeDir["GLFW"] = "Eclipse/vendor/GLFW_fork/include"
 IncludeDir["Glad"] = "Eclipse/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Eclipse/vendor/imgui"
 
-include "Eclipse/vendor/GLFW_fork"
-include "Eclipse/vendor/Glad"
-include "Eclipse/vendor/imgui"
+group "Dependencies"
+	include "Eclipse/vendor/GLFW_fork"
+	include "Eclipse/vendor/Glad"
+	include "Eclipse/vendor/imgui"
+group ""
 
 project "Eclipse"
 	location "Eclipse"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -54,33 +58,31 @@ project "Eclipse"
 
 	filter "system:windows"
 		cppdialect "C++20"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines {
 			"EC_PLATFORM_WINDOWS",
 			"EC_BUILD_DLL",
-			"EC_ENABLE_ASSERTS",
 			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands {
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox" )
+			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"" )
 		}
 
 	filter "configurations:Debug"
 		defines "EC_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "EC_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "EC_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 
@@ -88,6 +90,7 @@ project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -108,7 +111,6 @@ project "Sandbox"
 
 	filter "system:windows"
 		cppdialect "C++20"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines {
@@ -117,15 +119,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "EC_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "EC_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "EC_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
