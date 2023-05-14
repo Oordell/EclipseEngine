@@ -1,6 +1,6 @@
 #pragma once
 
-#include "eclipse/Layer.h"
+#include "eclipse/layer/layer.h"
 
 namespace eclipse {
 

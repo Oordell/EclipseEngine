@@ -1,10 +1,10 @@
 #include "ecpch.h"
-#include "WindowsWindow.h"
-#include "eclipse/Core.h"
-#include "eclipse/Events/WindowEvents.h"
-#include "eclipse/Events/ApplicationEvents.h"
-#include "eclipse/Events/KeyEvents.h"
-#include "eclipse/Events/MouseEvents.h"
+#include "windows_window.h"
+#include "eclipse/core.h"
+#include "eclipse/events/window_events.h"
+#include "eclipse/events/application_events.h"
+#include "eclipse/events/key_events.h"
+#include "eclipse/events/mouse_events.h"
 #include <glad/glad.h>
 
 namespace eclipse {

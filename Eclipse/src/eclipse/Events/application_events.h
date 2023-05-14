@@ -1,6 +1,6 @@
 #pragma once
 
-#include "eclipse/Events/Event.h"
+#include "eclipse/events/event.h"
 
 namespace eclipse {
 

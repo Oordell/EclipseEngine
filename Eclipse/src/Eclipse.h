@@ -2,11 +2,11 @@
 
 // For use by Eclipse applications
 
-#include "eclipse/Application.h"
-#include "eclipse/Layer.h"
-#include "eclipse/Log.h"
-#include "Eclipse/ImGui/ImGuiLayer.h"
+#include "eclipse/application.h"
+#include "eclipse/layer/layer.h"
+#include "eclipse/log.h"
+#include "Eclipse/imgui/imgui_layer.h"
 
 // ********* Entry point ************
-#include "eclipse/EntryPoint.h"
+#include "eclipse/entry_point.h"
 // **********************************

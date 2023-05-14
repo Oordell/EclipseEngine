@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Core.h"
-#include "Window.h"
-#include "eclipse/LayerStack.h"
-#include "Events/Event.h"
-#include "Events/WindowEvents.h"
+#include "core.h"
+#include "window.h"
+#include "eclipse/layer/layer_stack.h"
+#include "events/event.h"
+#include "events/window_events.h"
 
 #include <memory>
 

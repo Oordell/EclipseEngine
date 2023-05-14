@@ -1,94 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Platform">
-      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Platform\Windows">
-      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
-    </Filter>
     <Filter Include="eclipse">
       <UniqueIdentifier>{AA214651-1601-C5EC-1F19-50C38B772B4E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="eclipse\Events">
-      <UniqueIdentifier>{4E0A2492-3AD8-1798-236C-88BE0FD9F3FC}</UniqueIdentifier>
+    <Filter Include="eclipse\common_types">
+      <UniqueIdentifier>{363B7B62-22CA-042C-CBE8-1827B75615D2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="eclipse\Utils">
-      <UniqueIdentifier>{8A3AAD81-F6FA-28B8-BF35-72352BB56D94}</UniqueIdentifier>
+    <Filter Include="eclipse\events">
+      <UniqueIdentifier>{6E1EC9DC-5AEC-BCE2-4380-2D092FED9847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="eclipse\imgui">
+      <UniqueIdentifier>{94461383-0007-8FB9-C941-D83635C1D395}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform">
+      <UniqueIdentifier>{4A63C33C-3630-1E48-5F49-0CF04B7553D6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform\opengl">
+      <UniqueIdentifier>{9E4DBFD0-0AD9-2C95-13EA-AF897FF48895}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform\windows">
+      <UniqueIdentifier>{A44FC440-9048-E392-B97A-C817A5D2C29E}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Eclipse.h" />
-    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="src\eclipse\Application.h">
+    <ClInclude Include="src\eclipse.h" />
+    <ClInclude Include="src\eclipse\application.h">
       <Filter>eclipse</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\Core.h">
+    <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h">
+      <Filter>eclipse\common_types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\common_types\point_2d.h">
+      <Filter>eclipse\common_types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\common_types\window_size.h">
+      <Filter>eclipse\common_types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\core.h">
       <Filter>eclipse</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\EntryPoint.h">
+    <ClInclude Include="src\eclipse\entry_point.h">
       <Filter>eclipse</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\Events\ApplicationEvents.h">
-      <Filter>eclipse\Events</Filter>
+    <ClInclude Include="src\eclipse\events\application_events.h">
+      <Filter>eclipse\events</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\Events\Event.h">
-      <Filter>eclipse\Events</Filter>
+    <ClInclude Include="src\eclipse\events\event.h">
+      <Filter>eclipse\events</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\Events\KeyEvents.h">
-      <Filter>eclipse\Events</Filter>
+    <ClInclude Include="src\eclipse\events\key_events.h">
+      <Filter>eclipse\events</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\Events\MouseEvents.h">
-      <Filter>eclipse\Events</Filter>
+    <ClInclude Include="src\eclipse\events\mouse_events.h">
+      <Filter>eclipse\events</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\Events\WindowEvents.h">
-      <Filter>eclipse\Events</Filter>
+    <ClInclude Include="src\eclipse\events\window_events.h">
+      <Filter>eclipse\events</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\Layer.h">
+    <ClInclude Include="src\eclipse\imgui\imgui_layer.h">
+      <Filter>eclipse\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\layer.h">
       <Filter>eclipse</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\LayerStack.h">
+    <ClInclude Include="src\eclipse\layer_stack.h">
       <Filter>eclipse</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\Log.h">
+    <ClInclude Include="src\eclipse\log.h">
       <Filter>eclipse</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\Utils\MouseScrollOffset.h">
-      <Filter>eclipse\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\eclipse\Utils\Point2D.h">
-      <Filter>eclipse\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\eclipse\Utils\WindowSize.h">
-      <Filter>eclipse\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\eclipse\Window.h">
+    <ClInclude Include="src\eclipse\window.h">
       <Filter>eclipse</Filter>
     </ClInclude>
     <ClInclude Include="src\ecpch.h" />
-    <ClInclude Include="src\eclipse\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
+    <ClInclude Include="src\platform\opengl\imgui_opengl_renderer.h">
+      <Filter>platform\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\platform\windows\windows_window.h">
+      <Filter>platform\windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
-      <Filter>Platform\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\eclipse\Application.cpp">
+    <ClCompile Include="src\eclipse\application.cpp">
       <Filter>eclipse</Filter>
     </ClCompile>
-    <ClCompile Include="src\eclipse\Layer.cpp">
+    <ClCompile Include="src\eclipse\imgui\imgui_layer.cpp">
+      <Filter>eclipse\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\layer.cpp">
       <Filter>eclipse</Filter>
     </ClCompile>
-    <ClCompile Include="src\eclipse\LayerStack.cpp">
+    <ClCompile Include="src\eclipse\layer_stack.cpp">
       <Filter>eclipse</Filter>
     </ClCompile>
-    <ClCompile Include="src\eclipse\Log.cpp">
+    <ClCompile Include="src\eclipse\log.cpp">
       <Filter>eclipse</Filter>
     </ClCompile>
     <ClCompile Include="src\ecpch.cpp" />
-    <ClCompile Include="src\eclipse\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
+    <ClCompile Include="src\platform\opengl\imgui_opengl_renderer.cpp">
+      <Filter>platform\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\platform\windows\windows_window.cpp">
+      <Filter>platform\windows</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

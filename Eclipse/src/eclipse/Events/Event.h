@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ecpch.h"
-#include "eclipse/Core.h"
+#include "eclipse/core.h"
 
 namespace eclipse {
 
