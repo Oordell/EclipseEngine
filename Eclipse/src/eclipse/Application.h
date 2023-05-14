@@ -2,7 +2,7 @@
 
 #include "core.h"
 #include "window.h"
-#include "eclipse/layer_stack.h"
+#include "eclipse/layer/layer_stack.h"
 #include "events/event.h"
 #include "events/window_events.h"
 
