@@ -7,3 +7,6 @@
 [submodule "Eclipse/vendor/imgui"]
 	path = Eclipse/vendor/imgui
 	url = https://github.com/Oordell/imgui
+[submodule "Eclipse/vendor/glm"]
+	path = Eclipse/vendor/glm
+	url = https://github.com/g-truc/glm

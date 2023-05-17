@@ -15,6 +15,7 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "Eclipse/vendor/GLFW_fork/include"
 IncludeDir["Glad"] = "Eclipse/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Eclipse/vendor/imgui"
+IncludeDir["glm"] = "Eclipse/vendor/glm"
 
 group "Dependencies"
 	include "Eclipse/vendor/GLFW_fork"
@@ -37,6 +38,8 @@ project "Eclipse"
 	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl",
 	}
 
 	includedirs {
@@ -44,7 +47,8 @@ project "Eclipse"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.ImGui}"
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.glm}"
 	}
 
 	links {
@@ -102,7 +106,8 @@ project "Sandbox"
 
 	includedirs {
 		"Eclipse/vendor/spdlog/include",
-		"Eclipse/src"
+		"Eclipse/src",
+		"%{IncludeDir.glm}"
 	}
 
 	links {
