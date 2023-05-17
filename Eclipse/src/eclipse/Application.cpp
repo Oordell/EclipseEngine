@@ -53,7 +53,16 @@ namespace eclipse {
 			}
 			
 			auto [x_pose, y_pose] = InputManager::get_mouse_pose();
-			EC_CORE_TRACE("{0}, {1}", x_pose, y_pose);
+			EC_CORE_TRACE_THROTTLED(0.5, "{0}, {1}", x_pose, y_pose);
+
+			const unsigned int mouse_key = 0;
+			const unsigned int keyboard_key = 65;
+			if (InputManager::is_mouse_button_pressed(mouse_key)) {
+				EC_CORE_FATAL("Mouse key is pressed!");
+			}
+			if (InputManager::is_key_pressed(keyboard_key)) {
+				EC_CORE_FATAL("Keyboard key is pressed!");
+			}
 
 			window_->on_update();
 		}
