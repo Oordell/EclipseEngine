@@ -166,9 +166,11 @@
     <ClInclude Include="src\eclipse\events\window_events.h" />
     <ClInclude Include="src\eclipse\imgui\imgui_layer.h" />
     <ClInclude Include="src\eclipse\input_manager.h" />
+    <ClInclude Include="src\eclipse\key_codes.h" />
     <ClInclude Include="src\eclipse\layer\layer.h" />
     <ClInclude Include="src\eclipse\layer\layer_stack.h" />
     <ClInclude Include="src\eclipse\log.h" />
+    <ClInclude Include="src\eclipse\mouse_button_key_codes.h" />
     <ClInclude Include="src\eclipse\window.h" />
     <ClInclude Include="src\ecpch.h" />
     <ClInclude Include="src\platform\opengl\imgui_opengl_renderer.h" />

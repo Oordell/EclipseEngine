@@ -64,6 +64,9 @@
     <ClInclude Include="src\eclipse\imgui\imgui_layer.h">
       <Filter>eclipse\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\input_manager.h">
+      <Filter>eclipse</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\layer\layer.h">
       <Filter>eclipse\layer</Filter>
     </ClInclude>
@@ -80,9 +83,14 @@
     <ClInclude Include="src\platform\opengl\imgui_opengl_renderer.h">
       <Filter>platform\opengl</Filter>
     </ClInclude>
+    <ClInclude Include="src\platform\windows\windows_input.h">
+      <Filter>platform\windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\platform\windows\windows_window.h">
       <Filter>platform\windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\key_codes.h" />
+    <ClInclude Include="src\eclipse\mouse_button_key_codes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\application.cpp">
@@ -103,6 +111,9 @@
     <ClCompile Include="src\ecpch.cpp" />
     <ClCompile Include="src\platform\opengl\imgui_opengl_renderer.cpp">
       <Filter>platform\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\platform\windows\windows_input.cpp">
+      <Filter>platform\windows</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\windows\windows_window.cpp">
       <Filter>platform\windows</Filter>
