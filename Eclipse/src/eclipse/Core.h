@@ -1,16 +1,20 @@
 #pragma once
 
 #ifdef EC_PLATFORM_WINDOWS
+#if EC_DYNAMIC_LINK
 	#ifdef EC_BUILD_DLL
 		#define ECLIPSE_API _declspec(dllexport)
 	#else
 		#define ECLIPSE_API _declspec(dllimport)
 	#endif
 #else
+	#define ECLIPSE_API 
+#endif
+#else
 	#error Eclipse only supports Windows!
 #endif
 
-#ifdef EC_DEBUG
+#ifdef ECLIPSE_DEBUG
 	#define EC_ENABLE_ASSERTS
 #endif
 

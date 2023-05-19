@@ -3,7 +3,6 @@
 
 #include "imgui.h"
 
-#define IMGUI_IMPL_API
 #include "backends/imgui_impl_glfw.cpp"
 #include "backends/imgui_impl_opengl3.cpp"
 
@@ -11,13 +10,9 @@
 
 namespace eclipse {
 
-	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer") {
-		 
-	}
+	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer") {}
 
-	ImGuiLayer::~ImGuiLayer() {
-
-	}
+	ImGuiLayer::~ImGuiLayer() {}
 
 	void ImGuiLayer::on_attach() {
 		// Setup Dear ImGui context
@@ -65,7 +60,7 @@ namespace eclipse {
 	void ImGuiLayer::end() {
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::get();
-		io.DisplaySize = ImVec2(app.get_window().get_width(), app.get_window().get_height());
+		io.DisplaySize = ImVec2(static_cast<float>(app.get_window().get_width()), static_cast<float>(app.get_window().get_height()));
 
 		//Rendering
 		ImGui::Render();

@@ -25,9 +25,10 @@ group ""
 
 project "Eclipse"
 	location "Eclipse"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++20"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -40,6 +41,10 @@ project "Eclipse"
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
+	}
+
+	defines {
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	includedirs {
@@ -61,7 +66,6 @@ project "Eclipse"
 	}
 
 	filter "system:windows"
-		cppdialect "C++20"
 		systemversion "latest"
 
 		defines {
@@ -70,31 +74,28 @@ project "Eclipse"
 			"GLFW_INCLUDE_NONE"
 		}
 
-		postbuildcommands {
-			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"" )
-		}
-
 	filter "configurations:Debug"
-		defines "EC_DEBUG"
+		defines "ECLIPSE_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
-		defines "EC_RELEASE"
+		defines "ECLIPSE_RELEASE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 	filter "configurations:Dist"
-		defines "EC_DIST"
+		defines "ECLIPSE_DIST"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
-	staticruntime "off"
+	staticruntime "on"
+	cppdialect "C++20"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -115,7 +116,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++20"
 		systemversion "latest"
 
 		defines {
@@ -123,16 +123,16 @@ project "Sandbox"
 		}
 
 	filter "configurations:Debug"
-		defines "EC_DEBUG"
+		defines "ECLIPSE_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
-		defines "EC_RELEASE"
+		defines "ECLIPSE_RELEASE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 	filter "configurations:Dist"
-		defines "EC_DIST"
+		defines "ECLIPSE_DIST"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
