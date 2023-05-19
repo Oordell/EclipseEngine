@@ -26,8 +26,7 @@ public:
 class Sandbox : public eclipse::Application {
 public:
 	Sandbox() {
-		push_layer(new ExampleLayer()); 
-		push_overlay(new eclipse::ImGuiLayer());
+		push_layer(new ExampleLayer());
 	}
 	~Sandbox() {}
 };

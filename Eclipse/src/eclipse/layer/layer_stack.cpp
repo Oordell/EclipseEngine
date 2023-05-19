@@ -3,9 +3,7 @@
 
 namespace eclipse {
 
-	LayerStack::LayerStack() {
-		layer_insert_ = layers_.begin();
-	}
+	LayerStack::LayerStack() {}
 
 	LayerStack::~LayerStack() {
 		for (auto* layer : layers_) {
@@ -14,7 +12,8 @@ namespace eclipse {
 	}
 
 	void LayerStack::push_layer(Layer* layer) {
-		layer_insert_ = layers_.emplace(layer_insert_, layer);
+		layers_.emplace(layers_.begin() + layer_insert_index_, layer);
+		layer_insert_index_++;
 	}
 	
 	void LayerStack::push_overlay(Layer* overlay) {
@@ -25,7 +24,12 @@ namespace eclipse {
 		auto it = std::find(layers_.begin(), layers_.end(), layer);
 		if (it != layers_.end()) {
 			layers_.erase(it);
-			layer_insert_--;
+			if (layer_insert_index_ > 0) {
+				layer_insert_index_--;
+			} else {
+				EC_CORE_ERROR("Tried to decrement layer index, but it's already 0! "
+							  "Layer size: {0}, Insert index: {1}", layers_.size(), layer_insert_index_);
+			}
 		}
 	}
 	

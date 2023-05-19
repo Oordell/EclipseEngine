@@ -173,7 +173,6 @@
     <ClInclude Include="src\eclipse\mouse_button_key_codes.h" />
     <ClInclude Include="src\eclipse\window.h" />
     <ClInclude Include="src\ecpch.h" />
-    <ClInclude Include="src\platform\opengl\imgui_opengl_renderer.h" />
     <ClInclude Include="src\platform\windows\windows_input.h" />
     <ClInclude Include="src\platform\windows\windows_window.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -595,6 +594,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\application.cpp" />
+    <ClCompile Include="src\eclipse\imgui\imgui_build.cpp" />
     <ClCompile Include="src\eclipse\imgui\imgui_layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer_stack.cpp" />
@@ -602,7 +602,6 @@
     <ClCompile Include="src\ecpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\platform\opengl\imgui_opengl_renderer.cpp" />
     <ClCompile Include="src\platform\windows\windows_input.cpp" />
     <ClCompile Include="src\platform\windows\windows_window.cpp" />
   </ItemGroup>

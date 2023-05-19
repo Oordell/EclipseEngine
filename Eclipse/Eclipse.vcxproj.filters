@@ -22,9 +22,6 @@
     <Filter Include="src\platform">
       <UniqueIdentifier>{41663D6D-2DC9-CC11-D64E-05C8C2909894}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\platform\opengl">
-      <UniqueIdentifier>{B57427EB-21D6-04F9-AA43-4BAB16A43BB8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\platform\windows">
       <UniqueIdentifier>{9B5931A8-87E8-BA71-3007-CF6C1C75CB17}</UniqueIdentifier>
     </Filter>
@@ -113,9 +110,6 @@
     </ClInclude>
     <ClInclude Include="src\ecpch.h">
       <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\platform\opengl\imgui_opengl_renderer.h">
-      <Filter>src\platform\opengl</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\windows\windows_input.h">
       <Filter>src\platform\windows</Filter>
@@ -1376,6 +1370,9 @@
     <ClCompile Include="src\eclipse\application.cpp">
       <Filter>src\eclipse</Filter>
     </ClCompile>
+    <ClCompile Include="src\eclipse\imgui\imgui_build.cpp">
+      <Filter>src\eclipse\imgui</Filter>
+    </ClCompile>
     <ClCompile Include="src\eclipse\imgui\imgui_layer.cpp">
       <Filter>src\eclipse\imgui</Filter>
     </ClCompile>
@@ -1390,9 +1387,6 @@
     </ClCompile>
     <ClCompile Include="src\ecpch.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\platform\opengl\imgui_opengl_renderer.cpp">
-      <Filter>src\platform\opengl</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\windows\windows_input.cpp">
       <Filter>src\platform\windows</Filter>

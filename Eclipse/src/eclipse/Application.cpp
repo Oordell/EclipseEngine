@@ -15,6 +15,8 @@ namespace eclipse {
 		EC_CORE_ASSERT(!instance_, "Application already exists!");
 		instance_ = this;
 		window_->set_event_callback(BIND_EVENT_FN(on_event));
+
+		push_overlay(imgui_layer_.get());
 	};
 
 	Application::~Application() {};
@@ -51,6 +53,12 @@ namespace eclipse {
 			for (Layer* layer : layer_stack_) {
 				layer->on_update();
 			}
+
+			imgui_layer_->begin();
+			for (Layer* layer : layer_stack_) {
+				layer->on_imgui_render();
+			}
+			imgui_layer_->end();
 			
 			window_->on_update();
 		}
