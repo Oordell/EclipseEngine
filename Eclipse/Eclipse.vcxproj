@@ -162,11 +162,16 @@
     <ClInclude Include="src\eclipse\layer\layer_stack.h" />
     <ClInclude Include="src\eclipse\log.h" />
     <ClInclude Include="src\eclipse\mouse_button_key_codes.h" />
+    <ClInclude Include="src\eclipse\renderer\index_buffer.h" />
+    <ClInclude Include="src\eclipse\renderer\renderer.h" />
+    <ClInclude Include="src\eclipse\renderer\vertex_buffer.h" />
     <ClInclude Include="src\eclipse\renderer\graphics_context.h" />
     <ClInclude Include="src\eclipse\renderer\shader.h" />
     <ClInclude Include="src\eclipse\window.h" />
     <ClInclude Include="src\ecpch.h" />
     <ClInclude Include="src\platform\opengl\opengl_context.h" />
+    <ClInclude Include="src\platform\opengl\opengl_index_buffer.h" />
+    <ClInclude Include="src\platform\opengl\opengl_vertex_buffer.h" />
     <ClInclude Include="src\platform\windows\windows_input.h" />
     <ClInclude Include="src\platform\windows\windows_window.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -593,11 +598,16 @@
     <ClCompile Include="src\eclipse\layer\layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer_stack.cpp" />
     <ClCompile Include="src\eclipse\log.cpp" />
+    <ClCompile Include="src\eclipse\renderer\index_buffer.cpp" />
+    <ClCompile Include="src\eclipse\renderer\renderer.cpp" />
     <ClCompile Include="src\eclipse\renderer\shader.cpp" />
+    <ClCompile Include="src\eclipse\renderer\vertex_buffer.cpp" />
     <ClCompile Include="src\ecpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\platform\opengl\opengl_context.cpp" />
+    <ClCompile Include="src\platform\opengl\opengl_index_buffer.cpp" />
+    <ClCompile Include="src\platform\opengl\opengl_vertex_buffer.cpp" />
     <ClCompile Include="src\platform\windows\windows_input.cpp" />
     <ClCompile Include="src\platform\windows\windows_window.cpp" />
   </ItemGroup>

@@ -10,6 +10,8 @@
 #include <memory>
 
 #include "eclipse/renderer/shader.h"
+#include "eclipse/renderer/vertex_buffer.h"
+#include "eclipse/renderer/index_buffer.h"
 
 namespace eclipse {
 
@@ -40,9 +42,9 @@ namespace eclipse {
 		LayerStack layer_stack_;
 
 		unsigned int vertex_array_ = 0;
-		unsigned int vertex_buffer_ = 0;
-		unsigned int index_buffer_ = 0;
 		std::unique_ptr<Shader> shader_;
+		std::unique_ptr<VertexBuffer> vertex_buffer_;
+		std::unique_ptr<IndexBuffer> index_buffer_;
 	};
 
 	// To be defined in client
