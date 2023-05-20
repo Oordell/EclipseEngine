@@ -6,7 +6,7 @@ public:
 	~ExampleLayer() = default;
 
 	void on_update() override {
-		EC_INFO_THROTTLED(0.1, "ExampleLayer::on_update");
+		EC_INFO_THROTTLED(1.0, "ExampleLayer::on_update");
 
 		const unsigned int mouse_key = EC_MOUSE_BUTTON_LEFT;
 		const unsigned int keyboard_key = EC_KEY_A;

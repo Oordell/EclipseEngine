@@ -36,6 +36,10 @@ namespace eclipse {
 		std::shared_ptr<ImGuiLayer> imgui_layer_ = std::make_shared<ImGuiLayer>();
 		bool running_ = true;
 		LayerStack layer_stack_;
+
+		unsigned int vertex_array_ = 0;
+		unsigned int vertex_buffer_ = 0;
+		unsigned int index_buffer_ = 0;
 	};
 
 	// To be defined in client
