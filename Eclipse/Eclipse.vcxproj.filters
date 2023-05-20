@@ -1367,6 +1367,7 @@
     </ClInclude>
     <ClInclude Include="src\eclipse\renderer\graphics_context.h" />
     <ClInclude Include="src\platform\opengl\opengl_context.h" />
+    <ClInclude Include="src\eclipse\renderer\shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\application.cpp">
@@ -1397,5 +1398,6 @@
       <Filter>src\platform\windows</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\opengl\opengl_context.cpp" />
+    <ClCompile Include="src\eclipse\renderer\shader.cpp" />
   </ItemGroup>
 </Project>

@@ -33,4 +33,4 @@ public:
 
 eclipse::Application *eclipse::create_application() {
 	return new Sandbox();
-}
+} 

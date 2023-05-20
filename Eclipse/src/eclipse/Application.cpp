@@ -26,9 +26,9 @@ namespace eclipse {
 
 		static const int dimentions = 3;
 		float vertices[dimentions * dimentions] = {
-			-0.5F, -0.5F, 0.0F,
-			0.5F, -0.5F, 0.0F,
-			0.0F, 0.5F, 0.0F
+			-1.0F, -1.0F, 0.0F,
+			1.0F, -1.0F, 0.0F,
+			0.0F, 1.0F, 0.0F
 		};
 
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -42,7 +42,32 @@ namespace eclipse {
 		unsigned int indices[dimentions] = {0, 1, 2};
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
+		std::string vertex_src = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 position_;
 
+			out vec3 v_position;
+			
+			void main() {
+				v_position = position_;
+				gl_Position = vec4(position_, 1.0);
+			}
+		)";
+
+		std::string fragments_src = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec3 v_position;
+			
+			void main() {
+				color = vec4(v_position * 0.5 + 0.5, 1.0);
+			}
+		)";
+
+		shader_ = std::make_unique<Shader>(vertex_src, fragments_src);
 	};
 
 	Application::~Application() {};
@@ -80,6 +105,7 @@ namespace eclipse {
 			glClearColor(red, green, blue, alpha);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			shader_->bind();
 			glBindVertexArray(vertex_array_);
 			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 

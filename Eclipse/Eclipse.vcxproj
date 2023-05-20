@@ -163,6 +163,7 @@
     <ClInclude Include="src\eclipse\log.h" />
     <ClInclude Include="src\eclipse\mouse_button_key_codes.h" />
     <ClInclude Include="src\eclipse\renderer\graphics_context.h" />
+    <ClInclude Include="src\eclipse\renderer\shader.h" />
     <ClInclude Include="src\eclipse\window.h" />
     <ClInclude Include="src\ecpch.h" />
     <ClInclude Include="src\platform\opengl\opengl_context.h" />
@@ -592,6 +593,7 @@
     <ClCompile Include="src\eclipse\layer\layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer_stack.cpp" />
     <ClCompile Include="src\eclipse\log.cpp" />
+    <ClCompile Include="src\eclipse\renderer\shader.cpp" />
     <ClCompile Include="src\ecpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

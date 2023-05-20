@@ -9,6 +9,8 @@
 
 #include <memory>
 
+#include "eclipse/renderer/shader.h"
+
 namespace eclipse {
 
 	class ECLIPSE_API Application {
@@ -40,6 +42,7 @@ namespace eclipse {
 		unsigned int vertex_array_ = 0;
 		unsigned int vertex_buffer_ = 0;
 		unsigned int index_buffer_ = 0;
+		std::unique_ptr<Shader> shader_;
 	};
 
 	// To be defined in client
