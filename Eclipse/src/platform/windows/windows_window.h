@@ -1,6 +1,7 @@
 #pragma once
 
 #include "eclipse/window.h"
+#include "eclipse/renderer/graphics_context.h"
 
 #include <GLFW/glfw3.h>
 
@@ -28,6 +29,7 @@ namespace eclipse {
         void set_glfw_callbacks();
 
         GLFWwindow* window_;
+        GraphicsContext* context_;
 
         struct WindowData {
             WindowProps props{};

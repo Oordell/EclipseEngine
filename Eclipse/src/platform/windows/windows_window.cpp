@@ -5,7 +5,7 @@
 #include "eclipse/events/application_events.h"
 #include "eclipse/events/key_events.h"
 #include "eclipse/events/mouse_events.h"
-#include <glad/glad.h>
+#include "platform/opengl/opengl_context.h"
 
 namespace eclipse {
 
@@ -40,9 +40,8 @@ namespace eclipse {
 		}
 
 		window_ = glfwCreateWindow(static_cast<int>(props.window_size.width), static_cast<int>(props.window_size.height), data_.props.title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(window_);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		EC_CORE_ASSERT(status, "Failed to initialize Glad!")
+		context_ = new OpenGLContext(window_);
+		context_->init();
 		glfwSetWindowUserPointer(window_, &data_);
 		set_v_sync(true);
 
@@ -141,7 +140,7 @@ namespace eclipse {
 
 	void WindowsWindow::on_update() {
 		glfwPollEvents();
-		glfwSwapBuffers(window_);
+		context_->swap_buffers();
 	}
 
 	void WindowsWindow::set_v_sync(bool enabled) {

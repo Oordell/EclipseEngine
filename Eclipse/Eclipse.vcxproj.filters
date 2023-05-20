@@ -1365,6 +1365,8 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\renderer\graphics_context.h" />
+    <ClInclude Include="src\platform\opengl\opengl_context.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\application.cpp">
@@ -1394,5 +1396,6 @@
     <ClCompile Include="src\platform\windows\windows_window.cpp">
       <Filter>src\platform\windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\platform\opengl\opengl_context.cpp" />
   </ItemGroup>
 </Project>
