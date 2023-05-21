@@ -11,6 +11,26 @@ namespace eclipse {
 
 	Application* Application::instance_ = nullptr;
 
+	static GLenum shader_data_type_to_opengl_base_type(ShaderDataType type) {
+		using enum ShaderDataType;
+		switch (type) {
+			case floatvec1:	return GL_FLOAT;
+			case floatvec2:	return GL_FLOAT;
+			case floatvec3:	return GL_FLOAT;
+			case floatvec4:	return GL_FLOAT;
+			case floatmat3:	return GL_FLOAT;
+			case floatmat4:	return GL_FLOAT;
+			case intvec1:	return GL_INT;
+			case intvec2:	return GL_INT;
+			case intvec3:	return GL_INT;
+			case intvec4:	return GL_INT;
+			case boolean:	return GL_BOOL;
+		}
+
+		EC_CORE_ASSERT(false, "Unknown shader data type!");
+		return 0;
+	}
+
 	Application::Application() {
 		EC_CORE_ASSERT(!instance_, "Application already exists!");
 		instance_ = this;
@@ -22,16 +42,36 @@ namespace eclipse {
 		glBindVertexArray(vertex_array_);
 
 		static const int dimentions = 3;
-		float vertices[dimentions * dimentions] = {
-			-0.9F, -0.9F, 0.0F,
-			0.9F, -0.9F, 0.0F,
-			0.0F, 0.9F, 0.0F
+		float vertices[3 * 7] = {
+			-0.9F, -0.9F, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F,
+			0.9F, -0.9F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F,
+			0.0F, 0.9F, 0.0F, 1.0F, 1.0F, 0.0F, 1.0F,
 		};
 
 		vertex_buffer_.reset(VertexBuffer::create(vertices, sizeof(vertices)));
+		
+		{
+			BufferLayout layout {
+				{ ShaderDataType::floatvec3, "position_" },
+				{ ShaderDataType::floatvec4, "color_" }
+			};
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, dimentions * sizeof(float), nullptr);
+			vertex_buffer_->set_layout(layout);
+		}
+
+		uint32_t index = 0;
+		const auto& layout = vertex_buffer_->get_layout();
+		for (const auto& element : layout) {
+			glEnableVertexAttribArray(index);
+			glVertexAttribPointer(index, 
+								  element.get_component_count(), 
+								  shader_data_type_to_opengl_base_type(element.type), 
+								  element.normalized ? GL_TRUE : GL_FALSE, 
+								  layout.get_stride(),
+								  (const void*)element.offset);
+			index++;
+		}
+
 		uint32_t indices[dimentions] = {0, 1, 2};
 		index_buffer_.reset(IndexBuffer::create(indices, dimentions));
 
@@ -39,11 +79,14 @@ namespace eclipse {
 			#version 330 core
 			
 			layout(location = 0) in vec3 position_;
+			layout(location = 1) in vec4 color_;
 
 			out vec3 v_position;
+			out vec4 v_color;
 			
 			void main() {
 				v_position = position_;
+				v_color = color_;
 				gl_Position = vec4(position_, 1.0);
 			}
 		)";
@@ -54,9 +97,11 @@ namespace eclipse {
 			layout(location = 0) out vec4 color;
 
 			in vec3 v_position;
+			in vec4 v_color;
 			
 			void main() {
 				color = vec4(v_position * 0.5 + 0.5, 1.0);
+				color = v_color;
 			}
 		)";
 

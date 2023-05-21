@@ -1373,6 +1373,7 @@
     <ClInclude Include="src\platform\opengl\opengl_vertex_buffer.h" />
     <ClInclude Include="src\platform\opengl\opengl_index_buffer.h" />
     <ClInclude Include="src\eclipse\renderer\renderer.h" />
+    <ClInclude Include="src\eclipse\renderer\buffer_layout.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\application.cpp">

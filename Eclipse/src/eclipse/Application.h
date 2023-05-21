@@ -12,6 +12,7 @@
 #include "eclipse/renderer/shader.h"
 #include "eclipse/renderer/vertex_buffer.h"
 #include "eclipse/renderer/index_buffer.h"
+#include "eclipse/renderer/buffer_layout.h"
 
 namespace eclipse {
 

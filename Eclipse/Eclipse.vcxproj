@@ -162,6 +162,7 @@
     <ClInclude Include="src\eclipse\layer\layer_stack.h" />
     <ClInclude Include="src\eclipse\log.h" />
     <ClInclude Include="src\eclipse\mouse_button_key_codes.h" />
+    <ClInclude Include="src\eclipse\renderer\buffer_layout.h" />
     <ClInclude Include="src\eclipse\renderer\index_buffer.h" />
     <ClInclude Include="src\eclipse\renderer\renderer.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h" />
