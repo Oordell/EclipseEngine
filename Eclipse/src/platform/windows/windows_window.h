@@ -7,39 +7,40 @@
 
 namespace eclipse {
 
-    class WindowsWindow : public Window {
-    public:
-        WindowsWindow(const WindowProps& props);
-        virtual ~WindowsWindow();
+class WindowsWindow : public Window {
+public:
+	WindowsWindow(const WindowProps& props);
+	virtual ~WindowsWindow();
 
-        void on_update() override;
+	void on_update() override;
 
-        inline unsigned int get_width() const override { return data_.props.window_size.width; }
-        inline unsigned int get_height() const override { return data_.props.window_size.height; }
+	inline unsigned int get_width() const override { return data_.props.window_size.width; }
 
-        inline void set_event_callback(const EventCallbackfn& callback) override { data_.event_callback = callback; }
-        void set_v_sync(bool enabled) override;
-        bool is_v_sync() const override;
+	inline unsigned int get_height() const override { return data_.props.window_size.height; }
 
-        inline void* get_native_window() const override { return window_; }
+	inline void set_event_callback(const EventCallbackfn& callback) override { data_.event_callback = callback; }
 
-    private:
-        virtual void init(const WindowProps& props);
-        virtual void shutdown();
-        void set_glfw_callbacks();
+	void set_v_sync(bool enabled) override;
+	bool is_v_sync() const override;
 
-        GLFWwindow* window_;
-        GraphicsContext* context_;
+	inline void* get_native_window() const override { return window_; }
 
-        struct WindowData {
-            WindowProps props{};
-            bool v_sync{false};
+private:
+	virtual void init(const WindowProps& props);
+	virtual void shutdown();
+	void set_glfw_callbacks();
 
-            EventCallbackfn event_callback;
-        };
+	GLFWwindow* window_;
+	GraphicsContext* context_;
 
-        WindowData data_;
-    };
+	struct WindowData {
+		WindowProps props {};
+		bool v_sync {false};
 
+		EventCallbackfn event_callback;
+	};
 
-}
+	WindowData data_;
+};
+
+}  // namespace eclipse

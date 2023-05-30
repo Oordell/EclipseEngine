@@ -163,11 +163,11 @@
     <ClInclude Include="src\eclipse\log.h" />
     <ClInclude Include="src\eclipse\mouse_button_key_codes.h" />
     <ClInclude Include="src\eclipse\renderer\buffer_layout.h" />
+    <ClInclude Include="src\eclipse\renderer\graphics_context.h" />
     <ClInclude Include="src\eclipse\renderer\index_buffer.h" />
     <ClInclude Include="src\eclipse\renderer\renderer.h" />
-    <ClInclude Include="src\eclipse\renderer\vertex_buffer.h" />
-    <ClInclude Include="src\eclipse\renderer\graphics_context.h" />
     <ClInclude Include="src\eclipse\renderer\shader.h" />
+    <ClInclude Include="src\eclipse\renderer\vertex_buffer.h" />
     <ClInclude Include="src\eclipse\window.h" />
     <ClInclude Include="src\ecpch.h" />
     <ClInclude Include="src\platform\opengl\opengl_context.h" />
