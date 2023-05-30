@@ -4,10 +4,10 @@
 
 namespace eclipse {
 
-	class ECLIPSE_API GraphicsContext {
-	public:
-		virtual void init() = 0;
-		virtual void swap_buffers() = 0;
-	};
+class ECLIPSE_API GraphicsContext {
+public:
+	virtual void init()         = 0;
+	virtual void swap_buffers() = 0;
+};
 
-}
+}  // namespace eclipse

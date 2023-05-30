@@ -4,17 +4,15 @@
 
 namespace eclipse {
 
-	enum class RendererAPI {
-		none,
-		open_gl
-	};
+enum class RendererAPI { none, open_gl };
 
-	class ECLIPSE_API Renderer {
-	public:
-		inline static RendererAPI get_api() { return renderer_api_; }
-		inline static void set_api(const RendererAPI& api) { renderer_api_ = api; }
+class ECLIPSE_API Renderer {
+public:
+	inline static RendererAPI get_api() { return renderer_api_; }
 
-	private:
-		static RendererAPI renderer_api_;
-	};
-}
+	inline static void set_api(const RendererAPI& api) { renderer_api_ = api; }
+
+private:
+	static RendererAPI renderer_api_;
+};
+}  // namespace eclipse

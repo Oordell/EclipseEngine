@@ -6,82 +6,84 @@
 
 namespace eclipse {
 
-	class ECLIPSE_API MouseMovedEvent : public Event {
-	public:
-		MouseMovedEvent(const Point2D& current_position) : pose_(current_position) {};
+class ECLIPSE_API MouseMovedEvent : public Event {
+public:
+	MouseMovedEvent(const Point2D& current_position) : pose_(current_position) {};
 
-		inline float get_x() const { return pose_.x; }
-		inline float get_y() const { return pose_.y; }
+	inline float get_x() const { return pose_.x; }
 
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
-		EVENT_CLASS_TYPE(MouseMoved)
+	inline float get_y() const { return pose_.y; }
 
-		std::string to_string() const override {
-			std::stringstream ss;
-			ss << "MouseMovedEvent. (x, y): (" << pose_.x << ", " << pose_.y << ")";
-			return ss.str();
-		}
+	EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+	EVENT_CLASS_TYPE(MouseMoved)
 
-	private:
-		Point2D pose_ {};
-	};
+	std::string to_string() const override {
+		std::stringstream ss;
+		ss << "MouseMovedEvent. (x, y): (" << pose_.x << ", " << pose_.y << ")";
+		return ss.str();
+	}
 
-	class ECLIPSE_API MouseScrolledEvent : public Event {
-	public:
-		MouseScrolledEvent(const MouseScrollOffset& offset) : offset_(offset) {}
+private:
+	Point2D pose_ {};
+};
 
-		inline float get_x_offset() const { return offset_.x; }
-		inline float get_y_offset() const { return offset_.y; }
+class ECLIPSE_API MouseScrolledEvent : public Event {
+public:
+	MouseScrolledEvent(const MouseScrollOffset& offset) : offset_(offset) {}
 
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
-		EVENT_CLASS_TYPE(MouseScrolled)
+	inline float get_x_offset() const { return offset_.x; }
 
-		std::string to_string() const override {
-			std::stringstream ss;
-			ss << "MouseScrolledEvent. Offset (x, y): (" << offset_.x << ", " << offset_.y << ")";
-			return ss.str();
-		}
+	inline float get_y_offset() const { return offset_.y; }
 
-	private:
-		MouseScrollOffset offset_ {};
-	};
+	EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+	EVENT_CLASS_TYPE(MouseScrolled)
 
-	class ECLIPSE_API MouseButtonEvent : public Event {
-	public:
-		inline int get_mouse_button() const { return button; }
+	std::string to_string() const override {
+		std::stringstream ss;
+		ss << "MouseScrolledEvent. Offset (x, y): (" << offset_.x << ", " << offset_.y << ")";
+		return ss.str();
+	}
 
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+private:
+	MouseScrollOffset offset_ {};
+};
 
-	protected:
-		explicit MouseButtonEvent(int button) : button(button) {}
+class ECLIPSE_API MouseButtonEvent : public Event {
+public:
+	inline int get_mouse_button() const { return button; }
 
-		int button = -1;
-	};
+	EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 
-	class ECLIPSE_API MouseButtonPressedEvent : public MouseButtonEvent {
-	public:
-		MouseButtonPressedEvent(int button) : MouseButtonEvent(button) {}
+protected:
+	explicit MouseButtonEvent(int button) : button(button) {}
 
-		EVENT_CLASS_TYPE(MouseButtonPressed)
+	int button = -1;
+};
 
-		std::string to_string() const override {
-			std::stringstream ss;
-			ss << "MouseButtonPressedEvent. button: " << button;
-			return ss.str();
-		}
-	};
+class ECLIPSE_API MouseButtonPressedEvent : public MouseButtonEvent {
+public:
+	MouseButtonPressedEvent(int button) : MouseButtonEvent(button) {}
 
-	class ECLIPSE_API MouseButtonReleasedEvent : public MouseButtonEvent {
-	public:
-		MouseButtonReleasedEvent(int button) : MouseButtonEvent(button) {}
+	EVENT_CLASS_TYPE(MouseButtonPressed)
 
-		EVENT_CLASS_TYPE(MouseButtonReleased)
+	std::string to_string() const override {
+		std::stringstream ss;
+		ss << "MouseButtonPressedEvent. button: " << button;
+		return ss.str();
+	}
+};
 
-		std::string to_string() const override {
-			std::stringstream ss;
-			ss << "MouseButtonReleasedEvent. button: " << button;
-			return ss.str();
-		}
-	};
+class ECLIPSE_API MouseButtonReleasedEvent : public MouseButtonEvent {
+public:
+	MouseButtonReleasedEvent(int button) : MouseButtonEvent(button) {}
 
-}
+	EVENT_CLASS_TYPE(MouseButtonReleased)
+
+	std::string to_string() const override {
+		std::stringstream ss;
+		ss << "MouseButtonReleasedEvent. button: " << button;
+		return ss.str();
+	}
+};
+
+}  // namespace eclipse

@@ -3,6 +3,6 @@
 
 namespace eclipse {
 
-	Layer::Layer(const std::string& debug_name) : debug_name_(debug_name) {}
+Layer::Layer(const std::string& debug_name) : debug_name_(debug_name) {}
 
-}
+}  // namespace eclipse

@@ -3,6 +3,6 @@
 
 namespace eclipse {
 
-	RendererAPI Renderer::renderer_api_ = RendererAPI::open_gl;
+RendererAPI Renderer::renderer_api_ = RendererAPI::open_gl;
 
 }
