@@ -13,6 +13,7 @@
 #include "eclipse/renderer/vertex_buffer.h"
 #include "eclipse/renderer/index_buffer.h"
 #include "eclipse/renderer/buffer_layout.h"
+#include "eclipse/renderer/vertex_array.h"
 
 namespace eclipse {
 
@@ -42,10 +43,11 @@ private:
 	bool running_                            = true;
 	LayerStack layer_stack_;
 
-	unsigned int vertex_array_ = 0;
-	std::unique_ptr<Shader> shader_;
-	std::unique_ptr<VertexBuffer> vertex_buffer_;
-	std::unique_ptr<IndexBuffer> index_buffer_;
+	std::shared_ptr<Shader> shader_;
+	std::shared_ptr<VertexArray> vertex_array_ = std::shared_ptr<VertexArray>(VertexArray::create());
+
+	std::shared_ptr<Shader> blue_shader_;
+	std::shared_ptr<VertexArray> square_vertex_array_ = std::shared_ptr<VertexArray>(VertexArray::create());
 };
 
 // To be defined in client

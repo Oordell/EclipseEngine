@@ -167,11 +167,13 @@
     <ClInclude Include="src\eclipse\renderer\index_buffer.h" />
     <ClInclude Include="src\eclipse\renderer\renderer.h" />
     <ClInclude Include="src\eclipse\renderer\shader.h" />
+    <ClInclude Include="src\eclipse\renderer\vertex_array.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h" />
     <ClInclude Include="src\eclipse\window.h" />
     <ClInclude Include="src\ecpch.h" />
     <ClInclude Include="src\platform\opengl\opengl_context.h" />
     <ClInclude Include="src\platform\opengl\opengl_index_buffer.h" />
+    <ClInclude Include="src\platform\opengl\opengl_vertex_array.h" />
     <ClInclude Include="src\platform\opengl\opengl_vertex_buffer.h" />
     <ClInclude Include="src\platform\windows\windows_input.h" />
     <ClInclude Include="src\platform\windows\windows_window.h" />
@@ -602,12 +604,14 @@
     <ClCompile Include="src\eclipse\renderer\index_buffer.cpp" />
     <ClCompile Include="src\eclipse\renderer\renderer.cpp" />
     <ClCompile Include="src\eclipse\renderer\shader.cpp" />
+    <ClCompile Include="src\eclipse\renderer\vertex_array.cpp" />
     <ClCompile Include="src\eclipse\renderer\vertex_buffer.cpp" />
     <ClCompile Include="src\ecpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\platform\opengl\opengl_context.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_index_buffer.cpp" />
+    <ClCompile Include="src\platform\opengl\opengl_vertex_array.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_vertex_buffer.cpp" />
     <ClCompile Include="src\platform\windows\windows_input.cpp" />
     <ClCompile Include="src\platform\windows\windows_window.cpp" />
