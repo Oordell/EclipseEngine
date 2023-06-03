@@ -12,6 +12,14 @@
 
 #include "Eclipse/imgui/imgui_layer.h"
 
+#include "eclipse/renderer/renderer.h"
+#include "eclipse/renderer/render_command.h"
+#include "eclipse/renderer/index_buffer.h"
+#include "eclipse/renderer/vertex_buffer.h"
+#include "eclipse/renderer/shader.h"
+#include "eclipse/renderer/vertex_array.h"
+#include "eclipse/renderer/orthographic_camera.h"
+
 // ********* Entry point ************
 #include "eclipse/entry_point.h"
 // **********************************

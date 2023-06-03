@@ -145,14 +145,11 @@
   <ItemGroup>
     <ClInclude Include="src\eclipse.h" />
     <ClInclude Include="src\eclipse\Application.h" />
-    <ClInclude Include="src\eclipse\common_types\orthographic.h" />
     <ClInclude Include="src\eclipse\Core.h" />
     <ClInclude Include="src\eclipse\Log.h" />
-    <ClInclude Include="src\eclipse\renderer\orthographic_camera.h" />
-    <ClInclude Include="src\eclipse\renderer\renderer_api.h" />
-    <ClInclude Include="src\eclipse\renderer\render_command.h" />
     <ClInclude Include="src\eclipse\Window.h" />
     <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h" />
+    <ClInclude Include="src\eclipse\common_types\orthographic.h" />
     <ClInclude Include="src\eclipse\common_types\point_2d.h" />
     <ClInclude Include="src\eclipse\common_types\window_size.h" />
     <ClInclude Include="src\eclipse\entry_point.h" />
@@ -170,7 +167,10 @@
     <ClInclude Include="src\eclipse\renderer\buffer_layout.h" />
     <ClInclude Include="src\eclipse\renderer\graphics_context.h" />
     <ClInclude Include="src\eclipse\renderer\index_buffer.h" />
+    <ClInclude Include="src\eclipse\renderer\orthographic_camera.h" />
+    <ClInclude Include="src\eclipse\renderer\render_command.h" />
     <ClInclude Include="src\eclipse\renderer\renderer.h" />
+    <ClInclude Include="src\eclipse\renderer\renderer_api.h" />
     <ClInclude Include="src\eclipse\renderer\shader.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_array.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h" />
@@ -608,18 +608,18 @@
     <ClCompile Include="src\eclipse\layer\layer_stack.cpp" />
     <ClCompile Include="src\eclipse\renderer\index_buffer.cpp" />
     <ClCompile Include="src\eclipse\renderer\orthographic_camera.cpp" />
+    <ClCompile Include="src\eclipse\renderer\render_command.cpp" />
     <ClCompile Include="src\eclipse\renderer\renderer.cpp" />
     <ClCompile Include="src\eclipse\renderer\renderer_api.cpp" />
-    <ClCompile Include="src\eclipse\renderer\render_command.cpp" />
     <ClCompile Include="src\eclipse\renderer\shader.cpp" />
     <ClCompile Include="src\eclipse\renderer\vertex_array.cpp" />
     <ClCompile Include="src\eclipse\renderer\vertex_buffer.cpp" />
     <ClCompile Include="src\ecpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\platform\opengl\opengl_renderer_api.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_context.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_index_buffer.cpp" />
+    <ClCompile Include="src\platform\opengl\opengl_renderer_api.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_vertex_array.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_vertex_buffer.cpp" />
     <ClCompile Include="src\platform\windows\windows_input.cpp" />

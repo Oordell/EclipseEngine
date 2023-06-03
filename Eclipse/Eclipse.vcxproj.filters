@@ -72,6 +72,9 @@
     <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\common_types\orthographic.h">
+      <Filter>src\eclipse\common_types</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\common_types\point_2d.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
@@ -123,7 +126,16 @@
     <ClInclude Include="src\eclipse\renderer\index_buffer.h">
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\renderer\orthographic_camera.h">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\renderer\render_command.h">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\renderer\renderer.h">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\renderer\renderer_api.h">
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\renderer\shader.h">
@@ -142,6 +154,9 @@
       <Filter>src\platform\opengl</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\opengl\opengl_index_buffer.h">
+      <Filter>src\platform\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\platform\opengl\opengl_renderer_api.h">
       <Filter>src\platform\opengl</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\opengl\opengl_vertex_array.h">
@@ -1404,11 +1419,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\renderer\renderer_api.h" />
-    <ClInclude Include="src\eclipse\renderer\render_command.h" />
-    <ClInclude Include="src\platform\opengl\opengl_renderer_api.h" />
-    <ClInclude Include="src\eclipse\renderer\orthographic_camera.h" />
-    <ClInclude Include="src\eclipse\common_types\orthographic.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\Application.cpp">
@@ -1432,7 +1442,16 @@
     <ClCompile Include="src\eclipse\renderer\index_buffer.cpp">
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\eclipse\renderer\orthographic_camera.cpp">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\renderer\render_command.cpp">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\eclipse\renderer\renderer.cpp">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\renderer\renderer_api.cpp">
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\renderer\shader.cpp">
@@ -1453,6 +1472,9 @@
     <ClCompile Include="src\platform\opengl\opengl_index_buffer.cpp">
       <Filter>src\platform\opengl</Filter>
     </ClCompile>
+    <ClCompile Include="src\platform\opengl\opengl_renderer_api.cpp">
+      <Filter>src\platform\opengl</Filter>
+    </ClCompile>
     <ClCompile Include="src\platform\opengl\opengl_vertex_array.cpp">
       <Filter>src\platform\opengl</Filter>
     </ClCompile>
@@ -1465,9 +1487,5 @@
     <ClCompile Include="src\platform\windows\windows_window.cpp">
       <Filter>src\platform\windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\eclipse\renderer\renderer_api.cpp" />
-    <ClCompile Include="src\eclipse\renderer\render_command.cpp" />
-    <ClCompile Include="src\platform\opengl\opengl_renderer_api.cpp" />
-    <ClCompile Include="src\eclipse\renderer\orthographic_camera.cpp" />
   </ItemGroup>
 </Project>
