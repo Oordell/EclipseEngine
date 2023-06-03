@@ -37,6 +37,7 @@ public:
 
 private:
 	bool on_window_closed(WindowClosedEvent& e);
+	bool on_mose_scrolled(MouseScrolledEvent& e);
 
 	static Application* instance_;
 	std::unique_ptr<Window> window_          = std::unique_ptr<Window>(Window::create());

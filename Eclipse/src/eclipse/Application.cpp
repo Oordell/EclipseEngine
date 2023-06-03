@@ -2,6 +2,7 @@
 #include "application.h"
 #include "eclipse/renderer/renderer.h"
 #include "input_manager.h"
+#include "key_codes.h"
 
 namespace eclipse {
 
@@ -125,8 +126,28 @@ Application::~Application() {};
 void Application::on_event(Event& e) {
 	EventDispatcher dispatcher(e);
 	dispatcher.dispatch<WindowClosedEvent>(BIND_EVENT_FN(on_window_closed));
+	dispatcher.dispatch<MouseScrolledEvent>(BIND_EVENT_FN(on_mose_scrolled));
 
 	//	EC_CORE_INFO("{0}", e);
+
+	static const float offset = 0.05F;
+
+	if (InputManager::is_key_pressed(EC_KEY_W)) {
+		camera_position_ = camera_.get_position();
+		camera_position_.y += offset;
+	}
+	if (InputManager::is_key_pressed(EC_KEY_A)) {
+		camera_position_ = camera_.get_position();
+		camera_position_.x -= offset;
+	}
+	if (InputManager::is_key_pressed(EC_KEY_S)) {
+		camera_position_ = camera_.get_position();
+		camera_position_.y -= offset;
+	}
+	if (InputManager::is_key_pressed(EC_KEY_D)) {
+		camera_position_ = camera_.get_position();
+		camera_position_.x += offset;
+	}
 
 	for (auto it = layer_stack_.end(); it != layer_stack_.begin();) {
 		(*--it)->on_event(e);
@@ -184,5 +205,10 @@ bool Application::on_window_closed(WindowClosedEvent& e) {
 	running_ = false;
 	return true;
 }
+
+bool Application::on_mose_scrolled(MouseScrolledEvent& e) { 
+	EC_CORE_DEBUG("{}", e.get_y_offset());
+	camera_rotation_ += e.get_y_offset();
+	return true; }
 
 }  // namespace eclipse
