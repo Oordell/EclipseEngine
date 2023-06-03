@@ -6,7 +6,7 @@
 namespace eclipse {
 
 IndexBuffer* IndexBuffer::create(uint32_t* indices, uint32_t count) {
-	using enum RendererAPI;
+	using enum RendererAPI::API;
 	switch (Renderer::get_api()) {
 		case none: {
 			EC_CORE_ASSERT(false, "RendererAPI::none is not supported!");

@@ -144,14 +144,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\eclipse.h" />
-    <ClInclude Include="src\eclipse\application.h" />
+    <ClInclude Include="src\eclipse\Application.h" />
+    <ClInclude Include="src\eclipse\Core.h" />
+    <ClInclude Include="src\eclipse\Log.h" />
+    <ClInclude Include="src\eclipse\renderer\renderer_api.h" />
+    <ClInclude Include="src\eclipse\renderer\render_command.h" />
+    <ClInclude Include="src\eclipse\Window.h" />
     <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h" />
     <ClInclude Include="src\eclipse\common_types\point_2d.h" />
     <ClInclude Include="src\eclipse\common_types\window_size.h" />
-    <ClInclude Include="src\eclipse\core.h" />
     <ClInclude Include="src\eclipse\entry_point.h" />
+    <ClInclude Include="src\eclipse\events\Event.h" />
     <ClInclude Include="src\eclipse\events\application_events.h" />
-    <ClInclude Include="src\eclipse\events\event.h" />
     <ClInclude Include="src\eclipse\events\key_events.h" />
     <ClInclude Include="src\eclipse\events\mouse_events.h" />
     <ClInclude Include="src\eclipse\events\window_events.h" />
@@ -160,7 +164,6 @@
     <ClInclude Include="src\eclipse\key_codes.h" />
     <ClInclude Include="src\eclipse\layer\layer.h" />
     <ClInclude Include="src\eclipse\layer\layer_stack.h" />
-    <ClInclude Include="src\eclipse\log.h" />
     <ClInclude Include="src\eclipse\mouse_button_key_codes.h" />
     <ClInclude Include="src\eclipse\renderer\buffer_layout.h" />
     <ClInclude Include="src\eclipse\renderer\graphics_context.h" />
@@ -169,10 +172,10 @@
     <ClInclude Include="src\eclipse\renderer\shader.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_array.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h" />
-    <ClInclude Include="src\eclipse\window.h" />
     <ClInclude Include="src\ecpch.h" />
     <ClInclude Include="src\platform\opengl\opengl_context.h" />
     <ClInclude Include="src\platform\opengl\opengl_index_buffer.h" />
+    <ClInclude Include="src\platform\opengl\opengl_renderer_api.h" />
     <ClInclude Include="src\platform\opengl\opengl_vertex_array.h" />
     <ClInclude Include="src\platform\opengl\opengl_vertex_buffer.h" />
     <ClInclude Include="src\platform\windows\windows_input.h" />
@@ -595,20 +598,23 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\eclipse\application.cpp" />
+    <ClCompile Include="src\eclipse\Application.cpp" />
+    <ClCompile Include="src\eclipse\Log.cpp" />
     <ClCompile Include="src\eclipse\imgui\imgui_build.cpp" />
     <ClCompile Include="src\eclipse\imgui\imgui_layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer_stack.cpp" />
-    <ClCompile Include="src\eclipse\log.cpp" />
     <ClCompile Include="src\eclipse\renderer\index_buffer.cpp" />
     <ClCompile Include="src\eclipse\renderer\renderer.cpp" />
+    <ClCompile Include="src\eclipse\renderer\renderer_api.cpp" />
+    <ClCompile Include="src\eclipse\renderer\render_command.cpp" />
     <ClCompile Include="src\eclipse\renderer\shader.cpp" />
     <ClCompile Include="src\eclipse\renderer\vertex_array.cpp" />
     <ClCompile Include="src\eclipse\renderer\vertex_buffer.cpp" />
     <ClCompile Include="src\ecpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\platform\opengl\opengl_renderer_api.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_context.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_index_buffer.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_vertex_array.cpp" />

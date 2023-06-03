@@ -6,7 +6,7 @@
 namespace eclipse {
 
 VertexArray* VertexArray::create() {
-	using enum RendererAPI;
+	using enum RendererAPI::API;
 	switch (Renderer::get_api()) {
 		case none: {
 			EC_CORE_ASSERT(false, "RendererAPI::none is not supported!");

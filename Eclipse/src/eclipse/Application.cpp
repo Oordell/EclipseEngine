@@ -1,8 +1,6 @@
 #include "ecpch.h"
 #include "application.h"
-
-#include <glad/glad.h>
-
+#include "eclipse/renderer/renderer.h"
 #include "input_manager.h"
 
 namespace eclipse {
@@ -19,11 +17,13 @@ Application::Application() {
 	push_overlay(imgui_layer_.get());
 
 	static const int dimentions = 3;
+	/* clang-format off */
 	float vertices[3 * 7]       = {
 		-0.9F, -0.9F, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 
 		0.9F, -0.9F, 0.0F, 0.0F, 0.0F,  1.0F, 1.0F, 
 		0.0F, 0.9F, 0.0F, 1.0F, 1.0F, 0.0F,  1.0F
 	};
+	/* clang-format on */
 
 	std::shared_ptr<VertexBuffer> vertex_buffer;
 	vertex_buffer.reset(VertexBuffer::create(vertices, sizeof(vertices)));
@@ -37,11 +37,14 @@ Application::Application() {
 	index_buffer.reset(IndexBuffer::create(indices, dimentions));
 	vertex_array_->set_index_buffer(index_buffer);
 
+	/* clang-format off */
 	float square_vertices[3 * 4] = {
 		-0.5F, -0.5F, 0.0F, 
 		0.5F, -0.5F, 0.0F, 
 		0.5F, 0.5F, 0.0F, 
-		-0.5F, 0.5F, 0.0F};
+		-0.5F, 0.5F, 0.0F
+	};
+	/* clang-format on */
 
 	std::shared_ptr<VertexBuffer> square_vertex_buffer;
 	square_vertex_buffer.reset(VertexBuffer::create(square_vertices, sizeof(square_vertices)));
@@ -145,16 +148,19 @@ void Application::run() {
 		static const float green = 0.1F;
 		static const float blue  = 0.1F;
 		static const float alpha = 1.0F;
-		glClearColor(red, green, blue, alpha);
-		glClear(GL_COLOR_BUFFER_BIT);
+
+		RenderCommand::set_clear_color({red, green, blue, alpha});
+		RenderCommand::clear();
+
+		Renderer::begin_scene();
 
 		shader_->bind();
-		vertex_array_->bind();
-		glDrawElements(GL_TRIANGLES, vertex_array_->get_index_buffer()->get_count(), GL_UNSIGNED_INT, nullptr);
-		
+		Renderer::submit(vertex_array_);
+
 		blue_shader_->bind();
-		square_vertex_array_->bind();
-		glDrawElements(GL_TRIANGLES, square_vertex_array_->get_index_buffer()->get_count(), GL_UNSIGNED_INT, nullptr);
+		Renderer::submit(square_vertex_array_);
+
+		Renderer::end_scene();
 
 		for (Layer* layer : layer_stack_) {
 			layer->on_update();

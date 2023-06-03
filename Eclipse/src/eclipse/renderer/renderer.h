@@ -1,18 +1,18 @@
 #pragma once
 
 #include "eclipse/core.h"
+#include "render_command.h"
 
 namespace eclipse {
 
-enum class RendererAPI { none, open_gl };
-
 class ECLIPSE_API Renderer {
 public:
-	inline static RendererAPI get_api() { return renderer_api_; }
+	static void begin_scene();
 
-	inline static void set_api(const RendererAPI& api) { renderer_api_ = api; }
+	static void end_scene();
 
-private:
-	static RendererAPI renderer_api_;
+	static void submit(const std::shared_ptr<VertexArray>& vertex_array);
+
+	inline static RendererAPI::API get_api() { return RendererAPI::get_api(); }
 };
 }  // namespace eclipse

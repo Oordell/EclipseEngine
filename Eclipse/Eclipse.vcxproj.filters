@@ -60,6 +60,15 @@
     <ClInclude Include="src\eclipse\Application.h">
       <Filter>src\eclipse</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\Core.h">
+      <Filter>src\eclipse</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\Log.h">
+      <Filter>src\eclipse</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\Window.h">
+      <Filter>src\eclipse</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
@@ -69,16 +78,13 @@
     <ClInclude Include="src\eclipse\common_types\window_size.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\core.h">
-      <Filter>src\eclipse</Filter>
-    </ClInclude>
     <ClInclude Include="src\eclipse\entry_point.h">
       <Filter>src\eclipse</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\events\application_events.h">
+    <ClInclude Include="src\eclipse\events\Event.h">
       <Filter>src\eclipse\events</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\events\event.h">
+    <ClInclude Include="src\eclipse\events\application_events.h">
       <Filter>src\eclipse\events</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\events\key_events.h">
@@ -105,9 +111,6 @@
     <ClInclude Include="src\eclipse\layer\layer_stack.h">
       <Filter>src\eclipse\layer</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\log.h">
-      <Filter>src\eclipse</Filter>
-    </ClInclude>
     <ClInclude Include="src\eclipse\mouse_button_key_codes.h">
       <Filter>src\eclipse</Filter>
     </ClInclude>
@@ -126,11 +129,11 @@
     <ClInclude Include="src\eclipse\renderer\shader.h">
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\renderer\vertex_buffer.h">
+    <ClInclude Include="src\eclipse\renderer\vertex_array.h">
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\window.h">
-      <Filter>src\eclipse</Filter>
+    <ClInclude Include="src\eclipse\renderer\vertex_buffer.h">
+      <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\ecpch.h">
       <Filter>src</Filter>
@@ -139,6 +142,9 @@
       <Filter>src\platform\opengl</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\opengl\opengl_index_buffer.h">
+      <Filter>src\platform\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\platform\opengl\opengl_vertex_array.h">
       <Filter>src\platform\opengl</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\opengl\opengl_vertex_buffer.h">
@@ -1398,9 +1404,15 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\renderer\renderer_api.h" />
+    <ClInclude Include="src\eclipse\renderer\render_command.h" />
+    <ClInclude Include="src\platform\opengl\opengl_renderer_api.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\Application.cpp">
+      <Filter>src\eclipse</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\Log.cpp">
       <Filter>src\eclipse</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\imgui\imgui_build.cpp">
@@ -1415,9 +1427,6 @@
     <ClCompile Include="src\eclipse\layer\layer_stack.cpp">
       <Filter>src\eclipse\layer</Filter>
     </ClCompile>
-    <ClCompile Include="src\eclipse\log.cpp">
-      <Filter>src\eclipse</Filter>
-    </ClCompile>
     <ClCompile Include="src\eclipse\renderer\index_buffer.cpp">
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
@@ -1425,6 +1434,9 @@
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\renderer\shader.cpp">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\renderer\vertex_array.cpp">
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\renderer\vertex_buffer.cpp">
@@ -1439,6 +1451,9 @@
     <ClCompile Include="src\platform\opengl\opengl_index_buffer.cpp">
       <Filter>src\platform\opengl</Filter>
     </ClCompile>
+    <ClCompile Include="src\platform\opengl\opengl_vertex_array.cpp">
+      <Filter>src\platform\opengl</Filter>
+    </ClCompile>
     <ClCompile Include="src\platform\opengl\opengl_vertex_buffer.cpp">
       <Filter>src\platform\opengl</Filter>
     </ClCompile>
@@ -1448,5 +1463,8 @@
     <ClCompile Include="src\platform\windows\windows_window.cpp">
       <Filter>src\platform\windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\eclipse\renderer\renderer_api.cpp" />
+    <ClCompile Include="src\eclipse\renderer\render_command.cpp" />
+    <ClCompile Include="src\platform\opengl\opengl_renderer_api.cpp" />
   </ItemGroup>
 </Project>
