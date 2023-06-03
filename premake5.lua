@@ -108,6 +108,7 @@ project "Sandbox"
 	includedirs {
 		"Eclipse/vendor/spdlog/include",
 		"Eclipse/src",
+		"Eclipse/vendor",
 		"%{IncludeDir.glm}"
 	}
 
