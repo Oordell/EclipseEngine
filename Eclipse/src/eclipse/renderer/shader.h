@@ -1,7 +1,9 @@
 #pragma once
 
-#include <string>
 #include "eclipse/core.h"
+
+#include <string>
+#include <glm/glm.hpp>
 
 namespace eclipse {
 
@@ -12,6 +14,8 @@ public:
 
 	void bind() const;
 	void unbind() const;
+
+	void upload_uniform_mat4(const std::string& name, const glm::mat4& matrix);
 
 private:
 	uint32_t renderer_id_ = 0;

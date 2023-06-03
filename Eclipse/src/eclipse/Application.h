@@ -14,6 +14,7 @@
 #include "eclipse/renderer/index_buffer.h"
 #include "eclipse/renderer/buffer_layout.h"
 #include "eclipse/renderer/vertex_array.h"
+#include "eclipse/renderer/orthographic_camera.h"
 
 namespace eclipse {
 
@@ -48,6 +49,10 @@ private:
 
 	std::shared_ptr<Shader> blue_shader_;
 	std::shared_ptr<VertexArray> square_vertex_array_ = std::shared_ptr<VertexArray>(VertexArray::create());
+
+	glm::vec3 camera_position_ {0.0F, 0.0F, 0.0F};
+	float camera_rotation_ {0.0F};
+	OrthographicCamera camera_ {{.left = -1.6F, .right = 1.6F, .bottom = -0.9, .top = 0.9}};
 };
 
 // To be defined in client

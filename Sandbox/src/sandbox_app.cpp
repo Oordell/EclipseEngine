@@ -8,15 +8,6 @@ public:
 
 	void on_update() override {
 		EC_INFO_THROTTLED(1.0, "ExampleLayer::on_update");
-
-		const unsigned int mouse_key    = EC_MOUSE_BUTTON_LEFT;
-		const unsigned int keyboard_key = EC_KEY_A;
-		if (eclipse::InputManager::is_mouse_button_pressed(mouse_key)) {
-			EC_CORE_FATAL("Mouse key is pressed!");
-		}
-		if (eclipse::InputManager::is_key_pressed(keyboard_key)) {
-			EC_CORE_FATAL("Keyboard key is pressed!");
-		}
 	}
 
 	void on_event(eclipse::Event& event) {

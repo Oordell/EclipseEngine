@@ -19,9 +19,9 @@ Application::Application() {
 	static const int dimentions = 3;
 	/* clang-format off */
 	float vertices[3 * 7]       = {
-		-0.9F, -0.9F, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 
-		0.9F, -0.9F, 0.0F, 0.0F, 0.0F,  1.0F, 1.0F, 
-		0.0F, 0.9F, 0.0F, 1.0F, 1.0F, 0.0F,  1.0F
+		-0.5F, -0.5F, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 
+		0.5F, -0.5F, 0.0F, 0.0F, 0.0F,  1.0F, 1.0F, 
+		0.0F, 0.5F, 0.0F, 1.0F, 1.0F, 0.0F,  1.0F
 	};
 	/* clang-format on */
 
@@ -39,10 +39,10 @@ Application::Application() {
 
 	/* clang-format off */
 	float square_vertices[3 * 4] = {
-		-0.5F, -0.5F, 0.0F, 
-		0.5F, -0.5F, 0.0F, 
-		0.5F, 0.5F, 0.0F, 
-		-0.5F, 0.5F, 0.0F
+		-0.75F, -0.75F, 0.0F, 
+		0.75F, -0.75F, 0.0F, 
+		0.75F, 0.75F, 0.0F, 
+		-0.75F, 0.75F, 0.0F
 	};
 	/* clang-format on */
 
@@ -62,13 +62,15 @@ Application::Application() {
 			layout(location = 0) in vec3 position_;
 			layout(location = 1) in vec4 color_;
 
+			uniform mat4 view_projection;
+
 			out vec3 v_position;
 			out vec4 v_color;
 			
 			void main() {
 				v_position = position_;
 				v_color = color_;
-				gl_Position = vec4(position_, 1.0);
+				gl_Position = view_projection * vec4(position_, 1.0);
 			}
 		)";
 
@@ -93,11 +95,13 @@ Application::Application() {
 			
 			layout(location = 0) in vec3 position_;
 
+			uniform mat4 view_projection;
+
 			out vec3 v_position;
 			
 			void main() {
 				v_position = position_;
-				gl_Position = vec4(position_, 1.0);
+				gl_Position = view_projection * vec4(position_, 1.0);
 			}
 		)";
 
@@ -152,13 +156,13 @@ void Application::run() {
 		RenderCommand::set_clear_color({red, green, blue, alpha});
 		RenderCommand::clear();
 
-		Renderer::begin_scene();
+		camera_.set_position(camera_position_);
+		camera_.set_rotation(camera_rotation_);
 
-		shader_->bind();
-		Renderer::submit(vertex_array_);
+		Renderer::begin_scene(camera_);
 
-		blue_shader_->bind();
-		Renderer::submit(square_vertex_array_);
+		Renderer::submit(blue_shader_, square_vertex_array_);
+		Renderer::submit(shader_, vertex_array_);
 
 		Renderer::end_scene();
 

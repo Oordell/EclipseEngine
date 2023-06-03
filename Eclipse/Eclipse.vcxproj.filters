@@ -1407,6 +1407,8 @@
     <ClInclude Include="src\eclipse\renderer\renderer_api.h" />
     <ClInclude Include="src\eclipse\renderer\render_command.h" />
     <ClInclude Include="src\platform\opengl\opengl_renderer_api.h" />
+    <ClInclude Include="src\eclipse\renderer\orthographic_camera.h" />
+    <ClInclude Include="src\eclipse\common_types\orthographic.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\Application.cpp">
@@ -1466,5 +1468,6 @@
     <ClCompile Include="src\eclipse\renderer\renderer_api.cpp" />
     <ClCompile Include="src\eclipse\renderer\render_command.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_renderer_api.cpp" />
+    <ClCompile Include="src\eclipse\renderer\orthographic_camera.cpp" />
   </ItemGroup>
 </Project>
