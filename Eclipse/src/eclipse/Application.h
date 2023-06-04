@@ -6,6 +6,7 @@
 #include "events/event.h"
 #include "events/window_events.h"
 #include "eclipse/imgui/imgui_layer.h"
+#include "eclipse/core/timestep.h"
 
 #include <memory>
 
@@ -36,6 +37,7 @@ private:
 	std::shared_ptr<ImGuiLayer> imgui_layer_ = std::make_shared<ImGuiLayer>();
 	bool running_                            = true;
 	LayerStack layer_stack_;
+	float last_frame_time_ {};
 };
 
 // To be defined in client

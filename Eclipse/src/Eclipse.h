@@ -6,6 +6,8 @@
 #include "eclipse/layer/layer.h"
 #include "eclipse/log.h"
 
+#include "eclipse/core/timestep.h"
+
 #include "eclipse/input_manager.h"
 #include "eclipse/key_codes.h"
 #include "eclipse/mouse_button_key_codes.h"

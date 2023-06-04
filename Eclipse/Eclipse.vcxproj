@@ -146,6 +146,7 @@
     <ClInclude Include="src\eclipse.h" />
     <ClInclude Include="src\eclipse\Application.h" />
     <ClInclude Include="src\eclipse\Core.h" />
+    <ClInclude Include="src\eclipse\core\timestep.h" />
     <ClInclude Include="src\eclipse\Log.h" />
     <ClInclude Include="src\eclipse\Window.h" />
     <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h" />

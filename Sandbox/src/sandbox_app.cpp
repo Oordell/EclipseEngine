@@ -112,21 +112,24 @@ public:
 
 	~ExampleLayer() = default;
 
-	void on_update() override {
+	void on_update(eclipse::Timestep timestep) override {
+		frame_rate_ = static_cast<unsigned int>(1.0F / timestep);
+		EC_TRACE_THROTTLED(0.25, "Frame rate: {0}Hz", frame_rate_);
+
 		if (eclipse::InputManager::is_key_pressed(EC_KEY_LEFT)) {
-			camera_position_.x -= camera_move_speed_;
+			camera_position_.x -= camera_move_speed_ * timestep;
 		} else if (eclipse::InputManager::is_key_pressed(EC_KEY_RIGHT)) {
-			camera_position_.x += camera_move_speed_;
+			camera_position_.x += camera_move_speed_ * timestep;
 		}
 		if (eclipse::InputManager::is_key_pressed(EC_KEY_UP)) {
-			camera_position_.y += camera_move_speed_;
+			camera_position_.y += camera_move_speed_ * timestep;
 		} else if (eclipse::InputManager::is_key_pressed(EC_KEY_DOWN)) {
-			camera_position_.y -= camera_move_speed_;
+			camera_position_.y -= camera_move_speed_ * timestep;
 		}
 		if (eclipse::InputManager::is_key_pressed(EC_KEY_A)) {
-			camera_rotation_ += camera_rotate_speed_;
+			camera_rotation_ += camera_rotate_speed_ * timestep;
 		} else if (eclipse::InputManager::is_key_pressed(EC_KEY_D)) {
-			camera_rotation_ -= camera_rotate_speed_;
+			camera_rotation_ -= camera_rotate_speed_ * timestep;
 		}
 
 		static const float red   = 0.1F;
@@ -148,7 +151,12 @@ public:
 		eclipse::Renderer::end_scene();
 	}
 
-	void on_imgui_render() override {}
+	void on_imgui_render() override {
+		std::string text = "Frame rate: " + std::to_string(frame_rate_);
+		ImGui::Begin("Test");
+		ImGui::Text(text.c_str());
+		ImGui::End();
+	}
 
 	void on_event(eclipse::Event& event) {
 		eclipse::EventDispatcher dispatcher(event);
@@ -169,8 +177,9 @@ private:
 	glm::vec3 camera_position_ {0.0F, 0.0F, 0.0F};
 	float camera_rotation_ {0.0F};
 	eclipse::OrthographicCamera camera_ {{.left = -1.6F, .right = 1.6F, .bottom = -0.9F, .top = 0.9F}};
-	float camera_move_speed_ = 0.01F;
-	float camera_rotate_speed_ = 0.5F;
+	float camera_move_speed_   = 2.0F;   // [units / sec]
+	float camera_rotate_speed_ = 90.0F;  // [degrees / sec]
+	unsigned int frame_rate_   = 0;
 };
 
 class Sandbox : public eclipse::Application {

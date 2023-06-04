@@ -3,6 +3,8 @@
 #include "eclipse/renderer/renderer.h"
 #include "input_manager.h"
 
+#include <GLFW/glfw3.h>
+
 namespace eclipse {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -13,7 +15,6 @@ Application::Application() {
 	EC_CORE_ASSERT(!instance_, "Application already exists!");
 	instance_ = this;
 	window_->set_event_callback(BIND_EVENT_FN(on_event));
-
 	push_overlay(imgui_layer_.get());
 };
 
@@ -45,8 +46,12 @@ void Application::push_overlay(Layer* overlay) {
 
 void Application::run() {
 	while (running_) {
+		auto time         = static_cast<float>(glfwGetTime());
+		Timestep timestep = Timestep(time - last_frame_time_);
+		last_frame_time_  = time;
+
 		for (Layer* layer : layer_stack_) {
-			layer->on_update();
+			layer->on_update(timestep);
 		}
 
 		imgui_layer_->begin();
