@@ -2,17 +2,20 @@
 
 #include "imgui/imgui.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 class ExampleLayer : public eclipse::Layer {
 public:
 	ExampleLayer() : Layer("Example") {
 		static const int dimentions = 3;
-		float vertices[3 * 7]       = {
-      /* clang-format off */
+
+		float vertices[3 * 7] = {
+		    /* clang-format off */
 			-0.5F, -0.5F, 0.0F, 1.0F, 0.0F, 1.0F, 1.0F, 
 			0.5F, -0.5F, 0.0F, 0.0F, 0.0F,  1.0F, 1.0F, 
 			0.0F, 0.5F, 0.0F, 1.0F, 1.0F, 0.0F,  1.0F
-      /* clang-format on */
-  };
+		    /* clang-format on */
+		};
 
 		std::shared_ptr<eclipse::VertexBuffer> vertex_buffer;
 		vertex_buffer.reset(eclipse::VertexBuffer::create(vertices, sizeof(vertices)));
@@ -29,10 +32,10 @@ public:
 
 		float square_vertices[3 * 4] = {
 		    /* clang-format off */
-			-0.75F, -0.75F, 0.0F, 
-			0.75F, -0.75F, 0.0F, 
-			0.75F, 0.75F, 0.0F, 
-			-0.75F, 0.75F, 0.0F
+			-0.5F, -0.5F, 0.0F, 
+			0.5F, -0.5F, 0.0F, 
+			0.5F, 0.5F, 0.0F, 
+			-0.5F, 0.5F, 0.0F
 		    /* clang-format on */
 		};
 
@@ -53,6 +56,7 @@ public:
 			layout(location = 1) in vec4 color_;
 
 			uniform mat4 view_projection;
+			uniform mat4 transform;
 
 			out vec3 v_position;
 			out vec4 v_color;
@@ -60,7 +64,7 @@ public:
 			void main() {
 				v_position = position_;
 				v_color = color_;
-				gl_Position = view_projection * vec4(position_, 1.0);
+				gl_Position = view_projection * transform * vec4(position_, 1.0);
 			}
 		)";
 
@@ -86,12 +90,13 @@ public:
 			layout(location = 0) in vec3 position_;
 
 			uniform mat4 view_projection;
+			uniform mat4 transform;
 
 			out vec3 v_position;
 			
 			void main() {
 				v_position = position_;
-				gl_Position = view_projection * vec4(position_, 1.0);
+				gl_Position = view_projection * transform * vec4(position_, 1.0);
 			}
 		)";
 
@@ -145,7 +150,18 @@ public:
 
 		eclipse::Renderer::begin_scene(camera_);
 
-		eclipse::Renderer::submit(blue_shader_, square_vertex_array_);
+		static const glm::mat4 identity_matrix = glm::mat4(1.0F);
+		static const glm::mat4 scale           = glm::scale(identity_matrix, glm::vec3(0.1F));
+		static const unsigned int no_tiles     = 20;
+		static const float tile_position_scale = 0.11F;
+
+		for (int y = 0; y < no_tiles; y++) {
+			for (int x = 0; x < no_tiles; x++) {
+				glm::vec3 position(x * tile_position_scale, y * tile_position_scale, 0.0F);
+				glm::mat4 square_transform = glm::translate(identity_matrix, position) * scale;
+				eclipse::Renderer::submit(blue_shader_, square_vertex_array_, square_transform);
+			}
+		}
 		eclipse::Renderer::submit(shader_, vertex_array_);
 
 		eclipse::Renderer::end_scene();
