@@ -84,7 +84,7 @@ public:
 
 		shader_ = std::make_unique<eclipse::Shader>(vertex_src, fragments_src);
 
-		std::string blue_vertex_src = R"(
+		std::string flat_color_vertex_src = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 position_;
@@ -100,19 +100,21 @@ public:
 			}
 		)";
 
-		std::string blue_fragments_src = R"(
+		std::string flat_color_fragments_src = R"(
 			#version 330 core
 			
 			layout(location = 0) out vec4 color;
 
 			in vec3 v_position;
+
+			uniform vec4 u_color;
 			
 			void main() {
-				color = vec4(0.2, 0.3, 0.8, 1.0);
+				color = u_color;
 			}
 		)";
 
-		blue_shader_ = std::make_unique<eclipse::Shader>(blue_vertex_src, blue_fragments_src);
+		flat_color_shader_ = std::make_unique<eclipse::Shader>(flat_color_vertex_src, flat_color_fragments_src);
 	}
 
 	~ExampleLayer() = default;
@@ -154,12 +156,15 @@ public:
 		static const glm::mat4 scale           = glm::scale(identity_matrix, glm::vec3(0.1F));
 		static const unsigned int no_tiles     = 20;
 		static const float tile_position_scale = 0.11F;
+		static const glm::vec4 color_red(0.8F, 0.2F, 0.3F, 1.0F);
+		static const glm::vec4 color_blue(0.2F, 0.3F, 0.8F, 1.0F);
 
 		for (int y = 0; y < no_tiles; y++) {
 			for (int x = 0; x < no_tiles; x++) {
 				glm::vec3 position(x * tile_position_scale, y * tile_position_scale, 0.0F);
 				glm::mat4 square_transform = glm::translate(identity_matrix, position) * scale;
-				eclipse::Renderer::submit(blue_shader_, square_vertex_array_, square_transform);
+				flat_color_shader_->upload_uniform_float4("u_color", x % 2 == 0 ? color_red : color_blue);
+				eclipse::Renderer::submit(flat_color_shader_, square_vertex_array_, square_transform);
 			}
 		}
 		eclipse::Renderer::submit(shader_, vertex_array_);
@@ -186,7 +191,7 @@ private:
 	std::shared_ptr<eclipse::VertexArray> vertex_array_ =
 	    std::shared_ptr<eclipse::VertexArray>(eclipse::VertexArray::create());
 
-	std::shared_ptr<eclipse::Shader> blue_shader_;
+	std::shared_ptr<eclipse::Shader> flat_color_shader_;
 	std::shared_ptr<eclipse::VertexArray> square_vertex_array_ =
 	    std::shared_ptr<eclipse::VertexArray>(eclipse::VertexArray::create());
 
