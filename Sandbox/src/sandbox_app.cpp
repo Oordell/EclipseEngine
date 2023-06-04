@@ -3,6 +3,10 @@
 #include "imgui/imgui.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "platform/opengl/opengl_shader.h"
+
+#include <memory>
 
 class ExampleLayer : public eclipse::Layer {
 public:
@@ -82,7 +86,7 @@ public:
 			}
 		)";
 
-		shader_ = std::make_unique<eclipse::Shader>(vertex_src, fragments_src);
+		shader_.reset(eclipse::Shader::create(vertex_src, fragments_src));
 
 		std::string flat_color_vertex_src = R"(
 			#version 330 core
@@ -107,14 +111,14 @@ public:
 
 			in vec3 v_position;
 
-			uniform vec4 u_color;
+			uniform vec3 u_color;
 			
 			void main() {
-				color = u_color;
+				color = vec4(u_color, 1.0);
 			}
 		)";
 
-		flat_color_shader_ = std::make_unique<eclipse::Shader>(flat_color_vertex_src, flat_color_fragments_src);
+		flat_color_shader_.reset(eclipse::Shader::create(flat_color_vertex_src, flat_color_fragments_src));
 	}
 
 	~ExampleLayer() = default;
@@ -156,14 +160,14 @@ public:
 		static const glm::mat4 scale           = glm::scale(identity_matrix, glm::vec3(0.1F));
 		static const unsigned int no_tiles     = 20;
 		static const float tile_position_scale = 0.11F;
-		static const glm::vec4 color_red(0.8F, 0.2F, 0.3F, 1.0F);
-		static const glm::vec4 color_blue(0.2F, 0.3F, 0.8F, 1.0F);
+
+		std::dynamic_pointer_cast<eclipse::OpenGLShader>(flat_color_shader_)->bind();
+		std::dynamic_pointer_cast<eclipse::OpenGLShader>(flat_color_shader_)->upload_uniform_float3("u_color", square_color_);
 
 		for (int y = 0; y < no_tiles; y++) {
 			for (int x = 0; x < no_tiles; x++) {
 				glm::vec3 position(x * tile_position_scale, y * tile_position_scale, 0.0F);
 				glm::mat4 square_transform = glm::translate(identity_matrix, position) * scale;
-				flat_color_shader_->upload_uniform_float4("u_color", x % 2 == 0 ? color_red : color_blue);
 				eclipse::Renderer::submit(flat_color_shader_, square_vertex_array_, square_transform);
 			}
 		}
@@ -176,6 +180,10 @@ public:
 		std::string text = "Frame rate: " + std::to_string(frame_rate_);
 		ImGui::Begin("Test");
 		ImGui::Text(text.c_str());
+		ImGui::End();
+
+		ImGui::Begin("Settings");
+		ImGui::ColorEdit3("Square color", glm::value_ptr(square_color_));
 		ImGui::End();
 	}
 
@@ -201,6 +209,8 @@ private:
 	float camera_move_speed_   = 2.0F;   // [units / sec]
 	float camera_rotate_speed_ = 90.0F;  // [degrees / sec]
 	unsigned int frame_rate_   = 0;
+
+	glm::vec3 square_color_ = {0.2F, 0.3F, 0.8F};
 };
 
 class Sandbox : public eclipse::Application {
