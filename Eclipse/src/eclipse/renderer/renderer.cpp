@@ -13,7 +13,7 @@ void Renderer::begin_scene(OrthographicCamera& camera) {
 
 void Renderer::end_scene() {}
 
-void Renderer::submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertex_array,
+void Renderer::submit(const ref<Shader>& shader, const ref<VertexArray>& vertex_array,
                       const glm::mat4& transform) {
 	shader->bind();
 	std::dynamic_pointer_cast<OpenGLShader>(shader)->upload_uniform_mat4("view_projection",

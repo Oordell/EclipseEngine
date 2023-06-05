@@ -21,7 +21,7 @@ public:
 		    /* clang-format on */
 		};
 
-		std::shared_ptr<eclipse::VertexBuffer> vertex_buffer;
+		eclipse::ref<eclipse::VertexBuffer> vertex_buffer;
 		vertex_buffer.reset(eclipse::VertexBuffer::create(vertices, sizeof(vertices)));
 
 		eclipse::BufferLayout layout {{eclipse::ShaderDataType::floatvec3, "position_"},
@@ -30,7 +30,7 @@ public:
 		vertex_array_->add_vertex_buffer(vertex_buffer);
 
 		uint32_t indices[dimentions] = {0, 1, 2};
-		std::shared_ptr<eclipse::IndexBuffer> index_buffer;
+		eclipse::ref<eclipse::IndexBuffer> index_buffer;
 		index_buffer.reset(eclipse::IndexBuffer::create(indices, dimentions));
 		vertex_array_->set_index_buffer(index_buffer);
 
@@ -43,13 +43,13 @@ public:
 		    /* clang-format on */
 		};
 
-		std::shared_ptr<eclipse::VertexBuffer> square_vertex_buffer;
+		eclipse::ref<eclipse::VertexBuffer> square_vertex_buffer;
 		square_vertex_buffer.reset(eclipse::VertexBuffer::create(square_vertices, sizeof(square_vertices)));
 		square_vertex_buffer->set_layout({{eclipse::ShaderDataType::floatvec3, "position_"}});
 		square_vertex_array_->add_vertex_buffer(square_vertex_buffer);
 
 		uint32_t square_indices[6] = {0, 1, 2, 2, 3, 0};
-		std::shared_ptr<eclipse::IndexBuffer> square_index_buffer_;
+		eclipse::ref<eclipse::IndexBuffer> square_index_buffer_;
 		square_index_buffer_.reset(eclipse::IndexBuffer::create(square_indices, sizeof(square_indices) / sizeof(uint32_t)));
 		square_vertex_array_->set_index_buffer(square_index_buffer_);
 
@@ -195,13 +195,12 @@ public:
 	bool on_key_pressed_event(eclipse::KeyPressedEvent& event) { return false; }
 
 private:
-	std::shared_ptr<eclipse::Shader> shader_;
-	std::shared_ptr<eclipse::VertexArray> vertex_array_ =
-	    std::shared_ptr<eclipse::VertexArray>(eclipse::VertexArray::create());
+	eclipse::ref<eclipse::Shader> shader_;
+	eclipse::ref<eclipse::VertexArray> vertex_array_ = eclipse::ref<eclipse::VertexArray>(eclipse::VertexArray::create());
 
-	std::shared_ptr<eclipse::Shader> flat_color_shader_;
-	std::shared_ptr<eclipse::VertexArray> square_vertex_array_ =
-	    std::shared_ptr<eclipse::VertexArray>(eclipse::VertexArray::create());
+	eclipse::ref<eclipse::Shader> flat_color_shader_;
+	eclipse::ref<eclipse::VertexArray> square_vertex_array_ =
+	    eclipse::ref<eclipse::VertexArray>(eclipse::VertexArray::create());
 
 	glm::vec3 camera_position_ {0.0F, 0.0F, 0.0F};
 	float camera_rotation_ {0.0F};

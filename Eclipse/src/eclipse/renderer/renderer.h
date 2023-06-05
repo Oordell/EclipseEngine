@@ -13,7 +13,7 @@ public:
 
 	static void end_scene();
 
-	static void submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertex_array,
+	static void submit(const ref<Shader>& shader, const ref<VertexArray>& vertex_array,
 	                   const glm::mat4& transform = glm::mat4(1.0F));
 
 	inline static RendererAPI::API get_api() { return RendererAPI::get_api(); }

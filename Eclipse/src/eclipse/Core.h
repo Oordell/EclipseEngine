@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #ifdef EC_PLATFORM_WINDOWS
 #if EC_DYNAMIC_LINK
 #ifdef EC_BUILD_DLL
@@ -44,3 +46,23 @@ constexpr auto BIT(T x) {
 }
 
 #define EC_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+
+namespace eclipse {
+
+template <typename T>
+using scope = std::unique_ptr<T>;
+
+template <typename T, typename... Args>
+scope<T> make_scope(Args&&... args) {
+	return std::make_unique<T>(args...);
+}
+
+template <typename T>
+using ref = std::shared_ptr<T>;
+
+template <typename T, typename... Args>
+ref<T> make_ref(Args&&... args) {
+	return std::make_shared<T>(args...);
+}
+
+}  // namespace eclipse

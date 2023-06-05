@@ -8,8 +8,6 @@
 #include "eclipse/imgui/imgui_layer.h"
 #include "eclipse/core/timestep.h"
 
-#include <memory>
-
 namespace eclipse {
 
 class ECLIPSE_API Application {
@@ -33,9 +31,9 @@ private:
 	bool on_window_closed(WindowClosedEvent& e);
 
 	static Application* instance_;
-	std::unique_ptr<Window> window_          = std::unique_ptr<Window>(Window::create());
-	std::shared_ptr<ImGuiLayer> imgui_layer_ = std::make_shared<ImGuiLayer>();
-	bool running_                            = true;
+	scope<Window> window_        = scope<Window>(Window::create());
+	ref<ImGuiLayer> imgui_layer_ = make_ref<ImGuiLayer>();
+	bool running_                = true;
 	LayerStack layer_stack_;
 	float last_frame_time_ {};
 };
