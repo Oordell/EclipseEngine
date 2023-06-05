@@ -34,18 +34,19 @@ public:
 		index_buffer.reset(eclipse::IndexBuffer::create(indices, dimentions));
 		vertex_array_->set_index_buffer(index_buffer);
 
-		float square_vertices[3 * 4] = {
+		float square_vertices[5 * 4] = {
 		    /* clang-format off */
-			-0.5F, -0.5F, 0.0F, 
-			0.5F, -0.5F, 0.0F, 
-			0.5F, 0.5F, 0.0F, 
-			-0.5F, 0.5F, 0.0F
+			-0.5F, -0.5F, 0.0F, 0.0F, 0.0F,
+			0.5F, -0.5F, 0.0F, 1.0F, 0.0F,
+			0.5F, 0.5F, 0.0F, 1.0F, 1.0F,
+			-0.5F, 0.5F, 0.0F, 0.0F, 1.0F
 		    /* clang-format on */
 		};
 
 		eclipse::ref<eclipse::VertexBuffer> square_vertex_buffer;
 		square_vertex_buffer.reset(eclipse::VertexBuffer::create(square_vertices, sizeof(square_vertices)));
-		square_vertex_buffer->set_layout({{eclipse::ShaderDataType::floatvec3, "position_"}});
+		square_vertex_buffer->set_layout(
+		    {{eclipse::ShaderDataType::floatvec3, "position_"}, {eclipse::ShaderDataType::floatvec2, "tex_coord_"}});
 		square_vertex_array_->add_vertex_buffer(square_vertex_buffer);
 
 		uint32_t square_indices[6] = {0, 1, 2, 2, 3, 0};
@@ -119,6 +120,42 @@ public:
 		)";
 
 		flat_color_shader_.reset(eclipse::Shader::create(flat_color_vertex_src, flat_color_fragments_src));
+
+		std::string texture_shader_vertex_src = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 position_;
+			layout(location = 1) in vec2 tex_coord_;
+
+			uniform mat4 view_projection;
+			uniform mat4 transform;
+
+			out vec2 v_tex_coord_;
+
+			void main() {
+				v_tex_coord_ = tex_coord_;
+				gl_Position = view_projection * transform * vec4(position_, 1.0);
+			}
+		)";
+
+		std::string texture_shader_fragments_src = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec2 v_tex_coord_;
+
+			uniform sampler2D u_texture;
+			
+			void main() {
+				color = texture(u_texture, v_tex_coord_);
+			}
+		)";
+
+		texture_shader_.reset(eclipse::Shader::create(texture_shader_vertex_src, texture_shader_fragments_src));
+
+		std::dynamic_pointer_cast<eclipse::OpenGLShader>(texture_shader_)->bind();
+		std::dynamic_pointer_cast<eclipse::OpenGLShader>(texture_shader_)->upload_uniform_int("u_texture", 0);
 	}
 
 	~ExampleLayer() = default;
@@ -171,7 +208,11 @@ public:
 				eclipse::Renderer::submit(flat_color_shader_, square_vertex_array_, square_transform);
 			}
 		}
-		eclipse::Renderer::submit(shader_, vertex_array_);
+		texture_->bind(0);
+		eclipse::Renderer::submit(texture_shader_, square_vertex_array_, glm::scale(identity_matrix, glm::vec3(1.5F)));
+
+		// Triangle
+		//	eclipse::Renderer::submit(shader_, vertex_array_);
 
 		eclipse::Renderer::end_scene();
 	}
@@ -199,8 +240,11 @@ private:
 	eclipse::ref<eclipse::VertexArray> vertex_array_ = eclipse::ref<eclipse::VertexArray>(eclipse::VertexArray::create());
 
 	eclipse::ref<eclipse::Shader> flat_color_shader_;
+	eclipse::ref<eclipse::Shader> texture_shader_;
 	eclipse::ref<eclipse::VertexArray> square_vertex_array_ =
 	    eclipse::ref<eclipse::VertexArray>(eclipse::VertexArray::create());
+
+	eclipse::ref<eclipse::Texture2D> texture_ = eclipse::Texture2D::create("assets/textures/Checkerboard.png");
 
 	glm::vec3 camera_position_ {0.0F, 0.0F, 0.0F};
 	float camera_rotation_ {0.0F};

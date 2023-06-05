@@ -10,6 +10,9 @@
     <Filter Include="src\eclipse\common_types">
       <UniqueIdentifier>{AD68BA6C-998D-09ED-C2D8-EE7CAE5C080B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\eclipse\core">
+      <UniqueIdentifier>{D9127BAA-C50B-9AFC-EE3D-7F81DA957908}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\eclipse\events">
       <UniqueIdentifier>{A53EAD3A-9122-6E90-FA82-68E3E6855812}</UniqueIdentifier>
     </Filter>
@@ -52,21 +55,15 @@
     <Filter Include="vendor\glm\glm\gtx">
       <UniqueIdentifier>{B3A6A76B-9F8A-68C1-08EB-6214F4ED5243}</UniqueIdentifier>
     </Filter>
+    <Filter Include="vendor\stb_image">
+      <UniqueIdentifier>{0DA0BA59-F998-D9AB-22CB-BE300E23B9B7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\eclipse.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\application.h">
-      <Filter>src\eclipse</Filter>
-    </ClInclude>
-    <ClInclude Include="src\eclipse\core.h">
-      <Filter>src\eclipse</Filter>
-    </ClInclude>
-    <ClInclude Include="src\eclipse\log.h">
-      <Filter>src\eclipse</Filter>
-    </ClInclude>
-    <ClInclude Include="src\eclipse\window.h">
       <Filter>src\eclipse</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h">
@@ -81,13 +78,19 @@
     <ClInclude Include="src\eclipse\common_types\window_size.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\core.h">
+      <Filter>src\eclipse</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\core\timestep.h">
+      <Filter>src\eclipse\core</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\entry_point.h">
       <Filter>src\eclipse</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\events\event.h">
+    <ClInclude Include="src\eclipse\events\application_events.h">
       <Filter>src\eclipse\events</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\events\application_events.h">
+    <ClInclude Include="src\eclipse\events\event.h">
       <Filter>src\eclipse\events</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\events\key_events.h">
@@ -113,6 +116,9 @@
     </ClInclude>
     <ClInclude Include="src\eclipse\layer\layer_stack.h">
       <Filter>src\eclipse\layer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\log.h">
+      <Filter>src\eclipse</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\mouse_button_key_codes.h">
       <Filter>src\eclipse</Filter>
@@ -141,11 +147,17 @@
     <ClInclude Include="src\eclipse\renderer\shader.h">
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\renderer\texture.h">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\renderer\vertex_array.h">
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h">
       <Filter>src\eclipse\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\window.h">
+      <Filter>src\eclipse</Filter>
     </ClInclude>
     <ClInclude Include="src\ecpch.h">
       <Filter>src</Filter>
@@ -157,6 +169,12 @@
       <Filter>src\platform\opengl</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\opengl\opengl_renderer_api.h">
+      <Filter>src\platform\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\platform\opengl\opengl_shader.h">
+      <Filter>src\platform\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\platform\opengl\opengl_texture.h">
       <Filter>src\platform\opengl</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\opengl\opengl_vertex_array.h">
@@ -1419,14 +1437,12 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\core\timestep.h" />
-    <ClInclude Include="src\platform\opengl\opengl_shader.h" />
+    <ClInclude Include="vendor\stb_image\stb_image.h">
+      <Filter>vendor\stb_image</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\application.cpp">
-      <Filter>src\eclipse</Filter>
-    </ClCompile>
-    <ClCompile Include="src\eclipse\log.cpp">
       <Filter>src\eclipse</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\imgui\imgui_build.cpp">
@@ -1440,6 +1456,9 @@
     </ClCompile>
     <ClCompile Include="src\eclipse\layer\layer_stack.cpp">
       <Filter>src\eclipse\layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\log.cpp">
+      <Filter>src\eclipse</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\renderer\index_buffer.cpp">
       <Filter>src\eclipse\renderer</Filter>
@@ -1457,6 +1476,9 @@
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\renderer\shader.cpp">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\renderer\texture.cpp">
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\renderer\vertex_array.cpp">
@@ -1477,6 +1499,12 @@
     <ClCompile Include="src\platform\opengl\opengl_renderer_api.cpp">
       <Filter>src\platform\opengl</Filter>
     </ClCompile>
+    <ClCompile Include="src\platform\opengl\opengl_shader.cpp">
+      <Filter>src\platform\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\platform\opengl\opengl_texture.cpp">
+      <Filter>src\platform\opengl</Filter>
+    </ClCompile>
     <ClCompile Include="src\platform\opengl\opengl_vertex_array.cpp">
       <Filter>src\platform\opengl</Filter>
     </ClCompile>
@@ -1489,6 +1517,8 @@
     <ClCompile Include="src\platform\windows\windows_window.cpp">
       <Filter>src\platform\windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\platform\opengl\opengl_shader.cpp" />
+    <ClCompile Include="vendor\stb_image\stb_image.cpp">
+      <Filter>vendor\stb_image</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

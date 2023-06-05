@@ -19,6 +19,7 @@
 #include "eclipse/renderer/index_buffer.h"
 #include "eclipse/renderer/vertex_buffer.h"
 #include "eclipse/renderer/shader.h"
+#include "eclipse/renderer/texture.h"
 #include "eclipse/renderer/vertex_array.h"
 #include "eclipse/renderer/orthographic_camera.h"
 

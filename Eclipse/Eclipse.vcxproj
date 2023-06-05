@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>ecpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EC_PLATFORM_WINDOWS;EC_BUILD_DLL;GLFW_INCLUDE_NONE;ECLIPSE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW_fork\include;vendor\GLAD\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW_fork\include;vendor\GLAD\include;vendor\imgui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -98,7 +98,7 @@
       <PrecompiledHeaderFile>ecpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EC_PLATFORM_WINDOWS;EC_BUILD_DLL;GLFW_INCLUDE_NONE;ECLIPSE_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW_fork\include;vendor\GLAD\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW_fork\include;vendor\GLAD\include;vendor\imgui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -123,7 +123,7 @@
       <PrecompiledHeaderFile>ecpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EC_PLATFORM_WINDOWS;EC_BUILD_DLL;GLFW_INCLUDE_NONE;ECLIPSE_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW_fork\include;vendor\GLAD\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW_fork\include;vendor\GLAD\include;vendor\imgui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -145,17 +145,15 @@
   <ItemGroup>
     <ClInclude Include="src\eclipse.h" />
     <ClInclude Include="src\eclipse\application.h" />
-    <ClInclude Include="src\eclipse\core.h" />
-    <ClInclude Include="src\eclipse\core\timestep.h" />
-    <ClInclude Include="src\eclipse\log.h" />
-    <ClInclude Include="src\eclipse\window.h" />
     <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h" />
     <ClInclude Include="src\eclipse\common_types\orthographic.h" />
     <ClInclude Include="src\eclipse\common_types\point_2d.h" />
     <ClInclude Include="src\eclipse\common_types\window_size.h" />
+    <ClInclude Include="src\eclipse\core.h" />
+    <ClInclude Include="src\eclipse\core\timestep.h" />
     <ClInclude Include="src\eclipse\entry_point.h" />
-    <ClInclude Include="src\eclipse\events\event.h" />
     <ClInclude Include="src\eclipse\events\application_events.h" />
+    <ClInclude Include="src\eclipse\events\event.h" />
     <ClInclude Include="src\eclipse\events\key_events.h" />
     <ClInclude Include="src\eclipse\events\mouse_events.h" />
     <ClInclude Include="src\eclipse\events\window_events.h" />
@@ -164,6 +162,7 @@
     <ClInclude Include="src\eclipse\key_codes.h" />
     <ClInclude Include="src\eclipse\layer\layer.h" />
     <ClInclude Include="src\eclipse\layer\layer_stack.h" />
+    <ClInclude Include="src\eclipse\log.h" />
     <ClInclude Include="src\eclipse\mouse_button_key_codes.h" />
     <ClInclude Include="src\eclipse\renderer\buffer_layout.h" />
     <ClInclude Include="src\eclipse\renderer\graphics_context.h" />
@@ -173,13 +172,16 @@
     <ClInclude Include="src\eclipse\renderer\renderer.h" />
     <ClInclude Include="src\eclipse\renderer\renderer_api.h" />
     <ClInclude Include="src\eclipse\renderer\shader.h" />
+    <ClInclude Include="src\eclipse\renderer\texture.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_array.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h" />
+    <ClInclude Include="src\eclipse\window.h" />
     <ClInclude Include="src\ecpch.h" />
     <ClInclude Include="src\platform\opengl\opengl_context.h" />
     <ClInclude Include="src\platform\opengl\opengl_index_buffer.h" />
     <ClInclude Include="src\platform\opengl\opengl_renderer_api.h" />
     <ClInclude Include="src\platform\opengl\opengl_shader.h" />
+    <ClInclude Include="src\platform\opengl\opengl_texture.h" />
     <ClInclude Include="src\platform\opengl\opengl_vertex_array.h" />
     <ClInclude Include="src\platform\opengl\opengl_vertex_buffer.h" />
     <ClInclude Include="src\platform\windows\windows_input.h" />
@@ -600,20 +602,22 @@
     <ClInclude Include="vendor\glm\glm\vec3.hpp" />
     <ClInclude Include="vendor\glm\glm\vec4.hpp" />
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
+    <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\application.cpp" />
-    <ClCompile Include="src\eclipse\log.cpp" />
     <ClCompile Include="src\eclipse\imgui\imgui_build.cpp" />
     <ClCompile Include="src\eclipse\imgui\imgui_layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer_stack.cpp" />
+    <ClCompile Include="src\eclipse\log.cpp" />
     <ClCompile Include="src\eclipse\renderer\index_buffer.cpp" />
     <ClCompile Include="src\eclipse\renderer\orthographic_camera.cpp" />
     <ClCompile Include="src\eclipse\renderer\render_command.cpp" />
     <ClCompile Include="src\eclipse\renderer\renderer.cpp" />
     <ClCompile Include="src\eclipse\renderer\renderer_api.cpp" />
     <ClCompile Include="src\eclipse\renderer\shader.cpp" />
+    <ClCompile Include="src\eclipse\renderer\texture.cpp" />
     <ClCompile Include="src\eclipse\renderer\vertex_array.cpp" />
     <ClCompile Include="src\eclipse\renderer\vertex_buffer.cpp" />
     <ClCompile Include="src\ecpch.cpp">
@@ -623,10 +627,12 @@
     <ClCompile Include="src\platform\opengl\opengl_index_buffer.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_renderer_api.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_shader.cpp" />
+    <ClCompile Include="src\platform\opengl\opengl_texture.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_vertex_array.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_vertex_buffer.cpp" />
     <ClCompile Include="src\platform\windows\windows_input.cpp" />
     <ClCompile Include="src\platform\windows\windows_window.cpp" />
+    <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW_fork\GLFW.vcxproj">
