@@ -1440,6 +1440,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\common_types\strong_types.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\application.cpp">

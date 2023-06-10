@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="src\eclipse.h" />
     <ClInclude Include="src\eclipse\application.h" />
+    <ClInclude Include="src\eclipse\common_types\strong_types.h" />
     <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h" />
     <ClInclude Include="src\eclipse\common_types\orthographic.h" />
     <ClInclude Include="src\eclipse\common_types\point_2d.h" />

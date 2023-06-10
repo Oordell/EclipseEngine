@@ -3,10 +3,14 @@
 #include "eclipse/renderer/shader.h"
 #include <glm/glm.hpp>
 
+// TODO: Remove!
+using GLenum = unsigned int;
+
 namespace eclipse {
 
 class ECLIPSE_API OpenGLShader : public Shader {
 public:
+	OpenGLShader(const FilePath& filepath);
 	OpenGLShader(const std::string& vertex_src, const std::string& fragment_src);
 	virtual ~OpenGLShader();
 
@@ -22,6 +26,10 @@ public:
 	void upload_uniform_mat4(const std::string& name, const glm::mat4& matrix);
 
 private:
+	std::string read_file(const FilePath& filepath);
+	std::unordered_map<GLenum, std::string> pre_process(const std::string& vertes_src);
+	void compile(const std::unordered_map<GLenum, std::string>& shader_srcs);
+
 	uint32_t renderer_id_ = 0;
 };
 
