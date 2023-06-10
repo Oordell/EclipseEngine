@@ -15,6 +15,9 @@ Application::Application() {
 	EC_CORE_ASSERT(!instance_, "Application already exists!");
 	instance_ = this;
 	window_->set_event_callback(BIND_EVENT_FN(on_event));
+
+	Renderer::init();
+
 	push_overlay(imgui_layer_.get());
 };
 

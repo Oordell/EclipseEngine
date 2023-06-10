@@ -210,6 +210,8 @@ public:
 		}
 		texture_->bind(0);
 		eclipse::Renderer::submit(texture_shader_, square_vertex_array_, glm::scale(identity_matrix, glm::vec3(1.5F)));
+		texture_ordell_logo_->bind(0);
+		eclipse::Renderer::submit(texture_shader_, square_vertex_array_, glm::scale(identity_matrix, glm::vec3(1.5F)));
 
 		// Triangle
 		//	eclipse::Renderer::submit(shader_, vertex_array_);
@@ -245,6 +247,8 @@ private:
 	    eclipse::ref<eclipse::VertexArray>(eclipse::VertexArray::create());
 
 	eclipse::ref<eclipse::Texture2D> texture_ = eclipse::Texture2D::create("assets/textures/Checkerboard.png");
+	eclipse::ref<eclipse::Texture2D> texture_ordell_logo_ =
+	    eclipse::Texture2D::create("assets/textures/olliver_ordell_logo.png");
 
 	glm::vec3 camera_position_ {0.0F, 0.0F, 0.0F};
 	float camera_rotation_ {0.0F};

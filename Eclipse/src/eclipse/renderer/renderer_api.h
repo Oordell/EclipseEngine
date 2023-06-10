@@ -10,6 +10,7 @@ class ECLIPSE_API RendererAPI {
 public:
 	enum class API { none, open_gl };
 
+	virtual void init()                                             = 0;
 	virtual void set_clear_color(const glm::vec4& color)            = 0;
 	virtual void clear()                                            = 0;
 	virtual void draw_indexed(const ref<VertexArray>& vertex_array) = 0;

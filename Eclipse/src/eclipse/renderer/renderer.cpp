@@ -7,6 +7,8 @@ namespace eclipse {
 
 Renderer::SceneData* Renderer::scene_data_ = new Renderer::SceneData;
 
+void Renderer::init() { RenderCommand::init(); }
+
 void Renderer::begin_scene(OrthographicCamera& camera) {
 	scene_data_->view_projection_matrix = camera.get_view_projection_matrix();
 }
