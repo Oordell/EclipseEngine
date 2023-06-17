@@ -74,7 +74,7 @@ void OpenGLShader::upload_uniform_mat4(const std::string& name, const glm::mat4&
 
 std::string OpenGLShader::read_file(const FilePath& filepath) {
 	std::string result;
-	std::ifstream in(filepath.value(), std::ios::in, std::ios::binary);
+	std::ifstream in(filepath.value(), std::ios::in | std::ios::binary);
 	if (in) {
 		in.seekg(0, std::ios::end);
 		result.resize(in.tellg());
@@ -111,7 +111,10 @@ std::unordered_map<GLenum, std::string> OpenGLShader::pre_process(const std::str
 
 void OpenGLShader::compile(const std::unordered_map<GLenum, std::string>& shader_srcs) {
 	GLuint program = glCreateProgram();
-	std::vector<GLenum> glShaderIDs(shader_srcs.size());
+	static const size_t num_of_shaders = 2;
+	EC_CORE_ASSERT(shader_srcs.size() <= num_of_shaders, "We only support two shaders currently.");
+	std::array<GLenum, num_of_shaders> gl_shader_ids;
+	size_t gl_shader_id_index = 0;
 	for (auto& kv : shader_srcs) {
 		GLenum type               = kv.first;
 		const std::string& source = kv.second;
@@ -140,7 +143,7 @@ void OpenGLShader::compile(const std::unordered_map<GLenum, std::string>& shader
 		}
 
 		glAttachShader(program, shader);
-		glShaderIDs.push_back(shader);
+		gl_shader_ids[gl_shader_id_index++] = shader;
 	}
 
 	renderer_id_ = program;
@@ -161,7 +164,7 @@ void OpenGLShader::compile(const std::unordered_map<GLenum, std::string>& shader
 		// We don't need the program anymore.
 		glDeleteProgram(program);
 
-		for (auto id : glShaderIDs) {
+		for (auto id : gl_shader_ids) {
 			glDeleteShader(id);
 		}
 
@@ -170,7 +173,7 @@ void OpenGLShader::compile(const std::unordered_map<GLenum, std::string>& shader
 		return;
 	}
 
-	for (auto id : glShaderIDs) {
+	for (auto id : gl_shader_ids) {
 		glDetachShader(program, id);
 	}
 }
