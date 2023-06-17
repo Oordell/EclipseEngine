@@ -87,7 +87,8 @@ public:
 			}
 		)";
 
-		shader_.reset(eclipse::Shader::create(vertex_src, fragments_src));
+		shader_ =
+		    eclipse::Shader::create({.name = "VertexPosColor", .vertex_src = vertex_src, .fragment_src = fragments_src});
 
 		std::string flat_color_vertex_src = R"(
 			#version 330 core
@@ -119,12 +120,13 @@ public:
 			}
 		)";
 
-		flat_color_shader_.reset(eclipse::Shader::create(flat_color_vertex_src, flat_color_fragments_src));
+		flat_color_shader_ = eclipse::Shader::create(
+		    {.name = "FlatColor", .vertex_src = flat_color_vertex_src, .fragment_src = flat_color_fragments_src});
 
-		texture_shader_.reset(eclipse::Shader::create(eclipse::FilePath("assets/shaders/texture.glsl")));
+		auto texture_shader = shader_library_.load(eclipse::FilePath("assets/shaders/texture.glsl"));
 
-		std::dynamic_pointer_cast<eclipse::OpenGLShader>(texture_shader_)->bind();
-		std::dynamic_pointer_cast<eclipse::OpenGLShader>(texture_shader_)->upload_uniform_int("u_texture", 0);
+		std::dynamic_pointer_cast<eclipse::OpenGLShader>(texture_shader)->bind();
+		std::dynamic_pointer_cast<eclipse::OpenGLShader>(texture_shader)->upload_uniform_int("u_texture", 0);
 	}
 
 	~ExampleLayer() = default;
@@ -177,10 +179,13 @@ public:
 				eclipse::Renderer::submit(flat_color_shader_, square_vertex_array_, square_transform);
 			}
 		}
+
+		auto texture_shader = shader_library_.get("texture");
+
 		texture_->bind(0);
-		eclipse::Renderer::submit(texture_shader_, square_vertex_array_, glm::scale(identity_matrix, glm::vec3(1.5F)));
+		eclipse::Renderer::submit(texture_shader, square_vertex_array_, glm::scale(identity_matrix, glm::vec3(1.5F)));
 		texture_ordell_logo_->bind(0);
-		eclipse::Renderer::submit(texture_shader_, square_vertex_array_, glm::scale(identity_matrix, glm::vec3(1.5F)));
+		eclipse::Renderer::submit(texture_shader, square_vertex_array_, glm::scale(identity_matrix, glm::vec3(1.5F)));
 
 		// Triangle
 		//	eclipse::Renderer::submit(shader_, vertex_array_);
@@ -207,11 +212,11 @@ public:
 	bool on_key_pressed_event(eclipse::KeyPressedEvent& event) { return false; }
 
 private:
+	eclipse::ShaderLibrary shader_library_;
 	eclipse::ref<eclipse::Shader> shader_;
 	eclipse::ref<eclipse::VertexArray> vertex_array_ = eclipse::ref<eclipse::VertexArray>(eclipse::VertexArray::create());
 
 	eclipse::ref<eclipse::Shader> flat_color_shader_;
-	eclipse::ref<eclipse::Shader> texture_shader_;
 	eclipse::ref<eclipse::VertexArray> square_vertex_array_ =
 	    eclipse::ref<eclipse::VertexArray>(eclipse::VertexArray::create());
 

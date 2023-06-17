@@ -11,11 +11,13 @@ namespace eclipse {
 class ECLIPSE_API OpenGLShader : public Shader {
 public:
 	OpenGLShader(const FilePath& filepath);
-	OpenGLShader(const std::string& vertex_src, const std::string& fragment_src);
+	OpenGLShader(const ShaderInfo& info);
 	virtual ~OpenGLShader();
 
 	void bind() const override;
 	void unbind() const override;
+
+	const std::string& get_name() const override { return name_; }
 
 	void upload_uniform_int(const std::string& name, int value);
 	void upload_uniform_float(const std::string& name, float value);
@@ -31,6 +33,7 @@ private:
 	void compile(const std::unordered_map<GLenum, std::string>& shader_srcs);
 
 	uint32_t renderer_id_ = 0;
+	std::string name_ {};
 };
 
 }  // namespace eclipse

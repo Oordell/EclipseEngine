@@ -1,7 +1,6 @@
 #include "ecpch.h"
 #include "opengl_shader.h"
 
-#include <fstream>
 #include <glad/glad.h>
 
 #include <glm/gtc/type_ptr.hpp>
@@ -19,15 +18,18 @@ static GLenum shader_type_from_string(const std::string& type) {
 }
 
 OpenGLShader::OpenGLShader(const FilePath& filepath) {
+	std::filesystem::path path = filepath.value();
+	name_                      = path.stem().string();  // Returns the file's name stripped of the extension.
+
 	auto source      = read_file(filepath);
 	auto shader_srcs = pre_process(source);
 	compile(shader_srcs);
 }
 
-OpenGLShader::OpenGLShader(const std::string& vertex_src, const std::string& fragment_src) {
+OpenGLShader::OpenGLShader(const ShaderInfo& info) : name_(info.name) {
 	std::unordered_map<GLenum, std::string> sources;
-	sources[GL_VERTEX_SHADER]   = vertex_src;
-	sources[GL_FRAGMENT_SHADER] = fragment_src;
+	sources[GL_VERTEX_SHADER]   = info.vertex_src;
+	sources[GL_FRAGMENT_SHADER] = info.fragment_src;
 	compile(sources);
 }
 
@@ -110,7 +112,7 @@ std::unordered_map<GLenum, std::string> OpenGLShader::pre_process(const std::str
 }
 
 void OpenGLShader::compile(const std::unordered_map<GLenum, std::string>& shader_srcs) {
-	GLuint program = glCreateProgram();
+	GLuint program                     = glCreateProgram();
 	static const size_t num_of_shaders = 2;
 	EC_CORE_ASSERT(shader_srcs.size() <= num_of_shaders, "We only support two shaders currently.");
 	std::array<GLenum, num_of_shaders> gl_shader_ids;
