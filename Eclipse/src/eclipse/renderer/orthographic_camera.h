@@ -13,6 +13,8 @@ class OrthographicCamera {
 public:
 	OrthographicCamera(const OrthograficLimits& args);
 
+	void set_projection(const OrthograficLimits& args);
+
 	const glm::vec3& get_position() const { return position_; }
 
 	float get_rotation() const { return rotation_; }
@@ -35,6 +37,7 @@ public:
 
 private:
 	void calculate_view_matrix();
+	void calculate_view_projection_matrix();
 
 	glm::mat4 projection_matrix_ {};
 	glm::mat4 view_matrix_ {};

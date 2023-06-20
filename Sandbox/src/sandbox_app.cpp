@@ -132,24 +132,10 @@ public:
 	~ExampleLayer() = default;
 
 	void on_update(eclipse::Timestep timestep) override {
+		camera_controller_.on_update(timestep);
+
 		frame_rate_ = static_cast<unsigned int>(1.0F / timestep);
 		EC_TRACE_THROTTLED(0.25, "Frame rate: {0}Hz", frame_rate_);
-
-		if (eclipse::InputManager::is_key_pressed(EC_KEY_LEFT)) {
-			camera_position_.x -= camera_move_speed_ * timestep;
-		} else if (eclipse::InputManager::is_key_pressed(EC_KEY_RIGHT)) {
-			camera_position_.x += camera_move_speed_ * timestep;
-		}
-		if (eclipse::InputManager::is_key_pressed(EC_KEY_UP)) {
-			camera_position_.y += camera_move_speed_ * timestep;
-		} else if (eclipse::InputManager::is_key_pressed(EC_KEY_DOWN)) {
-			camera_position_.y -= camera_move_speed_ * timestep;
-		}
-		if (eclipse::InputManager::is_key_pressed(EC_KEY_A)) {
-			camera_rotation_ += camera_rotate_speed_ * timestep;
-		} else if (eclipse::InputManager::is_key_pressed(EC_KEY_D)) {
-			camera_rotation_ -= camera_rotate_speed_ * timestep;
-		}
 
 		static const float red   = 0.1F;
 		static const float green = 0.1F;
@@ -159,10 +145,7 @@ public:
 		eclipse::RenderCommand::set_clear_color({red, green, blue, alpha});
 		eclipse::RenderCommand::clear();
 
-		camera_.set_position(camera_position_);
-		camera_.set_rotation(camera_rotation_);
-
-		eclipse::Renderer::begin_scene(camera_);
+		eclipse::Renderer::begin_scene(camera_controller_.get_camera());
 
 		static const glm::mat4 identity_matrix = glm::mat4(1.0F);
 		static const glm::mat4 scale           = glm::scale(identity_matrix, glm::vec3(0.1F));
@@ -205,6 +188,7 @@ public:
 	}
 
 	void on_event(eclipse::Event& event) {
+		camera_controller_.on_event(event);
 		eclipse::EventDispatcher dispatcher(event);
 		dispatcher.dispatch<eclipse::KeyPressedEvent>(EC_BIND_EVENT_FN(ExampleLayer::on_key_pressed_event));
 	}
@@ -224,12 +208,8 @@ private:
 	eclipse::ref<eclipse::Texture2D> texture_ordell_logo_ =
 	    eclipse::Texture2D::create("assets/textures/olliver_ordell_logo.png");
 
-	glm::vec3 camera_position_ {0.0F, 0.0F, 0.0F};
-	float camera_rotation_ {0.0F};
-	eclipse::OrthographicCamera camera_ {{.left = -1.6F, .right = 1.6F, .bottom = -0.9F, .top = 0.9F}};
-	float camera_move_speed_   = 2.0F;   // [units / sec]
-	float camera_rotate_speed_ = 90.0F;  // [degrees / sec]
-	unsigned int frame_rate_   = 0;
+	eclipse::OrthographicCameraController camera_controller_ {1280.0F / 720.0F, eclipse::EnableCameraRotation::yes};
+	unsigned int frame_rate_ = 0;
 
 	glm::vec3 square_color_ = {0.2F, 0.3F, 0.8F};
 };

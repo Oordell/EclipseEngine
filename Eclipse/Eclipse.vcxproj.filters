@@ -1441,6 +1441,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\common_types\strong_types.h" />
+    <ClInclude Include="src\eclipse\orthographic_camera_controller.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\application.cpp">
@@ -1521,5 +1522,6 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\eclipse\orthographic_camera_controller.cpp" />
   </ItemGroup>
 </Project>
