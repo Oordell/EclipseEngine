@@ -3,6 +3,8 @@
 #include "ecpch.h"
 #include "eclipse/core.h"
 
+#include <concepts>
+
 namespace eclipse {
 
 enum class EventType {
@@ -65,20 +67,21 @@ public:
 };
 
 class ECLIPSE_API EventDispatcher {
-	template <typename T>
-	using EventFn = std::function<bool(T&)>;
-
 public:
 	EventDispatcher(Event& event) : event_(event) {};
 
-	template <typename T>
-	bool dispatch(EventFn<T> func) {
+	/* clang-format off */
+	template <typename T, typename F>
+	requires std::derived_from<T, Event>
+	bool dispatch(const F& func) {
 		if (event_.get_event_type() != T::get_static_type()) {
 			return false;
 		}
-		event_.handled = func(*(T*) &event_);
+		event_.handled = func(static_cast<T&>(event_));
 		return true;
 	}
+
+	/* clang-format on */
 
 private:
 	Event& event_;
