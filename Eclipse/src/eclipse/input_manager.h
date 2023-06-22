@@ -29,7 +29,7 @@ protected:
 	virtual float get_mouse_pose_y_impl()                 = 0;
 
 private:
-	static InputManager* instance_;
+	static scope<InputManager> instance_;
 };
 
 }  // namespace eclipse

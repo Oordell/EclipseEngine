@@ -6,7 +6,7 @@
 
 namespace eclipse {
 
-InputManager* InputManager::instance_ = new WindowsInput();
+scope<InputManager> InputManager::instance_ = make_scope<WindowsInput>();
 
 bool WindowsInput::is_key_pressed_impl(int keycode) {
 	auto window = static_cast<GLFWwindow*>(Application::get().get_window().get_native_window());
