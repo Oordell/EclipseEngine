@@ -75,6 +75,9 @@
     <ClInclude Include="src\eclipse\common_types\point_2d.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\common_types\strong_types.h">
+      <Filter>src\eclipse\common_types</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\common_types\window_size.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
@@ -121,6 +124,9 @@
       <Filter>src\eclipse</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\mouse_button_key_codes.h">
+      <Filter>src\eclipse</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\orthographic_camera_controller.h">
       <Filter>src\eclipse</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\renderer\buffer_layout.h">
@@ -1440,8 +1446,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\common_types\strong_types.h" />
-    <ClInclude Include="src\eclipse\orthographic_camera_controller.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\application.cpp">
@@ -1460,6 +1464,9 @@
       <Filter>src\eclipse\layer</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\log.cpp">
+      <Filter>src\eclipse</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\orthographic_camera_controller.cpp">
       <Filter>src\eclipse</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\renderer\index_buffer.cpp">
@@ -1522,6 +1529,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\eclipse\orthographic_camera_controller.cpp" />
   </ItemGroup>
 </Project>

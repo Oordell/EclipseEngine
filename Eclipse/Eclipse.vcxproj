@@ -80,7 +80,9 @@
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW_fork\include;vendor\GLAD\include;vendor\imgui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -105,6 +107,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -130,6 +133,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -145,10 +149,10 @@
   <ItemGroup>
     <ClInclude Include="src\eclipse.h" />
     <ClInclude Include="src\eclipse\application.h" />
-    <ClInclude Include="src\eclipse\common_types\strong_types.h" />
     <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h" />
     <ClInclude Include="src\eclipse\common_types\orthographic.h" />
     <ClInclude Include="src\eclipse\common_types\point_2d.h" />
+    <ClInclude Include="src\eclipse\common_types\strong_types.h" />
     <ClInclude Include="src\eclipse\common_types\window_size.h" />
     <ClInclude Include="src\eclipse\core.h" />
     <ClInclude Include="src\eclipse\core\timestep.h" />
