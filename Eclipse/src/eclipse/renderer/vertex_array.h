@@ -1,6 +1,6 @@
 #pragma once
 
-#include "eclipse/core.h"
+#include "eclipse/core/core.h"
 #include "eclipse/renderer/vertex_buffer.h"
 #include "eclipse/renderer/index_buffer.h"
 

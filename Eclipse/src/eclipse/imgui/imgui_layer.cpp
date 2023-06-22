@@ -6,7 +6,7 @@
 #include "backends/imgui_impl_glfw.cpp"
 #include "backends/imgui_impl_opengl3.cpp"
 
-#include "eclipse/application.h"
+#include "eclipse/core/application.h"
 
 namespace eclipse {
 

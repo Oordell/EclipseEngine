@@ -2,7 +2,7 @@
 
 #include "ecpch.h"
 
-#include "eclipse/core.h"
+#include "eclipse/core/core.h"
 #include "eclipse/events/event.h"
 #include "eclipse/common_types/window_size.h"
 

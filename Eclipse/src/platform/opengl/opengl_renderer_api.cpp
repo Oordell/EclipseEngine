@@ -11,7 +11,7 @@ void OpenGLRendererAPI::init() {
 }
 
 void OpenGLRendererAPI::set_viewport(const Point2D& origin, const WindowSize& size) {
-	glViewport(origin.x, origin.y, size.width, size.height);
+	glViewport(static_cast<GLint>(origin.x), static_cast<GLint>(origin.y), size.width, size.height);
 }
 
 void OpenGLRendererAPI::set_clear_color(const glm::vec4& color) { glClearColor(color.r, color.g, color.b, color.a); }

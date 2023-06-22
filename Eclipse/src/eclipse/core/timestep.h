@@ -1,6 +1,6 @@
 #pragma once
 
-#include "eclipse/core.h"
+#include "eclipse/core/core.h"
 
 namespace eclipse {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "eclipse/core.h"
+#include "eclipse/core/core.h"
 #include "renderer_api.h"
 #include "eclipse/common_types/point_2d.h"
 

@@ -1,7 +1,7 @@
 #include "ecpch.h"
 #include "orthographic_camera_controller.h"
-#include "eclipse/input_manager.h"
-#include "eclipse/key_codes.h"
+#include "eclipse/core/input_manager.h"
+#include "eclipse/core/key_codes.h"
 
 namespace eclipse {
 

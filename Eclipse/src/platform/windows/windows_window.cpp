@@ -1,6 +1,6 @@
 #include "ecpch.h"
 #include "windows_window.h"
-#include "eclipse/core.h"
+#include "eclipse/core/core.h"
 #include "eclipse/events/window_events.h"
 #include "eclipse/events/application_events.h"
 #include "eclipse/events/key_events.h"

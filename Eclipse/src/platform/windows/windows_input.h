@@ -1,6 +1,6 @@
 #pragma once
 
-#include "eclipse/input_manager.h"
+#include "eclipse/core/input_manager.h"
 
 namespace eclipse {
 

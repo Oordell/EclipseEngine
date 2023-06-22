@@ -148,28 +148,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\eclipse.h" />
-    <ClInclude Include="src\eclipse\application.h" />
+    <ClInclude Include="src\eclipse\core\application.h" />
     <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h" />
     <ClInclude Include="src\eclipse\common_types\orthographic.h" />
     <ClInclude Include="src\eclipse\common_types\point_2d.h" />
     <ClInclude Include="src\eclipse\common_types\strong_types.h" />
     <ClInclude Include="src\eclipse\common_types\window_size.h" />
-    <ClInclude Include="src\eclipse\core.h" />
+    <ClInclude Include="src\eclipse\core\core.h" />
     <ClInclude Include="src\eclipse\core\timestep.h" />
-    <ClInclude Include="src\eclipse\entry_point.h" />
+    <ClInclude Include="src\eclipse\core\entry_point.h" />
     <ClInclude Include="src\eclipse\events\application_events.h" />
     <ClInclude Include="src\eclipse\events\event.h" />
     <ClInclude Include="src\eclipse\events\key_events.h" />
     <ClInclude Include="src\eclipse\events\mouse_events.h" />
     <ClInclude Include="src\eclipse\events\window_events.h" />
     <ClInclude Include="src\eclipse\imgui\imgui_layer.h" />
-    <ClInclude Include="src\eclipse\input_manager.h" />
-    <ClInclude Include="src\eclipse\key_codes.h" />
+    <ClInclude Include="src\eclipse\core\input_manager.h" />
+    <ClInclude Include="src\eclipse\core\key_codes.h" />
     <ClInclude Include="src\eclipse\layer\layer.h" />
     <ClInclude Include="src\eclipse\layer\layer_stack.h" />
-    <ClInclude Include="src\eclipse\log.h" />
-    <ClInclude Include="src\eclipse\mouse_button_key_codes.h" />
-    <ClInclude Include="src\eclipse\orthographic_camera_controller.h" />
+    <ClInclude Include="src\eclipse\core\log.h" />
+    <ClInclude Include="src\eclipse\core\mouse_button_key_codes.h" />
+    <ClInclude Include="src\eclipse\renderer\orthographic_camera_controller.h" />
     <ClInclude Include="src\eclipse\renderer\buffer_layout.h" />
     <ClInclude Include="src\eclipse\renderer\graphics_context.h" />
     <ClInclude Include="src\eclipse\renderer\index_buffer.h" />
@@ -181,7 +181,7 @@
     <ClInclude Include="src\eclipse\renderer\texture.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_array.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h" />
-    <ClInclude Include="src\eclipse\window.h" />
+    <ClInclude Include="src\eclipse\core\window.h" />
     <ClInclude Include="src\ecpch.h" />
     <ClInclude Include="src\platform\opengl\opengl_context.h" />
     <ClInclude Include="src\platform\opengl\opengl_index_buffer.h" />
@@ -611,13 +611,13 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\eclipse\application.cpp" />
+    <ClCompile Include="src\eclipse\core\application.cpp" />
     <ClCompile Include="src\eclipse\imgui\imgui_build.cpp" />
     <ClCompile Include="src\eclipse\imgui\imgui_layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer_stack.cpp" />
-    <ClCompile Include="src\eclipse\log.cpp" />
-    <ClCompile Include="src\eclipse\orthographic_camera_controller.cpp" />
+    <ClCompile Include="src\eclipse\core\log.cpp" />
+    <ClCompile Include="src\eclipse\renderer\orthographic_camera_controller.cpp" />
     <ClCompile Include="src\eclipse\renderer\index_buffer.cpp" />
     <ClCompile Include="src\eclipse\renderer\orthographic_camera.cpp" />
     <ClCompile Include="src\eclipse\renderer\render_command.cpp" />

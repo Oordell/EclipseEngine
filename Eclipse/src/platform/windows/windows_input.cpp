@@ -1,6 +1,6 @@
 #include "ecpch.h"
 #include "windows_input.h"
-#include "eclipse/application.h"
+#include "eclipse/core/application.h"
 
 #include <GLFW/glfw3.h>
 

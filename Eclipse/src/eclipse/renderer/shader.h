@@ -1,6 +1,6 @@
 #pragma once
 
-#include "eclipse/core.h"
+#include "eclipse/core/core.h"
 #include "eclipse/common_types/strong_types.h"
 
 #include <string>

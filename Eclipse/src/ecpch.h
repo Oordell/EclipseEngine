@@ -15,7 +15,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "eclipse/log.h"
+#include "eclipse/core/log.h"
 
 #ifdef EC_PLATFORM_WINDOWS
 #include <Windows.h>

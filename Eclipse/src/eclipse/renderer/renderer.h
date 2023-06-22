@@ -1,6 +1,6 @@
 #pragma once
 
-#include "eclipse/core.h"
+#include "eclipse/core/core.h"
 #include "render_command.h"
 #include "orthographic_camera.h"
 #include "shader.h"

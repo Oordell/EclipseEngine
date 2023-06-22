@@ -1,7 +1,7 @@
 #pragma once
 
-#include "eclipse/log.h"
-#include "eclipse/core.h"
+#include "eclipse/core/log.h"
+#include "eclipse/core/core.h"
 #include <vector>
 #include <string>
 

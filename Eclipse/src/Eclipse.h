@@ -2,19 +2,19 @@
 
 // For use by Eclipse applications
 
-#include "eclipse/application.h"
+#include "eclipse/core/application.h"
 #include "eclipse/layer/layer.h"
-#include "eclipse/log.h"
+#include "eclipse/core/log.h"
 
 #include "eclipse/core/timestep.h"
 
-#include "eclipse/input_manager.h"
-#include "eclipse/key_codes.h"
-#include "eclipse/mouse_button_key_codes.h"
+#include "eclipse/core/input_manager.h"
+#include "eclipse/core/key_codes.h"
+#include "eclipse/core/mouse_button_key_codes.h"
 
 #include "Eclipse/imgui/imgui_layer.h"
 
-#include "eclipse/orthographic_camera_controller.h"
+#include "eclipse/renderer/orthographic_camera_controller.h"
 
 #include "eclipse/renderer/renderer.h"
 #include "eclipse/renderer/render_command.h"
@@ -26,5 +26,5 @@
 #include "eclipse/renderer/orthographic_camera.h"
 
 // ********* Entry point ************
-#include "eclipse/entry_point.h"
+#include "eclipse/core/entry_point.h"
 // **********************************

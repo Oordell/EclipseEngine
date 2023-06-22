@@ -1,6 +1,6 @@
 #pragma once
 
-#include "eclipse/window.h"
+#include "eclipse/core/window.h"
 #include "eclipse/renderer/graphics_context.h"
 
 #include <GLFW/glfw3.h>

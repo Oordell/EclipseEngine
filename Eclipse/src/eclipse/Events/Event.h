@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ecpch.h"
-#include "eclipse/core.h"
+#include "eclipse/core/core.h"
 
 #include <concepts>
 
