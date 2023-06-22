@@ -104,9 +104,11 @@ std::unordered_map<GLenum, std::string> OpenGLShader::pre_process(const std::str
 		EC_CORE_ASSERT(shader_type_from_string(type), "Invalid shader type specified");
 
 		size_t next_line_pos                       = vertes_src.find_first_not_of("\r\n", eol);
+		EC_CORE_ASSERT(next_line_pos != std::string::npos, "Syntax error");
 		pos                                        = vertes_src.find(type_token, next_line_pos);
-		shader_srcs[shader_type_from_string(type)] = vertes_src.substr(
-		    next_line_pos, pos - (next_line_pos == std::string::npos ? vertes_src.size() - 1 : next_line_pos));
+		shader_srcs[shader_type_from_string(type)] = (pos == std::string::npos)
+		                                                 ? vertes_src.substr(next_line_pos)
+		                                                 : vertes_src.substr(next_line_pos, pos - next_line_pos);
 	}
 	return shader_srcs;
 }
