@@ -29,11 +29,13 @@ public:
 
 private:
 	bool on_window_closed(WindowClosedEvent& e);
+	bool on_window_resize(WindowResizeEvent& e);
 
 	static Application* instance_;
 	scope<Window> window_        = scope<Window>(Window::create());
 	ref<ImGuiLayer> imgui_layer_ = make_ref<ImGuiLayer>();
 	bool running_                = true;
+	bool minimized_              = false;
 	LayerStack layer_stack_;
 	float last_frame_time_ {};
 };

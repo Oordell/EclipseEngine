@@ -13,6 +13,8 @@ public:
 
 	inline unsigned int get_height() const { return size_.height; }
 
+	inline const WindowSize& get_window_size() const { return size_; }
+
 	std::string to_string() const override {
 		std::stringstream ss;
 		ss << "WindowResizeEvent. width: " << size_.width << ", height: " << size_.height << "";

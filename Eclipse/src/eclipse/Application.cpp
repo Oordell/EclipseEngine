@@ -26,6 +26,7 @@ Application::~Application() {};
 void Application::on_event(Event& e) {
 	EventDispatcher dispatcher(e);
 	dispatcher.dispatch<WindowClosedEvent>(BIND_EVENT_FN(on_window_closed));
+	dispatcher.dispatch<WindowResizeEvent>(BIND_EVENT_FN(on_window_resize));
 
 	//	EC_CORE_INFO("{0}", e);
 
@@ -53,8 +54,10 @@ void Application::run() {
 		Timestep timestep = Timestep(time - last_frame_time_);
 		last_frame_time_  = time;
 
-		for (Layer* layer : layer_stack_) {
-			layer->on_update(timestep);
+		if (!minimized_) {
+			for (Layer* layer : layer_stack_) {
+				layer->on_update(timestep);
+			}
 		}
 
 		imgui_layer_->begin();
@@ -70,6 +73,17 @@ void Application::run() {
 bool Application::on_window_closed(WindowClosedEvent& e) {
 	running_ = false;
 	return true;
+}
+
+bool Application::on_window_resize(WindowResizeEvent& e) {
+	if (e.get_width() == 0 || e.get_height() == 0) {
+		minimized_ = true;
+		return false;
+	}
+	minimized_ = false;
+	Renderer::on_window_resize(e.get_window_size());
+
+	return false;
 }
 
 }  // namespace eclipse

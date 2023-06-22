@@ -4,12 +4,15 @@
 #include "render_command.h"
 #include "orthographic_camera.h"
 #include "shader.h"
+#include "eclipse/common_types/window_size.h"
 
 namespace eclipse {
 
 class ECLIPSE_API Renderer {
 public:
 	static void init();
+
+	static void on_window_resize(const WindowSize& window_size);
 
 	static void begin_scene(OrthographicCamera& camera);
 
