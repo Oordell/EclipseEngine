@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <numbers>
+#include <concepts>
 
 /* clang-format off */
 // Platform detection using predefined macros
@@ -8,7 +10,9 @@
 	/* Windows x64/x86 */
 	#ifdef _WIN64
 		/* Windows x64  */
-		#define EC_PLATFORM_WINDOWS
+		#ifndef EC_PLATFORM_WINDOWS
+			#define EC_PLATFORM_WINDOWS
+		#endif
 	#else
 		/* Windows x86 */
 		#error "x86 Builds are not supported!"
@@ -107,5 +111,12 @@ template <typename T, typename... Args>
 ref<T> make_ref(Args&&... args) {
 	return std::make_shared<T>(args...);
 }
+
+template <typename T>
+concept floating_point = std::is_floating_point_v<T>;
+
+floating_point auto deg_to_rad(const floating_point auto& angle) { return angle * (std::numbers::pi / 180.0); }
+
+floating_point auto rad_to_deg(const floating_point auto& angle) { return angle * (180.0 / std::numbers::pi); }
 
 }  // namespace eclipse
