@@ -63,9 +63,6 @@
     <ClInclude Include="src\eclipse.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\application.h">
-      <Filter>src\eclipse</Filter>
-    </ClInclude>
     <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
@@ -81,14 +78,32 @@
     <ClInclude Include="src\eclipse\common_types\window_size.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\core.h">
-      <Filter>src\eclipse</Filter>
+    <ClInclude Include="src\eclipse\core\application.h">
+      <Filter>src\eclipse\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\core\core.h">
+      <Filter>src\eclipse\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\core\entry_point.h">
+      <Filter>src\eclipse\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\core\input_manager.h">
+      <Filter>src\eclipse\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\core\key_codes.h">
+      <Filter>src\eclipse\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\core\log.h">
+      <Filter>src\eclipse\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\core\mouse_button_key_codes.h">
+      <Filter>src\eclipse\core</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\core\timestep.h">
       <Filter>src\eclipse\core</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\entry_point.h">
-      <Filter>src\eclipse</Filter>
+    <ClInclude Include="src\eclipse\core\window.h">
+      <Filter>src\eclipse\core</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\events\application_events.h">
       <Filter>src\eclipse\events</Filter>
@@ -108,26 +123,11 @@
     <ClInclude Include="src\eclipse\imgui\imgui_layer.h">
       <Filter>src\eclipse\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\input_manager.h">
-      <Filter>src\eclipse</Filter>
-    </ClInclude>
-    <ClInclude Include="src\eclipse\key_codes.h">
-      <Filter>src\eclipse</Filter>
-    </ClInclude>
     <ClInclude Include="src\eclipse\layer\layer.h">
       <Filter>src\eclipse\layer</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\layer\layer_stack.h">
       <Filter>src\eclipse\layer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\eclipse\log.h">
-      <Filter>src\eclipse</Filter>
-    </ClInclude>
-    <ClInclude Include="src\eclipse\mouse_button_key_codes.h">
-      <Filter>src\eclipse</Filter>
-    </ClInclude>
-    <ClInclude Include="src\eclipse\orthographic_camera_controller.h">
-      <Filter>src\eclipse</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\renderer\buffer_layout.h">
       <Filter>src\eclipse\renderer</Filter>
@@ -139,6 +139,9 @@
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\renderer\orthographic_camera.h">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\renderer\orthographic_camera_controller.h">
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\renderer\render_command.h">
@@ -161,9 +164,6 @@
     </ClInclude>
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h">
       <Filter>src\eclipse\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\eclipse\window.h">
-      <Filter>src\eclipse</Filter>
     </ClInclude>
     <ClInclude Include="src\ecpch.h">
       <Filter>src</Filter>
@@ -1448,8 +1448,11 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\eclipse\application.cpp">
-      <Filter>src\eclipse</Filter>
+    <ClCompile Include="src\eclipse\core\application.cpp">
+      <Filter>src\eclipse\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\core\log.cpp">
+      <Filter>src\eclipse\core</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\imgui\imgui_build.cpp">
       <Filter>src\eclipse\imgui</Filter>
@@ -1463,16 +1466,13 @@
     <ClCompile Include="src\eclipse\layer\layer_stack.cpp">
       <Filter>src\eclipse\layer</Filter>
     </ClCompile>
-    <ClCompile Include="src\eclipse\log.cpp">
-      <Filter>src\eclipse</Filter>
-    </ClCompile>
-    <ClCompile Include="src\eclipse\orthographic_camera_controller.cpp">
-      <Filter>src\eclipse</Filter>
-    </ClCompile>
     <ClCompile Include="src\eclipse\renderer\index_buffer.cpp">
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\renderer\orthographic_camera.cpp">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\renderer\orthographic_camera_controller.cpp">
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\renderer\render_command.cpp">

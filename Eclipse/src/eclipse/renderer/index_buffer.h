@@ -12,7 +12,7 @@ public:
 	virtual void unbind() const        = 0;
 	virtual uint32_t get_count() const = 0;
 
-	static IndexBuffer* create(uint32_t* indices, uint32_t count);
+	static ref<IndexBuffer> create(uint32_t* indices, uint32_t count);
 };
 
 }  // namespace eclipse

@@ -1,4 +1,5 @@
 #include <eclipse.h>
+#include <eclipse/core/entry_point.h>
 
 #include "imgui/imgui.h"
 
@@ -6,7 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "platform/opengl/opengl_shader.h"
 
-#include <memory>
+#include "sandbox_2d.h"
 
 class ExampleLayer : public eclipse::Layer {
 public:
@@ -21,8 +22,7 @@ public:
 		    /* clang-format on */
 		};
 
-		eclipse::ref<eclipse::VertexBuffer> vertex_buffer;
-		vertex_buffer.reset(eclipse::VertexBuffer::create(vertices, sizeof(vertices)));
+		auto vertex_buffer = eclipse::VertexBuffer::create(vertices, sizeof(vertices));
 
 		eclipse::BufferLayout layout {{eclipse::ShaderDataType::floatvec3, "position_"},
 		                              {eclipse::ShaderDataType::floatvec4, "color_"}};
@@ -30,8 +30,7 @@ public:
 		vertex_array_->add_vertex_buffer(vertex_buffer);
 
 		uint32_t indices[dimentions] = {0, 1, 2};
-		eclipse::ref<eclipse::IndexBuffer> index_buffer;
-		index_buffer.reset(eclipse::IndexBuffer::create(indices, dimentions));
+		auto index_buffer = eclipse::IndexBuffer::create(indices, dimentions);
 		vertex_array_->set_index_buffer(index_buffer);
 
 		float square_vertices[5 * 4] = {
@@ -43,15 +42,13 @@ public:
 		    /* clang-format on */
 		};
 
-		eclipse::ref<eclipse::VertexBuffer> square_vertex_buffer;
-		square_vertex_buffer.reset(eclipse::VertexBuffer::create(square_vertices, sizeof(square_vertices)));
+		auto square_vertex_buffer = eclipse::VertexBuffer::create(square_vertices, sizeof(square_vertices));
 		square_vertex_buffer->set_layout(
 		    {{eclipse::ShaderDataType::floatvec3, "position_"}, {eclipse::ShaderDataType::floatvec2, "tex_coord_"}});
 		square_vertex_array_->add_vertex_buffer(square_vertex_buffer);
 
 		uint32_t square_indices[6] = {0, 1, 2, 2, 3, 0};
-		eclipse::ref<eclipse::IndexBuffer> square_index_buffer_;
-		square_index_buffer_.reset(eclipse::IndexBuffer::create(square_indices, sizeof(square_indices) / sizeof(uint32_t)));
+		auto square_index_buffer_ = eclipse::IndexBuffer::create(square_indices, sizeof(square_indices) / sizeof(uint32_t));
 		square_vertex_array_->set_index_buffer(square_index_buffer_);
 
 		std::string vertex_src = R"(
@@ -198,11 +195,10 @@ public:
 private:
 	eclipse::ShaderLibrary shader_library_;
 	eclipse::ref<eclipse::Shader> shader_;
-	eclipse::ref<eclipse::VertexArray> vertex_array_ = eclipse::ref<eclipse::VertexArray>(eclipse::VertexArray::create());
+	eclipse::ref<eclipse::VertexArray> vertex_array_ = eclipse::VertexArray::create();
 
 	eclipse::ref<eclipse::Shader> flat_color_shader_;
-	eclipse::ref<eclipse::VertexArray> square_vertex_array_ =
-	    eclipse::ref<eclipse::VertexArray>(eclipse::VertexArray::create());
+	eclipse::ref<eclipse::VertexArray> square_vertex_array_ = eclipse::VertexArray::create();
 
 	eclipse::ref<eclipse::Texture2D> texture_ = eclipse::Texture2D::create("assets/textures/Checkerboard.png");
 	eclipse::ref<eclipse::Texture2D> texture_ordell_logo_ =
@@ -216,7 +212,10 @@ private:
 
 class Sandbox : public eclipse::Application {
 public:
-	Sandbox() { push_layer(new ExampleLayer()); }
+	Sandbox() {
+		//	push_layer(new ExampleLayer());
+		push_layer(new Sandbox2D());
+	}
 
 	~Sandbox() {}
 };

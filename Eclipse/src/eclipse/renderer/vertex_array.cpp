@@ -5,7 +5,7 @@
 
 namespace eclipse {
 
-VertexArray* VertexArray::create() {
+ref<VertexArray> VertexArray::create() {
 	using enum RendererAPI::API;
 	switch (Renderer::get_api()) {
 		case none: {
@@ -13,7 +13,7 @@ VertexArray* VertexArray::create() {
 			return nullptr;
 		}
 		case open_gl: {
-			return new OpenGLVertexArray();
+			return make_ref<OpenGLVertexArray>();
 		}
 		default: {
 			EC_CORE_ASSERT(false, "Couldn't identify the renderer API type!");

@@ -24,7 +24,3 @@
 #include "eclipse/renderer/texture.h"
 #include "eclipse/renderer/vertex_array.h"
 #include "eclipse/renderer/orthographic_camera.h"
-
-// ********* Entry point ************
-#include "eclipse/core/entry_point.h"
-// **********************************

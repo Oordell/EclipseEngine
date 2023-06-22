@@ -5,7 +5,7 @@
 
 namespace eclipse {
 
-IndexBuffer* IndexBuffer::create(uint32_t* indices, uint32_t count) {
+ref<IndexBuffer> IndexBuffer::create(uint32_t* indices, uint32_t count) {
 	using enum RendererAPI::API;
 	switch (Renderer::get_api()) {
 		case none: {
@@ -13,7 +13,7 @@ IndexBuffer* IndexBuffer::create(uint32_t* indices, uint32_t count) {
 			return nullptr;
 		}
 		case open_gl: {
-			return new OpenGLIndexBuffer(indices, count);
+			return make_ref<OpenGLIndexBuffer>(indices, count);
 		}
 		default: {
 			EC_CORE_ASSERT(false, "Couldn't identify the renderer API type!");
