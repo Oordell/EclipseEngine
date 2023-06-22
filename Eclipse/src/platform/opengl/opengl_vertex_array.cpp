@@ -53,10 +53,11 @@ void OpenGLVertexArray::add_vertex_buffer(const ref<VertexBuffer>& vertex_buffer
 	uint32_t index     = 0;
 	const auto& layout = vertex_buffer->get_layout();
 	for (const auto& element : layout) {
-		glEnableVertexAttribArray(index);
-		glVertexAttribPointer(index, element.get_component_count(), shader_data_type_to_opengl_base_type(element.type),
-		                      element.normalized ? GL_TRUE : GL_FALSE, layout.get_stride(), (const void*) element.offset);
-		index++;
+		glEnableVertexAttribArray(vertex_buffer_index_);
+		glVertexAttribPointer(vertex_buffer_index_, element.get_component_count(),
+		                      shader_data_type_to_opengl_base_type(element.type), element.normalized ? GL_TRUE : GL_FALSE,
+		                      layout.get_stride(), (const void*) element.offset);
+		vertex_buffer_index_++;
 	}
 
 	vertex_buffers_.push_back(vertex_buffer);

@@ -19,6 +19,7 @@ public:
 
 private:
 	uint32_t renderer_id_ {};
+	uint32_t vertex_buffer_index_ {0};
 	std::vector<ref<VertexBuffer>> vertex_buffers_;
 	ref<IndexBuffer> index_buffer_;
 };
