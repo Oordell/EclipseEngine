@@ -28,6 +28,6 @@ private:
 		glm::mat4 view_projection_matrix {};
 	};
 
-	static SceneData* scene_data_;
+	static scope<SceneData> scene_data_;
 };
 }  // namespace eclipse

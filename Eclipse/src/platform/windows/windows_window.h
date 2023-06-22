@@ -31,7 +31,7 @@ private:
 	void set_glfw_callbacks();
 
 	GLFWwindow* window_;
-	GraphicsContext* context_;
+	scope<GraphicsContext> context_;
 
 	struct WindowData {
 		WindowProps props {};

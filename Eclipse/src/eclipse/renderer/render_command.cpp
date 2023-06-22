@@ -5,6 +5,6 @@
 
 namespace eclipse {
 
-	RendererAPI* RenderCommand::renderer_api_ = new OpenGLRendererAPI;
+scope<RendererAPI> RenderCommand::renderer_api_ = make_scope<OpenGLRendererAPI>();
 
 }

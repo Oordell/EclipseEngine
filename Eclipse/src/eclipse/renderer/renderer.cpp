@@ -5,7 +5,7 @@
 
 namespace eclipse {
 
-Renderer::SceneData* Renderer::scene_data_ = new Renderer::SceneData;
+scope<Renderer::SceneData> Renderer::scene_data_ = make_scope<Renderer::SceneData>();
 
 void Renderer::init() { RenderCommand::init(); }
 

@@ -21,7 +21,7 @@ public:
 	inline static void draw_indexed(const ref<VertexArray>& vertex_array) { renderer_api_->draw_indexed(vertex_array); }
 
 private:
-	static RendererAPI* renderer_api_;
+	static scope<RendererAPI> renderer_api_;
 };
 
 }  // namespace eclipse

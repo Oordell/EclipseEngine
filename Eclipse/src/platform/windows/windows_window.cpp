@@ -36,7 +36,7 @@ void WindowsWindow::init(const WindowProps& props) {
 
 	window_  = glfwCreateWindow(static_cast<int>(props.window_size.width), static_cast<int>(props.window_size.height),
 	                            data_.props.title.c_str(), nullptr, nullptr);
-	context_ = new OpenGLContext(window_);
+	context_ = make_scope<OpenGLContext>(window_);
 	context_->init();
 	glfwSetWindowUserPointer(window_, &data_);
 	set_v_sync(true);
