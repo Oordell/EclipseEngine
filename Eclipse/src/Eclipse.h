@@ -17,6 +17,7 @@
 #include "eclipse/renderer/orthographic_camera_controller.h"
 
 #include "eclipse/renderer/renderer.h"
+#include "eclipse/renderer/renderer_2d.h"
 #include "eclipse/renderer/render_command.h"
 #include "eclipse/renderer/index_buffer.h"
 #include "eclipse/renderer/vertex_buffer.h"

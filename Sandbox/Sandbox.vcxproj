@@ -138,6 +138,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\sandbox_2d.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="src\sandbox_2d.cpp" />
     <ClCompile Include="src\sandbox_app.cpp" />
   </ItemGroup>
@@ -145,9 +148,6 @@
     <ProjectReference Include="..\Eclipse\Eclipse.vcxproj">
       <Project>{8A89FEB1-F668-7D4D-FF80-08246BDFE3AE}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\sandbox_2d.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

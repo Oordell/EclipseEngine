@@ -1,5 +1,6 @@
 #include "ecpch.h"
 #include "renderer.h"
+#include "eclipse/renderer/renderer_2d.h"
 
 #include "platform/opengl/opengl_shader.h"
 
@@ -7,7 +8,10 @@ namespace eclipse {
 
 scope<Renderer::SceneData> Renderer::scene_data_ = make_scope<Renderer::SceneData>();
 
-void Renderer::init() { RenderCommand::init(); }
+void Renderer::init() { 
+	RenderCommand::init(); 
+	Renderer2D::init();
+}
 
 void Renderer::on_window_resize(const WindowSize& window_size) {
 	RenderCommand::set_viewport({.x = 0, .y = 0}, window_size);
