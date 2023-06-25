@@ -17,6 +17,14 @@ public:
 	void bind() const override;
 	void unbind() const override;
 
+	void set_int(const std::string& name, int value) override;
+	void set_float(const std::string& name, float value) override;
+	void set_float2(const std::string& name, const glm::vec2& value) override;
+	void set_float3(const std::string& name, const glm::vec3& value) override;
+	void set_float4(const std::string& name, const glm::vec4& value) override;
+	void set_mat3(const std::string& name, const glm::mat3& value) override;
+	void set_mat4(const std::string& name, const glm::mat4& value) override;
+
 	const std::string& get_name() const override { return name_; }
 
 	void upload_uniform_int(const std::string& name, int value);

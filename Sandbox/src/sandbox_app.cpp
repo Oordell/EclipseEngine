@@ -5,7 +5,6 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "platform/opengl/opengl_shader.h"
 
 #include "sandbox_2d.h"
 
@@ -122,8 +121,8 @@ public:
 
 		auto texture_shader = shader_library_.load(eclipse::FilePath("assets/shaders/texture.glsl"));
 
-		std::dynamic_pointer_cast<eclipse::OpenGLShader>(texture_shader)->bind();
-		std::dynamic_pointer_cast<eclipse::OpenGLShader>(texture_shader)->upload_uniform_int("u_texture", 0);
+		texture_shader->bind();
+		texture_shader->set_int("u_texture", 0);
 	}
 
 	~ExampleLayer() = default;
@@ -149,8 +148,8 @@ public:
 		static const unsigned int no_tiles     = 20;
 		static const float tile_position_scale = 0.11F;
 
-		std::dynamic_pointer_cast<eclipse::OpenGLShader>(flat_color_shader_)->bind();
-		std::dynamic_pointer_cast<eclipse::OpenGLShader>(flat_color_shader_)->upload_uniform_float3("u_color", square_color_);
+		flat_color_shader_->bind();
+		flat_color_shader_->set_float3("u_color", square_color_);
 
 		for (int y = 0; y < no_tiles; y++) {
 			for (int x = 0; x < no_tiles; x++) {

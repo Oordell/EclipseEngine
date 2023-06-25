@@ -39,6 +39,20 @@ void OpenGLShader::bind() const { glUseProgram(renderer_id_); }
 
 void OpenGLShader::unbind() const { glUseProgram(0); }
 
+void OpenGLShader::set_int(const std::string& name, int value) { upload_uniform_int(name, value); }
+
+void OpenGLShader::set_float(const std::string& name, float value) { upload_uniform_float(name, value); }
+
+void OpenGLShader::set_float2(const std::string& name, const glm::vec2& value) { upload_uniform_float2(name, value); }
+
+void OpenGLShader::set_float3(const std::string& name, const glm::vec3& value) { upload_uniform_float3(name, value); }
+
+void OpenGLShader::set_float4(const std::string& name, const glm::vec4& value) { upload_uniform_float4(name, value); }
+
+void OpenGLShader::set_mat3(const std::string& name, const glm::mat3& value) { upload_uniform_mat3(name, value); }
+
+void OpenGLShader::set_mat4(const std::string& name, const glm::mat4& value) { upload_uniform_mat4(name, value); }
+
 void OpenGLShader::upload_uniform_int(const std::string& name, int value) {
 	auto location = glGetUniformLocation(renderer_id_, name.c_str());
 	glUniform1i(location, value);
@@ -79,10 +93,15 @@ std::string OpenGLShader::read_file(const FilePath& filepath) {
 	std::ifstream in(filepath.value(), std::ios::in | std::ios::binary);
 	if (in) {
 		in.seekg(0, std::ios::end);
-		result.resize(in.tellg());
-		in.seekg(0, std::ios::beg);
-		in.read(&result[0], result.size());
-		in.close();
+		size_t size = in.tellg();
+		if (size != -1) {
+			result.resize(size);
+			in.seekg(0, std::ios::beg);
+			in.read(&result[0], size);
+			in.close();
+		} else {
+			EC_CORE_ERROR("Could not read from file '{0}'", filepath.value());
+		}
 	} else {
 		EC_CORE_ERROR("Couldn't open file '{0}'", filepath.value());
 	}
@@ -103,7 +122,7 @@ std::unordered_map<GLenum, std::string> OpenGLShader::pre_process(const std::str
 		std::string type = vertes_src.substr(begin, eol - begin);
 		EC_CORE_ASSERT(shader_type_from_string(type), "Invalid shader type specified");
 
-		size_t next_line_pos                       = vertes_src.find_first_not_of("\r\n", eol);
+		size_t next_line_pos = vertes_src.find_first_not_of("\r\n", eol);
 		EC_CORE_ASSERT(next_line_pos != std::string::npos, "Syntax error");
 		pos                                        = vertes_src.find(type_token, next_line_pos);
 		shader_srcs[shader_type_from_string(type)] = (pos == std::string::npos)

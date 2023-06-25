@@ -1,8 +1,6 @@
 #include "sandbox_2d.h"
 #include "imgui/imgui.h"
 
-#include "platform/opengl/opengl_shader.h"
-
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -25,14 +23,11 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 	eclipse::RenderCommand::clear();
 
 	eclipse::Renderer2D::begin_scene(camera_controller_.get_camera());
-	eclipse::Renderer2D::draw_quad(
-	    eclipse::QuadMetaDataPosition2D {.size = {1.0F, 1.0F}, .color = {0.8F, 0.2F, 0.3F, 1.0F}});
+	eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition2D {
+	    .position = {-1.0F, 0.0F}, .rotation_deg = 0.0F, .size = {0.8F, 0.8F}, .color = {0.8F, 0.2F, 0.3F, 1.0F}});
+	eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3D {
+	    .position = {0.5F, -0.5F, 0.0F}, .rotation_deg = 60.0F, .size = {0.4F, 0.8F}, .color = {0.2F, 0.8F, 0.3F, 1.0F}});
 	eclipse::Renderer2D::end_scene();
-
-	/*
-	std::dynamic_pointer_cast<eclipse::OpenGLShader>(flat_color_shader_)->bind();
-	std::dynamic_pointer_cast<eclipse::OpenGLShader>(flat_color_shader_)->upload_uniform_float4("u_color", square_color_);
-	*/
 }
 
 void Sandbox2D::on_event(eclipse::Event& event) { camera_controller_.on_event(event); }

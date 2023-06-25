@@ -3,6 +3,8 @@
 #include "eclipse/core/core.h"
 #include "eclipse/common_types/strong_types.h"
 
+#include <glm/glm.hpp>
+
 #include <string>
 #include <unordered_map>
 
@@ -18,9 +20,16 @@ class ECLIPSE_API Shader {
 public:
 	virtual ~Shader() = default;
 
-	virtual void bind() const                   = 0;
-	virtual void unbind() const                 = 0;
-	virtual const std::string& get_name() const = 0;
+	virtual void bind() const                                                = 0;
+	virtual void unbind() const                                              = 0;
+	virtual void set_mat3(const std::string& name, const glm::mat3& value)   = 0;
+	virtual void set_mat4(const std::string& name, const glm::mat4& value)   = 0;
+	virtual void set_int(const std::string& name, int value)                 = 0;
+	virtual void set_float(const std::string& name, float value)             = 0;
+	virtual void set_float2(const std::string& name, const glm::vec2& value) = 0;
+	virtual void set_float3(const std::string& name, const glm::vec3& value) = 0;
+	virtual void set_float4(const std::string& name, const glm::vec4& value) = 0;
+	virtual const std::string& get_name() const                              = 0;
 
 	static ref<Shader> create(const FilePath& filepath);
 	static ref<Shader> create(const ShaderInfo& info);

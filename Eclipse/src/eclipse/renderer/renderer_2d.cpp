@@ -5,7 +5,7 @@
 #include "shader.h"
 #include "render_command.h"
 
-#include "platform/opengl/opengl_shader.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace eclipse {
 
@@ -43,23 +43,30 @@ void Renderer2D::init() {
 void Renderer2D::shutdown() { data.reset(); }
 
 void Renderer2D::begin_scene(const OrthographicCamera& camera) {
-	auto shader = std::dynamic_pointer_cast<OpenGLShader>(data->flat_color_shader);
-	shader->bind();
-	shader->upload_uniform_mat4("view_projection", camera.get_view_projection_matrix());
-	shader->upload_uniform_mat4("transform", glm::mat4(1.0F));
+	data->flat_color_shader->bind();
+	data->flat_color_shader->set_mat4("view_projection", camera.get_view_projection_matrix());
 }
 
 void Renderer2D::end_scene() {}
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition2D& info) {
-	draw_quad(QuadMetaDataPosition3D {
-	    .position = {info.position.x, info.position.y, 0.0F}, .size = info.size, .color = info.color});
+	draw_quad(QuadMetaDataPosition3D {.position     = {info.position.x, info.position.y, 0.0F},
+	                                  .rotation_deg = info.rotation_deg,
+	                                  .size         = info.size,
+	                                  .color        = info.color});
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition3D& info) {
-	auto shader = std::dynamic_pointer_cast<OpenGLShader>(data->flat_color_shader);
-	shader->bind();
-	shader->upload_uniform_float4("u_color", info.color);
+	data->flat_color_shader->bind();
+	data->flat_color_shader->set_float4("u_color", info.color);
+
+	static const glm::mat4 IDENTITY_MATRIX = glm::mat4(1.0F);
+	static const glm::vec3 ROTATION_AXIS   = glm::vec3(0.0F, 0.0F, 1.0F);
+	glm::mat4 transform                    = glm::translate(IDENTITY_MATRIX, info.position) *
+	                      glm::rotate(IDENTITY_MATRIX, glm::radians(info.rotation_deg), ROTATION_AXIS) *
+	                      glm::scale(IDENTITY_MATRIX, {info.size.x, info.size.y, 1.0F});
+
+	data->flat_color_shader->set_mat4("transform", transform);
 
 	data->quad_vertex_array->bind();
 	RenderCommand::draw_indexed(data->quad_vertex_array);

@@ -12,6 +12,8 @@ class ECLIPSE_API Renderer {
 public:
 	static void init();
 
+	static void shutdown();
+
 	static void on_window_resize(const WindowSize& window_size);
 
 	static void begin_scene(OrthographicCamera& camera);
