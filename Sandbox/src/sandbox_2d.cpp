@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-void Sandbox2D::on_attach() {}
+void Sandbox2D::on_attach() { checkerboard_texture_ = eclipse::Texture2D::create("assets/textures/Checkerboard.png"); }
 
 void Sandbox2D::on_detach() {}
 
@@ -27,6 +27,8 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 	    .position = {-1.0F, 0.0F}, .rotation_deg = 0.0F, .size = {0.8F, 0.8F}, .color = {0.8F, 0.2F, 0.3F, 1.0F}});
 	eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3D {
 	    .position = {0.5F, -0.5F, 0.0F}, .rotation_deg = 60.0F, .size = {0.4F, 0.8F}, .color = {0.2F, 0.8F, 0.3F, 1.0F}});
+	eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3DTexture {
+	    .position = {0.0F, 0.0F, -0.1F}, .rotation_deg = 0.0F, .size = {10.0F, 10.0F}, .texture = checkerboard_texture_});
 	eclipse::Renderer2D::end_scene();
 }
 
