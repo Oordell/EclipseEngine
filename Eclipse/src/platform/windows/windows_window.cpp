@@ -9,13 +9,13 @@
 
 namespace eclipse {
 
-static bool GLFW_initialized = false;
+static uint16_t GLFW_initialized = 0;
 
 static void GLFW_error_callback(int error, const char* description) {
 	EC_CORE_ERROR("GLFW Error (code: {0}) : {1}", error, description);
 }
 
-Window* Window::create(const WindowProps& props) { return new WindowsWindow(props); }
+scope<Window> Window::create(const WindowProps& props) { return make_scope<WindowsWindow>(props); }
 
 WindowsWindow::WindowsWindow(const WindowProps& props) { init(props); }
 
@@ -27,16 +27,17 @@ void WindowsWindow::init(const WindowProps& props) {
 	EC_CORE_INFO("Creating window \"{0}\" of size ({1}, {2})", props.title, props.window_size.width,
 	             props.window_size.height);
 
-	if (!GLFW_initialized) {
+	if (GLFW_initialized == 0) {
+		EC_CORE_INFO("Initializing GLFW");
 		auto success = glfwInit();
 		EC_CORE_ASSERT(success, "Could not initialize GLFW!");
 		glfwSetErrorCallback(GLFW_error_callback);
-		GLFW_initialized = true;
 	}
 
-	window_  = glfwCreateWindow(static_cast<int>(props.window_size.width), static_cast<int>(props.window_size.height),
-	                            data_.props.title.c_str(), nullptr, nullptr);
-	context_ = make_scope<OpenGLContext>(window_);
+	window_ = glfwCreateWindow(static_cast<int>(props.window_size.width), static_cast<int>(props.window_size.height),
+	                           data_.props.title.c_str(), nullptr, nullptr);
+	++GLFW_initialized;
+	context_ = GraphicsContext::create(window_);
 	context_->init();
 	glfwSetWindowUserPointer(window_, &data_);
 	set_v_sync(true);
@@ -44,7 +45,14 @@ void WindowsWindow::init(const WindowProps& props) {
 	set_glfw_callbacks();
 }
 
-void WindowsWindow::shutdown() { glfwDestroyWindow(window_); }
+void WindowsWindow::shutdown() {
+	glfwDestroyWindow(window_);
+	--GLFW_initialized;
+	if (GLFW_initialized == 0) {
+		EC_CORE_INFO("Terminating GLFW");
+		glfwTerminate();
+	}
+}
 
 void WindowsWindow::set_glfw_callbacks() {
 	glfwSetWindowSizeCallback(window_, [](GLFWwindow* window, int width, int height) {

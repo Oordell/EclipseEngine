@@ -32,7 +32,7 @@ private:
 	bool on_window_resize(WindowResizeEvent& e);
 
 	static Application* instance_;
-	scope<Window> window_        = scope<Window>(Window::create());
+	scope<Window> window_        = Window::create();
 	ref<ImGuiLayer> imgui_layer_ = make_ref<ImGuiLayer>();
 	bool running_                = true;
 	bool minimized_              = false;

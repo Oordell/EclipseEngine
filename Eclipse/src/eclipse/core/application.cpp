@@ -7,26 +7,24 @@
 
 namespace eclipse {
 
-#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
-
 Application* Application::instance_ = nullptr;
 
 Application::Application() {
 	EC_CORE_ASSERT(!instance_, "Application already exists!");
 	instance_ = this;
-	window_->set_event_callback(BIND_EVENT_FN(on_event));
+	window_->set_event_callback(EC_BIND_EVENT_FN(Application::on_event));
 
 	Renderer::init();
 
 	push_overlay(imgui_layer_.get());
 };
 
-Application::~Application() {};
+Application::~Application() { Renderer::shutdown(); };
 
 void Application::on_event(Event& e) {
 	EventDispatcher dispatcher(e);
-	dispatcher.dispatch<WindowClosedEvent>(BIND_EVENT_FN(on_window_closed));
-	dispatcher.dispatch<WindowResizeEvent>(BIND_EVENT_FN(on_window_resize));
+	dispatcher.dispatch<WindowClosedEvent>(EC_BIND_EVENT_FN(Application::on_window_closed));
+	dispatcher.dispatch<WindowResizeEvent>(EC_BIND_EVENT_FN(Application::on_window_resize));
 
 	//	EC_CORE_INFO("{0}", e);
 

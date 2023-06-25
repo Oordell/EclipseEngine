@@ -12,13 +12,13 @@ class ECLIPSE_API Log {
 public:
 	static void init();
 
-	inline static std::shared_ptr<spdlog::logger>& get_core_logger() { return core_logger_; }
+	inline static ref<spdlog::logger>& get_core_logger() { return core_logger_; }
 
-	inline static std::shared_ptr<spdlog::logger>& get_client_logger() { return client_logger_; }
+	inline static ref<spdlog::logger>& get_client_logger() { return client_logger_; }
 
 private:
-	static std::shared_ptr<spdlog::logger> core_logger_;
-	static std::shared_ptr<spdlog::logger> client_logger_;
+	static ref<spdlog::logger> core_logger_;
+	static ref<spdlog::logger> client_logger_;
 };
 }  // namespace eclipse
 

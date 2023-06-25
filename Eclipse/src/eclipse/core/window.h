@@ -27,6 +27,6 @@ public:
 	virtual bool is_v_sync() const                                   = 0;
 	virtual void* get_native_window() const                          = 0;
 
-	static Window* create(const WindowProps& props = {});
+	static scope<Window> create(const WindowProps& props = {});
 };
 }  // namespace eclipse

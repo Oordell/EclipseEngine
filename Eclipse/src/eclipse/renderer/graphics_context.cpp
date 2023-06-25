@@ -1,21 +1,20 @@
 #include "ecpch.h"
-#include "renderer_api.h"
+#include "eclipse/renderer/graphics_context.h"
 
-#include "platform/opengl/opengl_renderer_api.h"
+#include "eclipse/renderer/renderer.h"
+#include "platform/opengl/opengl_context.h"
 
 namespace eclipse {
 
-RendererAPI::API RendererAPI::api_ = RendererAPI::API::open_gl;
-
-scope<RendererAPI> RendererAPI::create() {
+scope<GraphicsContext> GraphicsContext::create(void* window) {
 	using enum RendererAPI::API;
-	switch (api_) {
+	switch (Renderer::get_api()) {
 		case none: {
 			EC_CORE_ASSERT(false, "RendererAPI::none is not supported!");
 			return nullptr;
 		}
 		case open_gl: {
-			return make_scope<OpenGLRendererAPI>();
+			return make_scope<OpenGLContext>(static_cast<GLFWwindow*>(window));
 		}
 		default: {
 			EC_CORE_ASSERT(false, "Couldn't identify the renderer API type!");

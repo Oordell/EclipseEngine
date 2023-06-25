@@ -1531,5 +1531,6 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\renderer\renderer_2d.cpp" />
+    <ClCompile Include="src\eclipse\renderer\graphics_context.cpp" />
   </ItemGroup>
 </Project>

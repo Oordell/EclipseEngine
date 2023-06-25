@@ -20,6 +20,8 @@ public:
 
 	inline static API get_api() { return api_; }
 
+	static scope<RendererAPI> create();
+
 private:
 	static API api_;
 };

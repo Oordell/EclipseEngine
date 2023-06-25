@@ -5,8 +5,8 @@
 
 namespace eclipse {
 
-std::shared_ptr<spdlog::logger> Log::core_logger_;
-std::shared_ptr<spdlog::logger> Log::client_logger_;
+ref<spdlog::logger> Log::core_logger_;
+ref<spdlog::logger> Log::client_logger_;
 
 void Log::init() {
 	spdlog::set_pattern("%^[%T:%e] [%=7n] %v%$");

@@ -618,6 +618,7 @@
     <ClCompile Include="src\eclipse\imgui\imgui_layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer_stack.cpp" />
+    <ClCompile Include="src\eclipse\renderer\graphics_context.cpp" />
     <ClCompile Include="src\eclipse\renderer\index_buffer.cpp" />
     <ClCompile Include="src\eclipse\renderer\orthographic_camera.cpp" />
     <ClCompile Include="src\eclipse\renderer\orthographic_camera_controller.cpp" />
