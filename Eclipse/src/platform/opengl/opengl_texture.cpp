@@ -3,9 +3,20 @@
 
 #include "stb_image.h"
 
-#include <glad/glad.h>
-
 namespace eclipse {
+OpenGLTexture2D::OpenGLTexture2D(const WindowSize& size) : width_(size.width), height_(size.height) {
+	internal_format_ = GL_RGBA8;
+	data_format_     = GL_RGBA;
+
+	glCreateTextures(GL_TEXTURE_2D, 1, &renderer_id_);
+	glTextureStorage2D(renderer_id_, 1, internal_format_, width_, height_);
+
+	glTextureParameteri(renderer_id_, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTextureParameteri(renderer_id_, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTextureParameteri(renderer_id_, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTextureParameteri(renderer_id_, GL_TEXTURE_WRAP_T, GL_REPEAT);
+}
 
 OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : path_(path) {
 	int width    = 0;
@@ -27,6 +38,10 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : path_(path) {
 		internal_format = GL_RGB8;
 		data_format     = GL_RGB;
 	}
+
+	internal_format_ = internal_format;
+	data_format_     = data_format;
+
 	EC_CORE_ASSERT(internal_format & data_format, "Texture format not suported!. Channels: {0}", channels);
 
 	glCreateTextures(GL_TEXTURE_2D, 1, &renderer_id_);
@@ -44,6 +59,12 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : path_(path) {
 }
 
 OpenGLTexture2D::~OpenGLTexture2D() { glDeleteTextures(1, &renderer_id_); }
+
+void OpenGLTexture2D::set_data(void* data, uint32_t size) {
+	uint32_t bytes_pr_pixel = data_format_ == GL_RGBA ? 4 : 3;
+	EC_CORE_ASSERT(size == width_ * height_ * bytes_pr_pixel, "Data must be entire texture");
+	glTextureSubImage2D(renderer_id_, 0, 0, 0, width_, height_, data_format_, GL_UNSIGNED_BYTE, data);
+}
 
 void OpenGLTexture2D::bind(uint32_t slot) const { glBindTextureUnit(slot, renderer_id_); }
 

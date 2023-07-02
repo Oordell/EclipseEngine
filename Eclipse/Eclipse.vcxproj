@@ -175,9 +175,9 @@
     <ClInclude Include="src\eclipse\renderer\index_buffer.h" />
     <ClInclude Include="src\eclipse\renderer\orthographic_camera.h" />
     <ClInclude Include="src\eclipse\renderer\orthographic_camera_controller.h" />
-    <ClInclude Include="src\eclipse\renderer\renderer_2d.h" />
     <ClInclude Include="src\eclipse\renderer\render_command.h" />
     <ClInclude Include="src\eclipse\renderer\renderer.h" />
+    <ClInclude Include="src\eclipse\renderer\renderer_2d.h" />
     <ClInclude Include="src\eclipse\renderer\renderer_api.h" />
     <ClInclude Include="src\eclipse\renderer\shader.h" />
     <ClInclude Include="src\eclipse\renderer\texture.h" />
@@ -622,9 +622,9 @@
     <ClCompile Include="src\eclipse\renderer\index_buffer.cpp" />
     <ClCompile Include="src\eclipse\renderer\orthographic_camera.cpp" />
     <ClCompile Include="src\eclipse\renderer\orthographic_camera_controller.cpp" />
-    <ClCompile Include="src\eclipse\renderer\renderer_2d.cpp" />
     <ClCompile Include="src\eclipse\renderer\render_command.cpp" />
     <ClCompile Include="src\eclipse\renderer\renderer.cpp" />
+    <ClCompile Include="src\eclipse\renderer\renderer_2d.cpp" />
     <ClCompile Include="src\eclipse\renderer\renderer_api.cpp" />
     <ClCompile Include="src\eclipse\renderer\shader.cpp" />
     <ClCompile Include="src\eclipse\renderer\texture.cpp" />

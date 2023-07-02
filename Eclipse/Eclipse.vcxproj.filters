@@ -150,6 +150,9 @@
     <ClInclude Include="src\eclipse\renderer\renderer.h">
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\renderer\renderer_2d.h">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\renderer\renderer_api.h">
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
@@ -1446,7 +1449,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\renderer\renderer_2d.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\core\application.cpp">
@@ -1467,6 +1469,9 @@
     <ClCompile Include="src\eclipse\layer\layer_stack.cpp">
       <Filter>src\eclipse\layer</Filter>
     </ClCompile>
+    <ClCompile Include="src\eclipse\renderer\graphics_context.cpp">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\eclipse\renderer\index_buffer.cpp">
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
@@ -1480,6 +1485,9 @@
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\renderer\renderer.cpp">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\renderer\renderer_2d.cpp">
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\renderer\renderer_api.cpp">
@@ -1530,7 +1538,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\eclipse\renderer\renderer_2d.cpp" />
-    <ClCompile Include="src\eclipse\renderer\graphics_context.cpp" />
   </ItemGroup>
 </Project>
