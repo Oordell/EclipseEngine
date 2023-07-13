@@ -4,7 +4,7 @@
 
 class Sandbox2D : public eclipse::Layer {
 public:
-	Sandbox2D() : Layer("Sandbox2D") {}
+	Sandbox2D() : Layer("Sandbox2D") { profile_results_.reserve(10); }
 
 	virtual ~Sandbox2D() = default;
 	void on_attach() override;
@@ -22,4 +22,6 @@ private:
 
 	glm::vec4 square_color_  = {0.2F, 0.3F, 0.8F, 1.0F};
 	unsigned int frame_rate_ = 0;
+
+	std::vector<eclipse::ProfileResult> profile_results_;
 };

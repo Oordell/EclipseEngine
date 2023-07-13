@@ -76,9 +76,4 @@ void ImGuiLayer::end() {
 	}
 }
 
-void ImGuiLayer::on_imgui_render() {
-	static bool show = true;
-	ImGui::ShowDemoWindow(&show);
-}
-
 }  // namespace eclipse
