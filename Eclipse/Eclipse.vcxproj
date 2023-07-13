@@ -152,7 +152,7 @@
     <ClInclude Include="src\eclipse\common_types\orthographic.h" />
     <ClInclude Include="src\eclipse\common_types\point_2d.h" />
     <ClInclude Include="src\eclipse\common_types\profile_results.h" />
-    <ClInclude Include="src\eclipse\common_types\strong_types.h" />
+    <ClInclude Include="src\eclipse\common_types\file_path.h" />
     <ClInclude Include="src\eclipse\common_types\window_size.h" />
     <ClInclude Include="src\eclipse\core\application.h" />
     <ClInclude Include="src\eclipse\core\core.h" />

@@ -72,7 +72,7 @@
     <ClInclude Include="src\eclipse\common_types\point_2d.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\common_types\strong_types.h">
+    <ClInclude Include="src\eclipse\common_types\file_path.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\common_types\window_size.h">

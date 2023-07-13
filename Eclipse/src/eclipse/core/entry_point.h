@@ -1,6 +1,6 @@
 #pragma once
 
-#include "eclipse/common_types/strong_types.h"
+#include "eclipse/common_types/file_path.h"
 
 #ifdef EC_PLATFORM_WINDOWS
 
