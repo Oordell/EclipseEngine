@@ -1449,8 +1449,9 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\core\timer.h" />
+    <ClInclude Include="src\eclipse\debug\timer.h" />
     <ClInclude Include="src\eclipse\common_types\profile_results.h" />
+    <ClInclude Include="src\eclipse\debug\instrumentor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\core\application.cpp">

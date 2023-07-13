@@ -161,7 +161,8 @@
     <ClInclude Include="src\eclipse\core\key_codes.h" />
     <ClInclude Include="src\eclipse\core\log.h" />
     <ClInclude Include="src\eclipse\core\mouse_button_key_codes.h" />
-    <ClInclude Include="src\eclipse\core\timer.h" />
+    <ClInclude Include="src\eclipse\debug\instrumentor.h" />
+    <ClInclude Include="src\eclipse\debug\timer.h" />
     <ClInclude Include="src\eclipse\core\timestep.h" />
     <ClInclude Include="src\eclipse\core\window.h" />
     <ClInclude Include="src\eclipse\events\application_events.h" />

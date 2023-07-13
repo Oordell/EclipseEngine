@@ -1,23 +1,18 @@
 #include "sandbox_2d.h"
 #include "imgui/imgui.h"
-#include "eclipse/core/timer.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#define PROFILE_SCOPE(name)           \
-	eclipse::Timer timer##__LINE__(name, \
-	                               [&](eclipse::ProfileResult profile_res) { profile_results_.push_back(profile_res); })
 
 void Sandbox2D::on_attach() { checkerboard_texture_ = eclipse::Texture2D::create("assets/textures/Checkerboard.png"); }
 
 void Sandbox2D::on_detach() {}
 
 void Sandbox2D::on_update(eclipse::Timestep timestep) {
-	PROFILE_SCOPE("Sandbox2D::on_update");
+	EC_PROFILE_FUNCTION();
 
 	{
-		PROFILE_SCOPE("CameraController::on_update");
+		EC_PROFILE_SCOPE("CameraController::on_update");
 		camera_controller_.on_update(timestep);
 	}
 
@@ -30,13 +25,13 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 	static const float alpha = 1.0F;
 
 	{
-		PROFILE_SCOPE("Renderer Prep");
+		EC_PROFILE_SCOPE("Renderer Prep");
 		eclipse::RenderCommand::set_clear_color({red, green, blue, alpha});
 		eclipse::RenderCommand::clear();
 	}
 
 	{
-		PROFILE_SCOPE("Renderer Draw");
+		EC_PROFILE_SCOPE("Renderer Draw");
 		eclipse::Renderer2D::begin_scene(camera_controller_.get_camera());
 		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition2D {
 		    .position = {-1.0F, 0.0F}, .rotation_deg = 0.0F, .size = {0.8F, 0.8F}, .color = {0.8F, 0.2F, 0.3F, 1.0F}});
@@ -51,6 +46,8 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 void Sandbox2D::on_event(eclipse::Event& event) { camera_controller_.on_event(event); }
 
 void Sandbox2D::on_imgui_render() {
+	EC_PROFILE_FUNCTION();
+
 	std::string text = "Frame rate: " + std::to_string(frame_rate_);
 	ImGui::Begin("Framerate");
 	ImGui::Text(text.c_str());
@@ -58,14 +55,6 @@ void Sandbox2D::on_imgui_render() {
 
 	ImGui::Begin("Settings");
 	ImGui::ColorEdit4("Square color", glm::value_ptr(square_color_));
-
-	for (auto& result : profile_results_) {
-		char label[50];
-		strcpy_s(label, "%.3fms : ");
-		strcat_s(label, result.name);
-		ImGui::Text(label, result.time);
-	}
-	profile_results_.clear();
 
 	ImGui::End();
 }
