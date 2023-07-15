@@ -155,6 +155,7 @@
     <ClInclude Include="src\eclipse\common_types\file_path.h" />
     <ClInclude Include="src\eclipse\common_types\window_size.h" />
     <ClInclude Include="src\eclipse\core\application.h" />
+    <ClInclude Include="src\eclipse\core\config.h" />
     <ClInclude Include="src\eclipse\core\core.h" />
     <ClInclude Include="src\eclipse\core\entry_point.h" />
     <ClInclude Include="src\eclipse\core\input_manager.h" />

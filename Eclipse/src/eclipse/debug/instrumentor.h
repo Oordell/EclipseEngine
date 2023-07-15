@@ -112,8 +112,6 @@ private:
 
 }  // namespace eclipse::debug
 
-#define EC_PROFILE 1
-
 /* clang-format off */
 #if EC_PROFILE
 	#define EC_PROFILE_BEGIN_SESSION(name, filepath) ::eclipse::debug::Instrumentor::get().begin_session(name, filepath)

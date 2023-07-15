@@ -1452,6 +1452,7 @@
     <ClInclude Include="src\eclipse\debug\timer.h" />
     <ClInclude Include="src\eclipse\common_types\profile_results.h" />
     <ClInclude Include="src\eclipse\debug\instrumentor.h" />
+    <ClInclude Include="src\eclipse\core\config.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\core\application.cpp">

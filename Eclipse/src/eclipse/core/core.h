@@ -1,5 +1,7 @@
 #pragma once
 
+#include "eclipse/core/config.h"
+
 #include <memory>
 #include <numbers>
 #include <concepts>
