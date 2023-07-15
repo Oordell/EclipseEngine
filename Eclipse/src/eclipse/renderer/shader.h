@@ -33,6 +33,10 @@ public:
 
 	static ref<Shader> create(const FilePath& filepath);
 	static ref<Shader> create(const ShaderInfo& info);
+
+private:
+	template <typename T>
+	static ref<Shader> create_impl(const T& arg);
 };
 
 class ECLIPSE_API ShaderLibrary {

@@ -36,15 +36,33 @@ static GLenum shader_data_type_to_opengl_base_type(ShaderDataType type) {
 	return 0;
 }
 
-OpenGLVertexArray::OpenGLVertexArray() { glCreateVertexArrays(1, &renderer_id_); }
+OpenGLVertexArray::OpenGLVertexArray() {
+	EC_PROFILE_FUNCTION();
 
-OpenGLVertexArray::~OpenGLVertexArray() { glDeleteVertexArrays(1, &renderer_id_); }
+	glCreateVertexArrays(1, &renderer_id_);
+}
 
-void OpenGLVertexArray::bind() const { glBindVertexArray(renderer_id_); }
+OpenGLVertexArray::~OpenGLVertexArray() {
+	EC_PROFILE_FUNCTION();
 
-void OpenGLVertexArray::unbind() const { glBindVertexArray(0); }
+	glDeleteVertexArrays(1, &renderer_id_);
+}
+
+void OpenGLVertexArray::bind() const {
+	EC_PROFILE_FUNCTION();
+
+	glBindVertexArray(renderer_id_);
+}
+
+void OpenGLVertexArray::unbind() const {
+	EC_PROFILE_FUNCTION();
+
+	glBindVertexArray(0);
+}
 
 void OpenGLVertexArray::add_vertex_buffer(const ref<VertexBuffer>& vertex_buffer) {
+	EC_PROFILE_FUNCTION();
+
 	EC_CORE_ASSERT(vertex_buffer->get_layout().get_elements().size(), "Vertex Buffer has no layout!");
 
 	glBindVertexArray(renderer_id_);
@@ -65,6 +83,8 @@ void OpenGLVertexArray::add_vertex_buffer(const ref<VertexBuffer>& vertex_buffer
 }
 
 void OpenGLVertexArray::set_index_buffer(const ref<IndexBuffer>& index_buffer) {
+	EC_PROFILE_FUNCTION();
+
 	glBindVertexArray(renderer_id_);
 	index_buffer->bind();
 	index_buffer_ = index_buffer;

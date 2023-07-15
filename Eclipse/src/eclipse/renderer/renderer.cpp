@@ -7,6 +7,8 @@ namespace eclipse {
 scope<Renderer::SceneData> Renderer::scene_data_ = make_scope<Renderer::SceneData>();
 
 void Renderer::init() {
+	EC_PROFILE_FUNCTION();
+
 	RenderCommand::init();
 	Renderer2D::init();
 }

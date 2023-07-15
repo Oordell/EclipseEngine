@@ -5,6 +5,8 @@
 
 namespace eclipse {
 OpenGLTexture2D::OpenGLTexture2D(const WindowSize& size) : width_(size.width), height_(size.height) {
+	EC_PROFILE_FUNCTION();
+
 	internal_format_ = GL_RGBA8;
 	data_format_     = GL_RGBA;
 
@@ -19,11 +21,17 @@ OpenGLTexture2D::OpenGLTexture2D(const WindowSize& size) : width_(size.width), h
 }
 
 OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : path_(path) {
+	EC_PROFILE_FUNCTION();
+
 	int width    = 0;
 	int height   = 0;
 	int channels = 0;
 	stbi_set_flip_vertically_on_load(1);
-	stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+	stbi_uc* data = nullptr;
+	{
+		EC_PROFILE_SCOPE("OpenGLTexture2D::OpenGLTexture2D(const std::string&)::stbi_load");
+		data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+	}
 	EC_CORE_ASSERT(data, "Failed to load image!");
 
 	width_  = static_cast<uint32_t>(width);
@@ -58,14 +66,24 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : path_(path) {
 	stbi_image_free(data);
 }
 
-OpenGLTexture2D::~OpenGLTexture2D() { glDeleteTextures(1, &renderer_id_); }
+OpenGLTexture2D::~OpenGLTexture2D() {
+	EC_PROFILE_FUNCTION();
+
+	glDeleteTextures(1, &renderer_id_);
+}
 
 void OpenGLTexture2D::set_data(void* data, uint32_t size) {
+	EC_PROFILE_FUNCTION();
+
 	uint32_t bytes_pr_pixel = data_format_ == GL_RGBA ? 4 : 3;
 	EC_CORE_ASSERT(size == width_ * height_ * bytes_pr_pixel, "Data must be entire texture");
 	glTextureSubImage2D(renderer_id_, 0, 0, 0, width_, height_, data_format_, GL_UNSIGNED_BYTE, data);
 }
 
-void OpenGLTexture2D::bind(uint32_t slot) const { glBindTextureUnit(slot, renderer_id_); }
+void OpenGLTexture2D::bind(uint32_t slot) const {
+	EC_PROFILE_FUNCTION();
+
+	glBindTextureUnit(slot, renderer_id_);
+}
 
 }  // namespace eclipse

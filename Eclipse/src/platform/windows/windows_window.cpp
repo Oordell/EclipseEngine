@@ -17,25 +17,36 @@ static void GLFW_error_callback(int error, const char* description) {
 
 scope<Window> Window::create(const WindowProps& props) { return make_scope<WindowsWindow>(props); }
 
-WindowsWindow::WindowsWindow(const WindowProps& props) { init(props); }
+WindowsWindow::WindowsWindow(const WindowProps& props) {
+	EC_PROFILE_FUNCTION();
+	init(props);
+}
 
-WindowsWindow::~WindowsWindow() { shutdown(); }
+WindowsWindow::~WindowsWindow() {
+	EC_PROFILE_FUNCTION();
+	shutdown();
+}
 
 void WindowsWindow::init(const WindowProps& props) {
+	EC_PROFILE_FUNCTION();
 	data_.props = props;
 
 	EC_CORE_INFO("Creating window \"{0}\" of size ({1}, {2})", props.title, props.window_size.width,
 	             props.window_size.height);
 
 	if (GLFW_initialized == 0) {
+		EC_PROFILE_SCOPE("WindowsWindow::init(const WindowProps&)::glfwInit()");
 		EC_CORE_INFO("Initializing GLFW");
 		auto success = glfwInit();
 		EC_CORE_ASSERT(success, "Could not initialize GLFW!");
 		glfwSetErrorCallback(GLFW_error_callback);
 	}
 
-	window_ = glfwCreateWindow(static_cast<int>(props.window_size.width), static_cast<int>(props.window_size.height),
-	                           data_.props.title.c_str(), nullptr, nullptr);
+	{
+		EC_PROFILE_SCOPE("WindowsWindow::init(const WindowProps&)::glfwCreateWindow()");
+		window_ = glfwCreateWindow(static_cast<int>(props.window_size.width), static_cast<int>(props.window_size.height),
+		                           data_.props.title.c_str(), nullptr, nullptr);
+	}
 	++GLFW_initialized;
 	context_ = GraphicsContext::create(window_);
 	context_->init();
@@ -46,6 +57,7 @@ void WindowsWindow::init(const WindowProps& props) {
 }
 
 void WindowsWindow::shutdown() {
+	EC_PROFILE_FUNCTION();
 	glfwDestroyWindow(window_);
 	--GLFW_initialized;
 	if (GLFW_initialized == 0) {
@@ -142,11 +154,13 @@ void WindowsWindow::set_glfw_callbacks() {
 }
 
 void WindowsWindow::on_update() {
+	EC_PROFILE_FUNCTION();
 	glfwPollEvents();
 	context_->swap_buffers();
 }
 
 void WindowsWindow::set_v_sync(bool enabled) {
+	EC_PROFILE_FUNCTION();
 	int input = enabled ? 1 : 0;
 	glfwSwapInterval(input);
 	data_.v_sync = enabled;

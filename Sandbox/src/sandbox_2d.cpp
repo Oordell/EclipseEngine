@@ -4,20 +4,21 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-void Sandbox2D::on_attach() { checkerboard_texture_ = eclipse::Texture2D::create("assets/textures/Checkerboard.png"); }
+void Sandbox2D::on_attach() {
+	EC_PROFILE_FUNCTION();
 
-void Sandbox2D::on_detach() {}
+	checkerboard_texture_ = eclipse::Texture2D::create("assets/textures/Checkerboard.png");
+}
+
+void Sandbox2D::on_detach() { EC_PROFILE_FUNCTION(); }
 
 void Sandbox2D::on_update(eclipse::Timestep timestep) {
 	EC_PROFILE_FUNCTION();
 
-	{
-		EC_PROFILE_SCOPE("CameraController::on_update");
-		camera_controller_.on_update(timestep);
-	}
+	camera_controller_.on_update(timestep);
 
 	frame_rate_ = static_cast<unsigned int>(1.0F / timestep);
-	EC_TRACE_THROTTLED(0.25, "Frame rate: {0}Hz", frame_rate_);
+	EC_TRACE_THROTTLED(1.0, "Frame rate: {0}Hz", frame_rate_);
 
 	static const float red   = 0.1F;
 	static const float green = 0.1F;

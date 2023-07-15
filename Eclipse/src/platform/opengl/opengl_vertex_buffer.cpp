@@ -6,15 +6,29 @@
 namespace eclipse {
 
 OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size) {
+	EC_PROFILE_FUNCTION();
+
 	glCreateBuffers(1, &renderer_id_);
 	glBindBuffer(GL_ARRAY_BUFFER, renderer_id_);
 	glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 }
 
-OpenGLVertexBuffer::~OpenGLVertexBuffer() { glDeleteBuffers(1, &renderer_id_); }
+OpenGLVertexBuffer::~OpenGLVertexBuffer() {
+	EC_PROFILE_FUNCTION();
+	
+	glDeleteBuffers(1, &renderer_id_);
+}
 
-void OpenGLVertexBuffer::bind() const { glBindBuffer(GL_ARRAY_BUFFER, renderer_id_); }
+void OpenGLVertexBuffer::bind() const {
+	EC_PROFILE_FUNCTION();
+	
+	glBindBuffer(GL_ARRAY_BUFFER, renderer_id_);
+}
 
-void OpenGLVertexBuffer::unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
+void OpenGLVertexBuffer::unbind() const {
+	EC_PROFILE_FUNCTION();
+	
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
 
 }  // namespace eclipse
