@@ -18,6 +18,8 @@ struct Renderer2DStorage {
 static scope<Renderer2DStorage> data;
 
 void Renderer2D::init() {
+	EC_PROFILE_FUNCTION();
+
 	data                    = make_scope<Renderer2DStorage>();
 	data->quad_vertex_array = VertexArray::create();
 
@@ -50,14 +52,18 @@ void Renderer2D::init() {
 	data->texture_shader->set_int("u_texture", 0);
 }
 
-void Renderer2D::shutdown() { data.reset(); }
+void Renderer2D::shutdown() {
+	EC_PROFILE_FUNCTION();
+	data.reset();
+}
 
 void Renderer2D::begin_scene(const OrthographicCamera& camera) {
+	EC_PROFILE_FUNCTION();
 	data->texture_shader->bind();
 	data->texture_shader->set_mat4("view_projection", camera.get_view_projection_matrix());
 }
 
-void Renderer2D::end_scene() {}
+void Renderer2D::end_scene() { EC_PROFILE_FUNCTION(); }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition2D& info) {
 	draw_quad(QuadMetaDataPosition3D {.position     = {info.position.x, info.position.y, 0.0F},
@@ -67,6 +73,8 @@ void Renderer2D::draw_quad(const QuadMetaDataPosition2D& info) {
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition3D& info) {
+	EC_PROFILE_FUNCTION();
+
 	data->texture_shader->set_float4("u_color", info.color);
 	data->white_texture->bind();
 
@@ -85,6 +93,7 @@ void Renderer2D::draw_quad(const QuadMetaDataPosition2DTexture& info) {
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition3DTexture& info) {
+	EC_PROFILE_FUNCTION();
 	data->texture_shader->set_float4("u_color", glm::vec4(1.0F));
 	info.texture->bind();
 
@@ -96,6 +105,7 @@ void Renderer2D::draw_quad(const QuadMetaDataPosition3DTexture& info) {
 }
 
 glm::mat4 Renderer2D::compute_transform(const glm::vec3& position, float rotation_deg, const glm::vec2& size) {
+	EC_PROFILE_FUNCTION();
 	static const glm::mat4 IDENTITY_MATRIX = glm::mat4(1.0F);
 	static const glm::vec3 ROTATION_AXIS   = glm::vec3(0.0F, 0.0F, 1.0F);
 	return glm::translate(IDENTITY_MATRIX, position) *

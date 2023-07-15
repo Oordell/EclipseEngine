@@ -11,6 +11,7 @@ OpenGLContext::OpenGLContext(GLFWwindow* window_handle) : window_handle_(window_
 }
 
 void OpenGLContext::init() {
+	EC_PROFILE_FUNCTION();
 	glfwMakeContextCurrent(window_handle_);
 	int status = gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 	EC_CORE_ASSERT(status, "Failed to initialize Glad!");
@@ -30,6 +31,9 @@ void OpenGLContext::init() {
 #endif
 }
 
-void OpenGLContext::swap_buffers() { glfwSwapBuffers(window_handle_); }
+void OpenGLContext::swap_buffers() {
+	EC_PROFILE_FUNCTION();
+	glfwSwapBuffers(window_handle_);
+}
 
 }  // namespace eclipse

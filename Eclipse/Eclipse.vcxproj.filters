@@ -72,7 +72,7 @@
     <ClInclude Include="src\eclipse\common_types\point_2d.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\common_types\strong_types.h">
+    <ClInclude Include="src\eclipse\common_types\file_path.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\common_types\window_size.h">
@@ -1449,6 +1449,10 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\debug\timer.h" />
+    <ClInclude Include="src\eclipse\common_types\profile_results.h" />
+    <ClInclude Include="src\eclipse\debug\instrumentor.h" />
+    <ClInclude Include="src\eclipse\core\config.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\core\application.cpp">

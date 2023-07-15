@@ -19,6 +19,7 @@
 #include <concepts>
 
 #include "eclipse/core/log.h"
+#include "eclipse/debug/instrumentor.h"
 
 #ifdef EC_PLATFORM_WINDOWS
 #include <Windows.h>

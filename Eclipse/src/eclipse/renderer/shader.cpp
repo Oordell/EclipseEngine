@@ -6,24 +6,12 @@
 
 namespace eclipse {
 
-ref<Shader> Shader::create(const FilePath& filepath) {
-	using enum RendererAPI::API;
-	switch (Renderer::get_api()) {
-		case none: {
-			EC_CORE_ASSERT(false, "RendererAPI::none is not supported!");
-			return nullptr;
-		}
-		case open_gl: {
-			return make_ref<OpenGLShader>(filepath);
-		}
-		default: {
-			EC_CORE_ASSERT(false, "Couldn't identify the renderer API type!");
-			return nullptr;
-		}
-	}
-}
+ref<Shader> Shader::create(const FilePath& filepath) { return create_impl(filepath); }
 
-ref<Shader> Shader::create(const ShaderInfo& info) {
+ref<Shader> Shader::create(const ShaderInfo& info) { return create_impl(info); }
+
+template <typename T>
+inline ref<Shader> Shader::create_impl(const T& arg) {
 	using enum RendererAPI::API;
 	switch (Renderer::get_api()) {
 		case none: {
@@ -31,7 +19,7 @@ ref<Shader> Shader::create(const ShaderInfo& info) {
 			return nullptr;
 		}
 		case open_gl: {
-			return make_ref<OpenGLShader>(info);
+			return make_ref<OpenGLShader>(arg);
 		}
 		default: {
 			EC_CORE_ASSERT(false, "Couldn't identify the renderer API type!");

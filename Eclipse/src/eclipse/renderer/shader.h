@@ -1,7 +1,7 @@
 #pragma once
 
 #include "eclipse/core/core.h"
-#include "eclipse/common_types/strong_types.h"
+#include "eclipse/common_types/file_path.h"
 
 #include <glm/glm.hpp>
 
@@ -33,6 +33,10 @@ public:
 
 	static ref<Shader> create(const FilePath& filepath);
 	static ref<Shader> create(const ShaderInfo& info);
+
+private:
+	template <typename T>
+	static ref<Shader> create_impl(const T& arg);
 };
 
 class ECLIPSE_API ShaderLibrary {

@@ -18,6 +18,8 @@ static GLenum shader_type_from_string(const std::string& type) {
 }
 
 OpenGLShader::OpenGLShader(const FilePath& filepath) {
+	EC_PROFILE_FUNCTION();
+
 	std::filesystem::path path = filepath.value();
 	name_                      = path.stem().string();  // Returns the file's name stripped of the extension.
 
@@ -27,6 +29,8 @@ OpenGLShader::OpenGLShader(const FilePath& filepath) {
 }
 
 OpenGLShader::OpenGLShader(const ShaderInfo& info) : name_(info.name) {
+	EC_PROFILE_FUNCTION();
+
 	std::unordered_map<GLenum, std::string> sources;
 	sources[GL_VERTEX_SHADER]   = info.vertex_src;
 	sources[GL_FRAGMENT_SHADER] = info.fragment_src;
@@ -35,23 +39,50 @@ OpenGLShader::OpenGLShader(const ShaderInfo& info) : name_(info.name) {
 
 OpenGLShader::~OpenGLShader() { glDeleteProgram(renderer_id_); }
 
-void OpenGLShader::bind() const { glUseProgram(renderer_id_); }
+void OpenGLShader::bind() const {
+	EC_PROFILE_FUNCTION();
+	glUseProgram(renderer_id_);
+}
 
-void OpenGLShader::unbind() const { glUseProgram(0); }
+void OpenGLShader::unbind() const {
+	EC_PROFILE_FUNCTION();
+	glUseProgram(0);
+}
 
-void OpenGLShader::set_int(const std::string& name, int value) { upload_uniform_int(name, value); }
+void OpenGLShader::set_int(const std::string& name, int value) {
+	EC_PROFILE_FUNCTION();
+	upload_uniform_int(name, value);
+}
 
-void OpenGLShader::set_float(const std::string& name, float value) { upload_uniform_float(name, value); }
+void OpenGLShader::set_float(const std::string& name, float value) {
+	EC_PROFILE_FUNCTION();
+	upload_uniform_float(name, value);
+}
 
-void OpenGLShader::set_float2(const std::string& name, const glm::vec2& value) { upload_uniform_float2(name, value); }
+void OpenGLShader::set_float2(const std::string& name, const glm::vec2& value) {
+	EC_PROFILE_FUNCTION();
+	upload_uniform_float2(name, value);
+}
 
-void OpenGLShader::set_float3(const std::string& name, const glm::vec3& value) { upload_uniform_float3(name, value); }
+void OpenGLShader::set_float3(const std::string& name, const glm::vec3& value) {
+	EC_PROFILE_FUNCTION();
+	upload_uniform_float3(name, value);
+}
 
-void OpenGLShader::set_float4(const std::string& name, const glm::vec4& value) { upload_uniform_float4(name, value); }
+void OpenGLShader::set_float4(const std::string& name, const glm::vec4& value) {
+	EC_PROFILE_FUNCTION();
+	upload_uniform_float4(name, value);
+}
 
-void OpenGLShader::set_mat3(const std::string& name, const glm::mat3& value) { upload_uniform_mat3(name, value); }
+void OpenGLShader::set_mat3(const std::string& name, const glm::mat3& value) {
+	EC_PROFILE_FUNCTION();
+	upload_uniform_mat3(name, value);
+}
 
-void OpenGLShader::set_mat4(const std::string& name, const glm::mat4& value) { upload_uniform_mat4(name, value); }
+void OpenGLShader::set_mat4(const std::string& name, const glm::mat4& value) {
+	EC_PROFILE_FUNCTION();
+	upload_uniform_mat4(name, value);
+}
 
 void OpenGLShader::upload_uniform_int(const std::string& name, int value) {
 	auto location = glGetUniformLocation(renderer_id_, name.c_str());
@@ -89,6 +120,8 @@ void OpenGLShader::upload_uniform_mat4(const std::string& name, const glm::mat4&
 }
 
 std::string OpenGLShader::read_file(const FilePath& filepath) {
+	EC_PROFILE_FUNCTION();
+
 	std::string result;
 	std::ifstream in(filepath.value(), std::ios::in | std::ios::binary);
 	if (in) {
@@ -109,6 +142,8 @@ std::string OpenGLShader::read_file(const FilePath& filepath) {
 }
 
 std::unordered_map<GLenum, std::string> OpenGLShader::pre_process(const std::string& vertes_src) {
+	EC_PROFILE_FUNCTION();
+
 	std::unordered_map<GLenum, std::string> shader_srcs;
 
 	const char* type_token   = "#type";
@@ -133,6 +168,8 @@ std::unordered_map<GLenum, std::string> OpenGLShader::pre_process(const std::str
 }
 
 void OpenGLShader::compile(const std::unordered_map<GLenum, std::string>& shader_srcs) {
+	EC_PROFILE_FUNCTION();
+
 	GLuint program                     = glCreateProgram();
 	static const size_t num_of_shaders = 2;
 	EC_CORE_ASSERT(shader_srcs.size() <= num_of_shaders, "We only support two shaders currently.");

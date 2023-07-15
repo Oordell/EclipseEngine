@@ -15,6 +15,8 @@ ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer") {}
 ImGuiLayer::~ImGuiLayer() {}
 
 void ImGuiLayer::on_attach() {
+	EC_PROFILE_FUNCTION();
+
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -48,18 +50,24 @@ void ImGuiLayer::on_attach() {
 }
 
 void ImGuiLayer::on_detach() {
+	EC_PROFILE_FUNCTION();
+
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 }
 
 void ImGuiLayer::begin() {
+	EC_PROFILE_FUNCTION();
+
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 }
 
 void ImGuiLayer::end() {
+	EC_PROFILE_FUNCTION();
+
 	ImGuiIO& io      = ImGui::GetIO();
 	Application& app = Application::get();
 	io.DisplaySize =
@@ -74,11 +82,6 @@ void ImGuiLayer::end() {
 		ImGui::RenderPlatformWindowsDefault();
 		glfwMakeContextCurrent(backup_current_context);
 	}
-}
-
-void ImGuiLayer::on_imgui_render() {
-	static bool show = true;
-	ImGui::ShowDemoWindow(&show);
 }
 
 }  // namespace eclipse

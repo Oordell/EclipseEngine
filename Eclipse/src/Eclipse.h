@@ -7,6 +7,8 @@
 #include "eclipse/core/log.h"
 
 #include "eclipse/core/timestep.h"
+#include "eclipse/debug/timer.h"
+#include "eclipse/debug/instrumentor.h"
 
 #include "eclipse/core/input_manager.h"
 #include "eclipse/core/key_codes.h"
