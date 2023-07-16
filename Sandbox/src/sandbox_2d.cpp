@@ -38,8 +38,13 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 		    .position = {-1.0F, 0.0F}, .rotation_deg = 0.0F, .size = {0.8F, 0.8F}, .color = {0.8F, 0.2F, 0.3F, 1.0F}});
 		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3D {
 		    .position = {0.5F, -0.5F, 0.0F}, .rotation_deg = 60.0F, .size = {0.4F, 0.8F}, .color = {0.2F, 0.8F, 0.3F, 1.0F}});
-		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3DTexture {
-		    .position = {0.0F, 0.0F, -0.1F}, .rotation_deg = 0.0F, .size = {10.0F, 10.0F}, .texture = checkerboard_texture_});
+		eclipse::Renderer2D::draw_quad(
+		    eclipse::QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, -0.1F},
+		                                            .rotation_deg  = -16.4F,
+		                                            .size          = {10.0F, 10.0F},
+		                                            .tiling_factor = 4.0F,
+		                                            .texture       = checkerboard_texture_,
+		                                            .tint_color    = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)});
 		eclipse::Renderer2D::end_scene();
 	}
 }

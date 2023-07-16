@@ -66,16 +66,18 @@ void Renderer2D::begin_scene(const OrthographicCamera& camera) {
 void Renderer2D::end_scene() { EC_PROFILE_FUNCTION(); }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition2D& info) {
-	draw_quad(QuadMetaDataPosition3D {.position     = {info.position.x, info.position.y, 0.0F},
-	                                  .rotation_deg = info.rotation_deg,
-	                                  .size         = info.size,
-	                                  .color        = info.color});
+	draw_quad(QuadMetaDataPosition3D {.position      = {info.position.x, info.position.y, 0.0F},
+	                                  .rotation_deg  = info.rotation_deg,
+	                                  .size          = info.size,
+	                                  .tiling_factor = info.tiling_factor,
+	                                  .color         = info.color});
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition3D& info) {
 	EC_PROFILE_FUNCTION();
 
 	data->texture_shader->set_float4("u_color", info.color);
+	data->texture_shader->set_float("u_tiling_factor", info.tiling_factor);
 	data->white_texture->bind();
 
 	glm::mat4 transform = compute_transform(info.position, info.rotation_deg, info.size);
@@ -86,15 +88,18 @@ void Renderer2D::draw_quad(const QuadMetaDataPosition3D& info) {
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition2DTexture& info) {
-	draw_quad(QuadMetaDataPosition3DTexture {.position     = {info.position.x, info.position.y, 0.0F},
-	                                         .rotation_deg = info.rotation_deg,
-	                                         .size         = info.size,
-	                                         .texture      = info.texture});
+	draw_quad(QuadMetaDataPosition3DTexture {.position      = {info.position.x, info.position.y, 0.0F},
+	                                         .rotation_deg  = info.rotation_deg,
+	                                         .size          = info.size,
+	                                         .tiling_factor = info.tiling_factor,
+	                                         .texture       = info.texture,
+	                                         .tint_color    = info.tint_color});
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition3DTexture& info) {
 	EC_PROFILE_FUNCTION();
-	data->texture_shader->set_float4("u_color", glm::vec4(1.0F));
+	data->texture_shader->set_float4("u_color", info.tint_color);
+	data->texture_shader->set_float("u_tiling_factor", info.tiling_factor);
 	info.texture->bind();
 
 	glm::mat4 transform = compute_transform(info.position, info.rotation_deg, info.size);
@@ -108,9 +113,13 @@ glm::mat4 Renderer2D::compute_transform(const glm::vec3& position, float rotatio
 	EC_PROFILE_FUNCTION();
 	static const glm::mat4 IDENTITY_MATRIX = glm::mat4(1.0F);
 	static const glm::vec3 ROTATION_AXIS   = glm::vec3(0.0F, 0.0F, 1.0F);
-	return glm::translate(IDENTITY_MATRIX, position) *
-	       glm::rotate(IDENTITY_MATRIX, glm::radians(rotation_deg), ROTATION_AXIS) *
-	       glm::scale(IDENTITY_MATRIX, {size.x, size.y, 1.0F});
+	static const float rotation_threshold  = 0.01F;
+	if (std::abs(rotation_deg) > rotation_threshold) {
+		return glm::translate(IDENTITY_MATRIX, position) *
+		       glm::rotate(IDENTITY_MATRIX, glm::radians(rotation_deg), ROTATION_AXIS) *
+		       glm::scale(IDENTITY_MATRIX, {size.x, size.y, 1.0F});
+	}
+	return glm::translate(IDENTITY_MATRIX, position) * glm::scale(IDENTITY_MATRIX, {size.x, size.y, 1.0F});
 }
 
 }  // namespace eclipse
