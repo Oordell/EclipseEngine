@@ -10,10 +10,14 @@
 
 namespace eclipse::debug {
 
+using floating_point_microseconds = std::chrono::duration<double, std::micro>;
+using steady_clock                = std::chrono::steady_clock;
+using microseconds                = std::chrono::microseconds;
+
 struct ProfileResult {
 	std::string name;
-	long long start_time;
-	long long end_time;
+	floating_point_microseconds start_time;
+	microseconds elapsed_time;
 	std::thread::id thread_id;
 };
 
@@ -36,6 +40,7 @@ public:
 			}
 			internal_end_session();
 		}
+
 		output_stream_.open(filepath.value());
 		if (output_stream_.is_open()) {
 			current_session_ = new InstrumentationSession {name};
@@ -58,14 +63,15 @@ public:
 		std::string name = result.name;
 		std::replace(name.begin(), name.end(), '"', '\'');
 
+		json << std::setprecision(3) << std::fixed;
 		json << ",{";
 		json << "\"cat\":\"function\",";
-		json << "\"dur\":" << (result.end_time - result.start_time) << ',';
+		json << "\"dur\":" << (result.elapsed_time.count()) << ',';
 		json << "\"name\":\"" << name << "\",";
 		json << "\"ph\":\"X\",";
 		json << "\"pid\":0,";
 		json << "\"tid\":" << result.thread_id << ",";
-		json << "\"ts\":" << result.start_time;
+		json << "\"ts\":" << result.start_time.count();
 		json << "}";
 
 		std::lock_guard lock(mutex_);
@@ -108,11 +114,7 @@ private:
 
 class InstrumentationTimer {
 public:
-	using high_resolution_clock = std::chrono::high_resolution_clock;
-	using microseconds          = std::chrono::microseconds;
-
-	InstrumentationTimer(const char* name)
-	    : name_(name), start_time_point_(high_resolution_clock::now()), running_(true) {}
+	InstrumentationTimer(const char* name) : name_(name), start_time_point_(steady_clock::now()), running_(true) {}
 
 	~InstrumentationTimer() {
 		if (running_) {
@@ -121,17 +123,20 @@ public:
 	}
 
 	void stop() {
-		auto end_time_point = high_resolution_clock::now();
-		long long start     = std::chrono::time_point_cast<microseconds>(start_time_point_).time_since_epoch().count();
-		long long end       = std::chrono::time_point_cast<microseconds>(end_time_point).time_since_epoch().count();
-		Instrumentor::get().write_profile(
-		    {.name = name_, .start_time = start, .end_time = end, .thread_id = std::this_thread::get_id()});
+		auto end_time_point      = steady_clock::now();
+		auto high_res_start_time = floating_point_microseconds {start_time_point_.time_since_epoch()};
+		auto elapsed_time        = std::chrono::time_point_cast<microseconds>(end_time_point).time_since_epoch() -
+		                    std::chrono::time_point_cast<microseconds>(start_time_point_).time_since_epoch();
+		Instrumentor::get().write_profile({.name         = name_,
+		                                   .start_time   = high_res_start_time,
+		                                   .elapsed_time = elapsed_time,
+		                                   .thread_id    = std::this_thread::get_id()});
 		running_ = false;
 	}
 
 private:
 	const char* name_;
-	std::chrono::time_point<high_resolution_clock> start_time_point_;
+	std::chrono::time_point<steady_clock> start_time_point_;
 	bool running_;
 };
 
