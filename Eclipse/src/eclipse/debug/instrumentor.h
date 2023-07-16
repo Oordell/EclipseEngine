@@ -14,7 +14,7 @@ struct ProfileResult {
 	std::string name;
 	long long start_time;
 	long long end_time;
-	uint32_t thread_id;
+	std::thread::id thread_id;
 };
 
 struct InstrumentationSession {
@@ -23,51 +23,56 @@ struct InstrumentationSession {
 
 class Instrumentor {
 public:
-	Instrumentor() : current_session_(nullptr), profile_count_(0) {}
+	Instrumentor() : current_session_(nullptr) {}
 
 	void begin_session(const std::string& name, FilePath filepath = FilePath("results.json")) {
+		std::lock_guard lock(mutex_);
+		if (current_session_) {
+			// If there is already a current session, then close it before beginning new one. Subsequent profiling output meant
+			// for the original session will end up in newly opened session instead. That's better than having badly profiling
+			// output.
+			if (Log::get_core_logger()) {  // Edge case: begin_session() might be before Log::init()
+				EC_CORE_ERROR("Instrumentor::begin_session('{0}') when session '{1}' already open.", name, current_session_->name);
+			}
+			internal_end_session();
+		}
 		output_stream_.open(filepath.value());
-		write_header();
-		current_session_ = new InstrumentationSession {name};
+		if (output_stream_.is_open()) {
+			current_session_ = new InstrumentationSession {name};
+			write_header();
+		} else {
+			if (Log::get_core_logger()) {  // Edge case: begin_session() might be before Log::init()
+				EC_CORE_ERROR("Instrumentor could not open results file '{0}'.", filepath.value());
+			}
+		}
 	}
 
 	void end_session() {
-		write_footer();
-		output_stream_.close();
-		delete current_session_;
-		current_session_ = nullptr;
-		profile_count_   = 0;
+		std::lock_guard lock(mutex_);
+		internal_end_session();
 	}
 
 	void write_profile(const ProfileResult& result) {
-		if (profile_count_++ > 0) {
-			output_stream_ << ",";
-		}
+		std::stringstream json;
 
 		std::string name = result.name;
 		std::replace(name.begin(), name.end(), '"', '\'');
 
-		output_stream_ << "{";
-		output_stream_ << "\"cat\":\"function\",";
-		output_stream_ << "\"dur\":" << (result.end_time - result.start_time) << ',';
-		output_stream_ << "\"name\":\"" << name << "\",";
-		output_stream_ << "\"ph\":\"X\",";
-		output_stream_ << "\"pid\":0,";
-		output_stream_ << "\"tid\":" << result.thread_id << ",";
-		output_stream_ << "\"ts\":" << result.start_time;
-		output_stream_ << "}";
+		json << ",{";
+		json << "\"cat\":\"function\",";
+		json << "\"dur\":" << (result.end_time - result.start_time) << ',';
+		json << "\"name\":\"" << name << "\",";
+		json << "\"ph\":\"X\",";
+		json << "\"pid\":0,";
+		json << "\"tid\":" << result.thread_id << ",";
+		json << "\"ts\":" << result.start_time;
+		json << "}";
 
-		output_stream_.flush();
-	}
-
-	void write_header() {
-		output_stream_ << "{\"otherData\": {},\"traceEvents\":[";
-		output_stream_.flush();
-	}
-
-	void write_footer() {
-		output_stream_ << "]}";
-		output_stream_.flush();
+		std::lock_guard lock(mutex_);
+		if (current_session_) {
+			output_stream_ << json.str();
+			output_stream_.flush();
+		}
 	}
 
 	static Instrumentor& get() {
@@ -76,9 +81,29 @@ public:
 	}
 
 private:
+	void write_header() {
+		output_stream_ << "{\"otherData\": {},\"traceEvents\":[{}";
+		output_stream_.flush();
+	}
+
+	void write_footer() {
+		output_stream_ << "]}";
+		output_stream_.flush();
+	}
+
+	// Note: you must already own lock on m_Mutex before calling internal_end_session()
+	void internal_end_session() {
+		if (current_session_) {
+			write_footer();
+			output_stream_.close();
+			delete current_session_;
+			current_session_ = nullptr;
+		}
+	}
+
+	std::mutex mutex_;
 	InstrumentationSession* current_session_;
 	std::ofstream output_stream_;
-	int profile_count_;
 };
 
 class InstrumentationTimer {
@@ -99,8 +124,8 @@ public:
 		auto end_time_point = high_resolution_clock::now();
 		long long start     = std::chrono::time_point_cast<microseconds>(start_time_point_).time_since_epoch().count();
 		long long end       = std::chrono::time_point_cast<microseconds>(end_time_point).time_since_epoch().count();
-		uint32_t thread_id  = static_cast<uint32_t>(std::hash<std::thread::id> {}(std::this_thread::get_id()));
-		Instrumentor::get().write_profile({name_, start, end, thread_id});
+		Instrumentor::get().write_profile(
+		    {.name = name_, .start_time = start, .end_time = end, .thread_id = std::this_thread::get_id()});
 		running_ = false;
 	}
 
