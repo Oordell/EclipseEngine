@@ -113,7 +113,7 @@ private:
 }  // namespace eclipse::debug
 
 /* clang-format off */
-#if EC_PROFILE
+#if EC_PROFILE_ENABLED
 	#define EC_PROFILE_BEGIN_SESSION(name, filepath) ::eclipse::debug::Instrumentor::get().begin_session(name, filepath)
 	#define EC_PROFILE_END_SESSION()                 ::eclipse::debug::Instrumentor::get().end_session()
 	#define EC_PROFILE_SCOPE(name)                   ::eclipse::debug::InstrumentationTimer timer##__LINE__(name)
