@@ -16,8 +16,6 @@ static void GLFW_error_callback(int error, const char* description) {
 	EC_CORE_ERROR("GLFW Error (code: {0}) : {1}", error, description);
 }
 
-scope<Window> Window::create(const WindowProps& props) { return make_scope<WindowsWindow>(props); }
-
 WindowsWindow::WindowsWindow(const WindowProps& props) {
 	EC_PROFILE_FUNCTION();
 	init(props);

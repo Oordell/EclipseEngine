@@ -20,6 +20,8 @@ public:
 
 	inline static float get_mouse_pose_y() { return instance_->get_mouse_pose_y_impl(); }
 
+	static scope<InputManager> create();
+
 protected:
 	InputManager()                                        = default;
 	virtual bool is_key_pressed_impl(int keycode)         = 0;

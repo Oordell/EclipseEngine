@@ -617,7 +617,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\core\application.cpp" />
+    <ClCompile Include="src\eclipse\core\input_manager.cpp" />
     <ClCompile Include="src\eclipse\core\log.cpp" />
+    <ClCompile Include="src\eclipse\core\window.cpp" />
     <ClCompile Include="src\eclipse\imgui\imgui_build.cpp" />
     <ClCompile Include="src\eclipse\imgui\imgui_layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer.cpp" />
