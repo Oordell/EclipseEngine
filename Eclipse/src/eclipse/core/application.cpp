@@ -33,10 +33,8 @@ void Application::on_event(Event& e) {
 	dispatcher.dispatch<WindowClosedEvent>(EC_BIND_EVENT_FN(Application::on_window_closed));
 	dispatcher.dispatch<WindowResizeEvent>(EC_BIND_EVENT_FN(Application::on_window_resize));
 
-	//	EC_CORE_INFO("{0}", e);
-
-	for (auto it = layer_stack_.end(); it != layer_stack_.begin();) {
-		(*--it)->on_event(e);
+	for (auto it = layer_stack_.rbegin(); it != layer_stack_.rend(); ++it) {
+		(*it)->on_event(e);
 		if (e.handled) {
 			break;
 		}

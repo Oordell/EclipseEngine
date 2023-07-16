@@ -13,6 +13,9 @@
     <Filter Include="src\eclipse\core">
       <UniqueIdentifier>{D9127BAA-C50B-9AFC-EE3D-7F81DA957908}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\eclipse\debug">
+      <UniqueIdentifier>{17C9E9F9-83DF-E78F-CC56-73B138ACB817}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\eclipse\events">
       <UniqueIdentifier>{A53EAD3A-9122-6E90-FA82-68E3E6855812}</UniqueIdentifier>
     </Filter>
@@ -60,8 +63,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\eclipse.h">
+    <ClInclude Include="src\Eclipse.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\common_types\file_path.h">
+      <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h">
       <Filter>src\eclipse\common_types</Filter>
@@ -72,13 +78,16 @@
     <ClInclude Include="src\eclipse\common_types\point_2d.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\common_types\file_path.h">
+    <ClInclude Include="src\eclipse\common_types\profile_results.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\common_types\window_size.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\core\application.h">
+      <Filter>src\eclipse\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\core\config.h">
       <Filter>src\eclipse\core</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\core\core.h">
@@ -104,6 +113,12 @@
     </ClInclude>
     <ClInclude Include="src\eclipse\core\window.h">
       <Filter>src\eclipse\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\debug\instrumentor.h">
+      <Filter>src\eclipse\debug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\debug\timer.h">
+      <Filter>src\eclipse\debug</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\events\application_events.h">
       <Filter>src\eclipse\events</Filter>
@@ -1449,10 +1464,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\debug\timer.h" />
-    <ClInclude Include="src\eclipse\common_types\profile_results.h" />
-    <ClInclude Include="src\eclipse\debug\instrumentor.h" />
-    <ClInclude Include="src\eclipse\core\config.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\core\application.cpp">

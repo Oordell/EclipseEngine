@@ -138,9 +138,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\example_layer.h" />
     <ClInclude Include="src\sandbox_2d.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\example_layer.cpp" />
     <ClCompile Include="src\sandbox_2d.cpp" />
     <ClCompile Include="src\sandbox_app.cpp" />
   </ItemGroup>
