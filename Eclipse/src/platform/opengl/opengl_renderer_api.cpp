@@ -5,8 +5,39 @@
 
 namespace eclipse {
 
+void opengl_message_callback(unsigned int /*source*/, unsigned int /*type*/, unsigned int /*id*/, unsigned int severity,
+                             int /*length*/, const char* message, const void* /*user_param*/) {
+	switch (severity) {
+		case GL_DEBUG_SEVERITY_HIGH: {
+			EC_CORE_FATAL(message);
+			return;
+		}
+		case GL_DEBUG_SEVERITY_MEDIUM: {
+			EC_CORE_WARN(message);
+			return;
+		}
+		case GL_DEBUG_SEVERITY_LOW: {
+			EC_CORE_INFO(message);
+			return;
+		}
+		case GL_DEBUG_SEVERITY_NOTIFICATION: {
+			EC_CORE_TRACE(message);
+			return;
+		}
+	}
+
+	EC_CORE_ASSERT(false, "Unknown severity level!");
+}
+
 void OpenGLRendererAPI::init() {
 	EC_PROFILE_FUNCTION();
+
+#ifdef ECLIPSE_DEBUG
+	glEnable(GL_DEBUG_OUTPUT);
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+	glDebugMessageCallback(opengl_message_callback, nullptr);
+	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
+#endif
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

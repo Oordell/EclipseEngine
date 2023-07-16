@@ -5,6 +5,7 @@
 #include "eclipse/events/application_events.h"
 #include "eclipse/events/key_events.h"
 #include "eclipse/events/mouse_events.h"
+#include "eclipse/renderer/renderer.h"
 #include "platform/opengl/opengl_context.h"
 
 namespace eclipse {
@@ -44,6 +45,13 @@ void WindowsWindow::init(const WindowProps& props) {
 
 	{
 		EC_PROFILE_SCOPE("WindowsWindow::init(const WindowProps&)::glfwCreateWindow()");
+
+#if defined(ECLIPSE_DEBUG)
+		if (Renderer::get_api() == RendererAPI::API::open_gl) {
+			glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+		}
+#endif
+
 		window_ = glfwCreateWindow(static_cast<int>(props.window_size.width), static_cast<int>(props.window_size.height),
 		                           data_.props.title.c_str(), nullptr, nullptr);
 	}
