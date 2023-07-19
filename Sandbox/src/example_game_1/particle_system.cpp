@@ -12,7 +12,7 @@ void ParticleSystem::emit(const ParticleProps& particle_prop) {
 	Particle& particle = particle_pool_[pool_index_];
 	particle.active    = true;
 	particle.position  = particle_prop.position;
-	particle.rotation  = Random::get_float() * 2.0F * std::numbers::pi;
+	particle.rotation  = Random::get_float() * 2.0F * static_cast<float>(std::numbers::pi);
 
 	// Velocity
 	particle.velocity = particle_prop.velocity;

@@ -53,7 +53,7 @@ void Player::on_update(eclipse::Timestep timestep) {
 
 		// Flames
 		glm::vec2 emission_point = {0.0F, -0.6F};
-		float rotation           = eclipse::deg_to_rad(get_rotation());
+		float rotation           = static_cast<float>(eclipse::deg_to_rad(get_rotation()));
 		glm::vec4 rotated =
 		    glm::rotate(glm::mat4(1.0F), rotation, {0.0F, 0.0F, 1.0F}) * glm::vec4(emission_point, 0.0F, 1.0F);
 		engine_particle_.position   = position_ + glm::vec2 {rotated.x, rotated.y};

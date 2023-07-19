@@ -8,8 +8,8 @@ class Sandbox : public eclipse::Application {
 public:
 	Sandbox() {
 		//	push_layer(new ExampleLayer());
-		//push_layer(new Sandbox2D());
-		push_layer(new GameLayer());
+		push_layer(new Sandbox2D());
+		//	push_layer(new GameLayer());
 	}
 
 	~Sandbox() {}
