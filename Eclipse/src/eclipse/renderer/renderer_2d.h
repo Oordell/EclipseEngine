@@ -40,12 +40,15 @@ struct QuadMetaDataPosition3DTexture {
 	glm::vec4 tint_color {glm::vec4(1.0F)};
 };
 
+using QuadDrawingDataImpl = QuadMetaDataPosition3DTexture;
+
 class ECLIPSE_API Renderer2D {
 public:
 	static void init();
 	static void shutdown();
 	static void begin_scene(const OrthographicCamera& camera);
 	static void end_scene();
+	static void flush();
 
 	static void draw_quad(const QuadMetaDataPosition2D& info);
 	static void draw_quad(const QuadMetaDataPosition3D& info);
@@ -53,6 +56,7 @@ public:
 	static void draw_quad(const QuadMetaDataPosition3DTexture& info);
 
 private:
+	static void draw_quad_impl(const QuadDrawingDataImpl& info);
 	static glm::mat4 compute_transform(const glm::vec3& position, float rotation_deg, const glm::vec2& size);
 };
 
