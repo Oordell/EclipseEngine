@@ -40,6 +40,15 @@ struct QuadMetaDataPosition3DTexture {
 	glm::vec4 tint_color {glm::vec4(1.0F)};
 };
 
+struct QuadVertexBufferMappingInfo {
+	glm::vec3 position;
+	glm::vec2 size;
+	glm::vec4 color;
+	glm::vec2 tex_coord;
+	float texture_index;
+	float tiling_factor;
+};
+
 using QuadDrawingDataImpl = QuadMetaDataPosition3DTexture;
 
 class ECLIPSE_API Renderer2D {
@@ -57,6 +66,7 @@ public:
 
 private:
 	static void draw_quad_impl(const QuadDrawingDataImpl& info);
+	static void map_quad_vertex_buffer_info(const QuadVertexBufferMappingInfo& info);
 	static glm::mat4 compute_transform(const glm::vec3& position, float rotation_deg, const glm::vec2& size);
 };
 
