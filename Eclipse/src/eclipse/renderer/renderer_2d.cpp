@@ -24,6 +24,7 @@ struct Renderer2DData {
 	static constexpr uint32_t QUAD_INDEX_COUNT_INCREMENT = 6;
 	/* TODO: Implement renderer capabilities, to query render data from the GPU. This is hard-coded for now: */
 	static constexpr uint32_t MAX_TEXTURE_SLOTS = 32;
+	static constexpr int32_t NUM_OF_CORNERS     = 4;
 
 	ref<VertexArray> quad_vertex_array;
 	ref<VertexBuffer> quad_vertex_buffer;
@@ -37,6 +38,8 @@ struct Renderer2DData {
 
 	std::array<ref<Texture2D>, MAX_TEXTURE_SLOTS> texture_slots;
 	uint32_t texture_slot_index = 1;  // index 0 = white texture.
+
+	glm::vec4 quad_vertex_positions[NUM_OF_CORNERS];
 };
 
 static Renderer2DData data;
@@ -89,6 +92,11 @@ void Renderer2D::init() {
 	data.texture_shader->set_int_array("u_textures", samplers, data.MAX_TEXTURE_SLOTS);
 
 	data.texture_slots[0] = data.white_texture;
+
+	data.quad_vertex_positions[0] = {-0.5F, -0.5F, 0.0F, 1.0F};
+	data.quad_vertex_positions[1] = {0.5F, -0.5F, 0.0F, 1.0F};
+	data.quad_vertex_positions[2] = {0.5F, 0.5F, 0.0F, 1.0F};
+	data.quad_vertex_positions[3] = {-0.5F, 0.5F, 0.0F, 1.0F};
 }
 
 void Renderer2D::shutdown() { EC_PROFILE_FUNCTION(); }
@@ -173,31 +181,20 @@ void Renderer2D::draw_quad_impl(const QuadDrawingDataImpl& info) {
 		data.texture_slot_index++;
 	}
 
-	static const int32_t CORNERS                    = 4;
-	const std::array<glm::vec2, CORNERS> sizes      = {glm::vec2 {0.0F, 0.0F}, glm::vec2 {info.size.x, 0.0F},
-	                                                   glm::vec2 {info.size.x, info.size.y}, glm::vec2 {0.0F, info.size.y}};
-	const std::array<glm::vec2, CORNERS> tex_coords = {glm::vec2 {0.0F, 0.0F}, glm::vec2 {1.0F, 0.0F},
-	                                                   glm::vec2 {1.0F, 1.0F}, glm::vec2 {0.0F, 1.0F}};
-	for (int32_t i = 0; i < CORNERS; i++) {
-		map_quad_vertex_buffer_info({.position      = info.position,
-		                             .size          = sizes[i],
-		                             .color         = info.tint_color,
-		                             .tex_coord     = tex_coords[i],
-		                             .texture_index = texture_index,
-		                             .tiling_factor = info.tiling_factor});
+	glm::mat4 transform = compute_transform(info.position, info.rotation_deg, info.size);
+	const std::array<glm::vec2, Renderer2DData::NUM_OF_CORNERS> tex_coords = {
+	    glm::vec2 {0.0F, 0.0F}, glm::vec2 {1.0F, 0.0F}, glm::vec2 {1.0F, 1.0F}, glm::vec2 {0.0F, 1.0F}};
+
+	for (int32_t i = 0; i < Renderer2DData::NUM_OF_CORNERS; i++) {
+		data.quad_vertex_buffer_ptr->position      = transform * data.quad_vertex_positions[i];
+		data.quad_vertex_buffer_ptr->color         = info.tint_color;
+		data.quad_vertex_buffer_ptr->tex_coord     = tex_coords[i];
+		data.quad_vertex_buffer_ptr->texture_index = texture_index;
+		data.quad_vertex_buffer_ptr->tiling_factor = info.tiling_factor;
+		data.quad_vertex_buffer_ptr++;
 	}
 
 	data.quad_index_count += data.QUAD_INDEX_COUNT_INCREMENT;
-}
-
-void Renderer2D::map_quad_vertex_buffer_info(const QuadVertexBufferMappingInfo& info) {
-	data.quad_vertex_buffer_ptr->position      = {info.position.x + info.size.x, info.position.y + info.size.y,
-	                                              info.position.z};
-	data.quad_vertex_buffer_ptr->color         = info.color;
-	data.quad_vertex_buffer_ptr->tex_coord     = info.tex_coord;
-	data.quad_vertex_buffer_ptr->texture_index = info.texture_index;
-	data.quad_vertex_buffer_ptr->tiling_factor = info.tiling_factor;
-	data.quad_vertex_buffer_ptr++;
 }
 
 glm::mat4 Renderer2D::compute_transform(const glm::vec3& position, float rotation_deg, const glm::vec2& size) {
