@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="example_game_1">
+      <UniqueIdentifier>{7A8D499D-665B-3DA3-4FEF-ADC93B5C1908}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\example_game_1\color.h">
+      <Filter>example_game_1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\example_game_1\game_layer.h">
+      <Filter>example_game_1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\example_game_1\level.h">
+      <Filter>example_game_1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\example_game_1\particle_system.h">
+      <Filter>example_game_1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\example_game_1\pillar.h">
+      <Filter>example_game_1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\example_game_1\player.h">
+      <Filter>example_game_1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\example_game_1\random.h">
+      <Filter>example_game_1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\example_layer.h" />
+    <ClInclude Include="src\sandbox_2d.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\example_game_1\game_layer.cpp">
+      <Filter>example_game_1</Filter>
+    </ClCompile>
+    <ClCompile Include="src\example_game_1\level.cpp">
+      <Filter>example_game_1</Filter>
+    </ClCompile>
+    <ClCompile Include="src\example_game_1\particle_system.cpp">
+      <Filter>example_game_1</Filter>
+    </ClCompile>
+    <ClCompile Include="src\example_game_1\player.cpp">
+      <Filter>example_game_1</Filter>
+    </ClCompile>
+    <ClCompile Include="src\example_game_1\random.cpp">
+      <Filter>example_game_1</Filter>
+    </ClCompile>
+    <ClCompile Include="src\example_layer.cpp" />
+    <ClCompile Include="src\sandbox_2d.cpp" />
+    <ClCompile Include="src\sandbox_app.cpp" />
+  </ItemGroup>
+</Project>

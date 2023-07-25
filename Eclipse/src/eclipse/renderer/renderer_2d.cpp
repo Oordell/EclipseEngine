@@ -40,6 +40,8 @@ struct Renderer2DData {
 	uint32_t texture_slot_index = 1;  // index 0 = white texture.
 
 	glm::vec4 quad_vertex_positions[NUM_OF_CORNERS];
+
+	RendererStatistics stats;
 };
 
 static Renderer2DData data;
@@ -128,6 +130,7 @@ void Renderer2D::flush() {
 		data.texture_slots[i]->bind(i);
 	}
 	RenderCommand::draw_indexed(data.quad_vertex_array, data.quad_index_count);
+	data.stats.draw_calls++;
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition2D& info) {
@@ -167,6 +170,10 @@ void Renderer2D::draw_quad(const QuadMetaDataPosition3DTexture& info) {
 void Renderer2D::draw_quad_impl(const QuadDrawingDataImpl& info) {
 	EC_PROFILE_FUNCTION();
 
+	if (data.quad_index_count >= Renderer2DData::MAX_INDICES) {
+		end_scene_and_start_new_batch();
+	}
+
 	float texture_index = -1.0F;
 	for (uint32_t i = 0; i < data.texture_slot_index; i++) {
 		if (data.texture_slots[i]->get_renderer_id() == info.texture->get_renderer_id()) {
@@ -195,6 +202,8 @@ void Renderer2D::draw_quad_impl(const QuadDrawingDataImpl& info) {
 	}
 
 	data.quad_index_count += data.QUAD_INDEX_COUNT_INCREMENT;
+
+	data.stats.quad_count++;
 }
 
 glm::mat4 Renderer2D::compute_transform(const glm::vec3& position, float rotation_deg, const glm::vec2& size) {
@@ -209,5 +218,16 @@ glm::mat4 Renderer2D::compute_transform(const glm::vec3& position, float rotatio
 	}
 	return glm::translate(IDENTITY_MATRIX, position) * glm::scale(IDENTITY_MATRIX, {size.x, size.y, 1.0F});
 }
+
+void Renderer2D::end_scene_and_start_new_batch() {
+	end_scene();
+	data.quad_index_count       = 0;
+	data.quad_vertex_buffer_ptr = data.quad_vertex_buffer_base;
+	data.texture_slot_index     = 1;
+}
+
+void Renderer2D::reset_statistics() { memset(&data.stats, 0, sizeof(RendererStatistics)); }
+
+RendererStatistics Renderer2D::get_statistics() { return data.stats; }
 
 }  // namespace eclipse

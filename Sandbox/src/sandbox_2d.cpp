@@ -7,7 +7,8 @@
 void Sandbox2D::on_attach() {
 	EC_PROFILE_FUNCTION();
 
-	checkerboard_texture_ = eclipse::Texture2D::create("assets/textures/Checkerboard.png");
+	checkerboard_texture_   = eclipse::Texture2D::create("assets/textures/Checkerboard.png");
+	olliver_ordell_texture_ = eclipse::Texture2D::create("assets/textures/olliver_ordell_logo.png");
 }
 
 void Sandbox2D::on_detach() { EC_PROFILE_FUNCTION(); }
@@ -25,6 +26,7 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 	static const float blue  = 0.1F;
 	static const float alpha = 1.0F;
 
+	eclipse::Renderer2D::reset_statistics();
 	{
 		EC_PROFILE_SCOPE("Renderer Prep");
 		eclipse::RenderCommand::set_clear_color({red, green, blue, alpha});
@@ -44,13 +46,10 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 		                                                                .rotation_deg = 60.0F,
 		                                                                .size         = {0.5F, 0.75F},
 		                                                                .color        = {0.2F, 0.8F, 0.3F, 1.0F}});
-		eclipse::Renderer2D::draw_quad(
-		    eclipse::QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, -0.1F},
-		                                            .rotation_deg  = -16.4F,
-		                                            .size          = {10.0F, 10.0F},
-		                                            .tiling_factor = 10.0F,
-		                                            .texture       = checkerboard_texture_,
-		                                            .tint_color    = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)});
+		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, -0.1F},
+		                                                                       .size          = {20.0F, 20.0F},
+		                                                                       .tiling_factor = 10.0F,
+		                                                                       .texture       = checkerboard_texture_});
 		eclipse::Renderer2D::draw_quad(
 		    eclipse::QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, 0.0F},
 		                                            .rotation_deg  = rotation,
@@ -58,6 +57,36 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 		                                            .tiling_factor = 10.0F,
 		                                            .texture       = checkerboard_texture_,
 		                                            .tint_color    = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)});
+		/*eclipse::Renderer2D::draw_quad(
+		    eclipse::QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, 0.1F},
+		                                            .rotation_deg  = rotation * static_cast<float>(std::numbers::pi / 2),
+		                                            .size          = {1.0F, 1.0F},
+		                                            .tiling_factor = 1.0F,
+		                                            .texture       = olliver_ordell_texture_,
+		                                            .tint_color    = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)});*/
+		eclipse::Renderer2D::end_scene();
+
+		eclipse::Renderer2D::begin_scene(camera_controller_.get_camera());
+
+		static const int NUMBER = 10;
+		float x                 = 0.0F;
+		float y                 = 0.0F;
+		float red               = 0.0F;
+		float green             = 0.4F;
+		float blue              = 0.0F;
+		float alpha             = 0.8F;
+		glm::vec4 color         = glm::vec4 {red, green, blue, alpha};
+		for (int i = -NUMBER; i < NUMBER; i++) {
+			y    = static_cast<float>(i) / 2;
+			blue = (static_cast<float>(i) + NUMBER) / (2 * NUMBER);
+			for (int j = -NUMBER; j < NUMBER; j++) {
+				x     = static_cast<float>(j) / 2;
+				red   = (static_cast<float>(j) + NUMBER) / (2 * NUMBER);
+				color = {red, green, blue, alpha};
+				eclipse::Renderer2D::draw_quad({.position = {x, y}, .size = {0.45F, 0.45F}, .color = color});
+			}
+		}
+
 		eclipse::Renderer2D::end_scene();
 	}
 }
@@ -73,6 +102,14 @@ void Sandbox2D::on_imgui_render() {
 	ImGui::End();
 
 	ImGui::Begin("Settings");
+
+	auto stats = eclipse::Renderer2D::get_statistics();
+	ImGui::Text("Renderer2D Statistics:");
+	ImGui::Text("Draw calls: %d", stats.draw_calls);
+	ImGui::Text("Quad count: %d", stats.quad_count);
+	ImGui::Text("Vertices  : %d", stats.get_total_vertex_count());
+	ImGui::Text("Indices   : %d", stats.get_total_index_count());
+
 	ImGui::ColorEdit4("Square color", glm::value_ptr(square_color_));
 
 	ImGui::End();

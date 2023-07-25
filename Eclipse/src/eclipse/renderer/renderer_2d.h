@@ -42,6 +42,15 @@ struct QuadMetaDataPosition3DTexture {
 
 using QuadDrawingDataImpl = QuadMetaDataPosition3DTexture;
 
+struct RendererStatistics {
+	uint32_t draw_calls = 0;
+	uint32_t quad_count = 0;
+
+	uint32_t get_total_vertex_count() { return quad_count * 4; }
+
+	uint32_t get_total_index_count() { return quad_count * 6; }
+};
+
 class ECLIPSE_API Renderer2D {
 public:
 	static void init();
@@ -58,6 +67,11 @@ public:
 private:
 	static void draw_quad_impl(const QuadDrawingDataImpl& info);
 	static glm::mat4 compute_transform(const glm::vec3& position, float rotation_deg, const glm::vec2& size);
+	static void end_scene_and_start_new_batch();
+
+public:
+	static void reset_statistics();
+	static RendererStatistics get_statistics();
 };
 
 }  // namespace eclipse

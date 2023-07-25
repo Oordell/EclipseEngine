@@ -19,6 +19,7 @@ private:
 	eclipse::ref<eclipse::Shader> flat_color_shader_ =
 	    eclipse::Shader::create(eclipse::FilePath("assets/shaders/flat_color.glsl"));
 	eclipse::ref<eclipse::Texture2D> checkerboard_texture_;
+	eclipse::ref<eclipse::Texture2D> olliver_ordell_texture_;
 
 	glm::vec4 square_color_  = {0.2F, 0.3F, 0.8F, 1.0F};
 	unsigned int frame_rate_ = 0;
