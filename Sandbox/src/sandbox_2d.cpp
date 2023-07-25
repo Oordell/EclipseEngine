@@ -57,13 +57,13 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 		                                            .tiling_factor = 10.0F,
 		                                            .texture       = checkerboard_texture_,
 		                                            .tint_color    = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)});
-		/*eclipse::Renderer2D::draw_quad(
+		eclipse::Renderer2D::draw_quad(
 		    eclipse::QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, 0.1F},
-		                                            .rotation_deg  = rotation * static_cast<float>(std::numbers::pi / 2),
+		                                            .rotation_deg  = rotation,
 		                                            .size          = {1.0F, 1.0F},
 		                                            .tiling_factor = 1.0F,
 		                                            .texture       = olliver_ordell_texture_,
-		                                            .tint_color    = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)});*/
+		                                            .tint_color    = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)});
 		eclipse::Renderer2D::end_scene();
 
 		eclipse::Renderer2D::begin_scene(camera_controller_.get_camera());
