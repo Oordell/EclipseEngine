@@ -16,6 +16,8 @@ public:
 
 	uint32_t get_height() const override { return height_; }
 
+	uint32_t get_renderer_id() const override { return renderer_id_; }
+
 	void set_data(void* data, uint32_t size) override;
 
 	void bind(uint32_t slot = 0) const override;

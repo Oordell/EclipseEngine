@@ -1469,7 +1469,13 @@
     <ClCompile Include="src\eclipse\core\application.cpp">
       <Filter>src\eclipse\core</Filter>
     </ClCompile>
+    <ClCompile Include="src\eclipse\core\input_manager.cpp">
+      <Filter>src\eclipse\core</Filter>
+    </ClCompile>
     <ClCompile Include="src\eclipse\core\log.cpp">
+      <Filter>src\eclipse\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\core\window.cpp">
       <Filter>src\eclipse\core</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\imgui\imgui_build.cpp">

@@ -20,6 +20,10 @@ public:
 
 	inline static void draw_indexed(const ref<VertexArray>& vertex_array) { renderer_api_->draw_indexed(vertex_array); }
 
+	inline static void draw_indexed(const ref<VertexArray>& vertex_array, uint32_t index_count) {
+		renderer_api_->draw_indexed(vertex_array, index_count);
+	}
+
 private:
 	static scope<RendererAPI> renderer_api_;
 };
