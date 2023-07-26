@@ -7,10 +7,11 @@ namespace eclipse {
 
 OrthographicCameraController::OrthographicCameraController(float aspect_ratio, EnableCameraRotation rotate_camera)
     : aspect_ratio_(aspect_ratio),
-      camera_({.left   = -aspect_ratio * zoom_level_,
+      bounds_({.left   = -aspect_ratio * zoom_level_,
                .right  = aspect_ratio * zoom_level_,
                .bottom = -zoom_level_,
                .top    = zoom_level_}),
+      camera_({.left = bounds_.left, .right = bounds_.right, .bottom = bounds_.bottom, .top = bounds_.top}),
       rotate_camera_(rotate_camera) {}
 
 void OrthographicCameraController::on_update(Timestep timestep) {
@@ -60,11 +61,7 @@ bool OrthographicCameraController::on_mouse_scrolled(MouseScrolledEvent& e) {
 
 	zoom_level_ -= e.get_y_offset() * 0.1F;
 	zoom_level_ = std::max(zoom_level_, 0.25F);
-	camera_.set_projection({.left   = -aspect_ratio_ * zoom_level_,
-	                        .right  = aspect_ratio_ * zoom_level_,
-	                        .bottom = -zoom_level_,
-	                        .top    = zoom_level_});
-
+	set_bounds_and_camera_projection();
 	return false;
 }
 
@@ -72,11 +69,16 @@ bool OrthographicCameraController::on_window_resized(WindowResizeEvent& e) {
 	EC_PROFILE_FUNCTION();
 
 	aspect_ratio_ = static_cast<float>(e.get_width()) / static_cast<float>(e.get_height());
-	camera_.set_projection({.left   = -aspect_ratio_ * zoom_level_,
-	                        .right  = aspect_ratio_ * zoom_level_,
-	                        .bottom = -zoom_level_,
-	                        .top    = zoom_level_});
+	set_bounds_and_camera_projection();
 	return false;
+}
+
+void OrthographicCameraController::set_bounds_and_camera_projection() {
+	bounds_ = {.left   = -aspect_ratio_ * zoom_level_,
+	           .right  = aspect_ratio_ * zoom_level_,
+	           .bottom = -zoom_level_,
+	           .top    = zoom_level_};
+	camera_.set_projection({.left = bounds_.left, .right = bounds_.right, .bottom = bounds_.bottom, .top = bounds_.top});
 }
 
 }  // namespace eclipse

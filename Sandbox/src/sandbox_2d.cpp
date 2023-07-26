@@ -37,13 +37,13 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 		EC_PROFILE_SCOPE("Renderer Draw");
 
 		static float rotation = 0.0F;
-		rotation += timestep * 40.0F;
+		rotation += timestep * 1.0F;
 
 		eclipse::Renderer2D::begin_scene(camera_controller_.get_camera());
 		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition2D {
-		    .position = {-1.0F, 0.0F}, .rotation_deg = 0.0F, .size = {0.8F, 0.8F}, .color = {0.8F, 0.2F, 0.3F, 1.0F}});
+		    .position = {-1.0F, 0.0F}, .rotation_rad = 0.0F, .size = {0.8F, 0.8F}, .color = {0.8F, 0.2F, 0.3F, 1.0F}});
 		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3D {.position     = {0.5F, -0.5F, 0.0F},
-		                                                                .rotation_deg = 60.0F,
+		                                                                .rotation_rad = std::numbers::pi / 4.0F,
 		                                                                .size         = {0.5F, 0.75F},
 		                                                                .color        = {0.2F, 0.8F, 0.3F, 1.0F}});
 		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, -0.1F},
@@ -52,14 +52,14 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 		                                                                       .texture       = checkerboard_texture_});
 		eclipse::Renderer2D::draw_quad(
 		    eclipse::QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, 0.0F},
-		                                            .rotation_deg  = rotation,
+		                                            .rotation_rad  = rotation,
 		                                            .size          = {1.0F, 1.0F},
 		                                            .tiling_factor = 10.0F,
 		                                            .texture       = checkerboard_texture_,
 		                                            .tint_color    = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)});
 		eclipse::Renderer2D::draw_quad(
 		    eclipse::QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, 0.1F},
-		                                            .rotation_deg  = rotation,
+		                                            .rotation_rad  = rotation,
 		                                            .size          = {1.0F, 1.0F},
 		                                            .tiling_factor = 1.0F,
 		                                            .texture       = olliver_ordell_texture_,

@@ -79,7 +79,7 @@ void Player::on_update(eclipse::Timestep timestep) {
 void Player::on_render() {
 	particle_system_.on_render();
 	eclipse::Renderer2D::draw_quad({.position     = {position_.x, position_.y, 0.5F},
-	                                .rotation_deg = get_rotation(),
+	                                .rotation_rad = get_rotation(),
 	                                .size         = {1.0F, 1.3F},
 	                                .texture      = ship_texture_});
 }

@@ -47,12 +47,12 @@ void Level::on_render() {
 
 	for (auto& pillar : pillars_) {
 		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3DTexture {.position     = pillar.top_position,
-		                                                                       .rotation_deg = 180.0F,
+		                                                                       .rotation_rad = static_cast<float>(eclipse::deg_to_rad(180.0F)),
 		                                                                       .size         = pillar.top_scale,
 		                                                                       .texture      = triangle_texture_,
 		                                                                       .tint_color   = color});
 		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3DTexture {.position     = pillar.bottom_position,
-		                                                                       .rotation_deg = 0.0F,
+		                                                                       .rotation_rad = 0.0F,
 		                                                                       .size         = pillar.bottom_scale,
 		                                                                       .texture      = triangle_texture_,
 		                                                                       .tint_color   = color});
@@ -105,7 +105,7 @@ bool Level::collision_check() {
 	/* clang-format on */
 
 	static const glm::mat4 IDENTITY_MATRIX = glm::mat4(1.0F);
-	const auto& pos = player_.get_position();
+	const auto& pos                        = player_.get_position();
 	glm::vec4 player_transformed_verts[4];
 	for (int i = 0; i < NUM_OF_PLAYER_VERTICES; i++) {
 		player_transformed_verts[i] = glm::translate(IDENTITY_MATRIX, {pos.x, pos.y, 0.0F}) *

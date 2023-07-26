@@ -135,7 +135,7 @@ void Renderer2D::flush() {
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition2D& info) {
 	draw_quad(QuadMetaDataPosition3D {.position      = {info.position.x, info.position.y, 0.0F},
-	                                  .rotation_deg  = info.rotation_deg,
+	                                  .rotation_rad  = info.rotation_rad,
 	                                  .size          = info.size,
 	                                  .tiling_factor = info.tiling_factor,
 	                                  .color         = info.color});
@@ -145,7 +145,7 @@ void Renderer2D::draw_quad(const QuadMetaDataPosition3D& info) {
 	EC_PROFILE_FUNCTION();
 
 	draw_quad_impl({.position      = info.position,
-	                .rotation_deg  = info.rotation_deg,
+	                .rotation_rad  = info.rotation_rad,
 	                .size          = info.size,
 	                .tiling_factor = info.tiling_factor,
 	                .texture       = data.white_texture,
@@ -154,7 +154,7 @@ void Renderer2D::draw_quad(const QuadMetaDataPosition3D& info) {
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition2DTexture& info) {
 	draw_quad(QuadMetaDataPosition3DTexture {.position      = {info.position.x, info.position.y, 0.0F},
-	                                         .rotation_deg  = info.rotation_deg,
+	                                         .rotation_rad  = info.rotation_rad,
 	                                         .size          = info.size,
 	                                         .tiling_factor = info.tiling_factor,
 	                                         .texture       = info.texture,
@@ -188,7 +188,7 @@ void Renderer2D::draw_quad_impl(const QuadDrawingDataImpl& info) {
 		data.texture_slot_index++;
 	}
 
-	glm::mat4 transform = compute_transform(info.position, info.rotation_deg, info.size);
+	glm::mat4 transform = compute_transform(info.position, info.rotation_rad, info.size);
 	const std::array<glm::vec2, Renderer2DData::NUM_OF_CORNERS> tex_coords = {
 	    glm::vec2 {0.0F, 0.0F}, glm::vec2 {1.0F, 0.0F}, glm::vec2 {1.0F, 1.0F}, glm::vec2 {0.0F, 1.0F}};
 
@@ -206,14 +206,13 @@ void Renderer2D::draw_quad_impl(const QuadDrawingDataImpl& info) {
 	data.stats.quad_count++;
 }
 
-glm::mat4 Renderer2D::compute_transform(const glm::vec3& position, float rotation_deg, const glm::vec2& size) {
+glm::mat4 Renderer2D::compute_transform(const glm::vec3& position, float rotation_rad, const glm::vec2& size) {
 	EC_PROFILE_FUNCTION();
 	static const glm::mat4 IDENTITY_MATRIX = glm::mat4(1.0F);
 	static const glm::vec3 ROTATION_AXIS   = glm::vec3(0.0F, 0.0F, 1.0F);
-	static const float rotation_threshold  = 0.01F;
-	if (std::abs(rotation_deg) > rotation_threshold) {
-		return glm::translate(IDENTITY_MATRIX, position) *
-		       glm::rotate(IDENTITY_MATRIX, glm::radians(rotation_deg), ROTATION_AXIS) *
+	static const float rotation_threshold  = 0.001F;
+	if (std::abs(rotation_rad) > rotation_threshold) {
+		return glm::translate(IDENTITY_MATRIX, position) * glm::rotate(IDENTITY_MATRIX, rotation_rad, ROTATION_AXIS) *
 		       glm::scale(IDENTITY_MATRIX, {size.x, size.y, 1.0F});
 	}
 	return glm::translate(IDENTITY_MATRIX, position) * glm::scale(IDENTITY_MATRIX, {size.x, size.y, 1.0F});

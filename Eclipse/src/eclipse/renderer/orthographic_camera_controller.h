@@ -9,6 +9,17 @@
 
 namespace eclipse {
 
+struct OrthographicCameraBounds {
+	float left {-1.0F};
+	float right {1.0F};
+	float bottom {-1.0F};
+	float top {1.0F};
+
+	float get_width() { return right - left; }
+
+	float get_height() { return top - bottom; }
+};
+
 enum class ECLIPSE_API EnableCameraRotation { yes, no };
 
 class ECLIPSE_API OrthographicCameraController {
@@ -16,7 +27,14 @@ public:
 	OrthographicCameraController(float aspect_ratio, EnableCameraRotation rotate_camera = EnableCameraRotation::no);
 
 	OrthographicCamera& get_camera() { return camera_; }
+
 	const OrthographicCamera& get_camera() const { return camera_; }
+
+	float get_zoom_level() const { return zoom_level_; }
+
+	void set_zoom_level(float lvl) { zoom_level_ = lvl; }
+
+	const OrthographicCameraBounds& get_bounds() const { return bounds_; }
 
 	void on_update(Timestep timestep);
 	void on_event(Event& e);
@@ -24,9 +42,11 @@ public:
 private:
 	bool on_mouse_scrolled(MouseScrolledEvent& e);
 	bool on_window_resized(WindowResizeEvent& e);
+	void set_bounds_and_camera_projection();
 
 	float aspect_ratio_;
 	float zoom_level_ {1.0F};
+	OrthographicCameraBounds bounds_;
 	OrthographicCamera camera_;
 
 	EnableCameraRotation rotate_camera_;

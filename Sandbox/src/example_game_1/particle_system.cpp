@@ -63,6 +63,6 @@ void ParticleSystem::on_render() {
 
 		float size = glm::lerp(particle.size_end, particle.size_begin, life);
 		eclipse::Renderer2D::draw_quad(
-		    {.position = particle.position, .rotation_deg = particle.rotation, .size = {size, size}, .color = color});
+		    {.position = particle.position, .rotation_rad = particle.rotation, .size = {size, size}, .color = color});
 	}
 }
