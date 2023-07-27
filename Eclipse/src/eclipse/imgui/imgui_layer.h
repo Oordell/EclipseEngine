@@ -14,6 +14,7 @@ public:
 
 	void on_attach() override;
 	void on_detach() override;
+	void on_event(Event& e) override;
 
 	void begin();
 	void end();

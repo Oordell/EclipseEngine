@@ -63,25 +63,35 @@
 #else
 	#error Eclipse only supports Windows!
 #endif  // End of DLL support
-/* clang-format on */
 
 #ifdef ECLIPSE_DEBUG
-#define EC_ENABLE_ASSERTS
+	#if defined(EC_PLATFORM_WINDOWS)
+		#define EC_DEBUGBREAK() __debugbreak()
+	#elif defined(EC_PLATFORM_LINUX)
+		#include <signal.h>
+		#define EC_DEBUGBREAK() raise(SIGTRAP)
+	#else
+		#error "Platform doesn't support debugbreak yet!"
+	#endif
+	#define EC_ENABLE_ASSERTS
+#else
+	#define EC_DEBUGBREAK()
 #endif
+/* clang-format on */
 
 #ifdef EC_ENABLE_ASSERTS
 #define EC_ASSERT(x, ...)                          \
 	{                                                 \
 		if (!(x)) {                                      \
 			EC_ERROR("Assertion Failed: {0}", __VA_ARGS__); \
-			__debugbreak();                                 \
+			EC_DEBUGBREAK();                                \
 		}                                                \
 	}
 #define EC_CORE_ASSERT(x, ...)                          \
 	{                                                      \
 		if (!(x)) {                                           \
 			EC_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); \
-			__debugbreak();                                      \
+			EC_DEBUGBREAK();                                     \
 		}                                                     \
 	}
 #else

@@ -35,9 +35,9 @@ static uint32_t ShaderDataTypeSize(ShaderDataType type) {
 		case floatvec4:
 			return float_size * 4;
 		case floatmat3:
-			return float_size * 3 * 3;
+			return float_size * 3;  // 3*floatvec3
 		case floatmat4:
-			return float_size * 4 * 4;
+			return float_size * 4;  // 4*floatvec3
 		case intvec1:
 			return float_size;
 		case intvec2:

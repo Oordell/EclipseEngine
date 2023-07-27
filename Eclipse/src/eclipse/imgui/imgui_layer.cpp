@@ -57,6 +57,12 @@ void ImGuiLayer::on_detach() {
 	ImGui::DestroyContext();
 }
 
+void ImGuiLayer::on_event(Event& e) {
+	ImGuiIO& io = ImGui::GetIO();
+	e.handled |= e.is_in_category(EventCategoryMouse) & io.WantCaptureMouse;
+	e.handled |= e.is_in_category(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+}
+
 void ImGuiLayer::begin() {
 	EC_PROFILE_FUNCTION();
 

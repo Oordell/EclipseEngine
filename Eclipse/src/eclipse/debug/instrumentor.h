@@ -60,14 +60,11 @@ public:
 	void write_profile(const ProfileResult& result) {
 		std::stringstream json;
 
-		std::string name = result.name;
-		std::replace(name.begin(), name.end(), '"', '\'');
-
 		json << std::setprecision(3) << std::fixed;
 		json << ",{";
 		json << "\"cat\":\"function\",";
 		json << "\"dur\":" << (result.elapsed_time.count()) << ',';
-		json << "\"name\":\"" << name << "\",";
+		json << "\"name\":\"" << result.name << "\",";
 		json << "\"ph\":\"X\",";
 		json << "\"pid\":0,";
 		json << "\"tid\":" << result.thread_id << ",";
@@ -140,17 +137,47 @@ private:
 	bool running_;
 };
 
+namespace utils {
+
+template <size_t N>
+struct ChangeResult {
+	char data[N];
+};
+
+template <size_t N, size_t K>
+constexpr auto cleanup_output_string(const char (&expr)[N], const char (&remove)[K]) {
+	ChangeResult<N> result = {};
+
+	size_t source_index      = 0;
+	size_t destination_index = 0;
+	while (source_index < N) {
+		size_t match_index = 0;
+		while (match_index < K - 1 && source_index + match_index < N - 1 &&
+		       expr[source_index + match_index] == remove[match_index]) {
+			match_index++;
+		}
+		if (match_index == K - 1) {
+			source_index += match_index;
+		}
+		result.data[destination_index++] = expr[source_index] == '"' ? '\'' : expr[source_index];
+		source_index++;
+	}
+	return result;
+}
+
+}  // namespace utils
 }  // namespace eclipse::debug
 
 /* clang-format off */
 #if EC_PROFILE_ENABLED
-	// Resolve which function signature macro will be used. Note that this only is resolved when the (pre)compiler 
-	// starts, so the syntax highlighting could mark the wrong one in your editor!
-	#if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__)
+   // Resolve which function signature macro will be used. Note that this only is resolved when the (pre)compiler
+   // starts, so the syntax highlighting could mark the wrong one in your editor!
+	#if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || \
+		defined(__ghs__)
 		#define EC_FUNC_SIG __PRETTY_FUNCTION__
 	#elif defined(__DMC__) && (__DMC__ >= 0x810)
 		#define EC_FUNC_SIG __PRETTY_FUNCTION__
-	#elif defined(__FUNCSIG__)
+	#elif (defined(__FUNCSIG__) || (_MSC_VER))
 		#define EC_FUNC_SIG __FUNCSIG__
 	#elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
 		#define EC_FUNC_SIG __FUNCTION__
@@ -166,8 +193,10 @@ private:
 
 	#define EC_PROFILE_BEGIN_SESSION(name, filepath) ::eclipse::debug::Instrumentor::get().begin_session(name, filepath)
 	#define EC_PROFILE_END_SESSION()                 ::eclipse::debug::Instrumentor::get().end_session()
-	#define EC_PROFILE_SCOPE(name)                   ::eclipse::debug::InstrumentationTimer timer##__LINE__(name)
-	#define EC_PROFILE_FUNCTION()                    EC_PROFILE_SCOPE(EC_FUNC_SIG)
+	#define EC_PROFILE_SCOPE(name)                                                                 \
+		constexpr auto fixed_name = ::eclipse::debug::utils::cleanup_output_string(name, "__cdecl "); \
+		::eclipse::debug::InstrumentationTimer timer##__LINE__(fixed_name.data)
+	#define EC_PROFILE_FUNCTION() EC_PROFILE_SCOPE(EC_FUNC_SIG)
 #else
 	#define EC_PROFILE_BEGIN_SESSION(name, filepath)
 	#define EC_PROFILE_END_SESSION()

@@ -8,14 +8,14 @@
 #include "eclipse/imgui/imgui_layer.h"
 #include "eclipse/core/timestep.h"
 
+int main(int argc, char** argv);
+
 namespace eclipse {
 
 class ECLIPSE_API Application {
 public:
 	Application();
 	virtual ~Application();
-
-	void run();
 
 	void on_event(Event& e);
 
@@ -28,6 +28,7 @@ public:
 	inline static Application& get() { return *instance_; }
 
 private:
+	void run();
 	bool on_window_closed(WindowClosedEvent& e);
 	bool on_window_resize(WindowResizeEvent& e);
 
@@ -38,6 +39,8 @@ private:
 	bool minimized_              = false;
 	LayerStack layer_stack_;
 	float last_frame_time_ {};
+
+	friend int ::main(int argc, char** argv);
 };
 
 // To be defined in client

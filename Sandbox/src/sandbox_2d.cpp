@@ -42,10 +42,11 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 		eclipse::Renderer2D::begin_scene(camera_controller_.get_camera());
 		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition2D {
 		    .position = {-1.0F, 0.0F}, .rotation_rad = 0.0F, .size = {0.8F, 0.8F}, .color = {0.8F, 0.2F, 0.3F, 1.0F}});
-		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3D {.position     = {0.5F, -0.5F, 0.0F},
-		                                                                .rotation_rad = std::numbers::pi / 4.0F,
-		                                                                .size         = {0.5F, 0.75F},
-		                                                                .color        = {0.2F, 0.8F, 0.3F, 1.0F}});
+		eclipse::Renderer2D::draw_quad(
+		    eclipse::QuadMetaDataPosition3D {.position     = {0.5F, -0.5F, 0.0F},
+		                                     .rotation_rad = static_cast<float>(std::numbers::pi) / 4.0F,
+		                                     .size         = {0.5F, 0.75F},
+		                                     .color        = square_color_});
 		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, -0.1F},
 		                                                                       .size          = {20.0F, 20.0F},
 		                                                                       .tiling_factor = 10.0F,

@@ -51,7 +51,8 @@ project "Eclipse"
 	}
 
 	defines {
-		"_CRT_SECURE_NO_WARNINGS"
+		"_CRT_SECURE_NO_WARNINGS",
+		"GLFW_INCLUDE_NONE"
 	}
 
 	includedirs {
@@ -77,9 +78,7 @@ project "Eclipse"
 		systemversion "latest"
 
 		defines {
-			"EC_PLATFORM_WINDOWS",
-			"EC_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
+			"EC_PLATFORM_WINDOWS"
 		}
 
 	filter "configurations:Debug"

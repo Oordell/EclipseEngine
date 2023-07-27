@@ -71,12 +71,41 @@ void OpenGLVertexArray::add_vertex_buffer(const ref<VertexBuffer>& vertex_buffer
 	uint32_t index     = 0;
 	const auto& layout = vertex_buffer->get_layout();
 	for (const auto& element : layout) {
-		glEnableVertexAttribArray(vertex_buffer_index_);
-		uint64_t offset = element.offset;
-		glVertexAttribPointer(vertex_buffer_index_, element.get_component_count(),
-		                      shader_data_type_to_opengl_base_type(element.type), element.normalized ? GL_TRUE : GL_FALSE,
-		                      layout.get_stride(), reinterpret_cast<const void*>(offset));
-		vertex_buffer_index_++;
+		switch (element.type) {
+			case ShaderDataType::floatvec1:
+			case ShaderDataType::floatvec2:
+			case ShaderDataType::floatvec3:
+			case ShaderDataType::floatvec4:
+			case ShaderDataType::intvec1:
+			case ShaderDataType::intvec2:
+			case ShaderDataType::intvec3:
+			case ShaderDataType::intvec4:
+			case ShaderDataType::boolean: {
+				glEnableVertexAttribArray(vertex_buffer_index_);
+				uint64_t offset = static_cast<uint64_t>(element.offset);
+				glVertexAttribPointer(vertex_buffer_index_, element.get_component_count(),
+				                      shader_data_type_to_opengl_base_type(element.type), element.normalized ? GL_TRUE : GL_FALSE,
+				                      layout.get_stride(), reinterpret_cast<const void*>(offset));
+				vertex_buffer_index_++;
+				break;
+			}
+			case ShaderDataType::floatmat3:
+			case ShaderDataType::floatmat4: {
+				auto count = element.get_component_count();
+				for (size_t i = 0; i < count; i++) {
+					glEnableVertexAttribArray(vertex_buffer_index_);
+					glVertexAttribPointer(vertex_buffer_index_, element.get_component_count(),
+					                      shader_data_type_to_opengl_base_type(element.type), element.normalized ? GL_TRUE : GL_FALSE,
+					                      layout.get_stride(), reinterpret_cast<const void*>(sizeof(float) * count * i));
+					glVertexAttribDivisor(vertex_buffer_index_, 1);
+					vertex_buffer_index_++;
+				}
+				break;
+			}
+			default: {
+				EC_CORE_ASSERT(false, "Unknown ShaderDataType!");
+			}
+		}
 	}
 
 	vertex_buffers_.push_back(vertex_buffer);

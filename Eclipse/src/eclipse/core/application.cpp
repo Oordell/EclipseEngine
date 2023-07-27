@@ -34,10 +34,10 @@ void Application::on_event(Event& e) {
 	dispatcher.dispatch<WindowResizeEvent>(EC_BIND_EVENT_FN(Application::on_window_resize));
 
 	for (auto it = layer_stack_.rbegin(); it != layer_stack_.rend(); ++it) {
-		(*it)->on_event(e);
 		if (e.handled) {
 			break;
 		}
+		(*it)->on_event(e);
 	}
 }
 

@@ -101,7 +101,10 @@ void Renderer2D::init() {
 	data.quad_vertex_positions[3] = {-0.5F, 0.5F, 0.0F, 1.0F};
 }
 
-void Renderer2D::shutdown() { EC_PROFILE_FUNCTION(); }
+void Renderer2D::shutdown() {
+	EC_PROFILE_FUNCTION();
+	delete[] data.quad_vertex_buffer_base;
+}
 
 void Renderer2D::begin_scene(const OrthographicCamera& camera) {
 	EC_PROFILE_FUNCTION();
@@ -126,6 +129,10 @@ void Renderer2D::end_scene() {
 void Renderer2D::flush() {
 	EC_PROFILE_FUNCTION();
 
+	if (data.quad_index_count == 0) {
+		return;  // Nothing to draw
+	}
+
 	for (uint32_t i = 0; i < data.texture_slot_index; i++) {
 		data.texture_slots[i]->bind(i);
 	}
@@ -134,6 +141,7 @@ void Renderer2D::flush() {
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition2D& info) {
+	EC_PROFILE_FUNCTION();
 	draw_quad(QuadMetaDataPosition3D {.position      = {info.position.x, info.position.y, 0.0F},
 	                                  .rotation_rad  = info.rotation_rad,
 	                                  .size          = info.size,
@@ -143,7 +151,6 @@ void Renderer2D::draw_quad(const QuadMetaDataPosition2D& info) {
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition3D& info) {
 	EC_PROFILE_FUNCTION();
-
 	draw_quad_impl({.position      = info.position,
 	                .rotation_rad  = info.rotation_rad,
 	                .size          = info.size,
@@ -153,6 +160,7 @@ void Renderer2D::draw_quad(const QuadMetaDataPosition3D& info) {
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition2DTexture& info) {
+	EC_PROFILE_FUNCTION();
 	draw_quad(QuadMetaDataPosition3DTexture {.position      = {info.position.x, info.position.y, 0.0F},
 	                                         .rotation_rad  = info.rotation_rad,
 	                                         .size          = info.size,
@@ -163,46 +171,51 @@ void Renderer2D::draw_quad(const QuadMetaDataPosition2DTexture& info) {
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition3DTexture& info) {
 	EC_PROFILE_FUNCTION();
-
 	draw_quad_impl(info);
 }
 
 void Renderer2D::draw_quad_impl(const QuadDrawingDataImpl& info) {
 	EC_PROFILE_FUNCTION();
 
-	if (data.quad_index_count >= Renderer2DData::MAX_INDICES) {
+	if (data.quad_index_count >= Renderer2DData::MAX_INDICES ||
+	    data.texture_slot_index >= Renderer2DData::MAX_TEXTURE_SLOTS) {
 		end_scene_and_start_new_batch();
 	}
 
 	float texture_index = -1.0F;
-	for (uint32_t i = 0; i < data.texture_slot_index; i++) {
-		if (data.texture_slots[i]->get_renderer_id() == info.texture->get_renderer_id()) {
-			texture_index = static_cast<float>(i);
-			break;
+	{
+		EC_PROFILE_SCOPE("Findind texture index");
+		for (uint32_t i = 0; i < data.texture_slot_index; i++) {
+			if (data.texture_slots[i]->get_renderer_id() == info.texture->get_renderer_id()) {
+				texture_index = static_cast<float>(i);
+				break;
+			}
+		}
+
+		if (texture_index == -1.0F) {
+			texture_index                               = static_cast<float>(data.texture_slot_index);
+			data.texture_slots[data.texture_slot_index] = info.texture;
+			data.texture_slot_index++;
 		}
 	}
 
-	if (texture_index == -1.0F) {
-		texture_index                               = static_cast<float>(data.texture_slot_index);
-		data.texture_slots[data.texture_slot_index] = info.texture;
-		data.texture_slot_index++;
-	}
-
 	glm::mat4 transform = compute_transform(info.position, info.rotation_rad, info.size);
-	const std::array<glm::vec2, Renderer2DData::NUM_OF_CORNERS> tex_coords = {
+	static const std::array<glm::vec2, Renderer2DData::NUM_OF_CORNERS> tex_coords = {
 	    glm::vec2 {0.0F, 0.0F}, glm::vec2 {1.0F, 0.0F}, glm::vec2 {1.0F, 1.0F}, glm::vec2 {0.0F, 1.0F}};
 
-	for (int32_t i = 0; i < Renderer2DData::NUM_OF_CORNERS; i++) {
-		data.quad_vertex_buffer_ptr->position      = transform * data.quad_vertex_positions[i];
-		data.quad_vertex_buffer_ptr->color         = info.tint_color;
-		data.quad_vertex_buffer_ptr->tex_coord     = tex_coords[i];
-		data.quad_vertex_buffer_ptr->texture_index = texture_index;
-		data.quad_vertex_buffer_ptr->tiling_factor = info.tiling_factor;
-		data.quad_vertex_buffer_ptr++;
+	{
+		EC_PROFILE_SCOPE("Adding data to quad vertex buffer ptr.");
+		for (int32_t i = 0; i < Renderer2DData::NUM_OF_CORNERS; i++) {
+			data.quad_vertex_buffer_ptr->position      = transform * data.quad_vertex_positions[i];
+			data.quad_vertex_buffer_ptr->color         = info.tint_color;
+			data.quad_vertex_buffer_ptr->tex_coord     = tex_coords[i];
+			data.quad_vertex_buffer_ptr->texture_index = texture_index;
+			data.quad_vertex_buffer_ptr->tiling_factor = info.tiling_factor;
+			data.quad_vertex_buffer_ptr++;
+		}
 	}
 
 	data.quad_index_count += data.QUAD_INDEX_COUNT_INCREMENT;
-
 	data.stats.quad_count++;
 }
 
@@ -210,8 +223,8 @@ glm::mat4 Renderer2D::compute_transform(const glm::vec3& position, float rotatio
 	EC_PROFILE_FUNCTION();
 	static const glm::mat4 IDENTITY_MATRIX = glm::mat4(1.0F);
 	static const glm::vec3 ROTATION_AXIS   = glm::vec3(0.0F, 0.0F, 1.0F);
-	static const float rotation_threshold  = 0.001F;
-	if (std::abs(rotation_rad) > rotation_threshold) {
+	static const float ROTATION_THRESHOLD  = 0.001F;
+	if (std::abs(rotation_rad) > ROTATION_THRESHOLD) {
 		return glm::translate(IDENTITY_MATRIX, position) * glm::rotate(IDENTITY_MATRIX, rotation_rad, ROTATION_AXIS) *
 		       glm::scale(IDENTITY_MATRIX, {size.x, size.y, 1.0F});
 	}

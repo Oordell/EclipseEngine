@@ -30,10 +30,6 @@ public:
 
 	const OrthographicCamera& get_camera() const { return camera_; }
 
-	float get_zoom_level() const { return zoom_level_; }
-
-	void set_zoom_level(float lvl) { zoom_level_ = lvl; }
-
 	const OrthographicCameraBounds& get_bounds() const { return bounds_; }
 
 	void on_update(Timestep timestep);
