@@ -14,6 +14,8 @@
 #include "eclipse/core/key_codes.h"
 #include "eclipse/core/mouse_button_key_codes.h"
 
+#include "eclipse/utils/math.h"
+
 #include "Eclipse/imgui/imgui_layer.h"
 
 #include "eclipse/renderer/orthographic_camera_controller.h"

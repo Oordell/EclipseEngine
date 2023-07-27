@@ -187,6 +187,7 @@
     <ClInclude Include="src\eclipse\renderer\texture.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_array.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h" />
+    <ClInclude Include="src\eclipse\utils\math.h" />
     <ClInclude Include="src\ecpch.h" />
     <ClInclude Include="src\platform\opengl\opengl_context.h" />
     <ClInclude Include="src\platform\opengl\opengl_index_buffer.h" />

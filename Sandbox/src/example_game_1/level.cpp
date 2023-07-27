@@ -46,11 +46,12 @@ void Level::on_render() {
 	    eclipse::QuadMetaDataPosition2D {.position = {player_pose.x, -34.0F}, .size = {50.0F, 50.0F}, .color = color});
 
 	for (auto& pillar : pillars_) {
-		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3DTexture {.position     = pillar.top_position,
-		                                                                       .rotation_rad = static_cast<float>(eclipse::deg_to_rad(180.0F)),
-		                                                                       .size         = pillar.top_scale,
-		                                                                       .texture      = triangle_texture_,
-		                                                                       .tint_color   = color});
+		eclipse::Renderer2D::draw_quad(
+		    eclipse::QuadMetaDataPosition3DTexture {.position     = pillar.top_position,
+		                                            .rotation_rad = eclipse::utils::deg_to_rad(180.0F),
+		                                            .size         = pillar.top_scale,
+		                                            .texture      = triangle_texture_,
+		                                            .tint_color   = color});
 		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3DTexture {.position     = pillar.bottom_position,
 		                                                                       .rotation_rad = 0.0F,
 		                                                                       .size         = pillar.bottom_scale,

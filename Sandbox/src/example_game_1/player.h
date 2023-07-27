@@ -17,7 +17,7 @@ public:
 
 	const glm::vec2& get_position() const { return position_; }
 
-	float get_rotation() { return static_cast<float>(eclipse::deg_to_rad(velocity_.y * 4.0F - 90.0F)); }
+	float get_rotation() { return eclipse::utils::deg_to_rad(velocity_.y * 4.0F - 90.0F); }
 
 	uint32_t get_score() const { return static_cast<uint32_t>((position_.x + 10.0F) / 10.0F); }
 
