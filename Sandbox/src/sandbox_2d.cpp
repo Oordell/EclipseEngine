@@ -9,6 +9,18 @@ void Sandbox2D::on_attach() {
 
 	checkerboard_texture_   = eclipse::Texture2D::create("assets/textures/Checkerboard.png");
 	olliver_ordell_texture_ = eclipse::Texture2D::create("assets/textures/olliver_ordell_logo.png");
+
+	eclipse::utils::Random::init();
+
+	particle_props_.color_begin        = {254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f};
+	particle_props_.color_end          = {254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f};
+	particle_props_.size_begin         = 0.5f;
+	particle_props_.size_variation     = 0.3f;
+	particle_props_.size_end           = 0.0f;
+	particle_props_.life_time          = 1.0f;
+	particle_props_.velocity           = {0.0f, 0.0f};
+	particle_props_.velocity_variation = {3.0f, 1.0f};
+	particle_props_.position           = {0.0f, 0.0f};
 }
 
 void Sandbox2D::on_detach() { EC_PROFILE_FUNCTION(); }
@@ -65,9 +77,24 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 		                                            .tiling_factor = 1.0F,
 		                                            .texture       = olliver_ordell_texture_,
 		                                            .tint_color    = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)});
-		eclipse::Renderer2D::end_scene();
 
-		eclipse::Renderer2D::begin_scene(camera_controller_.get_camera());
+		if (eclipse::InputManager::is_mouse_button_pressed(EC_MOUSE_BUTTON_LEFT)) {
+			auto [x, y] = eclipse::InputManager::get_mouse_pose();
+			auto width  = eclipse::Application::get().get_window().get_width();
+			auto height = eclipse::Application::get().get_window().get_height();
+
+			auto bounds              = camera_controller_.get_bounds();
+			auto pos                 = camera_controller_.get_camera().get_position();
+			x                        = (x / width) * bounds.get_width() - bounds.get_width() * 0.5f;
+			y                        = bounds.get_height() * 0.5f - (y / height) * bounds.get_height();
+			particle_props_.position = {x + pos.x, y + pos.y};
+			for (int i = 0; i < 5; i++) {
+				particle_system_.emit(particle_props_);
+			}
+		}
+
+		particle_system_.on_update(timestep);
+		particle_system_.on_render(camera_controller_.get_camera());
 
 		static const int NUMBER = 10;
 		float x                 = 0.0F;

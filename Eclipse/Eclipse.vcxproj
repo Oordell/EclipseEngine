@@ -154,6 +154,7 @@
     <ClInclude Include="src\eclipse\common_types\point_2d.h" />
     <ClInclude Include="src\eclipse\common_types\profile_results.h" />
     <ClInclude Include="src\eclipse\common_types\window_size.h" />
+    <ClInclude Include="src\eclipse\components\particle_system.h" />
     <ClInclude Include="src\eclipse\core\application.h" />
     <ClInclude Include="src\eclipse\core\config.h" />
     <ClInclude Include="src\eclipse\core\core.h" />
@@ -188,6 +189,7 @@
     <ClInclude Include="src\eclipse\renderer\vertex_array.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h" />
     <ClInclude Include="src\eclipse\utils\math.h" />
+    <ClInclude Include="src\eclipse\utils\random.h" />
     <ClInclude Include="src\ecpch.h" />
     <ClInclude Include="src\platform\opengl\opengl_context.h" />
     <ClInclude Include="src\platform\opengl\opengl_index_buffer.h" />
@@ -617,6 +619,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\eclipse\components\particle_system.cpp" />
     <ClCompile Include="src\eclipse\core\application.cpp" />
     <ClCompile Include="src\eclipse\core\input_manager.cpp" />
     <ClCompile Include="src\eclipse\core\log.cpp" />
@@ -637,6 +640,7 @@
     <ClCompile Include="src\eclipse\renderer\texture.cpp" />
     <ClCompile Include="src\eclipse\renderer\vertex_array.cpp" />
     <ClCompile Include="src\eclipse\renderer\vertex_buffer.cpp" />
+    <ClCompile Include="src\eclipse\utils\random.cpp" />
     <ClCompile Include="src\ecpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

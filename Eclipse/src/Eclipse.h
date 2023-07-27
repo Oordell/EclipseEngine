@@ -15,6 +15,7 @@
 #include "eclipse/core/mouse_button_key_codes.h"
 
 #include "eclipse/utils/math.h"
+#include "eclipse/utils/random.h"
 
 #include "Eclipse/imgui/imgui_layer.h"
 
@@ -29,3 +30,5 @@
 #include "eclipse/renderer/texture.h"
 #include "eclipse/renderer/vertex_array.h"
 #include "eclipse/renderer/orthographic_camera.h"
+
+#include "eclipse/components/particle_system.h"
