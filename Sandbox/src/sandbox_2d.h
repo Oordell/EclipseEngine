@@ -15,11 +15,12 @@ public:
 
 private:
 	eclipse::OrthographicCameraController camera_controller_ {1280.0F / 720.0F, eclipse::EnableCameraRotation::yes};
-	eclipse::ref<eclipse::VertexArray> square_vertex_array_ = eclipse::VertexArray::create();
-	eclipse::ref<eclipse::Shader> flat_color_shader_ =
-	    eclipse::Shader::create(eclipse::FilePath("assets/shaders/flat_color.glsl"));
 	eclipse::ref<eclipse::Texture2D> checkerboard_texture_;
 	eclipse::ref<eclipse::Texture2D> olliver_ordell_texture_;
+	eclipse::ref<eclipse::Texture2D> tiny_town_texture_;
+	eclipse::ref<eclipse::TextureSheet> tiny_town_sheet_;
+	eclipse::ref<eclipse::SubTexture2D> sub_texture_key_;
+	eclipse::ref<eclipse::SubTexture2D> sub_texture_door_;
 
 	glm::vec4 square_color_  = {0.2F, 0.3F, 0.8F, 1.0F};
 	unsigned int frame_rate_ = 0;

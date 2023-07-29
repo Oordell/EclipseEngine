@@ -6,12 +6,21 @@
 
 namespace eclipse {
 
+namespace defaults {
+
+static constexpr int32_t NUM_OF_QUAD_CORNERS                           = 4;
+static constexpr glm::vec2 DEFAULT_TEXTURE_COORDS[NUM_OF_QUAD_CORNERS] = {
+    glm::vec2 {0.0F, 0.0F}, glm::vec2 {1.0F, 0.0F}, glm::vec2 {1.0F, 1.0F}, glm::vec2 {0.0F, 1.0F}};
+
+}  // namespace defaults
+
 struct QuadMetaDataPosition2D {
 	glm::vec2 position {0.0F, 0.0F};
 	float rotation_rad {0.0F};
 	glm::vec2 size {0.0F, 0.0F};
 	float tiling_factor {1.0F};
 	glm::vec4 color {0.0F, 0.0F, 0.0F, 0.0F};
+	const glm::vec2* texture_coords = defaults::DEFAULT_TEXTURE_COORDS;
 };
 
 struct QuadMetaDataPosition3D {
@@ -20,6 +29,7 @@ struct QuadMetaDataPosition3D {
 	glm::vec2 size {0.0F, 0.0F};
 	float tiling_factor {1.0F};
 	glm::vec4 color {0.0F, 0.0F, 0.0F, 0.0F};
+	const glm::vec2* texture_coords = defaults::DEFAULT_TEXTURE_COORDS;
 };
 
 struct QuadMetaDataPosition2DTexture {
@@ -29,6 +39,7 @@ struct QuadMetaDataPosition2DTexture {
 	float tiling_factor {1.0F};
 	ref<Texture2D> texture;
 	glm::vec4 tint_color {glm::vec4(1.0F)};
+	const glm::vec2* texture_coords = defaults::DEFAULT_TEXTURE_COORDS;
 };
 
 struct QuadMetaDataPosition3DTexture {
@@ -38,6 +49,7 @@ struct QuadMetaDataPosition3DTexture {
 	float tiling_factor {1.0F};
 	ref<Texture2D> texture;
 	glm::vec4 tint_color {glm::vec4(1.0F)};
+	const glm::vec2* texture_coords = defaults::DEFAULT_TEXTURE_COORDS;
 };
 
 using QuadDrawingDataImpl = QuadMetaDataPosition3DTexture;

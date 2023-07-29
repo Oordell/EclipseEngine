@@ -24,7 +24,6 @@ struct Renderer2DData {
 	static constexpr uint32_t QUAD_INDEX_COUNT_INCREMENT = 6;
 	/* TODO: Implement renderer capabilities, to query render data from the GPU. This is hard-coded for now: */
 	static constexpr uint32_t MAX_TEXTURE_SLOTS = 32;
-	static constexpr int32_t NUM_OF_CORNERS     = 4;
 
 	ref<VertexArray> quad_vertex_array;
 	ref<VertexBuffer> quad_vertex_buffer;
@@ -39,7 +38,7 @@ struct Renderer2DData {
 	std::array<ref<Texture2D>, MAX_TEXTURE_SLOTS> texture_slots;
 	uint32_t texture_slot_index = 1;  // index 0 = white texture.
 
-	glm::vec4 quad_vertex_positions[NUM_OF_CORNERS];
+	glm::vec4 quad_vertex_positions[defaults::NUM_OF_QUAD_CORNERS];
 
 	RendererStatistics stats;
 };
@@ -142,31 +141,34 @@ void Renderer2D::flush() {
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition2D& info) {
 	EC_PROFILE_FUNCTION();
-	draw_quad(QuadMetaDataPosition3D {.position      = {info.position.x, info.position.y, 0.0F},
-	                                  .rotation_rad  = info.rotation_rad,
-	                                  .size          = info.size,
-	                                  .tiling_factor = info.tiling_factor,
-	                                  .color         = info.color});
+	draw_quad({.position       = {info.position.x, info.position.y, 0.0F},
+	           .rotation_rad   = info.rotation_rad,
+	           .size           = info.size,
+	           .tiling_factor  = info.tiling_factor,
+	           .color          = info.color,
+	           .texture_coords = info.texture_coords});
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition3D& info) {
 	EC_PROFILE_FUNCTION();
-	draw_quad_impl({.position      = info.position,
-	                .rotation_rad  = info.rotation_rad,
-	                .size          = info.size,
-	                .tiling_factor = info.tiling_factor,
-	                .texture       = data.white_texture,
-	                .tint_color    = info.color});
+	draw_quad_impl({.position       = info.position,
+	                .rotation_rad   = info.rotation_rad,
+	                .size           = info.size,
+	                .tiling_factor  = info.tiling_factor,
+	                .texture        = data.white_texture,
+	                .tint_color     = info.color,
+	                .texture_coords = info.texture_coords});
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition2DTexture& info) {
 	EC_PROFILE_FUNCTION();
-	draw_quad(QuadMetaDataPosition3DTexture {.position      = {info.position.x, info.position.y, 0.0F},
-	                                         .rotation_rad  = info.rotation_rad,
-	                                         .size          = info.size,
-	                                         .tiling_factor = info.tiling_factor,
-	                                         .texture       = info.texture,
-	                                         .tint_color    = info.tint_color});
+	draw_quad({.position       = {info.position.x, info.position.y, 0.0F},
+	           .rotation_rad   = info.rotation_rad,
+	           .size           = info.size,
+	           .tiling_factor  = info.tiling_factor,
+	           .texture        = info.texture,
+	           .tint_color     = info.tint_color,
+	           .texture_coords = info.texture_coords});
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition3DTexture& info) {
@@ -200,15 +202,12 @@ void Renderer2D::draw_quad_impl(const QuadDrawingDataImpl& info) {
 	}
 
 	glm::mat4 transform = compute_transform(info.position, info.rotation_rad, info.size);
-	static const std::array<glm::vec2, Renderer2DData::NUM_OF_CORNERS> tex_coords = {
-	    glm::vec2 {0.0F, 0.0F}, glm::vec2 {1.0F, 0.0F}, glm::vec2 {1.0F, 1.0F}, glm::vec2 {0.0F, 1.0F}};
-
 	{
 		EC_PROFILE_SCOPE("Adding data to quad vertex buffer ptr.");
-		for (int32_t i = 0; i < Renderer2DData::NUM_OF_CORNERS; i++) {
+		for (int32_t i = 0; i < defaults::NUM_OF_QUAD_CORNERS; i++) {
 			data.quad_vertex_buffer_ptr->position      = transform * data.quad_vertex_positions[i];
 			data.quad_vertex_buffer_ptr->color         = info.tint_color;
-			data.quad_vertex_buffer_ptr->tex_coord     = tex_coords[i];
+			data.quad_vertex_buffer_ptr->tex_coord     = info.texture_coords[i];
 			data.quad_vertex_buffer_ptr->texture_index = texture_index;
 			data.quad_vertex_buffer_ptr->tiling_factor = info.tiling_factor;
 			data.quad_vertex_buffer_ptr++;

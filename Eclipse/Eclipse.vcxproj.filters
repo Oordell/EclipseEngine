@@ -10,6 +10,9 @@
     <Filter Include="src\eclipse\common_types">
       <UniqueIdentifier>{AD68BA6C-998D-09ED-C2D8-EE7CAE5C080B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\eclipse\components">
+      <UniqueIdentifier>{56F081EF-42EA-AA41-2B57-415217F010AE}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\eclipse\core">
       <UniqueIdentifier>{D9127BAA-C50B-9AFC-EE3D-7F81DA957908}</UniqueIdentifier>
     </Filter>
@@ -27,6 +30,9 @@
     </Filter>
     <Filter Include="src\eclipse\renderer">
       <UniqueIdentifier>{A78AF291-9319-7C5B-3C38-905628A68C01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\eclipse\utils">
+      <UniqueIdentifier>{01C025FB-6DD6-2391-B64D-AFB222A3F418}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\platform">
       <UniqueIdentifier>{41663D6D-2DC9-CC11-D64E-05C8C2909894}</UniqueIdentifier>
@@ -83,6 +89,9 @@
     </ClInclude>
     <ClInclude Include="src\eclipse\common_types\window_size.h">
       <Filter>src\eclipse\common_types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\components\particle_system.h">
+      <Filter>src\eclipse\components</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\core\application.h">
       <Filter>src\eclipse\core</Filter>
@@ -182,6 +191,12 @@
     </ClInclude>
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h">
       <Filter>src\eclipse\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\utils\math.h">
+      <Filter>src\eclipse\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\utils\random.h">
+      <Filter>src\eclipse\utils</Filter>
     </ClInclude>
     <ClInclude Include="src\ecpch.h">
       <Filter>src</Filter>
@@ -1464,8 +1479,13 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\renderer\texture_sheet.h" />
+    <ClInclude Include="src\eclipse\renderer\sub_texture_2d.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\eclipse\components\particle_system.cpp">
+      <Filter>src\eclipse\components</Filter>
+    </ClCompile>
     <ClCompile Include="src\eclipse\core\application.cpp">
       <Filter>src\eclipse\core</Filter>
     </ClCompile>
@@ -1526,6 +1546,9 @@
     <ClCompile Include="src\eclipse\renderer\vertex_buffer.cpp">
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\eclipse\utils\random.cpp">
+      <Filter>src\eclipse\utils</Filter>
+    </ClCompile>
     <ClCompile Include="src\ecpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -1559,5 +1582,7 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\eclipse\renderer\texture_sheet.cpp" />
+    <ClCompile Include="src\eclipse\renderer\sub_texture_2d.cpp" />
   </ItemGroup>
 </Project>
