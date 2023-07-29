@@ -35,6 +35,8 @@ void Sandbox2D::on_attach() {
 	particle_props_.velocity           = {0.0f, 0.0f};
 	particle_props_.velocity_variation = {3.0f, 3.0f};
 	particle_props_.position           = {0.0f, 0.0f};
+
+	camera_controller_.set_zoom_level(5.0f);
 }
 
 void Sandbox2D::on_detach() { EC_PROFILE_FUNCTION(); }

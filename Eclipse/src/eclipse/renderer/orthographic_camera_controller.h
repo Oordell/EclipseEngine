@@ -32,6 +32,7 @@ public:
 
 	const OrthographicCameraBounds& get_bounds() const { return bounds_; }
 
+	void set_zoom_level(float lvl);
 	void on_update(Timestep timestep);
 	void on_event(Event& e);
 

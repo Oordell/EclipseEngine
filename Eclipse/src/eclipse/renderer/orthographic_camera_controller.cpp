@@ -15,6 +15,11 @@ OrthographicCameraController::OrthographicCameraController(float aspect_ratio, E
       camera_({.left = bounds_.left, .right = bounds_.right, .bottom = bounds_.bottom, .top = bounds_.top}),
       rotate_camera_(rotate_camera) {}
 
+void OrthographicCameraController::set_zoom_level(float lvl) {
+	zoom_level_ = lvl;
+	set_bounds_and_camera_projection();
+}
+
 void OrthographicCameraController::on_update(Timestep timestep) {
 	EC_PROFILE_FUNCTION();
 
