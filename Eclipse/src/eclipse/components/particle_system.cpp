@@ -44,7 +44,7 @@ void ParticleSystem::on_render(OrthographicCamera& camera) {
 
 		float size = glm::lerp(particle.size_end, particle.size_begin, life);
 		// Render
-		Renderer2D::draw_quad({.position     = {particle.position.x, particle.position.y, 0.0F},
+		Renderer2D::draw_quad({.position     = {particle.position.x, particle.position.y, 0.1F},
 		                       .rotation_rad = particle.rotation,
 		                       .size         = {size, size},
 		                       .color        = color});

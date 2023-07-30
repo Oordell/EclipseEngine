@@ -179,6 +179,10 @@ void Renderer2D::draw_quad(const QuadMetaDataPosition3DTexture& info) {
 void Renderer2D::draw_quad_impl(const QuadDrawingDataImpl& info) {
 	EC_PROFILE_FUNCTION();
 
+	if (info.texture == nullptr) {
+		return;
+	}
+
 	if (data.quad_index_count >= Renderer2DData::MAX_INDICES ||
 	    data.texture_slot_index >= Renderer2DData::MAX_TEXTURE_SLOTS) {
 		end_scene_and_start_new_batch();

@@ -68,6 +68,25 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 		rotation += timestep * 1.0F;
 
 		eclipse::Renderer2D::begin_scene(camera_controller_.get_camera());
+
+		if (eclipse::InputManager::is_mouse_button_pressed(EC_MOUSE_BUTTON_LEFT)) {
+			auto [x, y] = eclipse::InputManager::get_mouse_pose();
+			auto width  = eclipse::Application::get().get_window().get_width();
+			auto height = eclipse::Application::get().get_window().get_height();
+
+			auto bounds              = camera_controller_.get_bounds();
+			auto pos                 = camera_controller_.get_camera().get_position();
+			x                        = (x / width) * bounds.get_width() - bounds.get_width() * 0.5f;
+			y                        = bounds.get_height() * 0.5f - (y / height) * bounds.get_height();
+			particle_props_.position = {x + pos.x, y + pos.y};
+			for (int i = 0; i < 5; i++) {
+				particle_system_.emit(particle_props_);
+			}
+		}
+
+		particle_system_.on_update(timestep);
+		particle_system_.on_render(camera_controller_.get_camera());
+
 		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition2D {
 		    .position = {-1.0F, 0.0F}, .rotation_rad = 0.0F, .size = {0.8F, 0.8F}, .color = {0.8F, 0.2F, 0.3F, 1.0F}});
 		eclipse::Renderer2D::draw_quad(
@@ -87,7 +106,7 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 		                                            .texture       = checkerboard_texture_,
 		                                            .tint_color    = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)});
 		eclipse::Renderer2D::draw_quad(
-		    eclipse::QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, 0.1F},
+		    eclipse::QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, 0.2F},
 		                                            .rotation_rad  = rotation,
 		                                            .size          = {1.0F, 1.0F},
 		                                            .tiling_factor = 1.0F,
@@ -121,24 +140,6 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 		                                .size           = {sub_texture_door_->get_width(), sub_texture_door_->get_height()},
 		                                .texture        = sub_texture_door_->get_texture(),
 		                                .texture_coords = sub_texture_door_->get_texture_coords()});
-
-		if (eclipse::InputManager::is_mouse_button_pressed(EC_MOUSE_BUTTON_LEFT)) {
-			auto [x, y] = eclipse::InputManager::get_mouse_pose();
-			auto width  = eclipse::Application::get().get_window().get_width();
-			auto height = eclipse::Application::get().get_window().get_height();
-
-			auto bounds              = camera_controller_.get_bounds();
-			auto pos                 = camera_controller_.get_camera().get_position();
-			x                        = (x / width) * bounds.get_width() - bounds.get_width() * 0.5f;
-			y                        = bounds.get_height() * 0.5f - (y / height) * bounds.get_height();
-			particle_props_.position = {x + pos.x, y + pos.y};
-			for (int i = 0; i < 5; i++) {
-				particle_system_.emit(particle_props_);
-			}
-		}
-
-		particle_system_.on_update(timestep);
-		particle_system_.on_render(camera_controller_.get_camera());
 
 		eclipse::Renderer2D::end_scene();
 	}
