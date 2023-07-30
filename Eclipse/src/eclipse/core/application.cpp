@@ -24,7 +24,9 @@ Application::~Application() {
 	EC_PROFILE_FUNCTION();
 
 	Renderer::shutdown();
-};
+}
+
+void Application::close() { running_ = false; };
 
 void Application::on_event(Event& e) {
 	EC_PROFILE_FUNCTION();

@@ -16,6 +16,7 @@ class ECLIPSE_API Application {
 public:
 	Application();
 	virtual ~Application();
+	void close();
 
 	void on_event(Event& e);
 
