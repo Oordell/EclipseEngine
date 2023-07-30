@@ -1481,6 +1481,8 @@
     </ClInclude>
     <ClInclude Include="src\eclipse\renderer\texture_sheet.h" />
     <ClInclude Include="src\eclipse\renderer\sub_texture_2d.h" />
+    <ClInclude Include="src\eclipse\renderer\frame_buffer.h" />
+    <ClInclude Include="src\platform\opengl\opengl_frame_buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\components\particle_system.cpp">
@@ -1584,5 +1586,7 @@
     </ClCompile>
     <ClCompile Include="src\eclipse\renderer\texture_sheet.cpp" />
     <ClCompile Include="src\eclipse\renderer\sub_texture_2d.cpp" />
+    <ClCompile Include="src\eclipse\renderer\frame_buffer.cpp" />
+    <ClCompile Include="src\platform\opengl\opengl_frame_buffer.cpp" />
   </ItemGroup>
 </Project>

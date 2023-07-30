@@ -15,6 +15,9 @@ public:
 
 private:
 	eclipse::OrthographicCameraController camera_controller_ {1280.0F / 720.0F, eclipse::EnableCameraRotation::yes};
+
+	eclipse::ref<eclipse::FrameBuffer> frame_buffer_;
+
 	eclipse::ref<eclipse::Texture2D> checkerboard_texture_;
 	eclipse::ref<eclipse::Texture2D> olliver_ordell_texture_;
 	eclipse::ref<eclipse::Texture2D> tiny_town_texture_;

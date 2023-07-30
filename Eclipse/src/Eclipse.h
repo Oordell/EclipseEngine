@@ -32,5 +32,6 @@
 #include "eclipse/renderer/sub_texture_2d.h"
 #include "eclipse/renderer/vertex_array.h"
 #include "eclipse/renderer/orthographic_camera.h"
+#include "eclipse/renderer/frame_buffer.h"
 
 #include "eclipse/components/particle_system.h"

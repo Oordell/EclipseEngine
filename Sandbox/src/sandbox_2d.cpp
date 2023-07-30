@@ -37,6 +37,8 @@ void Sandbox2D::on_attach() {
 	particle_props_.position           = {0.0f, 0.0f};
 
 	camera_controller_.set_zoom_level(5.0f);
+
+	frame_buffer_ = eclipse::FrameBuffer::create({.width = 1280, .height = 720});
 }
 
 void Sandbox2D::on_detach() { EC_PROFILE_FUNCTION(); }
@@ -57,6 +59,7 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 	eclipse::Renderer2D::reset_statistics();
 	{
 		EC_PROFILE_SCOPE("Renderer Prep");
+		frame_buffer_->bind();
 		eclipse::RenderCommand::set_clear_color({red, green, blue, alpha});
 		eclipse::RenderCommand::clear();
 	}
@@ -142,6 +145,7 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 		                                .texture_coords = sub_texture_door_->get_texture_coords()});
 
 		eclipse::Renderer2D::end_scene();
+		frame_buffer_->unbind();
 	}
 }
 
@@ -220,8 +224,8 @@ void Sandbox2D::on_imgui_render() {
 		ImGui::Text("Indices   : %d", stats.get_total_index_count());
 
 		ImGui::ColorEdit4("Square color", glm::value_ptr(square_color_));
-		uint64_t texture_id = static_cast<uint64_t>(checkerboard_texture_->get_renderer_id());
-		ImGui::Image(reinterpret_cast<void*>(texture_id), ImVec2 {256.0F, 256.0F});
+		uint64_t texture_id = static_cast<uint64_t>(frame_buffer_->get_color_attachment_renderer_id());
+		ImGui::Image(reinterpret_cast<void*>(texture_id), ImVec2 {1280.0F, 720.0F});
 
 		ImGui::End();
 
