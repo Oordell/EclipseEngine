@@ -144,3 +144,52 @@ project "Sandbox"
 		defines "ECLIPSE_DIST"
 		runtime "Release"
 		optimize "on"
+
+
+project "Eclipse-Editor"
+	location "Eclipse-Editor"
+	kind "ConsoleApp"
+	language "C++"
+	staticruntime "on"
+	cppdialect "C++20"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files {
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp",
+	}
+
+	includedirs {
+		"Eclipse/vendor/spdlog/include",
+		"Eclipse/src",
+		"Eclipse/vendor",
+		"%{IncludeDir.glm}"
+	}
+
+	links {
+		"Eclipse"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+		defines {
+			"EC_PLATFORM_WINDOWS",
+		}
+
+	filter "configurations:Debug"
+		defines "ECLIPSE_DEBUG"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		defines "ECLIPSE_RELEASE"
+		runtime "Release"
+		optimize "on"
+
+	filter "configurations:Dist"
+		defines "ECLIPSE_DIST"
+		runtime "Release"
+		optimize "on"

@@ -14,7 +14,7 @@ namespace eclipse {
 
 class ECLIPSE_API Application {
 public:
-	Application();
+	Application(const std::string& name = "Eclipse App");
 	virtual ~Application();
 	void close();
 
@@ -34,10 +34,10 @@ private:
 	bool on_window_resize(WindowResizeEvent& e);
 
 	static Application* instance_;
-	scope<Window> window_        = Window::create();
 	ref<ImGuiLayer> imgui_layer_ = make_ref<ImGuiLayer>();
-	bool running_                = true;
-	bool minimized_              = false;
+	scope<Window> window_;
+	bool running_   = true;
+	bool minimized_ = false;
 	LayerStack layer_stack_;
 	float last_frame_time_ {};
 

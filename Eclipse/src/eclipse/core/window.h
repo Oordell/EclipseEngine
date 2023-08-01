@@ -9,7 +9,7 @@
 namespace eclipse {
 
 struct WindowProps {
-	std::string title = "Eclipse Engine";
+	std::string title = "Eclipse App";
 	WindowSize window_size {.width = 1280, .height = 720};
 };
 

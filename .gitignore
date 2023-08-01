@@ -38,3 +38,4 @@ bin-int/
 *.user
 
 Sandbox/logs/
+Eclipse-Editor/logs/

@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "Eclipse\vendor\img
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Eclipse", "Eclipse\Eclipse.vcxproj", "{8A89FEB1-F668-7D4D-FF80-08246BDFE3AE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Eclipse-Editor", "Eclipse-Editor\Eclipse-Editor.vcxproj", "{FEEDE48E-EABB-D894-D34F-49BBBFBCB4F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -50,6 +52,12 @@ Global
 		{8A89FEB1-F668-7D4D-FF80-08246BDFE3AE}.Dist|x64.Build.0 = Dist|x64
 		{8A89FEB1-F668-7D4D-FF80-08246BDFE3AE}.Release|x64.ActiveCfg = Release|x64
 		{8A89FEB1-F668-7D4D-FF80-08246BDFE3AE}.Release|x64.Build.0 = Release|x64
+		{FEEDE48E-EABB-D894-D34F-49BBBFBCB4F9}.Debug|x64.ActiveCfg = Debug|x64
+		{FEEDE48E-EABB-D894-D34F-49BBBFBCB4F9}.Debug|x64.Build.0 = Debug|x64
+		{FEEDE48E-EABB-D894-D34F-49BBBFBCB4F9}.Dist|x64.ActiveCfg = Dist|x64
+		{FEEDE48E-EABB-D894-D34F-49BBBFBCB4F9}.Dist|x64.Build.0 = Dist|x64
+		{FEEDE48E-EABB-D894-D34F-49BBBFBCB4F9}.Release|x64.ActiveCfg = Release|x64
+		{FEEDE48E-EABB-D894-D34F-49BBBFBCB4F9}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
