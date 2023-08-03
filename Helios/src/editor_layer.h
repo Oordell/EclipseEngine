@@ -26,7 +26,7 @@ private:
 	glm::vec4 square_color_  = {0.2F, 0.3F, 0.8F, 1.0F};
 	unsigned int frame_rate_ = 0;
 
-	WindowSize viewport_size_ {};
+	WindowSize viewport_size_ {.width = 0, .height = 0};
 	bool viewport_focused_ {false};
 	bool viewport_hovered_ {false};
 };

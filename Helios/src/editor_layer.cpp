@@ -22,6 +22,13 @@ void EditorLayer::on_detach() { EC_PROFILE_FUNCTION(); }
 void EditorLayer::on_update(Timestep timestep) {
 	EC_PROFILE_FUNCTION();
 
+	if (auto specs = frame_buffer_->get_specification();
+	    viewport_size_.width > 0 && viewport_size_.height > 0 &&
+	    (specs.width != viewport_size_.width || specs.height != viewport_size_.height)) {
+		frame_buffer_->resize(viewport_size_);
+		camera_controller_.on_resize(viewport_size_);
+	}
+
 	if (viewport_focused_) {
 		camera_controller_.on_update(timestep);
 	}
@@ -185,8 +192,6 @@ void EditorLayer::on_imgui_render() {
 	uint32_t temp_height       = static_cast<uint32_t>(viewport_panel_size.y);
 	if (viewport_size_.width != temp_width || viewport_size_.height != temp_height) {
 		viewport_size_ = {.width = temp_width, .height = temp_height};
-		frame_buffer_->resize(viewport_size_);
-		camera_controller_.on_resize(viewport_size_);
 	}
 	uint64_t texture_id = static_cast<uint64_t>(frame_buffer_->get_color_attachment_renderer_id());
 	ImGui::Image(reinterpret_cast<void*>(texture_id), ImVec2 {viewport_panel_size.x, viewport_panel_size.y}, ImVec2 {0, 1},
