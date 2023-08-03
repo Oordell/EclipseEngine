@@ -9,6 +9,7 @@ class ECLIPSE_API InputManager {
 public:
 	InputManager(const InputManager&)            = delete;
 	InputManager& operator=(const InputManager&) = delete;
+	virtual ~InputManager()                      = default;
 
 	inline static bool is_key_pressed(int keycode) { return instance_->is_key_pressed_impl(keycode); }
 

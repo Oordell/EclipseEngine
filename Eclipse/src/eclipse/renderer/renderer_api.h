@@ -12,6 +12,7 @@ class ECLIPSE_API RendererAPI {
 public:
 	enum class API { none, open_gl };
 
+	virtual ~RendererAPI()                                                                = default;
 	virtual void init()                                                                   = 0;
 	virtual void set_viewport(const Point2D& origin, const WindowSize& size)              = 0;
 	virtual void set_clear_color(const glm::vec4& color)                                  = 0;
