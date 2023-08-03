@@ -24,6 +24,8 @@ public:
 
 	void push_overlay(Layer* overlay);
 
+	ref<ImGuiLayer> get_imgui_layer() { return imgui_layer_; }
+
 	inline Window& get_window() { return *window_; }
 
 	inline static Application& get() { return *instance_; }

@@ -27,6 +27,8 @@ private:
 	unsigned int frame_rate_ = 0;
 
 	WindowSize viewport_size_ {};
+	bool viewport_focused_ {false};
+	bool viewport_hovered_ {false};
 };
 
 }  // namespace eclipse

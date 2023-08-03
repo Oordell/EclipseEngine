@@ -15,9 +15,13 @@ public:
 	void on_attach() override;
 	void on_detach() override;
 	void on_event(Event& e) override;
-
 	void begin();
 	void end();
+
+	void set_block_events(bool block) { block_events_ = block; }
+
+private:
+	bool block_events_ {false};
 };
 
 }  // namespace eclipse

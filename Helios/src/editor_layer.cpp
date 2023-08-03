@@ -22,7 +22,9 @@ void EditorLayer::on_detach() { EC_PROFILE_FUNCTION(); }
 void EditorLayer::on_update(Timestep timestep) {
 	EC_PROFILE_FUNCTION();
 
-	camera_controller_.on_update(timestep);
+	if (viewport_focused_) {
+		camera_controller_.on_update(timestep);
+	}
 
 	frame_rate_ = static_cast<unsigned int>(1.0F / timestep);
 	EC_TRACE_THROTTLED(1.0, "Frame rate: {0}Hz", frame_rate_);
@@ -173,6 +175,11 @@ void EditorLayer::on_imgui_render() {
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 {0.0F, 0.0F});
 	ImGui::Begin("Viewport");
+
+	viewport_focused_ = ImGui::IsWindowFocused();
+	viewport_hovered_ = ImGui::IsWindowHovered();
+	Application::get().get_imgui_layer()->set_block_events(!(viewport_focused_ && viewport_hovered_));
+
 	ImVec2 viewport_panel_size = ImGui::GetContentRegionAvail();
 	uint32_t temp_width        = static_cast<uint32_t>(viewport_panel_size.x);
 	uint32_t temp_height       = static_cast<uint32_t>(viewport_panel_size.y);
