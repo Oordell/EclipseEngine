@@ -12,7 +12,7 @@
 
 #include "eclipse/core/input_manager.h"
 #include "eclipse/core/key_codes.h"
-#include "eclipse/core/mouse_button_key_codes.h"
+#include "eclipse/core/mouse_button_codes.h"
 
 #include "eclipse/utils/math.h"
 #include "eclipse/utils/random.h"

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "event.h"
+#include "eclipse/core/key_codes.h"
 
 namespace eclipse {
 
@@ -9,18 +10,18 @@ public:
 	KeyEvent()                   = delete;
 	virtual ~KeyEvent() override = default;
 
-	inline int get_key_code() const { return key_code; }
+	inline KeyCode get_key_code() const { return key_code; }
 
 	EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 
 protected:
-	explicit KeyEvent(int keycode) : key_code(keycode) {}
+	explicit KeyEvent(KeyCode keycode) : key_code(keycode) {}
 
-	int key_code;
+	KeyCode key_code;
 };
 
 struct KeyPressedArgs {
-	int key_code     = -1;
+	KeyCode key_code = KeyCode::none;
 	int repeat_count = -1;
 };
 
@@ -45,7 +46,7 @@ private:
 
 class ECLIPSE_API KeyReleasedEvent : public KeyEvent {
 public:
-	KeyReleasedEvent(int keycode) : KeyEvent(keycode) {}
+	KeyReleasedEvent(KeyCode keycode) : KeyEvent(keycode) {}
 
 	~KeyReleasedEvent() override = default;
 
@@ -60,7 +61,7 @@ public:
 
 class ECLIPSE_API KeyTypedEvent : public KeyEvent {
 public:
-	KeyTypedEvent(int keycode) : KeyEvent(keycode) {}
+	KeyTypedEvent(KeyCode keycode) : KeyEvent(keycode) {}
 
 	~KeyTypedEvent() override = default;
 

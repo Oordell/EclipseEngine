@@ -1,6 +1,8 @@
 #include "ecpch.h"
 #include "windows_window.h"
 #include "eclipse/core/core.h"
+#include "eclipse/core/key_codes.h"
+#include "eclipse/core/mouse_button_codes.h"
 #include "eclipse/events/window_events.h"
 #include "eclipse/events/application_events.h"
 #include "eclipse/events/key_events.h"
@@ -94,17 +96,17 @@ void WindowsWindow::set_glfw_callbacks() {
 
 		switch (action) {
 			case GLFW_PRESS: {
-				KeyPressedEvent event({.key_code = key, .repeat_count = 0});
+				KeyPressedEvent event({.key_code = static_cast<KeyCode>(key), .repeat_count = 0});
 				data.event_callback(event);
 				break;
 			}
 			case GLFW_RELEASE: {
-				KeyReleasedEvent event(key);
+				KeyReleasedEvent event(static_cast<KeyCode>(key));
 				data.event_callback(event);
 				break;
 			}
 			case GLFW_REPEAT: {
-				KeyPressedEvent event({.key_code = key, .repeat_count = 1});
+				KeyPressedEvent event({.key_code = static_cast<KeyCode>(key), .repeat_count = 1});
 				data.event_callback(event);
 				break;
 			}
@@ -119,7 +121,7 @@ void WindowsWindow::set_glfw_callbacks() {
 	glfwSetCharCallback(window_, [](GLFWwindow* window, unsigned int keycode) {
 		WindowData& data = *(WindowData*) glfwGetWindowUserPointer(window);
 
-		KeyTypedEvent event(keycode);
+		KeyTypedEvent event(static_cast<KeyCode>(keycode));
 		data.event_callback(event);
 	});
 
@@ -128,12 +130,12 @@ void WindowsWindow::set_glfw_callbacks() {
 
 		switch (action) {
 			case GLFW_PRESS: {
-				MouseButtonPressedEvent event(button);
+				MouseButtonPressedEvent event(static_cast<MouseCode>(button));
 				data.event_callback(event);
 				break;
 			}
 			case GLFW_RELEASE: {
-				MouseButtonReleasedEvent event(button);
+				MouseButtonReleasedEvent event(static_cast<MouseCode>(button));
 				data.event_callback(event);
 				break;
 			}

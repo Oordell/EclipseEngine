@@ -6,15 +6,15 @@
 
 namespace eclipse {
 
-bool InputManager::is_key_pressed(int keycode) {
+bool InputManager::is_key_pressed(KeyCode keycode) {
 	auto window = static_cast<GLFWwindow*>(Application::get().get_window().get_native_window());
-	auto state  = glfwGetKey(window, keycode);
+	auto state  = glfwGetKey(window, static_cast<uint32_t>(keycode));
 	return state == GLFW_PRESS || state == GLFW_REPEAT;
 }
 
-bool InputManager::is_mouse_button_pressed(int button) {
+bool InputManager::is_mouse_button_pressed(MouseCode button) {
 	auto window = static_cast<GLFWwindow*>(Application::get().get_window().get_native_window());
-	auto state  = glfwGetMouseButton(window, button);
+	auto state  = glfwGetMouseButton(window, static_cast<uint32_t>(button));
 	return state == GLFW_PRESS;
 }
 

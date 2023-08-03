@@ -114,7 +114,7 @@
     <ClInclude Include="src\eclipse\core\log.h">
       <Filter>src\eclipse\core</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\core\mouse_button_key_codes.h">
+    <ClInclude Include="src\eclipse\core\mouse_button_codes.h">
       <Filter>src\eclipse\core</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\core\timestep.h">
@@ -233,9 +233,6 @@
     </ClInclude>
     <ClInclude Include="src\platform\opengl\opengl_vertex_buffer.h">
       <Filter>src\platform\opengl</Filter>
-    </ClInclude>
-    <ClInclude Include="src\platform\windows\windows_input.h">
-      <Filter>src\platform\windows</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\windows\windows_window.h">
       <Filter>src\platform\windows</Filter>
@@ -1497,9 +1494,6 @@
       <Filter>src\eclipse\components</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\core\application.cpp">
-      <Filter>src\eclipse\core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\eclipse\core\input_manager.cpp">
       <Filter>src\eclipse\core</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\core\log.cpp">

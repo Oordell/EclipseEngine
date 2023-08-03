@@ -1,6 +1,7 @@
 #pragma once
 
 #include "event.h"
+#include "eclipse/core/mouse_button_codes.h"
 #include "eclipse/common_types/point_2d.h"
 #include "eclipse/common_types/mouse_scroll_offset.h"
 
@@ -50,19 +51,19 @@ private:
 
 class ECLIPSE_API MouseButtonEvent : public Event {
 public:
-	inline int get_mouse_button() const { return button; }
+	inline MouseCode get_mouse_button() const { return button; }
 
 	EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 
 protected:
-	explicit MouseButtonEvent(int button) : button(button) {}
+	explicit MouseButtonEvent(MouseCode button) : button(button) {}
 
-	int button = -1;
+	MouseCode button = MouseCode::none;
 };
 
 class ECLIPSE_API MouseButtonPressedEvent : public MouseButtonEvent {
 public:
-	MouseButtonPressedEvent(int button) : MouseButtonEvent(button) {}
+	MouseButtonPressedEvent(MouseCode button) : MouseButtonEvent(button) {}
 
 	EVENT_CLASS_TYPE(MouseButtonPressed)
 
@@ -75,7 +76,7 @@ public:
 
 class ECLIPSE_API MouseButtonReleasedEvent : public MouseButtonEvent {
 public:
-	MouseButtonReleasedEvent(int button) : MouseButtonEvent(button) {}
+	MouseButtonReleasedEvent(MouseCode button) : MouseButtonEvent(button) {}
 
 	EVENT_CLASS_TYPE(MouseButtonReleased)
 
