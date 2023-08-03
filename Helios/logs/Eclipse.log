@@ -1,0 +1,10 @@
+[14:51:35] [debug] [ECLIPSE]: Initialized Log!
+[14:51:35] [info ] [ECLIPSE]: Creating window "Helios Eclipse Editor" of size (1280, 720)
+[14:51:35] [info ] [ECLIPSE]: Initializing GLFW
+[14:51:35] [info ] [ECLIPSE]: OpenGL Info:
+[14:51:35] [info ] [ECLIPSE]:  -> Vendor:   NVIDIA Corporation
+[14:51:35] [info ] [ECLIPSE]:  -> Renderer: NVIDIA GeForce GTX 1070 Ti/PCIe/SSE2
+[14:51:35] [info ] [ECLIPSE]:  -> Version:  4.6.0 NVIDIA 531.79
+[14:51:35] [trace] [  APP  ]: Frame rate: 4Hz
+[14:51:36] [trace] [  APP  ]: Frame rate: 99Hz
+[14:51:37] [trace] [  APP  ]: Frame rate: 99Hz

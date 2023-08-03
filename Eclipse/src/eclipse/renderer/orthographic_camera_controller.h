@@ -35,6 +35,7 @@ public:
 	void set_zoom_level(float lvl);
 	void on_update(Timestep timestep);
 	void on_event(Event& e);
+	void on_resize(const WindowSize& new_size);
 
 private:
 	bool on_mouse_scrolled(MouseScrolledEvent& e);

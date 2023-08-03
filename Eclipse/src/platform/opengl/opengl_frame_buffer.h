@@ -10,6 +10,7 @@ public:
 	~OpenGLFrameBuffer() override;
 	void bind() override;
 	void unbind() override;
+	void resize(const WindowSize& size);
 
 	const FrameBufferSpecification& get_specification() const override { return specifications_; }
 
@@ -18,9 +19,11 @@ public:
 	void invalidate();
 
 private:
-	uint32_t renderer_id_;
-	uint32_t color_attachment_;
-	uint32_t depth_attachment_;
+	void reset();
+
+	uint32_t renderer_id_      = 0;
+	uint32_t color_attachment_ = 0;
+	uint32_t depth_attachment_ = 0;
 	FrameBufferSpecification specifications_;
 };
 

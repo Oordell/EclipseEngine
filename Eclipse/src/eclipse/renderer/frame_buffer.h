@@ -1,6 +1,7 @@
 #pragma once
 
 #include "eclipse/core/core.h"
+#include "eclipse/common_types/window_size.h"
 
 namespace eclipse {
 
@@ -17,6 +18,7 @@ public:
 	virtual ~FrameBuffer()                                            = default;
 	virtual void bind()                                               = 0;
 	virtual void unbind()                                             = 0;
+	virtual void resize(const WindowSize& size)                       = 0;
 	virtual const FrameBufferSpecification& get_specification() const = 0;
 	virtual uint32_t get_color_attachment_renderer_id() const         = 0;
 

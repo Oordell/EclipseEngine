@@ -1,6 +1,6 @@
 workspace "Eclipse"
 	architecture "x86_64"
-	startproject "Sandbox"
+	startproject "Helios"
 
 	configurations {
 		"Debug",
@@ -146,8 +146,8 @@ project "Sandbox"
 		optimize "on"
 
 
-project "Eclipse-Editor"
-	location "Eclipse-Editor"
+project "Helios"
+	location "Helios"
 	kind "ConsoleApp"
 	language "C++"
 	staticruntime "on"

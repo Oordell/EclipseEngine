@@ -15,10 +15,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{FEEDE48E-EABB-D894-D34F-49BBBFBCB4F9}</ProjectGuid>
+    <ProjectGuid>{492333B7-35C5-5D8D-1E80-71E10AC1E4DD}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Eclipse-Editor</RootNamespace>
+    <RootNamespace>Helios</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -55,23 +55,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\Debug-windows-x86_64\Eclipse-Editor\</OutDir>
-    <IntDir>..\bin-int\Debug-windows-x86_64\Eclipse-Editor\</IntDir>
-    <TargetName>Eclipse-Editor</TargetName>
+    <OutDir>..\bin\Debug-windows-x86_64\Helios\</OutDir>
+    <IntDir>..\bin-int\Debug-windows-x86_64\Helios\</IntDir>
+    <TargetName>Helios</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Release-windows-x86_64\Eclipse-Editor\</OutDir>
-    <IntDir>..\bin-int\Release-windows-x86_64\Eclipse-Editor\</IntDir>
-    <TargetName>Eclipse-Editor</TargetName>
+    <OutDir>..\bin\Release-windows-x86_64\Helios\</OutDir>
+    <IntDir>..\bin-int\Release-windows-x86_64\Helios\</IntDir>
+    <TargetName>Helios</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Dist-windows-x86_64\Eclipse-Editor\</OutDir>
-    <IntDir>..\bin-int\Dist-windows-x86_64\Eclipse-Editor\</IntDir>
-    <TargetName>Eclipse-Editor</TargetName>
+    <OutDir>..\bin\Dist-windows-x86_64\Helios\</OutDir>
+    <IntDir>..\bin-int\Dist-windows-x86_64\Helios\</IntDir>
+    <TargetName>Helios</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -141,7 +141,7 @@
     <ClInclude Include="src\editor_layer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\eclipse_editor_app.cpp" />
+    <ClCompile Include="src\helios_app.cpp" />
     <ClCompile Include="src\editor_layer.cpp" />
   </ItemGroup>
   <ItemGroup>

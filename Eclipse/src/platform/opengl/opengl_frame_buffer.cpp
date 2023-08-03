@@ -8,15 +8,28 @@ OpenGLFrameBuffer::OpenGLFrameBuffer(const FrameBufferSpecification& specs) : sp
 
 OpenGLFrameBuffer::~OpenGLFrameBuffer() {
 	EC_PROFILE_FUNCTION();
-	glDeleteFramebuffers(1, &renderer_id_);
+	reset();
 }
 
-void OpenGLFrameBuffer::bind() { glBindFramebuffer(GL_FRAMEBUFFER, renderer_id_); }
+void OpenGLFrameBuffer::bind() {
+	glBindFramebuffer(GL_FRAMEBUFFER, renderer_id_);
+	glViewport(0, 0, specifications_.width, specifications_.height);
+}
 
 void OpenGLFrameBuffer::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
+void OpenGLFrameBuffer::resize(const WindowSize& size) {
+	specifications_.width  = size.width;
+	specifications_.height = size.height;
+	invalidate();
+}
+
 void OpenGLFrameBuffer::invalidate() {
 	EC_PROFILE_FUNCTION();
+
+	if (renderer_id_ != 0) {
+		reset();
+	}
 
 	glCreateFramebuffers(1, &renderer_id_);
 	glBindFramebuffer(GL_FRAMEBUFFER, renderer_id_);
@@ -31,13 +44,17 @@ void OpenGLFrameBuffer::invalidate() {
 
 	glCreateTextures(GL_TEXTURE_2D, 1, &depth_attachment_);
 	glBindTexture(GL_TEXTURE_2D, depth_attachment_);
-	//	glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, specifications_.width, specifications_.height);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, specifications_.width, specifications_.height, 0, GL_DEPTH_STENCIL,
-	             GL_UNSIGNED_INT_24_8, nullptr);
+	glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, specifications_.width, specifications_.height);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depth_attachment_, 0);
 
 	EC_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void OpenGLFrameBuffer::reset() {
+	glDeleteFramebuffers(1, &renderer_id_);
+	glDeleteTextures(1, &color_attachment_);
+	glDeleteTextures(1, &depth_attachment_);
 }
 }  // namespace eclipse

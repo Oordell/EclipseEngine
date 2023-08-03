@@ -9,9 +9,9 @@ class ECLIPSE_API WindowResizeEvent : public Event {
 public:
 	WindowResizeEvent(const WindowSize& new_size) : size_(new_size) {}
 
-	inline unsigned int get_width() const { return size_.width; }
+	inline uint32_t get_width() const { return size_.width; }
 
-	inline unsigned int get_height() const { return size_.height; }
+	inline uint32_t get_height() const { return size_.height; }
 
 	inline const WindowSize& get_window_size() const { return size_; }
 

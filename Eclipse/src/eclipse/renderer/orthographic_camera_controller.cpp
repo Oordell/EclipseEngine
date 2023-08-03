@@ -62,6 +62,13 @@ void OrthographicCameraController::on_event(Event& e) {
 	dispatcher.dispatch<WindowResizeEvent>(EC_BIND_EVENT_FN(OrthographicCameraController::on_window_resized));
 }
 
+void OrthographicCameraController::on_resize(const WindowSize& new_size) {
+	EC_PROFILE_FUNCTION();
+
+	aspect_ratio_ = static_cast<float>(new_size.width) / static_cast<float>(new_size.height);
+	set_bounds_and_camera_projection();
+}
+
 bool OrthographicCameraController::on_mouse_scrolled(MouseScrolledEvent& e) {
 	EC_PROFILE_FUNCTION();
 
@@ -74,8 +81,7 @@ bool OrthographicCameraController::on_mouse_scrolled(MouseScrolledEvent& e) {
 bool OrthographicCameraController::on_window_resized(WindowResizeEvent& e) {
 	EC_PROFILE_FUNCTION();
 
-	aspect_ratio_ = static_cast<float>(e.get_width()) / static_cast<float>(e.get_height());
-	set_bounds_and_camera_projection();
+	on_resize({.width = e.get_width(), .height = e.get_height()});
 	return false;
 }
 

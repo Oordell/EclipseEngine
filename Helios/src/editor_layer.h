@@ -25,6 +25,8 @@ private:
 
 	glm::vec4 square_color_  = {0.2F, 0.3F, 0.8F, 1.0F};
 	unsigned int frame_rate_ = 0;
+
+	WindowSize viewport_size_ {};
 };
 
 }  // namespace eclipse
