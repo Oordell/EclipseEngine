@@ -36,27 +36,26 @@ void Level::on_render() {
 	auto color              = hsv_to_rgb(pillar_hsv_).get();
 
 	// Background
-	eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3D {
-	    .position = {player_pose.x, 0.0F, -0.8F}, .size = {50.0F, 50.0F}, .color = {0.3F, 0.3F, 0.3F, 1.0F}});
+	eclipse::Renderer2D::draw_quad({.spatial_info = {.position = {player_pose.x, 0.0F, -0.8F}, .size = {50.0F, 50.0F}},
+	                                .common       = {.color = {0.3F, 0.3F, 0.3F, 1.0F}}});
 
 	// Floor & ceiling
 	eclipse::Renderer2D::draw_quad(
-	    eclipse::QuadMetaDataPosition2D {.position = {player_pose.x, 34.0F}, .size = {50.0F, 50.0F}, .color = color});
+	    {.spatial_info = {.position = {player_pose.x, 34.0F}, .size = {50.0F, 50.0F}}, .common = {.color = color}});
 	eclipse::Renderer2D::draw_quad(
-	    eclipse::QuadMetaDataPosition2D {.position = {player_pose.x, -34.0F}, .size = {50.0F, 50.0F}, .color = color});
+	    {.spatial_info = {.position = {player_pose.x, -34.0F}, .size = {50.0F, 50.0F}}, .common = {.color = color}});
 
 	for (auto& pillar : pillars_) {
 		eclipse::Renderer2D::draw_quad(
-		    eclipse::QuadMetaDataPosition3DTexture {.position     = pillar.top_position,
-		                                            .rotation_rad = eclipse::utils::deg_to_rad(180.0F),
-		                                            .size         = pillar.top_scale,
-		                                            .texture      = triangle_texture_,
-		                                            .tint_color   = color});
-		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3DTexture {.position     = pillar.bottom_position,
-		                                                                       .rotation_rad = 0.0F,
-		                                                                       .size         = pillar.bottom_scale,
-		                                                                       .texture      = triangle_texture_,
-		                                                                       .tint_color   = color});
+		    eclipse::QuadMetaDataPosition3DTexture {.spatial_info = {.position     = pillar.top_position,
+		                                                             .rotation_rad = eclipse::utils::deg_to_rad(180.0F),
+		                                                             .size         = pillar.top_scale},
+		                                            .common       = {.color = color},
+		                                            .texture      = triangle_texture_});
+		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3DTexture {
+		    .spatial_info = {.position = pillar.bottom_position, .rotation_rad = 0.0F, .size = pillar.bottom_scale},
+		    .common       = {.color = color},
+		    .texture      = triangle_texture_});
 	}
 
 	player_.on_render();

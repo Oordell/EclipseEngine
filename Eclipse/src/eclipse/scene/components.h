@@ -1,0 +1,34 @@
+#pragma once
+
+#include <glm/glm.hpp>
+
+namespace eclipse::component {
+
+struct Transform {
+	Transform()                 = default;
+	~Transform()                = default;
+	Transform(const Transform&) = default;
+
+	Transform(const glm::mat4& trans) : transform(trans) {}
+
+	operator glm::mat4() { return transform; }
+
+	operator const glm::mat4&() const { return transform; }
+
+	glm::mat4 transform {1.0F};
+};
+
+struct Color {
+	Color()             = default;
+	Color(const Color&) = default;
+
+	Color(const glm::vec4& color) : color(color) {}
+
+	operator glm::vec4() { return color; }
+
+	operator const glm::vec4&() const { return color; }
+
+	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
+};
+
+}  // namespace eclipse::component

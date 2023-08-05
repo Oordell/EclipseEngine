@@ -87,31 +87,24 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 		particle_system_.on_update(timestep);
 		particle_system_.on_render(camera_controller_.get_camera());
 
-		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition2D {
-		    .position = {-1.0F, 0.0F}, .rotation_rad = 0.0F, .size = {0.8F, 0.8F}, .color = {0.8F, 0.2F, 0.3F, 1.0F}});
 		eclipse::Renderer2D::draw_quad(
-		    eclipse::QuadMetaDataPosition3D {.position     = {0.5F, -0.5F, 0.0F},
-		                                     .rotation_rad = static_cast<float>(std::numbers::pi) / 4.0F,
-		                                     .size         = {0.5F, 0.75F},
-		                                     .color        = square_color_});
-		eclipse::Renderer2D::draw_quad(eclipse::QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, -0.2F},
-		                                                                       .size          = {20.0F, 20.0F},
-		                                                                       .tiling_factor = 10.0F,
-		                                                                       .texture       = checkerboard_texture_});
+		    {.spatial_info = {.position = {-1.0F, 0.0F}, .rotation_rad = 0.0F, .size = {0.8F, 0.8F}},
+		     .common       = {.color = {0.8F, 0.2F, 0.3F, 1.0F}}});
+		eclipse::Renderer2D::draw_quad({.spatial_info = {.position     = {0.5F, -0.5F, 0.0F},
+		                                                 .rotation_rad = static_cast<float>(std::numbers::pi) / 4.0F,
+		                                                 .size         = {0.5F, 0.75F}},
+		                                .common       = {.color = square_color_}});
+		eclipse::Renderer2D::draw_quad({.spatial_info = {.position = {0.0F, 0.0F, -0.2F}, .size = {20.0F, 20.0F}},
+		                                .common       = {.tiling_factor = 10.0F},
+		                                .texture      = checkerboard_texture_});
 		eclipse::Renderer2D::draw_quad(
-		    eclipse::QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, 0.0F},
-		                                            .rotation_rad  = rotation,
-		                                            .size          = {1.0F, 1.0F},
-		                                            .tiling_factor = 10.0F,
-		                                            .texture       = checkerboard_texture_,
-		                                            .tint_color    = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)});
+		    {.spatial_info = {.position = {0.0F, 0.0F, 0.0F}, .rotation_rad = rotation, .size = {1.0F, 1.0F}},
+		     .common       = {.tiling_factor = 10.0F, .color = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)},
+		     .texture      = checkerboard_texture_});
 		eclipse::Renderer2D::draw_quad(
-		    eclipse::QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, 0.2F},
-		                                            .rotation_rad  = rotation,
-		                                            .size          = {1.0F, 1.0F},
-		                                            .tiling_factor = 1.0F,
-		                                            .texture       = olliver_ordell_texture_,
-		                                            .tint_color    = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)});
+		    {.spatial_info = {.position = {0.0F, 0.0F, 0.2F}, .rotation_rad = rotation, .size = {1.0F, 1.0F}},
+		     .common       = {.tiling_factor = 1.0F, .color = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)},
+		     .texture      = olliver_ordell_texture_});
 
 		static const int NUMBER = 10;
 		float x                 = 0.0F;
@@ -128,18 +121,23 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 				x     = static_cast<float>(j) / 2;
 				red   = (static_cast<float>(j) + NUMBER) / (2 * NUMBER);
 				color = {red, green, blue, alpha};
-				eclipse::Renderer2D::draw_quad({.position = {x, y, -0.1F}, .size = {0.45F, 0.45F}, .color = color});
+				eclipse::Renderer2D::draw_quad(
+				    {.spatial_info = {.position = {x, y, -0.1F}, .size = {0.45F, 0.45F}}, .common = {.color = color}});
 			}
 		}
 
-		eclipse::Renderer2D::draw_quad({.position       = {0.0F, 1.0F, 0.5F},
-		                                .size           = {sub_texture_key_->get_width(), sub_texture_key_->get_height()},
-		                                .texture        = sub_texture_key_->get_texture(),
-		                                .texture_coords = sub_texture_key_->get_texture_coords()});
-		eclipse::Renderer2D::draw_quad({.position       = {1.0F, 1.0F, 0.5F},
-		                                .size           = {sub_texture_door_->get_width(), sub_texture_door_->get_height()},
-		                                .texture        = sub_texture_door_->get_texture(),
-		                                .texture_coords = sub_texture_door_->get_texture_coords()});
+		eclipse::Renderer2D::draw_quad({
+		    .spatial_info = {.position = {0.0F, 1.0F, 0.5F},
+		                     .size     = {sub_texture_key_->get_width(), sub_texture_key_->get_height()}},
+		    .common       = {.texture_coords = sub_texture_key_->get_texture_coords()},
+		    .texture      = sub_texture_key_->get_texture(),
+		});
+		eclipse::Renderer2D::draw_quad({
+		    .spatial_info = {.position = {1.0F, 1.0F, 0.5F},
+		                     .size     = {sub_texture_door_->get_width(), sub_texture_door_->get_height()}},
+		    .common       = {.texture_coords = sub_texture_door_->get_texture_coords()},
+		    .texture      = sub_texture_door_->get_texture(),
+		});
 
 		eclipse::Renderer2D::end_scene();
 	}

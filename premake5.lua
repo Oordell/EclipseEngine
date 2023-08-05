@@ -21,6 +21,7 @@ IncludeDir["Glad"] = "Eclipse/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Eclipse/vendor/imgui"
 IncludeDir["glm"] = "Eclipse/vendor/glm"
 IncludeDir["stb_image"] = "Eclipse/vendor/stb_image"
+IncludeDir["entt"] = "Eclipse/vendor/entt/include"
 
 group "Dependencies"
 	include "Eclipse/vendor/GLFW_fork"
@@ -62,7 +63,8 @@ project "Eclipse"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.entt}"
 	}
 
 	links {
@@ -116,7 +118,8 @@ project "Sandbox"
 		"Eclipse/vendor/spdlog/include",
 		"Eclipse/src",
 		"Eclipse/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
 	}
 
 	links {
@@ -165,7 +168,8 @@ project "Helios"
 		"Eclipse/vendor/spdlog/include",
 		"Eclipse/src",
 		"Eclipse/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
 	}
 
 	links {

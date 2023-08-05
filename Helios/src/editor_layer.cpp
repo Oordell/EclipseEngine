@@ -12,9 +12,12 @@ void EditorLayer::on_attach() {
 	checkerboard_texture_   = Texture2D::create("assets/textures/Checkerboard.png");
 	olliver_ordell_texture_ = Texture2D::create("assets/textures/olliver_ordell_logo.png");
 
-	camera_controller_.set_zoom_level(5.0f);
-
 	frame_buffer_ = FrameBuffer::create({.width = 1280, .height = 720});
+
+	active_scene_  = make_ref<Scene>();
+	square_entity_ = active_scene_->create_entity();
+	active_scene_->get_reg().emplace<component::Transform>(square_entity_);
+	active_scene_->get_reg().emplace<component::Color>(square_entity_, glm::vec4 {0.2F, 0.9F, 0.3F, 1.0F});
 }
 
 void EditorLayer::on_detach() { EC_PROFILE_FUNCTION(); }
@@ -42,66 +45,17 @@ void EditorLayer::on_update(Timestep timestep) {
 	static const float alpha = 1.0F;
 
 	Renderer2D::reset_statistics();
-	{
-		EC_PROFILE_SCOPE("Renderer Prep");
-		frame_buffer_->bind();
-		RenderCommand::set_clear_color({red, green, blue, alpha});
-		RenderCommand::clear();
-	}
 
-	{
-		EC_PROFILE_SCOPE("Renderer Draw");
+	frame_buffer_->bind();
+	RenderCommand::set_clear_color({red, green, blue, alpha});
+	RenderCommand::clear();
 
-		static float rotation = 0.0F;
-		rotation += timestep * 1.0F;
+	Renderer2D::begin_scene(camera_controller_.get_camera());
 
-		Renderer2D::begin_scene(camera_controller_.get_camera());
+	active_scene_->on_update(timestep);
 
-		Renderer2D::draw_quad(QuadMetaDataPosition2D {
-		    .position = {-1.0F, 0.0F}, .rotation_rad = 0.0F, .size = {0.8F, 0.8F}, .color = {0.8F, 0.2F, 0.3F, 1.0F}});
-		Renderer2D::draw_quad(QuadMetaDataPosition3D {.position     = {0.5F, -0.5F, 0.0F},
-		                                              .rotation_rad = static_cast<float>(std::numbers::pi) / 4.0F,
-		                                              .size         = {0.5F, 0.75F},
-		                                              .color        = square_color_});
-		Renderer2D::draw_quad(QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, -0.2F},
-		                                                     .size          = {20.0F, 20.0F},
-		                                                     .tiling_factor = 10.0F,
-		                                                     .texture       = checkerboard_texture_});
-		Renderer2D::draw_quad(QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, 0.0F},
-		                                                     .rotation_rad  = rotation,
-		                                                     .size          = {1.0F, 1.0F},
-		                                                     .tiling_factor = 10.0F,
-		                                                     .texture       = checkerboard_texture_,
-		                                                     .tint_color    = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)});
-		Renderer2D::draw_quad(QuadMetaDataPosition3DTexture {.position      = {0.0F, 0.0F, 0.2F},
-		                                                     .rotation_rad  = rotation,
-		                                                     .size          = {1.0F, 1.0F},
-		                                                     .tiling_factor = 1.0F,
-		                                                     .texture       = olliver_ordell_texture_,
-		                                                     .tint_color    = glm::vec4(1.0F, 0.8F, 0.8F, 1.0F)});
-
-		static const int NUMBER = 10;
-		float x                 = 0.0F;
-		float y                 = 0.0F;
-		float red               = 0.0F;
-		float green             = 0.4F;
-		float blue              = 0.0F;
-		float alpha             = 0.8F;
-		glm::vec4 color         = glm::vec4 {red, green, blue, alpha};
-		for (int i = -NUMBER; i < NUMBER; i++) {
-			y    = static_cast<float>(i) / 2;
-			blue = (static_cast<float>(i) + NUMBER) / (2 * NUMBER);
-			for (int j = -NUMBER; j < NUMBER; j++) {
-				x     = static_cast<float>(j) / 2;
-				red   = (static_cast<float>(j) + NUMBER) / (2 * NUMBER);
-				color = {red, green, blue, alpha};
-				Renderer2D::draw_quad({.position = {x, y, -0.1F}, .size = {0.45F, 0.45F}, .color = color});
-			}
-		}
-
-		Renderer2D::end_scene();
-		frame_buffer_->unbind();
-	}
+	Renderer2D::end_scene();
+	frame_buffer_->unbind();
 }
 
 void EditorLayer::on_event(Event& event) { camera_controller_.on_event(event); }
@@ -177,7 +131,8 @@ void EditorLayer::on_imgui_render() {
 	ImGui::Text("Vertices  : %d", stats.get_total_vertex_count());
 	ImGui::Text("Indices   : %d", stats.get_total_index_count());
 
-	ImGui::ColorEdit4("Square color", glm::value_ptr(square_color_));
+	auto& square_color = active_scene_->get_reg().get<component::Color>(square_entity_).color;
+	ImGui::ColorEdit4("Square color", glm::value_ptr(square_color));
 	ImGui::End();
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 {0.0F, 0.0F});

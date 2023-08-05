@@ -19,7 +19,8 @@ private:
 	OrthographicCameraController camera_controller_ {1280.0F / 720.0F, EnableCameraRotation::yes};
 
 	ref<FrameBuffer> frame_buffer_;
-
+	ref<Scene> active_scene_;
+	entt::entity square_entity_;
 	ref<Texture2D> checkerboard_texture_;
 	ref<Texture2D> olliver_ordell_texture_;
 

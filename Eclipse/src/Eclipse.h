@@ -17,7 +17,11 @@
 #include "eclipse/utils/math.h"
 #include "eclipse/utils/random.h"
 
-#include "Eclipse/imgui/imgui_layer.h"
+#include "eclipse/imgui/imgui_layer.h"
+
+#include "eclipse/scene/scene.h"
+#include "eclipse/scene/components.h"
+#include "eclipse/components/particle_system.h"
 
 #include "eclipse/renderer/orthographic_camera_controller.h"
 
@@ -33,5 +37,3 @@
 #include "eclipse/renderer/vertex_array.h"
 #include "eclipse/renderer/orthographic_camera.h"
 #include "eclipse/renderer/frame_buffer.h"
-
-#include "eclipse/components/particle_system.h"

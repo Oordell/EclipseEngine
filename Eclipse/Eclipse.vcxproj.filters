@@ -31,6 +31,9 @@
     <Filter Include="src\eclipse\renderer">
       <UniqueIdentifier>{A78AF291-9319-7C5B-3C38-905628A68C01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\eclipse\scene">
+      <UniqueIdentifier>{BE2BF8FA-2A42-F690-73B9-81B2DF0EC718}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\eclipse\utils">
       <UniqueIdentifier>{01C025FB-6DD6-2391-B64D-AFB222A3F418}</UniqueIdentifier>
     </Filter>
@@ -76,6 +79,9 @@
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h">
+      <Filter>src\eclipse\common_types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\common_types\must_init.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\common_types\orthographic.h">
@@ -200,6 +206,12 @@
     </ClInclude>
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h">
       <Filter>src\eclipse\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\scene\components.h">
+      <Filter>src\eclipse\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\scene\scene.h">
+      <Filter>src\eclipse\scene</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\utils\math.h">
       <Filter>src\eclipse\utils</Filter>
@@ -1558,6 +1570,9 @@
     </ClCompile>
     <ClCompile Include="src\eclipse\renderer\vertex_buffer.cpp">
       <Filter>src\eclipse\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\scene\scene.cpp">
+      <Filter>src\eclipse\scene</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\utils\random.cpp">
       <Filter>src\eclipse\utils</Filter>

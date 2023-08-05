@@ -3,6 +3,7 @@
 #include "eclipse/core/core.h"
 #include "orthographic_camera.h"
 #include "eclipse/renderer/texture.h"
+#include "eclipse/common_types/must_init.h"
 
 namespace eclipse {
 
@@ -14,45 +15,64 @@ static constexpr glm::vec2 DEFAULT_TEXTURE_COORDS[NUM_OF_QUAD_CORNERS] = {
 
 }  // namespace defaults
 
-struct QuadMetaDataPosition2D {
+struct QuadMetaDataCommon {
+	float tiling_factor {1.0F};
+	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
+	const glm::vec2* texture_coords = defaults::DEFAULT_TEXTURE_COORDS;
+};
+
+struct QuadSpatialInfo2D {
 	glm::vec2 position {0.0F, 0.0F};
 	float rotation_rad {0.0F};
 	glm::vec2 size {0.0F, 0.0F};
-	float tiling_factor {1.0F};
-	glm::vec4 color {0.0F, 0.0F, 0.0F, 0.0F};
-	const glm::vec2* texture_coords = defaults::DEFAULT_TEXTURE_COORDS;
+};
+
+struct QuadSpatialInfo3D {
+	glm::vec3 position {0.0F, 0.0F, 0.0F};
+	float rotation_rad {0.0F};
+	glm::vec2 size {0.0F, 0.0F};
+};
+
+struct QuadMetaDataPosition2D {
+	QuadSpatialInfo2D spatial_info {};
+	QuadMetaDataCommon common {};
 };
 
 struct QuadMetaDataPosition3D {
-	glm::vec3 position {0.0F, 0.0F, 0.0F};
-	float rotation_rad {0.0F};
-	glm::vec2 size {0.0F, 0.0F};
-	float tiling_factor {1.0F};
-	glm::vec4 color {0.0F, 0.0F, 0.0F, 0.0F};
-	const glm::vec2* texture_coords = defaults::DEFAULT_TEXTURE_COORDS;
+	QuadSpatialInfo3D spatial_info {};
+	QuadMetaDataCommon common {};
+};
+
+struct QuadMetaDataTransform {
+	glm::mat4 transform {1.0F};
+	QuadMetaDataCommon common {};
 };
 
 struct QuadMetaDataPosition2DTexture {
-	glm::vec2 position {0.0F, 0.0F};
-	float rotation_rad {0.0F};
-	glm::vec2 size {0.0F, 0.0F};
-	float tiling_factor {1.0F};
-	ref<Texture2D> texture;
-	glm::vec4 tint_color {glm::vec4(1.0F)};
-	const glm::vec2* texture_coords = defaults::DEFAULT_TEXTURE_COORDS;
+	QuadSpatialInfo2D spatial_info {};
+	QuadMetaDataCommon common {};
+	MustInit<ref<Texture2D>> texture;
 };
 
 struct QuadMetaDataPosition3DTexture {
-	glm::vec3 position {0.0F, 0.0F, 0.0F};
-	float rotation_rad {0.0F};
-	glm::vec2 size {0.0F, 0.0F};
-	float tiling_factor {1.0F};
-	ref<Texture2D> texture;
-	glm::vec4 tint_color {glm::vec4(1.0F)};
-	const glm::vec2* texture_coords = defaults::DEFAULT_TEXTURE_COORDS;
+	QuadSpatialInfo3D spatial_info {};
+	QuadMetaDataCommon common {};
+	MustInit<ref<Texture2D>> texture;
 };
 
-using QuadDrawingDataImpl = QuadMetaDataPosition3DTexture;
+struct QuadMetaDataTransformTexture {
+	glm::mat4 transform {1.0F};
+	QuadMetaDataCommon common {};
+	MustInit<ref<Texture2D>> texture;
+};
+
+struct QuadDrawingDataImpl {
+	ref<Texture2D> texture;
+	glm::mat4 transform {1.0F};
+	float tiling_factor {1.0F};
+	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
+	const glm::vec2* texture_coords = defaults::DEFAULT_TEXTURE_COORDS;
+};
 
 struct RendererStatistics {
 	uint32_t draw_calls = 0;
@@ -73,8 +93,10 @@ public:
 
 	static void draw_quad(const QuadMetaDataPosition2D& info);
 	static void draw_quad(const QuadMetaDataPosition3D& info);
+	static void draw_quad(const QuadMetaDataTransform& info);
 	static void draw_quad(const QuadMetaDataPosition2DTexture& info);
 	static void draw_quad(const QuadMetaDataPosition3DTexture& info);
+	static void draw_quad(const QuadMetaDataTransformTexture& info);
 
 private:
 	static void draw_quad_impl(const QuadDrawingDataImpl& info);

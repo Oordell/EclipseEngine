@@ -39,3 +39,4 @@ bin-int/
 
 **/logs/*.log
 **/logs/*.json
+**/*/Eclipse.log
