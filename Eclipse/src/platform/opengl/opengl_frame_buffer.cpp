@@ -19,6 +19,12 @@ void OpenGLFrameBuffer::bind() {
 void OpenGLFrameBuffer::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
 void OpenGLFrameBuffer::resize(const WindowSize& size) {
+	static const uint32_t MAX_FRAME_BUFFER_SIZE = 8192;
+	if (size.width == 0 || size.height == 0 || size.width > MAX_FRAME_BUFFER_SIZE || size.height > MAX_FRAME_BUFFER_SIZE) {
+		EC_CORE_ERROR("Invalid frame buffer resize attempt. Tried resizing to: ({0}, {1})", size.width, size.height);
+		return;
+	}
+
 	specifications_.width  = size.width;
 	specifications_.height = size.height;
 	invalidate();
