@@ -141,60 +141,44 @@ void Renderer2D::flush() {
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition2D& info) {
 	EC_PROFILE_FUNCTION();
-	draw_quad_impl({.texture        = data.white_texture,
-	                .transform      = compute_transform({info.spatial_info.position.x, info.spatial_info.position.y, 0.0F},
-	                                                    info.spatial_info.rotation_rad, info.spatial_info.size),
-	                .tiling_factor  = info.common.tiling_factor,
-	                .color          = info.common.color,
-	                .texture_coords = info.common.texture_coords});
+	draw_quad_impl({.texture   = data.white_texture,
+	                .transform = compute_transform({info.spatial_info.position.x, info.spatial_info.position.y, 0.0F},
+	                                               info.spatial_info.rotation_rad, info.spatial_info.size),
+	                .common    = info.common});
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition3D& info) {
 	EC_PROFILE_FUNCTION();
-	draw_quad_impl({.texture        = data.white_texture,
-	                .transform      = compute_transform(info.spatial_info.position, info.spatial_info.rotation_rad,
-	                                                    info.spatial_info.size),
-	                .tiling_factor  = info.common.tiling_factor,
-	                .color          = info.common.color,
-	                .texture_coords = info.common.texture_coords});
+	draw_quad_impl({.texture   = data.white_texture,
+	                .transform = compute_transform(info.spatial_info.position, info.spatial_info.rotation_rad,
+	                                               info.spatial_info.size),
+	                .common    = info.common});
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataTransform& info) {
 	EC_PROFILE_FUNCTION();
-	draw_quad_impl({.texture        = data.white_texture,
-	                .transform      = info.transform,
-	                .tiling_factor  = info.common.tiling_factor,
-	                .color          = info.common.color,
-	                .texture_coords = info.common.texture_coords});
+	draw_quad_impl({.texture = data.white_texture, .transform = info.transform, .common = info.common});
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition2DTexture& info) {
 	EC_PROFILE_FUNCTION();
-	draw_quad_impl({.texture        = info.texture,
-	                .transform      = compute_transform({info.spatial_info.position.x, info.spatial_info.position.y, 0.0F},
-	                                                    info.spatial_info.rotation_rad, info.spatial_info.size),
-	                .tiling_factor  = info.common.tiling_factor,
-	                .color          = info.common.color,
-	                .texture_coords = info.common.texture_coords});
+	draw_quad_impl({.texture   = info.texture,
+	                .transform = compute_transform({info.spatial_info.position.x, info.spatial_info.position.y, 0.0F},
+	                                               info.spatial_info.rotation_rad, info.spatial_info.size),
+	                .common    = info.common});
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition3DTexture& info) {
 	EC_PROFILE_FUNCTION();
-	draw_quad_impl({.texture        = info.texture,
-	                .transform      = compute_transform(info.spatial_info.position, info.spatial_info.rotation_rad,
-	                                                    info.spatial_info.size),
-	                .tiling_factor  = info.common.tiling_factor,
-	                .color          = info.common.color,
-	                .texture_coords = info.common.texture_coords});
+	draw_quad_impl({.texture   = info.texture,
+	                .transform = compute_transform(info.spatial_info.position, info.spatial_info.rotation_rad,
+	                                               info.spatial_info.size),
+	                .common    = info.common});
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataTransformTexture& info) {
 	EC_PROFILE_FUNCTION();
-	draw_quad_impl({.texture        = info.texture,
-	                .transform      = info.transform,
-	                .tiling_factor  = info.common.tiling_factor,
-	                .color          = info.common.color,
-	                .texture_coords = info.common.texture_coords});
+	draw_quad_impl({.texture = info.texture, .transform = info.transform, .common = info.common});
 }
 
 void Renderer2D::draw_quad_impl(const QuadDrawingDataImpl& info) {
@@ -230,10 +214,10 @@ void Renderer2D::draw_quad_impl(const QuadDrawingDataImpl& info) {
 		EC_PROFILE_SCOPE("Adding data to quad vertex buffer ptr.");
 		for (int32_t i = 0; i < defaults::NUM_OF_QUAD_CORNERS; i++) {
 			data.quad_vertex_buffer_ptr->position      = info.transform * data.quad_vertex_positions[i];
-			data.quad_vertex_buffer_ptr->color         = info.color;
-			data.quad_vertex_buffer_ptr->tex_coord     = info.texture_coords[i];
+			data.quad_vertex_buffer_ptr->color         = info.common.color;
+			data.quad_vertex_buffer_ptr->tex_coord     = info.common.texture_coords[i];
 			data.quad_vertex_buffer_ptr->texture_index = texture_index;
-			data.quad_vertex_buffer_ptr->tiling_factor = info.tiling_factor;
+			data.quad_vertex_buffer_ptr->tiling_factor = info.common.tiling_factor;
 			data.quad_vertex_buffer_ptr++;
 		}
 	}

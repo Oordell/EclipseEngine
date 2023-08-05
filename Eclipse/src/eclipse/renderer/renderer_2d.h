@@ -69,9 +69,7 @@ struct QuadMetaDataTransformTexture {
 struct QuadDrawingDataImpl {
 	ref<Texture2D> texture;
 	glm::mat4 transform {1.0F};
-	float tiling_factor {1.0F};
-	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
-	const glm::vec2* texture_coords = defaults::DEFAULT_TEXTURE_COORDS;
+	QuadMetaDataCommon common {};
 };
 
 struct RendererStatistics {
