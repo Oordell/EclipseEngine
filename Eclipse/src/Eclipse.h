@@ -22,7 +22,7 @@
 #include "eclipse/scene/scene.h"
 #include "eclipse/scene/components.h"
 #include "eclipse/scene/entity.h"
-#include "eclipse/components/particle_system.h"
+#include "eclipse/scene/particle_system.h"
 
 #include "eclipse/renderer/orthographic_camera_controller.h"
 

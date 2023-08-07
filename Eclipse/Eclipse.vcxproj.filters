@@ -96,7 +96,7 @@
     <ClInclude Include="src\eclipse\common_types\window_size.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\components\particle_system.h">
+    <ClInclude Include="src\eclipse\scene\particle_system.h">
       <Filter>src\eclipse\components</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\core\application.h">
@@ -1503,7 +1503,7 @@
     <ClInclude Include="src\eclipse\scene\entity.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\eclipse\components\particle_system.cpp">
+    <ClCompile Include="src\eclipse\scene\particle_system.cpp">
       <Filter>src\eclipse\components</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\core\application.cpp">

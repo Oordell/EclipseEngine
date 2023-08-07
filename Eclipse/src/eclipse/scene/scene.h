@@ -13,10 +13,9 @@ class Scene {
 public:
 	Scene()  = default;
 	~Scene() = default;
+	void on_update(Timestep timestep);
 
 	Entity create_entity(const std::string& name = "");
-
-	void on_update(Timestep timestep);
 
 	entt::registry& get_registry() { return registry_; }
 

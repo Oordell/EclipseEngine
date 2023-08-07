@@ -10,7 +10,7 @@ public:
 	Entity()              = default;
 	~Entity()             = default;
 	Entity(const Entity&) = default;
-	Entity(entt::entity entity, Scene* scene);
+	Entity(entt::entity entity, ref<Scene> scene);
 
 	template <typename T, typename... Args>
 	T& add_component(Args&&... args) {
@@ -45,10 +45,11 @@ private:
 	void validate_members() const {
 		EC_CORE_ASSERT(scene_ != nullptr, "Scene is a null pointer!");
 		EC_CORE_ASSERT(entity_handle_ != entt::null, "Entity is not set!");
+		EC_CORE_ASSERT(scene_->get_registry().valid(entity_handle_), "Entity is no longer valid!");
 	}
 
 	entt::entity entity_handle_ {entt::null};
-	Scene* scene_ {nullptr};
+	ref<Scene> scene_ {nullptr};
 };
 
 }  // namespace eclipse

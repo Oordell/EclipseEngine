@@ -9,7 +9,7 @@
 namespace eclipse {
 
 Entity Scene::create_entity(const std::string& name) {
-	Entity e {registry_.create(), this};
+	Entity e {registry_.create(), ref<Scene>(this)};
 	e.add_component<component::Transform>();
 	e.add_component<component::Tag>(name.empty() ? "Entity" : name);
 	return e;
