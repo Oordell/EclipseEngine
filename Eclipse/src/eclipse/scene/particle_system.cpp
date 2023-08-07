@@ -5,7 +5,7 @@
 
 #include <glm/gtx/compatibility.hpp>
 
-namespace eclipse {
+namespace eclipse::component {
 
 ParticleSystem::ParticleSystem(uint32_t max_particles) {
 	if (max_particles < 1) {
@@ -75,4 +75,4 @@ void ParticleSystem::emit(const ParticleProperties& particle_props) {
 	pool_index_ = --pool_index_ % particle_pool_.size();
 }
 
-}  // namespace eclipse
+}  // namespace eclipse::component

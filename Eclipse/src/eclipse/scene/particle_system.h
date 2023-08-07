@@ -5,7 +5,7 @@
 
 #include <glm/glm.hpp>
 
-namespace eclipse {
+namespace eclipse::component {
 
 struct ParticleProperties {
 	glm::vec2 position;
@@ -44,4 +44,4 @@ private:
 	uint32_t pool_index_;
 };
 
-}  // namespace eclipse
+}  // namespace eclipse::component
