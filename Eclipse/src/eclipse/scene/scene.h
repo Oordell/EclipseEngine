@@ -6,16 +6,19 @@
 
 namespace eclipse {
 
+// Forward declaration
+class Entity;
+
 class Scene {
 public:
 	Scene()  = default;
 	~Scene() = default;
 
-	entt::entity create_entity();
+	Entity create_entity(const std::string& name = "");
 
 	void on_update(Timestep timestep);
 
-	entt::registry& get_reg() { return registry_; }
+	entt::registry& get_registry() { return registry_; }
 
 private:
 	entt::registry registry_;

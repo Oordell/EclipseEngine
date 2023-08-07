@@ -16,8 +16,9 @@ void EditorLayer::on_attach() {
 
 	active_scene_  = make_ref<Scene>();
 	square_entity_ = active_scene_->create_entity();
-	active_scene_->get_reg().emplace<component::Transform>(square_entity_);
-	active_scene_->get_reg().emplace<component::Color>(square_entity_, glm::vec4 {0.2F, 0.9F, 0.3F, 1.0F});
+	square_entity_.add_component<component::Color>(glm::vec4 {0.2F, 0.9F, 0.3F, 1.0F});
+
+	EC_DEBUG("Square entity tag: {0}", square_entity_.get_component<component::Tag>().tag);
 }
 
 void EditorLayer::on_detach() { EC_PROFILE_FUNCTION(); }
@@ -131,7 +132,7 @@ void EditorLayer::on_imgui_render() {
 	ImGui::Text("Vertices  : %d", stats.get_total_vertex_count());
 	ImGui::Text("Indices   : %d", stats.get_total_index_count());
 
-	auto& square_color = active_scene_->get_reg().get<component::Color>(square_entity_).color;
+	auto& square_color = square_entity_.get_component<component::Color>().color;
 	ImGui::ColorEdit4("Square color", glm::value_ptr(square_color));
 	ImGui::End();
 

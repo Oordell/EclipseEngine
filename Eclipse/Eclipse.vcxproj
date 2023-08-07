@@ -193,6 +193,7 @@
     <ClInclude Include="src\eclipse\renderer\vertex_array.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h" />
     <ClInclude Include="src\eclipse\scene\components.h" />
+    <ClInclude Include="src\eclipse\scene\entity.h" />
     <ClInclude Include="src\eclipse\scene\scene.h" />
     <ClInclude Include="src\eclipse\utils\math.h" />
     <ClInclude Include="src\eclipse\utils\random.h" />
@@ -648,6 +649,7 @@
     <ClCompile Include="src\eclipse\renderer\texture_sheet.cpp" />
     <ClCompile Include="src\eclipse\renderer\vertex_array.cpp" />
     <ClCompile Include="src\eclipse\renderer\vertex_buffer.cpp" />
+    <ClCompile Include="src\eclipse\scene\entity.cpp" />
     <ClCompile Include="src\eclipse\scene\scene.cpp" />
     <ClCompile Include="src\eclipse\utils\random.cpp" />
     <ClCompile Include="src\ecpch.cpp">

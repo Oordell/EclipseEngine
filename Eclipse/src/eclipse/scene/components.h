@@ -4,6 +4,16 @@
 
 namespace eclipse::component {
 
+struct Tag {
+	Tag()           = default;
+	~Tag()          = default;
+	Tag(const Tag&) = default;
+
+	Tag(const std::string& tag) : tag(tag) {}
+
+	std::string tag;
+};
+
 struct Transform {
 	Transform()                 = default;
 	~Transform()                = default;
@@ -20,6 +30,7 @@ struct Transform {
 
 struct Color {
 	Color()             = default;
+	~Color()            = default;
 	Color(const Color&) = default;
 
 	Color(const glm::vec4& color) : color(color) {}
