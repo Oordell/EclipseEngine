@@ -40,3 +40,5 @@ bin-int/
 **/logs/*.log
 **/logs/*.json
 **/*/Eclipse.log
+Helios/logs/*
+Helios\logs\*
