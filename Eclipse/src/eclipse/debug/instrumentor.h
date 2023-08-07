@@ -198,9 +198,11 @@ constexpr auto cleanup_output_string(const char (&expr)[N], const char (&remove)
 
 	#define EC_PROFILE_BEGIN_SESSION(name, filepath) ::eclipse::debug::Instrumentor::get().begin_session(name, filepath)
 	#define EC_PROFILE_END_SESSION()                 ::eclipse::debug::Instrumentor::get().end_session()
-	#define EC_PROFILE_SCOPE(name)                                                                 \
-		constexpr auto fixed_name = ::eclipse::debug::utils::cleanup_output_string(name, "__cdecl "); \
-		::eclipse::debug::InstrumentationTimer timer##__LINE__(fixed_name.data)
+	#define EC_PROFILE_SCOPE_LINE2(name, line)                                                          \
+		constexpr auto fixedName##line = ::eclipse::debug::utils::cleanup_output_string(name, "__cdecl "); \
+		::eclipse::debug::InstrumentationTimer timer##line(fixedName##line.data)
+	#define EC_PROFILE_SCOPE_LINE(name, line) EC_PROFILE_SCOPE_LINE2(name, line)
+	#define EC_PROFILE_SCOPE(name)            EC_PROFILE_SCOPE_LINE(name, __LINE__)
 	#define EC_PROFILE_FUNCTION() EC_PROFILE_SCOPE(EC_FUNC_SIG)
 #else
 	#define EC_PROFILE_BEGIN_SESSION(name, filepath)
