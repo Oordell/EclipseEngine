@@ -39,13 +39,15 @@ public:
 		return scene_->get_registry().try_get<T>(entity_handle_) ? true : false;
 	}
 
+	operator bool() { return ((scene_ != nullptr) && (entity_handle_ != entt::null)); }
+
 private:
 	void validate_members() const {
 		EC_CORE_ASSERT(scene_ != nullptr, "Scene is a null pointer!");
-		EC_CORE_ASSERT(static_cast<uint32_t>(entity_handle_) != 0, "Entity is not set!");
+		EC_CORE_ASSERT(entity_handle_ != entt::null, "Entity is not set!");
 	}
 
-	entt::entity entity_handle_ {0};
+	entt::entity entity_handle_ {entt::null};
 	Scene* scene_ {nullptr};
 };
 
