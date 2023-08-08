@@ -18,7 +18,8 @@ void EditorLayer::on_attach() {
 	square_entity_ = active_scene_->create_entity();
 	square_entity_.add_component<component::Color>(glm::vec4 {0.2F, 0.9F, 0.3F, 1.0F});
 
-	EC_DEBUG("Square entity tag: {0}", square_entity_.get_component<component::Tag>().tag);
+	camera_entity_ = active_scene_->create_entity("Camera Entity");
+	camera_entity_.add_component<component::Camera>(glm::ortho(-16.0F, 16.0F, -9.0F, 9.0F, -1.0F, 1.0F));
 }
 
 void EditorLayer::on_detach() { EC_PROFILE_FUNCTION(); }
@@ -51,11 +52,8 @@ void EditorLayer::on_update(Timestep timestep) {
 	RenderCommand::set_clear_color({red, green, blue, alpha});
 	RenderCommand::clear();
 
-	Renderer2D::begin_scene(camera_controller_.get_camera());
-
 	active_scene_->on_update(timestep);
 
-	Renderer2D::end_scene();
 	frame_buffer_->unbind();
 }
 
@@ -132,8 +130,14 @@ void EditorLayer::on_imgui_render() {
 	ImGui::Text("Vertices  : %d", stats.get_total_vertex_count());
 	ImGui::Text("Indices   : %d", stats.get_total_index_count());
 
+	ImGui::Separator();
+
 	auto& square_color = square_entity_.get_component<component::Color>().color;
 	ImGui::ColorEdit4("Square color", glm::value_ptr(square_color));
+
+	ImGui::DragFloat3("Camera transform",
+	                  glm::value_ptr(camera_entity_.get_component<component::Transform>().transform[3]));
+
 	ImGui::End();
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 {0.0F, 0.0F});

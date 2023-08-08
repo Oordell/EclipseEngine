@@ -1501,6 +1501,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\scene\entity.h" />
+    <ClInclude Include="src\eclipse\renderer\camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\scene\particle_system.cpp">

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "eclipse/renderer/camera.h"
+
 #include <glm/glm.hpp>
 
 namespace eclipse::component {
@@ -40,6 +42,17 @@ struct Color {
 	operator const glm::vec4&() const { return color; }
 
 	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
+};
+
+struct Camera {
+	Camera()              = default;
+	~Camera()             = default;
+	Camera(const Camera&) = default;
+
+	Camera(const eclipse::Camera& camera) : camera(camera) {}
+
+	eclipse::Camera camera;
+	bool primary {true};
 };
 
 }  // namespace eclipse::component

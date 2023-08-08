@@ -2,6 +2,7 @@
 
 #include "eclipse/core/core.h"
 #include "orthographic_camera.h"
+#include "eclipse/renderer/camera.h"
 #include "eclipse/renderer/texture.h"
 #include "eclipse/common_types/must_init.h"
 
@@ -81,10 +82,16 @@ struct RendererStatistics {
 	uint32_t get_total_index_count() { return quad_count * 6; }
 };
 
+struct RenderCamera {
+	glm::mat4 projection {1.0F};
+	glm::mat4 transform {1.0F};
+};
+
 class ECLIPSE_API Renderer2D {
 public:
 	static void init();
 	static void shutdown();
+	static void begin_scene(const RenderCamera& camera);
 	static void begin_scene(const OrthographicCamera& camera);
 	static void end_scene();
 	static void flush();
@@ -100,6 +107,8 @@ private:
 	static void draw_quad_impl(const QuadDrawingDataImpl& info);
 	static glm::mat4 compute_transform(const glm::vec3& position, float rotation_rad, const glm::vec2& size);
 	static void end_scene_and_start_new_batch();
+	static void init_scene(const glm::mat4& view_projection);
+	static void reset_data();
 
 public:
 	static void reset_statistics();

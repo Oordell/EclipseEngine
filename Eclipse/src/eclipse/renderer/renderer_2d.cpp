@@ -105,14 +105,14 @@ void Renderer2D::shutdown() {
 	delete[] data.quad_vertex_buffer_base;
 }
 
+void Renderer2D::begin_scene(const RenderCamera& camera) {
+	EC_PROFILE_FUNCTION();
+	init_scene(camera.projection * glm::inverse(camera.transform));
+}
+
 void Renderer2D::begin_scene(const OrthographicCamera& camera) {
 	EC_PROFILE_FUNCTION();
-	data.texture_shader->bind();
-	data.texture_shader->set_mat4("view_projection", camera.get_view_projection_matrix());
-
-	data.quad_index_count       = 0;
-	data.quad_vertex_buffer_ptr = data.quad_vertex_buffer_base;
-	data.texture_slot_index     = 1;
+	init_scene(camera.get_view_projection_matrix());
 }
 
 void Renderer2D::end_scene() {
@@ -195,7 +195,7 @@ void Renderer2D::draw_quad_impl(const QuadDrawingDataImpl& info) {
 
 	float texture_index = -1.0F;
 	{
-		EC_PROFILE_SCOPE("Findind texture index");
+		EC_PROFILE_SCOPE("Finding texture index");
 		for (uint32_t i = 0; i < data.texture_slot_index; i++) {
 			if (data.texture_slots[i]->get_renderer_id() == info.texture->get_renderer_id()) {
 				texture_index = static_cast<float>(i);
@@ -240,6 +240,19 @@ glm::mat4 Renderer2D::compute_transform(const glm::vec3& position, float rotatio
 
 void Renderer2D::end_scene_and_start_new_batch() {
 	end_scene();
+	reset_data();
+}
+
+void Renderer2D::init_scene(const glm::mat4& view_projection) {
+	EC_PROFILE_FUNCTION();
+
+	data.texture_shader->bind();
+	data.texture_shader->set_mat4("view_projection", view_projection);
+
+	reset_data();
+}
+
+void Renderer2D::reset_data() {
 	data.quad_index_count       = 0;
 	data.quad_vertex_buffer_ptr = data.quad_vertex_buffer_base;
 	data.texture_slot_index     = 1;
