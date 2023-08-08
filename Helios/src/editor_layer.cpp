@@ -19,7 +19,7 @@ void EditorLayer::on_attach() {
 	square_entity_.add_component<component::Color>(glm::vec4 {0.2F, 0.9F, 0.3F, 1.0F});
 
 	camera_entity_ = active_scene_->create_entity("Camera Entity");
-	camera_entity_.add_component<component::Camera>(glm::ortho(-16.0F, 16.0F, -9.0F, 9.0F, -1.0F, 1.0F));
+	camera_entity_.add_component<component::Camera>();
 }
 
 void EditorLayer::on_detach() { EC_PROFILE_FUNCTION(); }
@@ -32,6 +32,8 @@ void EditorLayer::on_update(Timestep timestep) {
 	    (specs.width != viewport_size_.width || specs.height != viewport_size_.height)) {
 		frame_buffer_->resize(viewport_size_);
 		camera_controller_.on_resize(viewport_size_);
+
+		active_scene_->on_viewport_resize(viewport_size_);
 	}
 
 	if (viewport_focused_) {

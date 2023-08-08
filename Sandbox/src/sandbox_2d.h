@@ -25,6 +25,6 @@ private:
 	glm::vec4 square_color_  = {0.2F, 0.3F, 0.8F, 1.0F};
 	unsigned int frame_rate_ = 0;
 
-	eclipse::ParticleSystem particle_system_ {};
-	eclipse::ParticleProperties particle_props_ {};
+	eclipse::component::ParticleSystem particle_system_ {};
+	eclipse::component::ParticleProperties particle_props_ {};
 };

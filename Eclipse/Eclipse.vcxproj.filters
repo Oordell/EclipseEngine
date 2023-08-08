@@ -1502,6 +1502,7 @@
     </ClInclude>
     <ClInclude Include="src\eclipse\scene\entity.h" />
     <ClInclude Include="src\eclipse\renderer\camera.h" />
+    <ClInclude Include="src\eclipse\scene\scene_camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\scene\particle_system.cpp">
@@ -1616,5 +1617,6 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\scene\entity.cpp" />
+    <ClCompile Include="src\eclipse\scene\scene_camera.cpp" />
   </ItemGroup>
 </Project>

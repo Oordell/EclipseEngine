@@ -19,9 +19,9 @@ void Scene::on_update(Timestep timestep) {
 	Camera* main_camera         = nullptr;
 	glm::mat4* camera_transform = nullptr;
 
-	auto camera_group = registry_.view<component::Transform, component::Camera>();
-	for (auto entity : camera_group) {
-		const auto& [transform, camera] = camera_group.get<component::Transform, component::Camera>(entity);
+	auto camera_view = registry_.view<component::Transform, component::Camera>();
+	for (auto entity : camera_view) {
+		const auto& [transform, camera] = camera_view.get<component::Transform, component::Camera>(entity);
 		if (camera.primary) {
 			main_camera      = &camera.camera;
 			camera_transform = &transform.transform;
@@ -31,7 +31,7 @@ void Scene::on_update(Timestep timestep) {
 
 	if (main_camera != nullptr) {
 		Renderer2D::begin_scene({.projection = main_camera->get_projection(), .transform = *camera_transform});
-		
+
 		auto group = registry_.view<component::Transform, component::Color>();
 		for (auto entity : group) {
 			const auto& [trans, color] = group.get<component::Transform, component::Color>(entity);
@@ -39,6 +39,17 @@ void Scene::on_update(Timestep timestep) {
 		}
 
 		Renderer2D::end_scene();
+	}
+}
+
+void Scene::on_viewport_resize(const WindowSize& new_size) {
+	viewport_size_   = new_size;
+	auto camera_view = registry_.view<component::Camera>();
+	for (auto entity : camera_view) {
+		auto& camera = camera_view.get<component::Camera>(entity);
+		if (!camera.fixed_aspect_ratio) {
+			camera.camera.set_viewport_size(viewport_size_);
+		}
 	}
 }
 

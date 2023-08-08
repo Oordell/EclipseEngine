@@ -1,6 +1,6 @@
 #pragma once
 
-#include "eclipse/renderer/camera.h"
+#include "eclipse/scene/scene_camera.h"
 
 #include <glm/glm.hpp>
 
@@ -49,10 +49,9 @@ struct Camera {
 	~Camera()             = default;
 	Camera(const Camera&) = default;
 
-	Camera(const eclipse::Camera& camera) : camera(camera) {}
-
-	eclipse::Camera camera;
+	SceneCamera camera;
 	bool primary {true};
+	bool fixed_aspect_ratio {false};
 };
 
 }  // namespace eclipse::component
