@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace eclipse {
+
 SceneCamera::SceneCamera() : Camera() { recalculate_projection(); }
 
 void SceneCamera::set_orthographic(const OrthographicProperties& props) {

@@ -197,6 +197,7 @@
     <ClInclude Include="src\eclipse\scene\entity.h" />
     <ClInclude Include="src\eclipse\scene\scene.h" />
     <ClInclude Include="src\eclipse\scene\scene_camera.h" />
+    <ClInclude Include="src\eclipse\scene\scriptable_entity.h" />
     <ClInclude Include="src\eclipse\utils\math.h" />
     <ClInclude Include="src\eclipse\utils\random.h" />
     <ClInclude Include="src\ecpch.h" />

@@ -22,6 +22,8 @@ private:
 	ref<Scene> active_scene_;
 	Entity square_entity_;
 	Entity camera_entity_;
+	Entity second_camera_;
+	bool use_primary_camera_ = true;
 	ref<Texture2D> checkerboard_texture_;
 	ref<Texture2D> olliver_ordell_texture_;
 

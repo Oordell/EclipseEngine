@@ -16,12 +16,23 @@ Entity Scene::create_entity(const std::string& name) {
 }
 
 void Scene::on_update(Timestep timestep) {
+	// Update scripts
+	registry_.view<component::NativeScript>().each([=](auto entity, auto& nsc) {
+		if (nsc.instance == nullptr) {
+			nsc.instance          = nsc.instantiate_script_func();
+			nsc.instance->entity_ = Entity {entity, ref<Scene>(this)};
+			nsc.instance->on_create();
+		}
+		nsc.instance->on_update(timestep);
+	});
+
+	// Render 2D:
 	Camera* main_camera         = nullptr;
 	glm::mat4* camera_transform = nullptr;
 
 	auto camera_view = registry_.view<component::Transform, component::Camera>();
 	for (auto entity : camera_view) {
-		const auto& [transform, camera] = camera_view.get<component::Transform, component::Camera>(entity);
+		auto [transform, camera] = camera_view.get<component::Transform, component::Camera>(entity);
 		if (camera.primary) {
 			main_camera      = &camera.camera;
 			camera_transform = &transform.transform;

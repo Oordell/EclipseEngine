@@ -20,6 +20,41 @@ void EditorLayer::on_attach() {
 
 	camera_entity_ = active_scene_->create_entity("Camera Entity");
 	camera_entity_.add_component<component::Camera>();
+
+	second_camera_ = active_scene_->create_entity("Second camera");
+	auto& cam      = second_camera_.add_component<component::Camera>();
+	cam.primary    = false;
+
+	class CameraController : public ScriptableEntity {
+	public:
+		~CameraController() override = default;
+
+		void on_create() override {
+			auto& transform = get_component<component::Transform>().transform;
+			transform[3][0] = rand() % 10 - 5.0F;
+		}
+
+		void on_destroy() override {}
+
+		void on_update(Timestep timestep) override {
+			auto& transform = get_component<component::Transform>().transform;
+
+			static const float camera_move_speed = 5.0F;
+			if (InputManager::is_key_pressed(KeyCode::A)) {
+				transform[3][0] -= camera_move_speed * timestep;
+			} else if (InputManager::is_key_pressed(KeyCode::D)) {
+				transform[3][0] += camera_move_speed * timestep;
+			}
+			if (InputManager::is_key_pressed(KeyCode::W)) {
+				transform[3][1] += camera_move_speed * timestep;
+			} else if (InputManager::is_key_pressed(KeyCode::S)) {
+				transform[3][1] -= camera_move_speed * timestep;
+			}
+		}
+	};
+
+	camera_entity_.add_component<component::NativeScript>().bind<CameraController>();
+	second_camera_.add_component<component::NativeScript>().bind<CameraController>();
 }
 
 void EditorLayer::on_detach() { EC_PROFILE_FUNCTION(); }
@@ -139,6 +174,11 @@ void EditorLayer::on_imgui_render() {
 
 	ImGui::DragFloat3("Camera transform",
 	                  glm::value_ptr(camera_entity_.get_component<component::Transform>().transform[3]));
+
+	if (ImGui::Checkbox("Camera A", &use_primary_camera_)) {
+		camera_entity_.get_component<component::Camera>().primary = use_primary_camera_;
+		second_camera_.get_component<component::Camera>().primary = !use_primary_camera_;
+	}
 
 	ImGui::End();
 
