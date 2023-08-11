@@ -10,9 +10,6 @@
     <Filter Include="src\eclipse\common_types">
       <UniqueIdentifier>{AD68BA6C-998D-09ED-C2D8-EE7CAE5C080B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\eclipse\components">
-      <UniqueIdentifier>{56F081EF-42EA-AA41-2B57-415217F010AE}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\eclipse\core">
       <UniqueIdentifier>{D9127BAA-C50B-9AFC-EE3D-7F81DA957908}</UniqueIdentifier>
     </Filter>
@@ -96,9 +93,6 @@
     <ClInclude Include="src\eclipse\common_types\window_size.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\scene\particle_system.h">
-      <Filter>src\eclipse\components</Filter>
-    </ClInclude>
     <ClInclude Include="src\eclipse\core\application.h">
       <Filter>src\eclipse\core</Filter>
     </ClInclude>
@@ -121,6 +115,9 @@
       <Filter>src\eclipse\core</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\core\mouse_button_codes.h">
+      <Filter>src\eclipse\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\core\platform_detection.h">
       <Filter>src\eclipse\core</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\core\timestep.h">
@@ -160,6 +157,9 @@
       <Filter>src\eclipse\layer</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\renderer\buffer_layout.h">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\renderer\camera.h">
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\renderer\frame_buffer.h">
@@ -210,7 +210,19 @@
     <ClInclude Include="src\eclipse\scene\components.h">
       <Filter>src\eclipse\scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\scene\entity.h">
+      <Filter>src\eclipse\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\scene\particle_system.h">
+      <Filter>src\eclipse\scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\scene\scene.h">
+      <Filter>src\eclipse\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\scene\scene_camera.h">
+      <Filter>src\eclipse\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\scene\scriptable_entity.h">
       <Filter>src\eclipse\scene</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\utils\math.h">
@@ -1500,15 +1512,8 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\scene\entity.h" />
-    <ClInclude Include="src\eclipse\renderer\camera.h" />
-    <ClInclude Include="src\eclipse\scene\scene_camera.h" />
-    <ClInclude Include="src\eclipse\scene\scriptable_entity.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\eclipse\scene\particle_system.cpp">
-      <Filter>src\eclipse\components</Filter>
-    </ClCompile>
     <ClCompile Include="src\eclipse\core\application.cpp">
       <Filter>src\eclipse\core</Filter>
     </ClCompile>
@@ -1575,7 +1580,16 @@
     <ClCompile Include="src\eclipse\renderer\vertex_buffer.cpp">
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\eclipse\scene\entity.cpp">
+      <Filter>src\eclipse\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\scene\particle_system.cpp">
+      <Filter>src\eclipse\scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\eclipse\scene\scene.cpp">
+      <Filter>src\eclipse\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\scene\scene_camera.cpp">
       <Filter>src\eclipse\scene</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\utils\random.cpp">
@@ -1617,7 +1631,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\eclipse\scene\entity.cpp" />
-    <ClCompile Include="src\eclipse\scene\scene_camera.cpp" />
   </ItemGroup>
 </Project>

@@ -23,20 +23,20 @@ void OrthographicCameraController::set_zoom_level(float lvl) {
 void OrthographicCameraController::on_update(Timestep timestep) {
 	EC_PROFILE_FUNCTION();
 
-	if (InputManager::is_key_pressed(EC_KEY_A)) {
+	if (InputManager::is_key_pressed(KeyCode::A)) {
 		camera_position_.x -= camera_move_speed_ * timestep;
-	} else if (InputManager::is_key_pressed(EC_KEY_D)) {
+	} else if (InputManager::is_key_pressed(KeyCode::D)) {
 		camera_position_.x += camera_move_speed_ * timestep;
 	}
-	if (InputManager::is_key_pressed(EC_KEY_W)) {
+	if (InputManager::is_key_pressed(KeyCode::W)) {
 		camera_position_.y += camera_move_speed_ * timestep;
-	} else if (InputManager::is_key_pressed(EC_KEY_S)) {
+	} else if (InputManager::is_key_pressed(KeyCode::S)) {
 		camera_position_.y -= camera_move_speed_ * timestep;
 	}
 	if (rotate_camera_ == EnableCameraRotation::yes) {
-		if (InputManager::is_key_pressed(EC_KEY_Q)) {
+		if (InputManager::is_key_pressed(KeyCode::Q)) {
 			camera_rotation_ += camera_rotate_speed_ * timestep;
-		} else if (InputManager::is_key_pressed(EC_KEY_E)) {
+		} else if (InputManager::is_key_pressed(KeyCode::E)) {
 			camera_rotation_ -= camera_rotate_speed_ * timestep;
 		}
 

@@ -69,7 +69,7 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 
 		eclipse::Renderer2D::begin_scene(camera_controller_.get_camera());
 
-		if (eclipse::InputManager::is_mouse_button_pressed(EC_MOUSE_BUTTON_LEFT)) {
+		if (eclipse::InputManager::is_mouse_button_pressed(eclipse::MouseCode::button_left)) {
 			auto [x, y] = eclipse::InputManager::get_mouse_pose();
 			auto width  = eclipse::Application::get().get_window().get_width();
 			auto height = eclipse::Application::get().get_window().get_height();

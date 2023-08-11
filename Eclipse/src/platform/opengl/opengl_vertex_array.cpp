@@ -96,7 +96,8 @@ void OpenGLVertexArray::add_vertex_buffer(const ref<VertexBuffer>& vertex_buffer
 					glEnableVertexAttribArray(vertex_buffer_index_);
 					glVertexAttribPointer(vertex_buffer_index_, element.get_component_count(),
 					                      shader_data_type_to_opengl_base_type(element.type), element.normalized ? GL_TRUE : GL_FALSE,
-					                      layout.get_stride(), reinterpret_cast<const void*>(sizeof(float) * count * i));
+					                      layout.get_stride(),
+					                      reinterpret_cast<const void*>(element.offset + sizeof(float) * count * i));
 					glVertexAttribDivisor(vertex_buffer_index_, 1);
 					vertex_buffer_index_++;
 				}

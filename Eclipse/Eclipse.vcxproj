@@ -155,8 +155,6 @@
     <ClInclude Include="src\eclipse\common_types\point_2d.h" />
     <ClInclude Include="src\eclipse\common_types\profile_results.h" />
     <ClInclude Include="src\eclipse\common_types\window_size.h" />
-    <ClInclude Include="src\eclipse\renderer\camera.h" />
-    <ClInclude Include="src\eclipse\scene\particle_system.h" />
     <ClInclude Include="src\eclipse\core\application.h" />
     <ClInclude Include="src\eclipse\core\config.h" />
     <ClInclude Include="src\eclipse\core\core.h" />
@@ -165,6 +163,7 @@
     <ClInclude Include="src\eclipse\core\key_codes.h" />
     <ClInclude Include="src\eclipse\core\log.h" />
     <ClInclude Include="src\eclipse\core\mouse_button_codes.h" />
+    <ClInclude Include="src\eclipse\core\platform_detection.h" />
     <ClInclude Include="src\eclipse\core\timestep.h" />
     <ClInclude Include="src\eclipse\core\window.h" />
     <ClInclude Include="src\eclipse\debug\instrumentor.h" />
@@ -178,6 +177,7 @@
     <ClInclude Include="src\eclipse\layer\layer.h" />
     <ClInclude Include="src\eclipse\layer\layer_stack.h" />
     <ClInclude Include="src\eclipse\renderer\buffer_layout.h" />
+    <ClInclude Include="src\eclipse\renderer\camera.h" />
     <ClInclude Include="src\eclipse\renderer\frame_buffer.h" />
     <ClInclude Include="src\eclipse\renderer\graphics_context.h" />
     <ClInclude Include="src\eclipse\renderer\index_buffer.h" />
@@ -195,6 +195,7 @@
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h" />
     <ClInclude Include="src\eclipse\scene\components.h" />
     <ClInclude Include="src\eclipse\scene\entity.h" />
+    <ClInclude Include="src\eclipse\scene\particle_system.h" />
     <ClInclude Include="src\eclipse\scene\scene.h" />
     <ClInclude Include="src\eclipse\scene\scene_camera.h" />
     <ClInclude Include="src\eclipse\scene\scriptable_entity.h" />
@@ -629,7 +630,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\eclipse\scene\particle_system.cpp" />
     <ClCompile Include="src\eclipse\core\application.cpp" />
     <ClCompile Include="src\eclipse\core\log.cpp" />
     <ClCompile Include="src\eclipse\core\window.cpp" />
@@ -653,6 +653,7 @@
     <ClCompile Include="src\eclipse\renderer\vertex_array.cpp" />
     <ClCompile Include="src\eclipse\renderer\vertex_buffer.cpp" />
     <ClCompile Include="src\eclipse\scene\entity.cpp" />
+    <ClCompile Include="src\eclipse\scene\particle_system.cpp" />
     <ClCompile Include="src\eclipse\scene\scene.cpp" />
     <ClCompile Include="src\eclipse\scene\scene_camera.cpp" />
     <ClCompile Include="src\eclipse\utils\random.cpp" />

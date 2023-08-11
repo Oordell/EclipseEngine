@@ -45,7 +45,7 @@ void Player::load_asserts() { ship_texture_ = eclipse::Texture2D::create("assets
 void Player::on_update(eclipse::Timestep timestep) {
 	time_ += timestep;
 
-	if (eclipse::InputManager::is_key_pressed(EC_KEY_SPACE)) {
+	if (eclipse::InputManager::is_key_pressed(eclipse::KeyCode::space)) {
 		velocity_.y += engine_power_;
 		if (velocity_.y < 0.0F) {
 			velocity_.y += engine_power_ * 2.0F;
