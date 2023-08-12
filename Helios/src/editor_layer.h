@@ -22,6 +22,7 @@ private:
 	ref<FrameBuffer> frame_buffer_;
 	ref<Scene> active_scene_;
 	Entity square_entity_;
+	Entity red_square_entity_;
 	Entity camera_entity_;
 	Entity second_camera_;
 	bool use_primary_camera_ = true;

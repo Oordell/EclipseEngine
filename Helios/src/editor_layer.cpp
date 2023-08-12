@@ -15,8 +15,11 @@ void EditorLayer::on_attach() {
 	frame_buffer_ = FrameBuffer::create({.width = 1280, .height = 720});
 
 	active_scene_  = make_ref<Scene>();
-	square_entity_ = active_scene_->create_entity();
+	square_entity_ = active_scene_->create_entity("Green square");
 	square_entity_.add_component<component::Color>(glm::vec4 {0.2F, 0.9F, 0.3F, 1.0F});
+
+	red_square_entity_ = active_scene_->create_entity("Red square");
+	red_square_entity_.add_component<component::Color>(glm::vec4 {0.9F, 0.2F, 0.3F, 1.0F});
 
 	camera_entity_ = active_scene_->create_entity("Camera Entity");
 	camera_entity_.add_component<component::Camera>();
