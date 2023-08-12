@@ -1,6 +1,7 @@
 #pragma once
 
 #include "eclipse.h"
+#include "panels/scene_hierarchy_panel.h"
 
 namespace eclipse {
 
@@ -33,6 +34,8 @@ private:
 	WindowSize viewport_size_ {.width = 0, .height = 0};
 	bool viewport_focused_ {false};
 	bool viewport_hovered_ {false};
+
+	SceneHierarchyPanel scene_hierarchy_panel_;
 };
 
 }  // namespace eclipse

@@ -55,6 +55,8 @@ void EditorLayer::on_attach() {
 
 	camera_entity_.add_component<component::NativeScript>().bind<CameraController>();
 	second_camera_.add_component<component::NativeScript>().bind<CameraController>();
+
+	scene_hierarchy_panel_.set_context(active_scene_);
 }
 
 void EditorLayer::on_detach() { EC_PROFILE_FUNCTION(); }
@@ -157,6 +159,8 @@ void EditorLayer::on_imgui_render() {
 		}
 		ImGui::EndMenuBar();
 	}
+
+	scene_hierarchy_panel_.on_imgui_render();
 
 	ImGui::Begin("Settings");
 

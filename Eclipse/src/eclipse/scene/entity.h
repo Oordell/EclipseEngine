@@ -41,6 +41,12 @@ public:
 
 	operator bool() { return ((scene_ != nullptr) && (entity_handle_ != entt::null)); }
 
+	operator uint32_t() { return static_cast<uint32_t>(entity_handle_); }
+
+	operator uint64_t() { return static_cast<uint64_t>(entity_handle_); }
+
+	auto operator<=>(const Entity&) const = default;
+
 private:
 	void validate_members() const {
 		EC_CORE_ASSERT(scene_ != nullptr, "Scene is a null pointer!");
