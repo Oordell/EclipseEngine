@@ -14,6 +14,11 @@ public:
 private:
 	void draw_entity_node(Entity entity);
 	void draw_components(Entity entity);
+	void draw_tag_component(Entity entity);
+	void draw_transform_component(Entity entity);
+	void draw_camera_component(Entity entity);
+	void draw_color_component(Entity entity);
+	void draw_sprite_renderer_component(Entity entity);
 
 	ref<Scene> context_;
 	Entity selection_context_;

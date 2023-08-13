@@ -46,6 +46,14 @@ void SceneHierarchyPanel::draw_entity_node(Entity entity) {
 }
 
 void SceneHierarchyPanel::draw_components(Entity entity) {
+	draw_tag_component(entity);
+	draw_transform_component(entity);
+	draw_camera_component(entity);
+	draw_color_component(entity);
+	draw_sprite_renderer_component(entity);
+}
+
+void SceneHierarchyPanel::draw_tag_component(Entity entity) {
 	if (entity.has_component<component::Tag>()) {
 		auto& tag = entity.get_component<component::Tag>().tag;
 
@@ -56,7 +64,9 @@ void SceneHierarchyPanel::draw_components(Entity entity) {
 			tag = std::string(buffer);
 		}
 	}
+}
 
+void SceneHierarchyPanel::draw_transform_component(Entity entity) {
 	if (entity.has_component<component::Transform>()) {
 		if (ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::Transform).hash_code()),
 		                      ImGuiTreeNodeFlags_DefaultOpen, "Transform")) {
@@ -65,7 +75,9 @@ void SceneHierarchyPanel::draw_components(Entity entity) {
 			ImGui::TreePop();
 		}
 	}
+}
 
+void SceneHierarchyPanel::draw_camera_component(Entity entity) {
 	if (entity.has_component<component::Camera>()) {
 		if (ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::Camera).hash_code()), ImGuiTreeNodeFlags_DefaultOpen,
 		                      "Camera")) {
@@ -127,6 +139,28 @@ void SceneHierarchyPanel::draw_components(Entity entity) {
 
 			ImGui::Checkbox("Fixed Aspect Ratio", &camera_component.fixed_aspect_ratio);
 
+			ImGui::TreePop();
+		}
+	}
+}
+
+void SceneHierarchyPanel::draw_color_component(Entity entity) {
+	if (entity.has_component<component::Color>()) {
+		if (ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::Color).hash_code()), ImGuiTreeNodeFlags_DefaultOpen,
+		                      "Color")) {
+			auto& color = entity.get_component<component::Color>().color;
+			ImGui::ColorEdit4("Color", glm::value_ptr(color));
+			ImGui::TreePop();
+		}
+	}
+}
+
+void SceneHierarchyPanel::draw_sprite_renderer_component(Entity entity) {
+	if (entity.has_component<component::SpriteRenderer>()) {
+		if (ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::SpriteRenderer).hash_code()),
+		                      ImGuiTreeNodeFlags_DefaultOpen, "Sprite Renderer")) {
+			auto& color = entity.get_component<component::SpriteRenderer>().color;
+			ImGui::ColorEdit4("Color", glm::value_ptr(color));
 			ImGui::TreePop();
 		}
 	}

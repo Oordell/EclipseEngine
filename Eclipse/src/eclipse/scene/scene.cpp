@@ -43,10 +43,16 @@ void Scene::on_update(Timestep timestep) {
 	if (main_camera != nullptr) {
 		Renderer2D::begin_scene({.projection = main_camera->get_projection(), .transform = *camera_transform});
 
-		auto group = registry_.view<component::Transform, component::Color>();
-		for (auto entity : group) {
-			const auto& [trans, color] = group.get<component::Transform, component::Color>(entity);
+		auto color_group = registry_.view<component::Transform, component::Color>();
+		for (auto entity : color_group) {
+			const auto& [trans, color] = color_group.get<component::Transform, component::Color>(entity);
 			Renderer2D::draw_quad({.transform = trans, .common = {.color = color}});
+		}
+
+		auto sprite_group = registry_.view<component::Transform, component::SpriteRenderer>();
+		for (auto entity : sprite_group) {
+			const auto& [trans, sprite_renderer] = sprite_group.get<component::Transform, component::SpriteRenderer>(entity);
+			Renderer2D::draw_quad({.transform = trans, .common = {.color = sprite_renderer.color}});
 		}
 
 		Renderer2D::end_scene();

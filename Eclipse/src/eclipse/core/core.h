@@ -40,14 +40,14 @@
 #define EC_ASSERT(x, ...)                          \
 	{                                                 \
 		if (!(x)) {                                      \
-			EC_ERROR("Assertion Failed: {0}", __VA_ARGS__); \
+			EC_FATAL("Assertion Failed: {0}", __VA_ARGS__); \
 			EC_DEBUGBREAK();                                \
 		}                                                \
 	}
 #define EC_CORE_ASSERT(x, ...)                          \
 	{                                                      \
 		if (!(x)) {                                           \
-			EC_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); \
+			EC_CORE_FATAL("Assertion Failed: {0}", __VA_ARGS__); \
 			EC_DEBUGBREAK();                                     \
 		}                                                     \
 	}

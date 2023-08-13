@@ -19,7 +19,7 @@ void EditorLayer::on_attach() {
 	square_entity_.add_component<component::Color>(glm::vec4 {0.2F, 0.9F, 0.3F, 1.0F});
 
 	red_square_entity_ = active_scene_->create_entity("Red square");
-	red_square_entity_.add_component<component::Color>(glm::vec4 {0.9F, 0.2F, 0.3F, 1.0F});
+	red_square_entity_.add_component<component::SpriteRenderer>(glm::vec4 {0.9F, 0.2F, 0.3F, 1.0F});
 
 	camera_entity_ = active_scene_->create_entity("Camera Entity");
 	camera_entity_.add_component<component::Camera>();
@@ -175,17 +175,6 @@ void EditorLayer::on_imgui_render() {
 	ImGui::Text("Indices   : %d", stats.get_total_index_count());
 
 	ImGui::Separator();
-
-	auto& square_color = square_entity_.get_component<component::Color>().color;
-	ImGui::ColorEdit4("Square color", glm::value_ptr(square_color));
-
-	ImGui::DragFloat3("Camera transform",
-	                  glm::value_ptr(camera_entity_.get_component<component::Transform>().transform[3]));
-
-	if (ImGui::Checkbox("Camera A", &use_primary_camera_)) {
-		camera_entity_.get_component<component::Camera>().primary = use_primary_camera_;
-		second_camera_.get_component<component::Camera>().primary = !use_primary_camera_;
-	}
 
 	ImGui::End();
 

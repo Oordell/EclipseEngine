@@ -46,6 +46,16 @@ struct Color {
 	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
 };
 
+struct SpriteRenderer {
+	SpriteRenderer()                      = default;
+	~SpriteRenderer()                     = default;
+	SpriteRenderer(const SpriteRenderer&) = default;
+
+	SpriteRenderer(const glm::vec4& color) : color(color) {}
+
+	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
+};
+
 struct Camera {
 	Camera()              = default;
 	~Camera()             = default;
