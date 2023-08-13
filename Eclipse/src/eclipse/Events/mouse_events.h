@@ -53,7 +53,7 @@ class ECLIPSE_API MouseButtonEvent : public Event {
 public:
 	inline MouseCode get_mouse_button() const { return button; }
 
-	EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+	EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput | EventCategoryMouseButton)
 
 protected:
 	explicit MouseButtonEvent(MouseCode button) : button(button) {}

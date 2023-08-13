@@ -1,8 +1,9 @@
 #pragma once
 
 #include "eclipse/core/core.h"
-#include "spdlog/spdlog.h"
-#include "spdlog/fmt/ostr.h"
+
+#include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
 
 #include <chrono>
 
