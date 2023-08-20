@@ -14,7 +14,7 @@ void SceneHierarchyPanel::on_imgui_render() {
 	ImGui::Begin("Scene Hierarchy");
 
 	context_->get_registry().each([&](auto entity_id) {
-		Entity entity {entity_id, ref<Scene>(context_)};
+		Entity entity {entity_id, context_.get()};
 		draw_entity_node(entity);
 	});
 
@@ -22,11 +22,40 @@ void SceneHierarchyPanel::on_imgui_render() {
 		selection_context_ = {};
 	}
 
+	// Right click on blank space
+	ImGuiPopupFlags flags = ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight;
+	if (ImGui::BeginPopupContextWindow(0, flags)) {
+		if (ImGui::MenuItem("Create empty entity")) {
+			context_->create_entity("Empty entity");
+		}
+		ImGui::EndPopup();
+	}
+
 	ImGui::End();
 
 	ImGui::Begin("Properties");
 	if (selection_context_) {
 		draw_components(selection_context_);
+
+		if (ImGui::Button("Add Component")) {
+			ImGui::OpenPopup("AddComponent");
+		}
+		if (ImGui::BeginPopup("AddComponent")) {
+			if (ImGui::MenuItem("Camera")) {
+				selection_context_.add_component<component::Camera>();
+				ImGui::CloseCurrentPopup();
+			}
+			if (ImGui::MenuItem("Sprite Renderer")) {
+				selection_context_.add_component<component::SpriteRenderer>();
+				ImGui::CloseCurrentPopup();
+			}
+			if (ImGui::MenuItem("Color")) {
+				selection_context_.add_component<component::Color>();
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
 	}
 	ImGui::End();
 }
@@ -41,8 +70,24 @@ void SceneHierarchyPanel::draw_entity_node(Entity entity) {
 	if (ImGui::IsItemClicked()) {
 		selection_context_ = entity;
 	}
+
+	bool entity_deleted = false;
+	if (ImGui::BeginPopupContextItem()) {
+		if (ImGui::MenuItem("Delete entity")) {
+			entity_deleted = true;
+		}
+		ImGui::EndPopup();
+	}
+
 	if (opened) {
 		ImGui::TreePop();
+	}
+
+	if (entity_deleted) {
+		if (selection_context_ == entity) {
+			selection_context_ = {};
+		}
+		context_->destroy_entity(entity);
 	}
 }
 
@@ -68,9 +113,10 @@ void SceneHierarchyPanel::draw_tag_component(Entity entity) {
 }
 
 void SceneHierarchyPanel::draw_transform_component(Entity entity) {
+	static const ImGuiTreeNodeFlags tree_node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap;
 	if (entity.has_component<component::Transform>()) {
-		if (ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::Transform).hash_code()),
-		                      ImGuiTreeNodeFlags_DefaultOpen, "Transform")) {
+		if (ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::Transform).hash_code()), tree_node_flags,
+		                      "Transform")) {
 			auto& transform = entity.get_component<component::Transform>();
 			draw_vec3_control({.values = transform.translation, .label = "Translation"});
 			glm::vec3 rotation = glm::degrees(transform.rotation);
@@ -83,9 +129,9 @@ void SceneHierarchyPanel::draw_transform_component(Entity entity) {
 }
 
 void SceneHierarchyPanel::draw_camera_component(Entity entity) {
+	static const ImGuiTreeNodeFlags tree_node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap;
 	if (entity.has_component<component::Camera>()) {
-		if (ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::Camera).hash_code()), ImGuiTreeNodeFlags_DefaultOpen,
-		                      "Camera")) {
+		if (ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::Camera).hash_code()), tree_node_flags, "Camera")) {
 			auto& camera_component = entity.get_component<component::Camera>();
 			auto& camera           = camera_component.camera;
 
@@ -150,17 +196,40 @@ void SceneHierarchyPanel::draw_camera_component(Entity entity) {
 }
 
 void SceneHierarchyPanel::draw_color_component(Entity entity) {
+	static const ImGuiTreeNodeFlags tree_node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap;
 	if (entity.has_component<component::Color>()) {
-		if (ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::Color).hash_code()), ImGuiTreeNodeFlags_DefaultOpen,
-		                      "Color")) {
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2 {4.0F, 4.0F});
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
+		bool open =
+		    ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::Color).hash_code()), tree_node_flags, "Color");
+		ImGui::SameLine(ImGui::GetWindowWidth() - 25.0F);
+		if (ImGui::Button("+", ImVec2 {20.0F, 20.0F})) {
+			ImGui::OpenPopup("ComponentSettings");
+		}
+		ImGui::PopStyleVar(2);
+
+		bool remove_component = false;
+		if (ImGui::BeginPopup("ComponentSettings")) {
+			if (ImGui::MenuItem("Remove Component")) {
+				remove_component = true;
+			}
+			ImGui::EndPopup();
+		}
+
+		if (open) {
 			auto& color = entity.get_component<component::Color>().color;
 			ImGui::ColorEdit4("Color", glm::value_ptr(color));
 			ImGui::TreePop();
+		}
+
+		if (remove_component) {
+			entity.remove_component<component::Color>();
 		}
 	}
 }
 
 void SceneHierarchyPanel::draw_sprite_renderer_component(Entity entity) {
+	static const ImGuiTreeNodeFlags tree_node_flags = ImGuiTreeNodeFlags_DefaultOpen | tree_node_flags;
 	if (entity.has_component<component::SpriteRenderer>()) {
 		if (ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::SpriteRenderer).hash_code()),
 		                      ImGuiTreeNodeFlags_DefaultOpen, "Sprite Renderer")) {

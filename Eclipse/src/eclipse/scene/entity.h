@@ -10,7 +10,7 @@ public:
 	Entity()              = default;
 	~Entity()             = default;
 	Entity(const Entity&) = default;
-	Entity(entt::entity entity, ref<Scene> scene);
+	Entity(entt::entity entity, Scene* scene);
 
 	template <typename T, typename... Args>
 	T& add_component(Args&&... args) {
@@ -45,6 +45,8 @@ public:
 
 	operator uint64_t() { return static_cast<uint64_t>(entity_handle_); }
 
+	operator entt::entity() const { return entity_handle_; }
+
 	auto operator<=>(const Entity&) const = default;
 
 private:
@@ -55,7 +57,7 @@ private:
 	}
 
 	entt::entity entity_handle_ {entt::null};
-	ref<Scene> scene_ {nullptr};
+	Scene* scene_ {nullptr};
 };
 
 }  // namespace eclipse

@@ -18,6 +18,7 @@ public:
 	void on_viewport_resize(const WindowSize& new_size);
 
 	Entity create_entity(const std::string& name = "");
+	void destroy_entity(Entity entity);
 
 	entt::registry& get_registry() { return registry_; }
 
