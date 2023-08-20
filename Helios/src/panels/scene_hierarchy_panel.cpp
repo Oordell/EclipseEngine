@@ -1,6 +1,7 @@
 #include "scene_hierarchy_panel.h"
 
 #include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace eclipse {
@@ -70,8 +71,12 @@ void SceneHierarchyPanel::draw_transform_component(Entity entity) {
 	if (entity.has_component<component::Transform>()) {
 		if (ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::Transform).hash_code()),
 		                      ImGuiTreeNodeFlags_DefaultOpen, "Transform")) {
-			auto& transform = entity.get_component<component::Transform>().transform;
-			ImGui::DragFloat3("Position", glm::value_ptr(transform[3]), 0.1F);
+			auto& transform = entity.get_component<component::Transform>();
+			draw_vec3_control({.values = transform.translation, .label = "Translation"});
+			glm::vec3 rotation = glm::degrees(transform.rotation);
+			draw_vec3_control({.values = rotation, .label = "Rotation"});
+			transform.rotation = glm::radians(rotation);
+			draw_vec3_control({.values = transform.scale, .label = "Scale", .reset_value = 1.0F});
 			ImGui::TreePop();
 		}
 	}
@@ -164,6 +169,69 @@ void SceneHierarchyPanel::draw_sprite_renderer_component(Entity entity) {
 			ImGui::TreePop();
 		}
 	}
+}
+
+void SceneHierarchyPanel::draw_vec3_control(const Vec3Controls& controls) {
+	ImGui::PushID(controls.label.c_str());
+	ImGui::Columns(2);
+
+	ImGui::SetColumnWidth(0, controls.column_width);
+	ImGui::Text(controls.label.c_str());
+	ImGui::NextColumn();
+
+	ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2 {4.0F, 2.0F});
+
+	float line_height  = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0F;
+	ImVec2 button_size = {line_height + 3.0F, line_height};
+
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 {0.8F, 0.1F, 0.15F, 1.0F});
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 {0.9F, 0.2F, 0.2F, 1.0F});
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 {0.8F, 0.1F, 0.15F, 1.0F});
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
+	if (ImGui::Button("X", button_size)) {
+		controls.values.x = controls.reset_value;
+	}
+	ImGui::PopStyleVar(1);
+	ImGui::PopStyleColor(3);
+
+	ImGui::SameLine();
+	ImGui::DragFloat("##X", &controls.values.x, 0.1F, 0.0F, 0.0F, "%.2f");
+	ImGui::PopItemWidth();
+	ImGui::SameLine();
+
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 {0.2F, 0.7F, 0.2F, 1.0F});
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 {0.3F, 0.8F, 0.3F, 1.0F});
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 {0.2F, 0.7F, 0.2F, 1.0F});
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
+	if (ImGui::Button("Y", button_size)) {
+		controls.values.y = controls.reset_value;
+	}
+	ImGui::PopStyleVar(1);
+	ImGui::PopStyleColor(3);
+
+	ImGui::SameLine();
+	ImGui::DragFloat("##Y", &controls.values.y, 0.1F, 0.0F, 0.0F, "%.2f");
+	ImGui::PopItemWidth();
+	ImGui::SameLine();
+
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 {0.1F, 0.25F, 0.8F, 1.0F});
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 {0.2F, 0.35F, 0.9F, 1.0F});
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 {0.1F, 0.25F, 0.8F, 1.0F});
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
+	if (ImGui::Button("Z", button_size)) {
+		controls.values.z = controls.reset_value;
+	}
+	ImGui::PopStyleVar(1);
+	ImGui::PopStyleColor(3);
+
+	ImGui::SameLine();
+	ImGui::DragFloat("##Z", &controls.values.z, 0.1F, 0.0F, 0.0F, "%.2f");
+	ImGui::PopItemWidth();
+
+	ImGui::PopStyleVar();
+	ImGui::Columns(1);
+	ImGui::PopID();
 }
 
 }  // namespace eclipse

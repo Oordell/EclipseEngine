@@ -33,25 +33,25 @@ void EditorLayer::on_attach() {
 		~CameraController() override = default;
 
 		void on_create() override {
-			auto& transform = get_component<component::Transform>().transform;
-			transform[3][0] = rand() % 10 - 5.0F;
+			auto& transform         = get_component<component::Transform>();
+			transform.translation.x = rand() % 10 - 5.0F;
 		}
 
 		void on_destroy() override {}
 
 		void on_update(Timestep timestep) override {
-			auto& transform = get_component<component::Transform>().transform;
+			auto& translation = get_component<component::Transform>().translation;
 
 			static const float camera_move_speed = 5.0F;
 			if (InputManager::is_key_pressed(KeyCode::A)) {
-				transform[3][0] -= camera_move_speed * timestep;
+				translation.x -= camera_move_speed * timestep;
 			} else if (InputManager::is_key_pressed(KeyCode::D)) {
-				transform[3][0] += camera_move_speed * timestep;
+				translation.x += camera_move_speed * timestep;
 			}
 			if (InputManager::is_key_pressed(KeyCode::W)) {
-				transform[3][1] += camera_move_speed * timestep;
+				translation.y += camera_move_speed * timestep;
 			} else if (InputManager::is_key_pressed(KeyCode::S)) {
-				transform[3][1] -= camera_move_speed * timestep;
+				translation.y -= camera_move_speed * timestep;
 			}
 		}
 	};

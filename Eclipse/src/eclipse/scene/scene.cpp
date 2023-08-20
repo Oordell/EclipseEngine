@@ -27,32 +27,32 @@ void Scene::on_update(Timestep timestep) {
 	});
 
 	// Render 2D:
-	Camera* main_camera         = nullptr;
-	glm::mat4* camera_transform = nullptr;
+	Camera* main_camera = nullptr;
+	glm::mat4 camera_transform;
 
 	auto camera_view = registry_.view<component::Transform, component::Camera>();
 	for (auto entity : camera_view) {
 		auto [transform, camera] = camera_view.get<component::Transform, component::Camera>(entity);
 		if (camera.primary) {
 			main_camera      = &camera.camera;
-			camera_transform = &transform.transform;
+			camera_transform = transform.get_transform();
 			break;
 		}
 	}
 
 	if (main_camera != nullptr) {
-		Renderer2D::begin_scene({.projection = main_camera->get_projection(), .transform = *camera_transform});
+		Renderer2D::begin_scene({.projection = main_camera->get_projection(), .transform = camera_transform});
 
 		auto color_group = registry_.view<component::Transform, component::Color>();
 		for (auto entity : color_group) {
 			const auto& [trans, color] = color_group.get<component::Transform, component::Color>(entity);
-			Renderer2D::draw_quad({.transform = trans, .common = {.color = color}});
+			Renderer2D::draw_quad({.transform = trans.get_transform(), .common = {.color = color}});
 		}
 
 		auto sprite_group = registry_.view<component::Transform, component::SpriteRenderer>();
 		for (auto entity : sprite_group) {
 			const auto& [trans, sprite_renderer] = sprite_group.get<component::Transform, component::SpriteRenderer>(entity);
-			Renderer2D::draw_quad({.transform = trans, .common = {.color = sprite_renderer.color}});
+			Renderer2D::draw_quad({.transform = trans.get_transform(), .common = {.color = sprite_renderer.color}});
 		}
 
 		Renderer2D::end_scene();

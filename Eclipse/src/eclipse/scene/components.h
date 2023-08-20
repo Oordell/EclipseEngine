@@ -5,6 +5,7 @@
 #include "eclipse/core/timestep.h"
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace eclipse::component {
 
@@ -23,13 +24,18 @@ struct Transform {
 	~Transform()                = default;
 	Transform(const Transform&) = default;
 
-	Transform(const glm::mat4& trans) : transform(trans) {}
+	glm::mat4 get_transform() const {
+		static const glm::mat4 IDENTITY_MATRIX = glm::mat4(1.0F);
 
-	operator glm::mat4() { return transform; }
+		glm::mat4 rotation_mat = glm::rotate(IDENTITY_MATRIX, rotation.x, {1, 0, 0}) *
+		                         glm::rotate(IDENTITY_MATRIX, rotation.y, {0, 1, 0}) *
+		                         glm::rotate(IDENTITY_MATRIX, rotation.z, {0, 0, 1});
+		return glm::translate(IDENTITY_MATRIX, translation) * rotation_mat * glm::scale(IDENTITY_MATRIX, scale);
+	}
 
-	operator const glm::mat4&() const { return transform; }
-
-	glm::mat4 transform {1.0F};
+	glm::vec3 translation {0.0F, 0.0F, 0.0F};
+	glm::vec3 rotation {0.0F, 0.0F, 0.0F};
+	glm::vec3 scale {1.0F, 1.0F, 1.0F};
 };
 
 struct Color {
