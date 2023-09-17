@@ -18,6 +18,8 @@ public:
 	void begin();
 	void end();
 
+	void set_dark_theme_colors();
+
 	void set_block_events(bool block) { block_events_ = block; }
 
 private:

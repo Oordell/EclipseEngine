@@ -7,7 +7,9 @@ namespace eclipse {
 
 class Helios : public Application {
 public:
-	Helios() : Application("Helios (Eclipse Editor)") { push_layer(new EditorLayer()); }
+	Helios() : Application({.title = "Helios (Eclipse Editor)", .window_size = {.width = 1600, .height = 900}}) {
+		push_layer(new EditorLayer());
+	}
 
 	~Helios() {}
 };

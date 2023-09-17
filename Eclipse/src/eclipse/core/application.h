@@ -14,7 +14,7 @@ namespace eclipse {
 
 class ECLIPSE_API Application {
 public:
-	Application(const std::string& name = "Eclipse App");
+	Application(const WindowProps& window_properties);
 	virtual ~Application();
 	void close();
 

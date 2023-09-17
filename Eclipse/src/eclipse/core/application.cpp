@@ -9,11 +9,11 @@ namespace eclipse {
 
 Application* Application::instance_ = nullptr;
 
-Application::Application(const std::string& name) {
+Application::Application(const WindowProps& window_properties) {
 	EC_PROFILE_FUNCTION();
 	EC_CORE_ASSERT(!instance_, "Application already exists!");
 	instance_ = this;
-	window_   = Window::create({.title = name});
+	window_   = Window::create(window_properties);
 	window_->set_event_callback(EC_BIND_EVENT_FN(Application::on_event));
 
 	Renderer::init();

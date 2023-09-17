@@ -6,7 +6,7 @@
 
 class Sandbox : public eclipse::Application {
 public:
-	Sandbox() {
+	Sandbox() : Application({.title = "Sandbox App"}) {
 		//	push_layer(new ExampleLayer());
 		push_layer(new Sandbox2D());
 		//	push_layer(new GameLayer());

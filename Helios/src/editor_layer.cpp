@@ -12,7 +12,7 @@ void EditorLayer::on_attach() {
 	checkerboard_texture_   = Texture2D::create("assets/textures/Checkerboard.png");
 	olliver_ordell_texture_ = Texture2D::create("assets/textures/olliver_ordell_logo.png");
 
-	frame_buffer_ = FrameBuffer::create({.width = 1280, .height = 720});
+	frame_buffer_ = FrameBuffer::create({.width = 1600, .height = 900});
 
 	active_scene_  = make_ref<Scene>();
 	square_entity_ = active_scene_->create_entity("Green square");
@@ -144,11 +144,15 @@ void EditorLayer::on_imgui_render() {
 	}
 
 	// DockSpace
-	ImGuiIO& io = ImGui::GetIO();
+	ImGuiIO& io           = ImGui::GetIO();
+	ImGuiStyle& style     = ImGui::GetStyle();
+	auto min_window_size  = style.WindowMinSize;
+	style.WindowMinSize.x = 380.0F;
 	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
 		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 	}
+	style.WindowMinSize.x = min_window_size.x;
 
 	if (ImGui::BeginMenuBar()) {
 		if (ImGui::BeginMenu("File")) {

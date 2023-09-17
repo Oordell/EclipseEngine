@@ -36,26 +36,6 @@ void SceneHierarchyPanel::on_imgui_render() {
 	ImGui::Begin("Properties");
 	if (selection_context_) {
 		draw_components(selection_context_);
-
-		if (ImGui::Button("Add Component")) {
-			ImGui::OpenPopup("AddComponent");
-		}
-		if (ImGui::BeginPopup("AddComponent")) {
-			if (ImGui::MenuItem("Camera")) {
-				selection_context_.add_component<component::Camera>();
-				ImGui::CloseCurrentPopup();
-			}
-			if (ImGui::MenuItem("Sprite Renderer")) {
-				selection_context_.add_component<component::SpriteRenderer>();
-				ImGui::CloseCurrentPopup();
-			}
-			if (ImGui::MenuItem("Color")) {
-				selection_context_.add_component<component::Color>();
-				ImGui::CloseCurrentPopup();
-			}
-
-			ImGui::EndPopup();
-		}
 	}
 	ImGui::End();
 }
@@ -66,6 +46,7 @@ void SceneHierarchyPanel::draw_entity_node(Entity entity) {
 
 	ImGuiTreeNodeFlags flags =
 	    ((selection_context_ == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
+	flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 	bool opened = ImGui::TreeNodeEx(reinterpret_cast<void*>(entity_id), flags, tag_component.tag.c_str());
 	if (ImGui::IsItemClicked()) {
 		selection_context_ = entity;
@@ -91,122 +72,28 @@ void SceneHierarchyPanel::draw_entity_node(Entity entity) {
 	}
 }
 
-void SceneHierarchyPanel::draw_components(Entity entity) {
-	draw_tag_component(entity);
-	draw_transform_component(entity);
-	draw_camera_component(entity);
-	draw_color_component(entity);
-	draw_sprite_renderer_component(entity);
-}
+template <typename ComponentType>
+static void draw_component(const std::string& name, Entity entity, auto ui_function) {
+	const ImGuiTreeNodeFlags tree_node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed |
+	                                           ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding |
+	                                           ImGuiTreeNodeFlags_AllowItemOverlap;
+	if (entity.has_component<ComponentType>()) {
+		auto& component                 = entity.get_component<ComponentType>();
+		ImVec2 content_region_available = ImGui::GetContentRegionAvail();
 
-void SceneHierarchyPanel::draw_tag_component(Entity entity) {
-	if (entity.has_component<component::Tag>()) {
-		auto& tag = entity.get_component<component::Tag>().tag;
-
-		static char buffer[256];
-		memset(buffer, 0, sizeof(buffer));
-		strcpy_s(buffer, sizeof(buffer), tag.c_str());
-		if (ImGui::InputText("Tag", buffer, sizeof(buffer))) {
-			tag = std::string(buffer);
-		}
-	}
-}
-
-void SceneHierarchyPanel::draw_transform_component(Entity entity) {
-	static const ImGuiTreeNodeFlags tree_node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap;
-	if (entity.has_component<component::Transform>()) {
-		if (ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::Transform).hash_code()), tree_node_flags,
-		                      "Transform")) {
-			auto& transform = entity.get_component<component::Transform>();
-			draw_vec3_control({.values = transform.translation, .label = "Translation"});
-			glm::vec3 rotation = glm::degrees(transform.rotation);
-			draw_vec3_control({.values = rotation, .label = "Rotation"});
-			transform.rotation = glm::radians(rotation);
-			draw_vec3_control({.values = transform.scale, .label = "Scale", .reset_value = 1.0F});
-			ImGui::TreePop();
-		}
-	}
-}
-
-void SceneHierarchyPanel::draw_camera_component(Entity entity) {
-	static const ImGuiTreeNodeFlags tree_node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap;
-	if (entity.has_component<component::Camera>()) {
-		if (ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::Camera).hash_code()), tree_node_flags, "Camera")) {
-			auto& camera_component = entity.get_component<component::Camera>();
-			auto& camera           = camera_component.camera;
-
-			ImGui::Checkbox("Primary", &camera_component.primary);
-
-			const char* projection_type_string[] = {"Perspective", "Orthographic"};
-			const char* current_projection_type_string =
-			    projection_type_string[static_cast<uint16_t>(camera.get_projection_type())];
-			if (ImGui::BeginCombo("Projection", current_projection_type_string)) {
-				for (uint16_t i = 0; i < NUM_OF_PROJECTION_TYPES; i++) {
-					bool is_selected = current_projection_type_string == projection_type_string[i];
-					if (ImGui::Selectable(projection_type_string[i], is_selected)) {
-						current_projection_type_string = projection_type_string[i];
-						camera.set_projection_type(static_cast<ProjectionType>(i));
-					}
-					if (is_selected) {
-						ImGui::SetItemDefaultFocus();
-					}
-				}
-				ImGui::EndCombo();
-			}
-
-			if (camera.get_projection_type() == ProjectionType::perspective) {
-				float perspective_fov = utils::rad_to_deg(camera.get_perspective_vertical_fov());
-				if (ImGui::DragFloat("Vertical FOV", &perspective_fov)) {
-					camera.set_perspective_vertical_fov(utils::deg_to_rad(perspective_fov));
-				}
-
-				float perspective_near_clip = camera.get_perspective_near_clip();
-				if (ImGui::DragFloat("Near", &perspective_near_clip)) {
-					camera.set_perspective_near_clip(perspective_near_clip);
-				}
-
-				float perspective_far_clip = camera.get_perspective_far_clip();
-				if (ImGui::DragFloat("Far", &perspective_far_clip)) {
-					camera.set_perspective_far_clip(perspective_far_clip);
-				}
-			}
-
-			if (camera.get_projection_type() == ProjectionType::orthographic) {
-				float ortho_size = camera.get_orthographic_size();
-				if (ImGui::DragFloat("Size", &ortho_size)) {
-					camera.set_orthographic_size(ortho_size);
-				}
-
-				float ortho_near_clip = camera.get_orthographic_near_clip();
-				if (ImGui::DragFloat("Near", &ortho_near_clip)) {
-					camera.set_orthographic_near_clip(ortho_near_clip);
-				}
-
-				float ortho_far_clip = camera.get_orthographic_far_clip();
-				if (ImGui::DragFloat("Far", &ortho_far_clip)) {
-					camera.set_orthographic_far_clip(ortho_far_clip);
-				}
-			}
-
-			ImGui::Checkbox("Fixed Aspect Ratio", &camera_component.fixed_aspect_ratio);
-
-			ImGui::TreePop();
-		}
-	}
-}
-
-void SceneHierarchyPanel::draw_color_component(Entity entity) {
-	static const ImGuiTreeNodeFlags tree_node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap;
-	if (entity.has_component<component::Color>()) {
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2 {4.0F, 4.0F});
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
+		float line_height = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0F;
+		ImGui::Separator();
 		bool open =
-		    ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::Color).hash_code()), tree_node_flags, "Color");
-		ImGui::SameLine(ImGui::GetWindowWidth() - 25.0F);
-		if (ImGui::Button("+", ImVec2 {20.0F, 20.0F})) {
+		    ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(ComponentType).hash_code()), tree_node_flags, name.c_str());
+		ImGui::PopStyleVar(2);
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
+		ImGui::SameLine(content_region_available.x - line_height * 0.5F);
+		if (ImGui::Button("+", ImVec2 {line_height, line_height})) {
 			ImGui::OpenPopup("ComponentSettings");
 		}
-		ImGui::PopStyleVar(2);
+		ImGui::PopStyleVar();
 
 		bool remove_component = false;
 		if (ImGui::BeginPopup("ComponentSettings")) {
@@ -217,30 +104,154 @@ void SceneHierarchyPanel::draw_color_component(Entity entity) {
 		}
 
 		if (open) {
-			auto& color = entity.get_component<component::Color>().color;
-			ImGui::ColorEdit4("Color", glm::value_ptr(color));
+			ui_function(component);
 			ImGui::TreePop();
 		}
 
 		if (remove_component) {
-			entity.remove_component<component::Color>();
+			entity.remove_component<ComponentType>();
 		}
 	}
+}
+
+void SceneHierarchyPanel::draw_components(Entity entity) {
+	draw_tag_component(entity);
+	draw_transform_component(entity);
+	draw_camera_component(entity);
+	draw_color_component(entity);
+	draw_sprite_renderer_component(entity);
+}
+
+void SceneHierarchyPanel::draw_tag_component(Entity entity) {
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2 {4.0F, 4.0F});
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
+
+	if (entity.has_component<component::Tag>()) {
+		auto& tag = entity.get_component<component::Tag>().tag;
+
+		static char buffer[256];
+		memset(buffer, 0, sizeof(buffer));
+		strcpy_s(buffer, sizeof(buffer), tag.c_str());
+		if (ImGui::InputText("##Tag", buffer, sizeof(buffer))) {
+			tag = std::string(buffer);
+		}
+	}
+
+	ImGui::SameLine();
+	ImGui::PushItemWidth(-1);
+
+	if (ImGui::Button("Add Component")) {
+		ImGui::OpenPopup("AddComponent");
+	}
+	if (ImGui::BeginPopup("AddComponent")) {
+		if (!entity.has_component<component::Camera>() && ImGui::MenuItem("Camera")) {
+			selection_context_.add_component<component::Camera>();
+			ImGui::CloseCurrentPopup();
+		}
+		if (!entity.has_component<component::SpriteRenderer>() && ImGui::MenuItem("Sprite Renderer")) {
+			selection_context_.add_component<component::SpriteRenderer>();
+			ImGui::CloseCurrentPopup();
+		}
+		if (!entity.has_component<component::Color>() && ImGui::MenuItem("Color")) {
+			selection_context_.add_component<component::Color>();
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+	ImGui::PopItemWidth();
+	ImGui::PopStyleVar(2);
+}
+
+void SceneHierarchyPanel::draw_transform_component(Entity entity) {
+	draw_component<component::Transform>("Transform", entity, [this](auto& component) {
+		draw_vec3_control({.values = component.translation, .label = "Translation"});
+		glm::vec3 rotation = glm::degrees(component.rotation);
+		draw_vec3_control({.values = rotation, .label = "Rotation"});
+		component.rotation = glm::radians(rotation);
+		draw_vec3_control({.values = component.scale, .label = "Scale", .reset_value = 1.0F});
+	});
+}
+
+void SceneHierarchyPanel::draw_camera_component(Entity entity) {
+	draw_component<component::Camera>("Camera", entity, [](auto& component) {
+		auto& camera = component.camera;
+
+		ImGui::Checkbox("Primary", &component.primary);
+
+		const char* projection_type_string[] = {"Perspective", "Orthographic"};
+		const char* current_projection_type_string =
+		    projection_type_string[static_cast<uint16_t>(camera.get_projection_type())];
+		if (ImGui::BeginCombo("Projection", current_projection_type_string)) {
+			for (uint16_t i = 0; i < NUM_OF_PROJECTION_TYPES; i++) {
+				bool is_selected = current_projection_type_string == projection_type_string[i];
+				if (ImGui::Selectable(projection_type_string[i], is_selected)) {
+					current_projection_type_string = projection_type_string[i];
+					camera.set_projection_type(static_cast<ProjectionType>(i));
+				}
+				if (is_selected) {
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndCombo();
+		}
+
+		if (camera.get_projection_type() == ProjectionType::perspective) {
+			float perspective_fov = utils::rad_to_deg(camera.get_perspective_vertical_fov());
+			if (ImGui::DragFloat("Vertical FOV", &perspective_fov)) {
+				camera.set_perspective_vertical_fov(utils::deg_to_rad(perspective_fov));
+			}
+
+			float perspective_near_clip = camera.get_perspective_near_clip();
+			if (ImGui::DragFloat("Near", &perspective_near_clip)) {
+				camera.set_perspective_near_clip(perspective_near_clip);
+			}
+
+			float perspective_far_clip = camera.get_perspective_far_clip();
+			if (ImGui::DragFloat("Far", &perspective_far_clip)) {
+				camera.set_perspective_far_clip(perspective_far_clip);
+			}
+		}
+
+		if (camera.get_projection_type() == ProjectionType::orthographic) {
+			float ortho_size = camera.get_orthographic_size();
+			if (ImGui::DragFloat("Size", &ortho_size)) {
+				camera.set_orthographic_size(ortho_size);
+			}
+
+			float ortho_near_clip = camera.get_orthographic_near_clip();
+			if (ImGui::DragFloat("Near", &ortho_near_clip)) {
+				camera.set_orthographic_near_clip(ortho_near_clip);
+			}
+
+			float ortho_far_clip = camera.get_orthographic_far_clip();
+			if (ImGui::DragFloat("Far", &ortho_far_clip)) {
+				camera.set_orthographic_far_clip(ortho_far_clip);
+			}
+		}
+
+		ImGui::Checkbox("Fixed Aspect Ratio", &component.fixed_aspect_ratio);
+	});
+}
+
+void SceneHierarchyPanel::draw_color_component(Entity entity) {
+	draw_component<component::Color>("Color", entity,
+	                                 [](auto& component) { ImGui::ColorEdit4("Color", glm::value_ptr(component.color)); });
 }
 
 void SceneHierarchyPanel::draw_sprite_renderer_component(Entity entity) {
-	static const ImGuiTreeNodeFlags tree_node_flags = ImGuiTreeNodeFlags_DefaultOpen | tree_node_flags;
-	if (entity.has_component<component::SpriteRenderer>()) {
-		if (ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(component::SpriteRenderer).hash_code()),
-		                      ImGuiTreeNodeFlags_DefaultOpen, "Sprite Renderer")) {
-			auto& color = entity.get_component<component::SpriteRenderer>().color;
-			ImGui::ColorEdit4("Color", glm::value_ptr(color));
-			ImGui::TreePop();
-		}
-	}
+	draw_component<component::SpriteRenderer>(
+	    "Sprite Renderer", entity, [](auto& component) { ImGui::ColorEdit4("Color", glm::value_ptr(component.color)); });
 }
 
 void SceneHierarchyPanel::draw_vec3_control(const Vec3Controls& controls) {
+	ImGuiIO& io                      = ImGui::GetIO();
+	auto [font_was_found, font_data] = fonts::FontLibrary::get_font_index_by_name("Roboto-Bold");
+	if (!font_was_found) {
+		EC_FATAL("The font was not found!");
+	}
+	ImFont* bold_font = io.Fonts->Fonts[font_data.index];
+
 	ImGui::PushID(controls.label.c_str());
 	ImGui::Columns(2);
 
@@ -257,10 +268,12 @@ void SceneHierarchyPanel::draw_vec3_control(const Vec3Controls& controls) {
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 {0.8F, 0.1F, 0.15F, 1.0F});
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 {0.9F, 0.2F, 0.2F, 1.0F});
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 {0.8F, 0.1F, 0.15F, 1.0F});
+	ImGui::PushFont(bold_font);
 	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
 	if (ImGui::Button("X", button_size)) {
 		controls.values.x = controls.reset_value;
 	}
+	ImGui::PopFont();
 	ImGui::PopStyleVar(1);
 	ImGui::PopStyleColor(3);
 
@@ -273,9 +286,11 @@ void SceneHierarchyPanel::draw_vec3_control(const Vec3Controls& controls) {
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 {0.3F, 0.8F, 0.3F, 1.0F});
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 {0.2F, 0.7F, 0.2F, 1.0F});
 	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
+	ImGui::PushFont(bold_font);
 	if (ImGui::Button("Y", button_size)) {
 		controls.values.y = controls.reset_value;
 	}
+	ImGui::PopFont();
 	ImGui::PopStyleVar(1);
 	ImGui::PopStyleColor(3);
 
@@ -288,9 +303,11 @@ void SceneHierarchyPanel::draw_vec3_control(const Vec3Controls& controls) {
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 {0.2F, 0.35F, 0.9F, 1.0F});
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 {0.1F, 0.25F, 0.8F, 1.0F});
 	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
+	ImGui::PushFont(bold_font);
 	if (ImGui::Button("Z", button_size)) {
 		controls.values.z = controls.reset_value;
 	}
+	ImGui::PopFont();
 	ImGui::PopStyleVar(1);
 	ImGui::PopStyleColor(3);
 

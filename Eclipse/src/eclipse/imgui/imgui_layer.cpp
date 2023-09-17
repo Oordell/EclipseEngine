@@ -1,5 +1,6 @@
 #include "ecpch.h"
 #include "imgui_layer.h"
+#include "font_library.h"
 
 #include "imgui.h"
 
@@ -29,6 +30,19 @@ void ImGuiLayer::on_attach() {
 	//	io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcon;
 	//	io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
+	// Add fonts
+	fonts::FontLibrary::add_font(FilePath("assets/fonts/gochi-hand/GochiHand-Regular.ttf"), "GochiHand-Regular", 20.0F);
+	fonts::FontLibrary::add_font(FilePath("assets/fonts/rock-salt/RockSalt-Regular.ttf"), "RockSalt-Regular", 22.0F);
+	fonts::FontLibrary::add_font(FilePath("assets/fonts/rock-salt/RockSalt-Regular.ttf"), "RockSalt-Regular");
+	fonts::FontLibrary::add_font(FilePath("assets/fonts/roboto-mono/static/RobotoMono-Regular.ttf"), "RobotoMono-Regular");
+	fonts::FontLibrary::add_font(FilePath("assets/fonts/roboto/Roboto-Regular.ttf"), "Roboto-Regular");
+	fonts::FontLibrary::add_font(FilePath("assets/fonts/roboto/Roboto-Italic.ttf"), "Roboto-Italic");
+	fonts::FontLibrary::add_font(FilePath("assets/fonts/roboto/Roboto-Bold.ttf"), "Roboto-Bold");
+	auto [success, font_data] = fonts::FontLibrary::get_font_index_by_name("Roboto-Regular");
+	EC_CORE_ASSERT(success, "Font was not found!");
+
+	io.FontDefault = io.Fonts->Fonts[font_data.index];
+
 	//	Setup Dear ImGui style
 	ImGui::StyleColorsDark();
 	//	ImGui::StyleColorsClassic();
@@ -40,6 +54,7 @@ void ImGuiLayer::on_attach() {
 		style.WindowRounding              = 0.0F;
 		style.Colors[ImGuiCol_WindowBg].w = 1.0F;
 	}
+	set_dark_theme_colors();
 
 	Application& app   = Application::get();
 	GLFWwindow* window = static_cast<GLFWwindow*>(app.get_window().get_native_window());
@@ -90,6 +105,38 @@ void ImGuiLayer::end() {
 		ImGui::RenderPlatformWindowsDefault();
 		glfwMakeContextCurrent(backup_current_context);
 	}
+}
+
+void ImGuiLayer::set_dark_theme_colors() {
+	auto& colors              = ImGui::GetStyle().Colors;
+	colors[ImGuiCol_WindowBg] = ImVec4 {0.1F, 0.105F, 0.11F, 1.0F};
+
+	// Headers
+	colors[ImGuiCol_Header]        = ImVec4 {0.2F, 0.205F, 0.21F, 1.0F};
+	colors[ImGuiCol_HeaderHovered] = ImVec4 {0.3F, 0.305F, 0.31F, 1.0F};
+	colors[ImGuiCol_HeaderActive]  = ImVec4 {0.15F, 0.1505F, 0.151F, 1.0F};
+
+	// Buttons
+	colors[ImGuiCol_Button]        = ImVec4 {0.2F, 0.205F, 0.21F, 1.0F};
+	colors[ImGuiCol_ButtonHovered] = ImVec4 {0.3F, 0.305F, 0.31F, 1.0F};
+	colors[ImGuiCol_ButtonActive]  = ImVec4 {0.15F, 0.1505F, 0.151F, 1.0F};
+
+	// Frame BG
+	colors[ImGuiCol_FrameBg]        = ImVec4 {0.2F, 0.205F, 0.21F, 1.0F};
+	colors[ImGuiCol_FrameBgHovered] = ImVec4 {0.3F, 0.305F, 0.31F, 1.0F};
+	colors[ImGuiCol_FrameBgActive]  = ImVec4 {0.15F, 0.1505F, 0.151F, 1.0F};
+
+	// Tabs
+	colors[ImGuiCol_Tab]                = ImVec4 {0.15F, 0.1505F, 0.151F, 1.0F};
+	colors[ImGuiCol_TabHovered]         = ImVec4 {0.38F, 0.3805F, 0.381F, 1.0F};
+	colors[ImGuiCol_TabActive]          = ImVec4 {0.28F, 0.2805F, 0.281F, 1.0F};
+	colors[ImGuiCol_TabUnfocused]       = ImVec4 {0.15F, 0.1505F, 0.151F, 1.0F};
+	colors[ImGuiCol_TabUnfocusedActive] = ImVec4 {0.2F, 0.205F, 0.21F, 1.0F};
+
+	// Title
+	colors[ImGuiCol_TitleBg]          = ImVec4 {0.15F, 0.1505F, 0.151F, 1.0F};
+	colors[ImGuiCol_TitleBgActive]    = ImVec4 {0.15F, 0.1505F, 0.151F, 1.0F};
+	colors[ImGuiCol_TitleBgCollapsed] = ImVec4 {0.15F, 0.1505F, 0.151F, 1.0F};
 }
 
 }  // namespace eclipse

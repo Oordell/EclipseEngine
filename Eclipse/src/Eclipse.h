@@ -18,6 +18,7 @@
 #include "eclipse/utils/random.h"
 
 #include "eclipse/imgui/imgui_layer.h"
+#include "eclipse/imgui/font_library.h"
 
 #include "eclipse/scene/scene.h"
 #include "eclipse/scene/components.h"

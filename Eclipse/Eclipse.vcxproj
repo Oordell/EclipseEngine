@@ -173,6 +173,7 @@
     <ClInclude Include="src\eclipse\events\key_events.h" />
     <ClInclude Include="src\eclipse\events\mouse_events.h" />
     <ClInclude Include="src\eclipse\events\window_events.h" />
+    <ClInclude Include="src\eclipse\imgui\font_library.h" />
     <ClInclude Include="src\eclipse\imgui\imgui_layer.h" />
     <ClInclude Include="src\eclipse\layer\layer.h" />
     <ClInclude Include="src\eclipse\layer\layer_stack.h" />
@@ -633,6 +634,7 @@
     <ClCompile Include="src\eclipse\core\application.cpp" />
     <ClCompile Include="src\eclipse\core\log.cpp" />
     <ClCompile Include="src\eclipse\core\window.cpp" />
+    <ClCompile Include="src\eclipse\imgui\font_library.cpp" />
     <ClCompile Include="src\eclipse\imgui\imgui_build.cpp" />
     <ClCompile Include="src\eclipse\imgui\imgui_layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer.cpp" />
