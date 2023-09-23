@@ -1,5 +1,6 @@
 #include "editor_layer.h"
 #include "imgui/imgui.h"
+#include "eclipse/scene/scene_serializer.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -14,7 +15,8 @@ void EditorLayer::on_attach() {
 
 	frame_buffer_ = FrameBuffer::create({.width = 1600, .height = 900});
 
-	active_scene_  = make_ref<Scene>();
+	active_scene_ = make_ref<Scene>();
+	/*
 	square_entity_ = active_scene_->create_entity("Green square");
 	square_entity_.add_component<component::Color>(glm::vec4 {0.2F, 0.9F, 0.3F, 1.0F});
 
@@ -30,34 +32,36 @@ void EditorLayer::on_attach() {
 
 	class CameraController : public ScriptableEntity {
 	public:
-		~CameraController() override = default;
+	 ~CameraController() override = default;
 
-		void on_create() override {
-			auto& transform         = get_component<component::Transform>();
-			transform.translation.x = rand() % 10 - 5.0F;
-		}
+	 void on_create() override {
+	  auto& transform         = get_component<component::Transform>();
+	  transform.translation.x = rand() % 10 - 5.0F;
+	 }
 
-		void on_destroy() override {}
+	 void on_destroy() override {}
 
-		void on_update(Timestep timestep) override {
-			auto& translation = get_component<component::Transform>().translation;
+	 void on_update(Timestep timestep) override {
+	  auto& translation = get_component<component::Transform>().translation;
 
-			static const float camera_move_speed = 5.0F;
-			if (InputManager::is_key_pressed(KeyCode::A)) {
-				translation.x -= camera_move_speed * timestep;
-			} else if (InputManager::is_key_pressed(KeyCode::D)) {
-				translation.x += camera_move_speed * timestep;
-			}
-			if (InputManager::is_key_pressed(KeyCode::W)) {
-				translation.y += camera_move_speed * timestep;
-			} else if (InputManager::is_key_pressed(KeyCode::S)) {
-				translation.y -= camera_move_speed * timestep;
-			}
-		}
+	  static const float camera_move_speed = 5.0F;
+	  if (InputManager::is_key_pressed(KeyCode::A)) {
+	   translation.x -= camera_move_speed * timestep;
+	  } else if (InputManager::is_key_pressed(KeyCode::D)) {
+	   translation.x += camera_move_speed * timestep;
+	  }
+	  if (InputManager::is_key_pressed(KeyCode::W)) {
+	   translation.y += camera_move_speed * timestep;
+	  } else if (InputManager::is_key_pressed(KeyCode::S)) {
+	   translation.y -= camera_move_speed * timestep;
+	  }
+	 }
 	};
 
 	camera_entity_.add_component<component::NativeScript>().bind<CameraController>();
 	second_camera_.add_component<component::NativeScript>().bind<CameraController>();
+
+	*/
 
 	scene_hierarchy_panel_.set_context(active_scene_);
 }
@@ -159,6 +163,16 @@ void EditorLayer::on_imgui_render() {
 			// Disabling fullscreen would allow the window to be moved to the front of other windows, which we can't undo at
 			// the moment without finer window depth/z control. ImGui::MenuItem("Fullscreen", NULL,
 			// &opt_fullscreen_persistant);
+			if (ImGui::MenuItem("Serialize")) {
+				SceneSerializer serializer(active_scene_);
+				serializer.serialize_text(FilePath {"assets/scene/example.eclipse"});
+			}
+
+			if (ImGui::MenuItem("Deserialize")) {
+				SceneSerializer serializer(active_scene_);
+				serializer.deserialize_text(FilePath {"assets/scene/example.eclipse"});
+			}
+
 			if (ImGui::MenuItem("Exit")) {
 				Application::get().close();
 			}
