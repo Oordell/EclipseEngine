@@ -1,6 +1,7 @@
 #include "editor_layer.h"
 #include "imgui/imgui.h"
 #include "eclipse/scene/scene_serializer.h"
+#include "eclipse/utils/platform_utils.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -103,7 +104,12 @@ void EditorLayer::on_update(Timestep timestep) {
 	frame_buffer_->unbind();
 }
 
-void EditorLayer::on_event(Event& event) { camera_controller_.on_event(event); }
+void EditorLayer::on_event(Event& event) {
+	camera_controller_.on_event(event);
+
+	EventDispatcher dispatcher(event);
+	dispatcher.dispatch<KeyPressedEvent>(EC_BIND_EVENT_FN(EditorLayer::on_key_pressed));
+}
 
 void EditorLayer::on_imgui_render() {
 	EC_PROFILE_FUNCTION();
@@ -163,14 +169,16 @@ void EditorLayer::on_imgui_render() {
 			// Disabling fullscreen would allow the window to be moved to the front of other windows, which we can't undo at
 			// the moment without finer window depth/z control. ImGui::MenuItem("Fullscreen", NULL,
 			// &opt_fullscreen_persistant);
-			if (ImGui::MenuItem("Serialize")) {
-				SceneSerializer serializer(active_scene_);
-				serializer.serialize_text(FilePath {"assets/scene/example.eclipse"});
+			if (ImGui::MenuItem("New", "Ctrl+N")) {
+				create_new_active_scene();
 			}
 
-			if (ImGui::MenuItem("Deserialize")) {
-				SceneSerializer serializer(active_scene_);
-				serializer.deserialize_text(FilePath {"assets/scene/example.eclipse"});
+			if (ImGui::MenuItem("Open...", "Ctrl+O")) {
+				open_scene();
+			}
+
+			if (ImGui::MenuItem("Save as...", "Ctrl+Shift+S")) {
+				save_scene_as();
 			}
 
 			if (ImGui::MenuItem("Exit")) {
@@ -216,5 +224,67 @@ void EditorLayer::on_imgui_render() {
 	ImGui::PopStyleVar();
 
 	ImGui::End();
+}
+
+void EditorLayer::create_new_active_scene() {
+	active_scene_ = make_ref<Scene>();
+	active_scene_->on_viewport_resize(viewport_size_);
+	scene_hierarchy_panel_.set_context(active_scene_);
+}
+
+void EditorLayer::open_scene() {
+	auto result = FileDialogs::open_file(WINDOWS_FILE_DIALOG_FILTER.data());
+
+	if (result.success) {
+		create_new_active_scene();
+
+		SceneSerializer serializer(active_scene_);
+		serializer.deserialize_text(result.file_path.value());
+	}
+}
+
+void EditorLayer::save_scene_as() {
+	auto result = FileDialogs::save_file(WINDOWS_FILE_DIALOG_FILTER.data());
+
+	if (result.success) {
+		SceneSerializer serializer(active_scene_);
+		serializer.serialize_text(result.file_path.value());
+	}
+}
+
+bool EditorLayer::on_key_pressed(KeyPressedEvent& event) {
+	if (event.get_repeate_count() > 0) {
+		return false;
+	}
+
+	bool control_pressed =
+	    InputManager::is_key_pressed(KeyCode::left_control) || InputManager::is_key_pressed(KeyCode::right_control);
+	bool shift_pressed =
+	    InputManager::is_key_pressed(KeyCode::left_shift) || InputManager::is_key_pressed(KeyCode::right_shift);
+
+	switch (event.get_key_code()) {
+		case KeyCode::N: {
+			if (control_pressed) {
+				create_new_active_scene();
+			}
+			break;
+		}
+		case KeyCode::O: {
+			if (control_pressed) {
+				open_scene();
+			}
+			break;
+		}
+		case KeyCode::S: {
+			if (control_pressed && shift_pressed) {
+				save_scene_as();
+			}
+			break;
+		}
+		default:
+			break;
+	}
+
+	return false;
 }
 }  // namespace eclipse

@@ -202,6 +202,7 @@
     <ClInclude Include="src\eclipse\scene\scene_serializer.h" />
     <ClInclude Include="src\eclipse\scene\scriptable_entity.h" />
     <ClInclude Include="src\eclipse\utils\math.h" />
+    <ClInclude Include="src\eclipse\utils\platform_utils.h" />
     <ClInclude Include="src\eclipse\utils\random.h" />
     <ClInclude Include="src\ecpch.h" />
     <ClInclude Include="src\platform\opengl\opengl_context.h" />
@@ -673,6 +674,7 @@
     <ClCompile Include="src\platform\opengl\opengl_vertex_array.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_vertex_buffer.cpp" />
     <ClCompile Include="src\platform\windows\windows_input.cpp" />
+    <ClCompile Include="src\platform\windows\windows_platform_utils.cpp" />
     <ClCompile Include="src\platform\windows\windows_window.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>

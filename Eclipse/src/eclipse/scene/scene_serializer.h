@@ -17,7 +17,7 @@ private:
 	ref<Scene> scene_;
 };
 
-namespace keys {
+namespace serializer_keys {
 // Scene
 static constexpr std::string_view SCENE    = "scene";
 static constexpr std::string_view ENTITIES = "entities";
@@ -52,6 +52,6 @@ static constexpr std::string_view COLOR           = "color";
 
 // component::SpriteRenderer
 static constexpr std::string_view SPRITE_RENDERER_COMPONENT = "sprite_renderer_component";
-}  // namespace keys
+}  // namespace serializer_keys
 
 }  // namespace eclipse
