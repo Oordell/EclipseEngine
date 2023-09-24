@@ -17,6 +17,11 @@ public:
 	void on_imgui_render() override;
 
 private:
+	void create_new_active_scene();
+	void open_scene();
+	void save_scene_as();
+	bool on_key_pressed(KeyPressedEvent& event);
+
 	OrthographicCameraController camera_controller_ {1280.0F / 720.0F, EnableCameraRotation::yes};
 
 	ref<FrameBuffer> frame_buffer_;
@@ -35,6 +40,8 @@ private:
 	bool viewport_hovered_ {false};
 
 	SceneHierarchyPanel scene_hierarchy_panel_;
+
+	static constexpr std::string_view WINDOWS_FILE_DIALOG_FILTER = "Eclipse Scene(*.eclipse)\0 *.eclipse\0";
 };
 
 }  // namespace eclipse

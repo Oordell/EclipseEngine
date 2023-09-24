@@ -72,4 +72,34 @@ void Scene::on_viewport_resize(const WindowSize& new_size) {
 	}
 }
 
+template <typename Component>
+void Scene::on_component_added(Entity entity, Component& component) {
+	EC_CORE_ASSERT(false, "We need a specialization of \"Scene::on_component_added\"!")
+}
+
+template <>
+void Scene::on_component_added<component::Tag>(Entity entity, component::Tag& component) {
+	// Do nothing
+}
+
+template <>
+void Scene::on_component_added<component::Transform>(Entity entity, component::Transform& component) {
+	// Do nothing
+}
+
+template <>
+void Scene::on_component_added<component::Color>(Entity entity, component::Color& component) {
+	// Do nothing
+}
+
+template <>
+void Scene::on_component_added<component::SpriteRenderer>(Entity entity, component::SpriteRenderer& component) {
+	// Do nothing
+}
+
+template <>
+void Scene::on_component_added<component::Camera>(Entity entity, component::Camera& component) {
+	component.camera.set_viewport_size(viewport_size_);
+}
+
 }  // namespace eclipse

@@ -10,3 +10,6 @@
 [submodule "Eclipse/vendor/glm"]
 	path = Eclipse/vendor/glm
 	url = https://github.com/g-truc/glm
+[submodule "Eclipse/vendor/yaml-cpp"]
+	path = Eclipse/vendor/yaml-cpp
+	url = https://github.com/Oordell/yaml-cpp.git

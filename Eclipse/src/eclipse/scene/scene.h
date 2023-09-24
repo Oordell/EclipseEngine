@@ -22,6 +22,9 @@ public:
 
 	entt::registry& get_registry() { return registry_; }
 
+	template <typename Component>
+	void on_component_added(Entity entity, Component& component);
+
 private:
 	entt::registry registry_;
 	WindowSize viewport_size_ {};

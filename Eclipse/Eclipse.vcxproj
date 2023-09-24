@@ -76,8 +76,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>ecpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;EC_PLATFORM_WINDOWS;ECLIPSE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW_fork\include;vendor\GLAD\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;YAML_CPP_STATIC_DEFINE;EC_PLATFORM_WINDOWS;ECLIPSE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW_fork\include;vendor\GLAD\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -99,8 +99,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>ecpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;EC_PLATFORM_WINDOWS;ECLIPSE_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW_fork\include;vendor\GLAD\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;YAML_CPP_STATIC_DEFINE;EC_PLATFORM_WINDOWS;ECLIPSE_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW_fork\include;vendor\GLAD\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -125,8 +125,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>ecpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;EC_PLATFORM_WINDOWS;ECLIPSE_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW_fork\include;vendor\GLAD\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;YAML_CPP_STATIC_DEFINE;EC_PLATFORM_WINDOWS;ECLIPSE_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW_fork\include;vendor\GLAD\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -199,8 +199,10 @@
     <ClInclude Include="src\eclipse\scene\particle_system.h" />
     <ClInclude Include="src\eclipse\scene\scene.h" />
     <ClInclude Include="src\eclipse\scene\scene_camera.h" />
+    <ClInclude Include="src\eclipse\scene\scene_serializer.h" />
     <ClInclude Include="src\eclipse\scene\scriptable_entity.h" />
     <ClInclude Include="src\eclipse\utils\math.h" />
+    <ClInclude Include="src\eclipse\utils\platform_utils.h" />
     <ClInclude Include="src\eclipse\utils\random.h" />
     <ClInclude Include="src\ecpch.h" />
     <ClInclude Include="src\platform\opengl\opengl_context.h" />
@@ -658,6 +660,7 @@
     <ClCompile Include="src\eclipse\scene\particle_system.cpp" />
     <ClCompile Include="src\eclipse\scene\scene.cpp" />
     <ClCompile Include="src\eclipse\scene\scene_camera.cpp" />
+    <ClCompile Include="src\eclipse\scene\scene_serializer.cpp" />
     <ClCompile Include="src\eclipse\utils\random.cpp" />
     <ClCompile Include="src\ecpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
@@ -671,6 +674,7 @@
     <ClCompile Include="src\platform\opengl\opengl_vertex_array.cpp" />
     <ClCompile Include="src\platform\opengl\opengl_vertex_buffer.cpp" />
     <ClCompile Include="src\platform\windows\windows_input.cpp" />
+    <ClCompile Include="src\platform\windows\windows_platform_utils.cpp" />
     <ClCompile Include="src\platform\windows\windows_window.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
@@ -683,6 +687,9 @@
     </ProjectReference>
     <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\yaml-cpp\yaml-cpp.vcxproj">
+      <Project>{88F1A057-74BE-FB62-9DD7-E90A890331F1}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

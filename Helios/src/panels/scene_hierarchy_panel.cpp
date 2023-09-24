@@ -8,7 +8,10 @@ namespace eclipse {
 
 SceneHierarchyPanel::SceneHierarchyPanel(const ref<Scene>& context) { set_context(context); }
 
-void SceneHierarchyPanel::set_context(const ref<Scene>& context) { context_ = context; }
+void SceneHierarchyPanel::set_context(const ref<Scene>& context) {
+	context_           = context;
+	selection_context_ = {};
+}
 
 void SceneHierarchyPanel::on_imgui_render() {
 	ImGui::Begin("Scene Hierarchy");

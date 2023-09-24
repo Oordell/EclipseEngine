@@ -26,7 +26,7 @@ private:
 		float reset_value        = 0.0F;
 		float column_width       = 100.0F;
 	};
-
+	
 	void draw_vec3_control(const Vec3Controls& controls);
 
 	ref<Scene> context_;

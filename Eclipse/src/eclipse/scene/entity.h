@@ -16,7 +16,9 @@ public:
 	T& add_component(Args&&... args) {
 		validate_members();
 		EC_CORE_ASSERT(!has_component<T>(), "Entity already has this component!");
-		return scene_->get_registry().emplace<T>(entity_handle_, std::forward<Args>(args)...);
+		T& component = scene_->get_registry().emplace<T>(entity_handle_, std::forward<Args>(args)...);
+		scene_->on_component_added<T>(*this, component);
+		return component;
 	}
 
 	template <typename T>

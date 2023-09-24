@@ -22,11 +22,13 @@ IncludeDir["ImGui"] = "Eclipse/vendor/imgui"
 IncludeDir["glm"] = "Eclipse/vendor/glm"
 IncludeDir["stb_image"] = "Eclipse/vendor/stb_image"
 IncludeDir["entt"] = "Eclipse/vendor/entt/include"
+IncludeDir["yaml_cpp"] = "Eclipse/vendor/yaml-cpp/include"
 
 group "Dependencies"
 	include "Eclipse/vendor/GLFW_fork"
 	include "Eclipse/vendor/Glad"
 	include "Eclipse/vendor/imgui"
+	include "Eclipse/vendor/yaml-cpp"
 group ""
 
 project "Eclipse"
@@ -53,7 +55,8 @@ project "Eclipse"
 
 	defines {
 		"_CRT_SECURE_NO_WARNINGS",
-		"GLFW_INCLUDE_NONE"
+		"GLFW_INCLUDE_NONE",
+		"YAML_CPP_STATIC_DEFINE"
 	}
 
 	includedirs {
@@ -64,13 +67,15 @@ project "Eclipse"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.yaml_cpp}",
 	}
 
 	links {
 		"GLFW",
 		"Glad",
 		"ImGui",
+		"yaml-cpp",
 		"user32.lib",
 		"gdi32.lib",
 		"opengl32.lib"
@@ -112,6 +117,10 @@ project "Sandbox"
 	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+	}
+
+	defines {
+		"YAML_CPP_STATIC_DEFINE"
 	}
 
 	includedirs {
@@ -162,6 +171,10 @@ project "Helios"
 	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+	}
+
+	defines {
+		"YAML_CPP_STATIC_DEFINE"
 	}
 
 	includedirs {

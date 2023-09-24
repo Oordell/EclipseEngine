@@ -78,7 +78,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>EC_PLATFORM_WINDOWS;ECLIPSE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>YAML_CPP_STATIC_DEFINE;EC_PLATFORM_WINDOWS;ECLIPSE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\Eclipse\vendor\spdlog\include;..\Eclipse\src;..\Eclipse\vendor;..\Eclipse\vendor\glm;..\Eclipse\vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -97,7 +97,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>EC_PLATFORM_WINDOWS;ECLIPSE_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>YAML_CPP_STATIC_DEFINE;EC_PLATFORM_WINDOWS;ECLIPSE_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\Eclipse\vendor\spdlog\include;..\Eclipse\src;..\Eclipse\vendor;..\Eclipse\vendor\glm;..\Eclipse\vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -119,7 +119,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>EC_PLATFORM_WINDOWS;ECLIPSE_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>YAML_CPP_STATIC_DEFINE;EC_PLATFORM_WINDOWS;ECLIPSE_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\Eclipse\vendor\spdlog\include;..\Eclipse\src;..\Eclipse\vendor;..\Eclipse\vendor\glm;..\Eclipse\vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>

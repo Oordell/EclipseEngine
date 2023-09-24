@@ -147,6 +147,9 @@
     <ClInclude Include="src\eclipse\events\window_events.h">
       <Filter>src\eclipse\events</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\imgui\font_library.h">
+      <Filter>src\eclipse\imgui</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\imgui\imgui_layer.h">
       <Filter>src\eclipse\imgui</Filter>
     </ClInclude>
@@ -220,6 +223,9 @@
       <Filter>src\eclipse\scene</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\scene\scene_camera.h">
+      <Filter>src\eclipse\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\scene\scene_serializer.h">
       <Filter>src\eclipse\scene</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\scene\scriptable_entity.h">
@@ -1512,7 +1518,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\imgui\font_library.h" />
+    <ClInclude Include="src\eclipse\utils\platform_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\core\application.cpp">
@@ -1523,6 +1529,9 @@
     </ClCompile>
     <ClCompile Include="src\eclipse\core\window.cpp">
       <Filter>src\eclipse\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\imgui\font_library.cpp">
+      <Filter>src\eclipse\imgui</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\imgui\imgui_build.cpp">
       <Filter>src\eclipse\imgui</Filter>
@@ -1593,6 +1602,9 @@
     <ClCompile Include="src\eclipse\scene\scene_camera.cpp">
       <Filter>src\eclipse\scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\eclipse\scene\scene_serializer.cpp">
+      <Filter>src\eclipse\scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\eclipse\utils\random.cpp">
       <Filter>src\eclipse\utils</Filter>
     </ClCompile>
@@ -1632,6 +1644,6 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\eclipse\imgui\font_library.cpp" />
+    <ClCompile Include="src\platform\windows\windows_platform_utils.cpp" />
   </ItemGroup>
 </Project>
