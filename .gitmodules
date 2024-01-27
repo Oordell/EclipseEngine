@@ -13,3 +13,6 @@
 [submodule "Eclipse/vendor/yaml-cpp"]
 	path = Eclipse/vendor/yaml-cpp
 	url = https://github.com/Oordell/yaml-cpp.git
+[submodule "Eclipse/vendor/imguizmo"]
+	path = Eclipse/vendor/imguizmo
+	url = https://github.com/Oordell/ImGuizmo

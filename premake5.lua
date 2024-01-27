@@ -23,6 +23,7 @@ IncludeDir["glm"] = "Eclipse/vendor/glm"
 IncludeDir["stb_image"] = "Eclipse/vendor/stb_image"
 IncludeDir["entt"] = "Eclipse/vendor/entt/include"
 IncludeDir["yaml_cpp"] = "Eclipse/vendor/yaml-cpp/include"
+IncludeDir["imguizmo"] = "Eclipse/vendor/imguizmo"
 
 group "Dependencies"
 	include "Eclipse/vendor/GLFW_fork"
@@ -51,6 +52,8 @@ project "Eclipse"
 		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
+		"%{prj.name}/vendor/imguizmo/ImGuizmo.h",
+		"%{prj.name}/vendor/imguizmo/ImGuizmo.cpp",
 	}
 
 	defines {
@@ -69,6 +72,7 @@ project "Eclipse"
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.yaml_cpp}",
+		"%{IncludeDir.imguizmo}",
 	}
 
 	links {
@@ -80,6 +84,9 @@ project "Eclipse"
 		"gdi32.lib",
 		"opengl32.lib"
 	}
+
+	filter "files:Eclipse/vendor/imguizmo/**.cpp"
+		flags { "NoPCH" }
 
 	filter "system:windows"
 		systemversion "latest"
@@ -182,7 +189,8 @@ project "Helios"
 		"Eclipse/src",
 		"Eclipse/vendor",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.imguizmo}",
 	}
 
 	links {
