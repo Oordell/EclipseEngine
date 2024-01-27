@@ -11,6 +11,8 @@ public:
 	void set_context(const ref<Scene>& context);
 	void on_imgui_render();
 
+	[[nodiscard]] Entity get_selected_entity() const { return selection_context_; }
+
 private:
 	void draw_entity_node(Entity entity);
 	void draw_components(Entity entity);

@@ -17,6 +17,17 @@ Entity Scene::create_entity(const std::string& name) {
 
 void Scene::destroy_entity(Entity entity) { registry_.destroy(entity); }
 
+Entity Scene::get_primary_camera_entity() { 
+	auto view = registry_.view<component::Camera>();
+	for (auto entity : view) {
+		const auto& camera = view.get<component::Camera>(entity);
+		if (camera.primary) {
+			return {entity, this};
+		}
+	}
+	return {};
+}
+
 void Scene::on_update(Timestep timestep) {
 	// Update scripts
 	registry_.view<component::NativeScript>().each([=](auto entity, auto& nsc) {

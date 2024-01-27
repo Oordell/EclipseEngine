@@ -25,6 +25,8 @@ public:
 	template <typename Component>
 	void on_component_added(Entity entity, Component& component);
 
+	[[nodiscard]] Entity get_primary_camera_entity();
+
 private:
 	entt::registry registry_;
 	WindowSize viewport_size_ {};

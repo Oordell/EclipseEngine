@@ -1,5 +1,6 @@
 #include "editor_layer.h"
 #include "imgui/imgui.h"
+#include "ImGuizmo.h"
 #include "eclipse/scene/scene_serializer.h"
 #include "eclipse/utils/platform_utils.h"
 
@@ -220,6 +221,28 @@ void EditorLayer::on_imgui_render() {
 	uint64_t texture_id = static_cast<uint64_t>(frame_buffer_->get_color_attachment_renderer_id());
 	ImGui::Image(reinterpret_cast<void*>(texture_id), ImVec2 {viewport_panel_size.x, viewport_panel_size.y}, ImVec2 {0, 1},
 	             ImVec2 {1, 0});
+
+	// Gizmos:
+	auto selected_entity = scene_hierarchy_panel_.get_selected_entity();
+	if (selected_entity) {
+		ImGuizmo::SetOrthographic(false);
+		ImGuizmo::SetDrawlist();
+
+		auto window_width  = static_cast<float>(ImGui::GetWindowWidth());
+		auto window_height = static_cast<float>(ImGui::GetWindowHeight());
+		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, window_width, window_height);
+
+		auto camera_entity                 = active_scene_->get_primary_camera_entity();
+		const auto& camera                 = camera_entity.get_component<component::Camera>().camera;
+		const glm::mat4& camera_projection = camera.get_projection();
+		glm::mat4 camera_view = glm::inverse(camera_entity.get_component<component::Transform>().get_transform());
+
+		glm::mat4 entity_transform = selected_entity.get_component<component::Transform>().get_transform();
+
+		ImGuizmo::Manipulate(glm::value_ptr(camera_view), glm::value_ptr(camera_projection), ImGuizmo::OPERATION::TRANSLATE,
+		                     ImGuizmo::LOCAL, glm::value_ptr(entity_transform));
+	}
+
 	ImGui::End();
 	ImGui::PopStyleVar();
 

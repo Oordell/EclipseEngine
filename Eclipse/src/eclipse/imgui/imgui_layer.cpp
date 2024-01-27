@@ -9,6 +9,8 @@
 
 #include "eclipse/core/application.h"
 
+#include "ImGuizmo.h"
+
 namespace eclipse {
 
 ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer") {}
@@ -86,6 +88,7 @@ void ImGuiLayer::begin() {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+	ImGuizmo::BeginFrame();
 }
 
 void ImGuiLayer::end() {
