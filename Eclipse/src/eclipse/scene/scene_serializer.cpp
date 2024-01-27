@@ -14,6 +14,7 @@ struct convert<glm::vec3> {
 		node.push_back(rhs.x);
 		node.push_back(rhs.y);
 		node.push_back(rhs.z);
+		node.SetStyle(EmitterStyle::Flow);
 		return node;
 	}
 
@@ -36,6 +37,7 @@ struct convert<glm::vec4> {
 		node.push_back(rhs.y);
 		node.push_back(rhs.z);
 		node.push_back(rhs.w);
+		node.SetStyle(EmitterStyle::Flow);
 		return node;
 	}
 
@@ -162,12 +164,7 @@ void SceneSerializer::serialize_binary(const FilePath& file_path) {
 }
 
 bool SceneSerializer::deserialize_text(const FilePath& file_path) {
-	EC_CORE_TRACE("Deserializing file: \"{0}\"", file_path.value());
-	std::ifstream stream(file_path.value());
-	std::stringstream str_stream;
-	str_stream << stream.rdbuf();
-
-	YAML::Node data = YAML::Load(str_stream.str());
+	YAML::Node data = YAML::LoadFile(file_path.value());
 	if (!data[serializer_keys::SCENE]) {
 		EC_CORE_ERROR("Error loading eclipse file. Could identify Scene...");
 		return false;
