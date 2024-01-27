@@ -3,6 +3,7 @@
 #include "ImGuizmo.h"
 #include "eclipse/scene/scene_serializer.h"
 #include "eclipse/utils/platform_utils.h"
+#include "eclipse/utils/math.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -210,7 +211,7 @@ void EditorLayer::on_imgui_render() {
 
 	viewport_focused_ = ImGui::IsWindowFocused();
 	viewport_hovered_ = ImGui::IsWindowHovered();
-	Application::get().get_imgui_layer()->set_block_events(!(viewport_focused_ && viewport_hovered_));
+	Application::get().get_imgui_layer()->set_block_events(!viewport_focused_ && !viewport_hovered_);
 
 	ImVec2 viewport_panel_size = ImGui::GetContentRegionAvail();
 	uint32_t temp_width        = static_cast<uint32_t>(viewport_panel_size.x);
@@ -224,7 +225,7 @@ void EditorLayer::on_imgui_render() {
 
 	// Gizmos:
 	auto selected_entity = scene_hierarchy_panel_.get_selected_entity();
-	if (selected_entity) {
+	if (selected_entity && gizmo_type_ > -1) {
 		ImGuizmo::SetOrthographic(false);
 		ImGuizmo::SetDrawlist();
 
@@ -237,10 +238,27 @@ void EditorLayer::on_imgui_render() {
 		const glm::mat4& camera_projection = camera.get_projection();
 		glm::mat4 camera_view = glm::inverse(camera_entity.get_component<component::Transform>().get_transform());
 
-		glm::mat4 entity_transform = selected_entity.get_component<component::Transform>().get_transform();
+		auto& trans                = selected_entity.get_component<component::Transform>();
+		glm::mat4 entity_transform = trans.get_transform();
 
-		ImGuizmo::Manipulate(glm::value_ptr(camera_view), glm::value_ptr(camera_projection), ImGuizmo::OPERATION::TRANSLATE,
-		                     ImGuizmo::LOCAL, glm::value_ptr(entity_transform));
+		// Snapping
+		bool snap            = InputManager::is_key_pressed(KeyCode::left_control);
+		float snap_value     = gizmo_type_ == ImGuizmo::OPERATION::ROTATE ? 45.0F : 0.5F;
+		float snap_values[3] = {snap_value, snap_value, snap_value};
+
+		ImGuizmo::Manipulate(glm::value_ptr(camera_view), glm::value_ptr(camera_projection),
+		                     static_cast<ImGuizmo::OPERATION>(gizmo_type_), ImGuizmo::LOCAL, glm::value_ptr(entity_transform),
+		                     nullptr, snap ? snap_values : nullptr);
+
+		if (ImGuizmo::IsUsing()) {
+			auto decomposed_transform = utils::decompose_transform(entity_transform);
+			if (decomposed_transform.has_value()) {
+				glm::vec3 delta_rotation = decomposed_transform.value().rotation - trans.rotation;
+				trans.translation        = decomposed_transform.value().translation;
+				trans.rotation += delta_rotation;
+				trans.scale = decomposed_transform.value().scale;
+			}
+		}
 	}
 
 	ImGui::End();
@@ -302,6 +320,22 @@ bool EditorLayer::on_key_pressed(KeyPressedEvent& event) {
 			if (control_pressed && shift_pressed) {
 				save_scene_as();
 			}
+			break;
+		}
+		case KeyCode::Q: {
+			gizmo_type_ = -1;
+			break;
+		}
+		case KeyCode::W: {
+			gizmo_type_ = static_cast<int>(ImGuizmo::OPERATION::TRANSLATE);
+			break;
+		}
+		case KeyCode::E: {
+			gizmo_type_ = static_cast<int>(ImGuizmo::OPERATION::ROTATE);
+			break;
+		}
+		case KeyCode::R: {
+			gizmo_type_ = static_cast<int>(ImGuizmo::OPERATION::SCALE);
 			break;
 		}
 		default:

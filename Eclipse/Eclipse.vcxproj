@@ -154,6 +154,7 @@
     <ClInclude Include="src\eclipse\common_types\orthographic.h" />
     <ClInclude Include="src\eclipse\common_types\point_2d.h" />
     <ClInclude Include="src\eclipse\common_types\profile_results.h" />
+    <ClInclude Include="src\eclipse\common_types\transform.h" />
     <ClInclude Include="src\eclipse\common_types\window_size.h" />
     <ClInclude Include="src\eclipse\core\application.h" />
     <ClInclude Include="src\eclipse\core\config.h" />
@@ -662,6 +663,7 @@
     <ClCompile Include="src\eclipse\scene\scene.cpp" />
     <ClCompile Include="src\eclipse\scene\scene_camera.cpp" />
     <ClCompile Include="src\eclipse\scene\scene_serializer.cpp" />
+    <ClCompile Include="src\eclipse\utils\math.cpp" />
     <ClCompile Include="src\eclipse\utils\random.cpp" />
     <ClCompile Include="src\ecpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

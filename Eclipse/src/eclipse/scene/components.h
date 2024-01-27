@@ -7,6 +7,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
+
 namespace eclipse::component {
 
 struct Tag {
@@ -26,11 +29,8 @@ struct Transform {
 
 	glm::mat4 get_transform() const {
 		static const glm::mat4 IDENTITY_MATRIX = glm::mat4(1.0F);
-
-		glm::mat4 rotation_mat = glm::rotate(IDENTITY_MATRIX, rotation.x, {1, 0, 0}) *
-		                         glm::rotate(IDENTITY_MATRIX, rotation.y, {0, 1, 0}) *
-		                         glm::rotate(IDENTITY_MATRIX, rotation.z, {0, 0, 1});
-		return glm::translate(IDENTITY_MATRIX, translation) * rotation_mat * glm::scale(IDENTITY_MATRIX, scale);
+		return glm::translate(IDENTITY_MATRIX, translation) * glm::toMat4(glm::quat(rotation)) *
+		       glm::scale(IDENTITY_MATRIX, scale);
 	}
 
 	glm::vec3 translation {0.0F, 0.0F, 0.0F};

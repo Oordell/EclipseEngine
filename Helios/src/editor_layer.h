@@ -41,6 +41,8 @@ private:
 
 	SceneHierarchyPanel scene_hierarchy_panel_;
 
+	int gizmo_type_ = -1;
+
 	static constexpr std::string_view WINDOWS_FILE_DIALOG_FILTER = "Eclipse Scene(*.eclipse)\0 *.eclipse\0";
 };
 
