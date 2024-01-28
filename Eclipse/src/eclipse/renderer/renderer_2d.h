@@ -3,6 +3,7 @@
 #include "eclipse/core/core.h"
 #include "orthographic_camera.h"
 #include "eclipse/renderer/camera.h"
+#include "eclipse/renderer/editor_camera.h"
 #include "eclipse/renderer/texture.h"
 #include "eclipse/common_types/must_init.h"
 
@@ -92,6 +93,7 @@ public:
 	static void init();
 	static void shutdown();
 	static void begin_scene(const RenderCamera& camera);
+	static void begin_scene(const EditorCamera& camera);
 	static void begin_scene(const OrthographicCamera& camera);
 	static void end_scene();
 	static void flush();

@@ -155,6 +155,7 @@
     <ClInclude Include="src\eclipse\common_types\point_2d.h" />
     <ClInclude Include="src\eclipse\common_types\profile_results.h" />
     <ClInclude Include="src\eclipse\common_types\transform.h" />
+    <ClInclude Include="src\eclipse\common_types\velocity_2d.h" />
     <ClInclude Include="src\eclipse\common_types\window_size.h" />
     <ClInclude Include="src\eclipse\core\application.h" />
     <ClInclude Include="src\eclipse\core\config.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="src\eclipse\layer\layer_stack.h" />
     <ClInclude Include="src\eclipse\renderer\buffer_layout.h" />
     <ClInclude Include="src\eclipse\renderer\camera.h" />
+    <ClInclude Include="src\eclipse\renderer\editor_camera.h" />
     <ClInclude Include="src\eclipse\renderer\frame_buffer.h" />
     <ClInclude Include="src\eclipse\renderer\graphics_context.h" />
     <ClInclude Include="src\eclipse\renderer\index_buffer.h" />
@@ -643,6 +645,7 @@
     <ClCompile Include="src\eclipse\imgui\imgui_layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer.cpp" />
     <ClCompile Include="src\eclipse\layer\layer_stack.cpp" />
+    <ClCompile Include="src\eclipse\renderer\editor_camera.cpp" />
     <ClCompile Include="src\eclipse\renderer\frame_buffer.cpp" />
     <ClCompile Include="src\eclipse\renderer\graphics_context.cpp" />
     <ClCompile Include="src\eclipse\renderer\index_buffer.cpp" />

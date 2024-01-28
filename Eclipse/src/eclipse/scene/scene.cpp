@@ -28,7 +28,25 @@ Entity Scene::get_primary_camera_entity() {
 	return {};
 }
 
-void Scene::on_update(Timestep timestep) {
+void Scene::on_update_editor(Timestep timestep, EditorCamera& camera) {
+	Renderer2D::begin_scene(camera);
+
+	auto color_group = registry_.view<component::Transform, component::Color>();
+	for (auto entity : color_group) {
+		const auto& [trans, color] = color_group.get<component::Transform, component::Color>(entity);
+		Renderer2D::draw_quad({.transform = trans.get_transform(), .common = {.color = color}});
+	}
+
+	auto sprite_group = registry_.view<component::Transform, component::SpriteRenderer>();
+	for (auto entity : sprite_group) {
+		const auto& [trans, sprite_renderer] = sprite_group.get<component::Transform, component::SpriteRenderer>(entity);
+		Renderer2D::draw_quad({.transform = trans.get_transform(), .common = {.color = sprite_renderer.color}});
+	}
+
+	Renderer2D::end_scene();
+}
+
+void Scene::on_update_runtime(Timestep timestep) {
 	// Update scripts
 	registry_.view<component::NativeScript>().each([=](auto entity, auto& nsc) {
 		if (nsc.instance == nullptr) {

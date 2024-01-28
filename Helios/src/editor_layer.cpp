@@ -79,6 +79,7 @@ void EditorLayer::on_update(Timestep timestep) {
 	    (specs.width != viewport_size_.width || specs.height != viewport_size_.height)) {
 		frame_buffer_->resize(viewport_size_);
 		camera_controller_.on_resize(viewport_size_);
+		editor_camera_.set_viewport_size(viewport_size_);
 
 		active_scene_->on_viewport_resize(viewport_size_);
 	}
@@ -86,6 +87,7 @@ void EditorLayer::on_update(Timestep timestep) {
 	if (viewport_focused_) {
 		camera_controller_.on_update(timestep);
 	}
+	editor_camera_.on_update(timestep);
 
 	frame_rate_ = static_cast<unsigned int>(1.0F / timestep);
 	EC_TRACE_THROTTLED(1.0, "Frame rate: {0}Hz", frame_rate_);
@@ -101,13 +103,14 @@ void EditorLayer::on_update(Timestep timestep) {
 	RenderCommand::set_clear_color({red, green, blue, alpha});
 	RenderCommand::clear();
 
-	active_scene_->on_update(timestep);
+	active_scene_->on_update_editor(timestep, editor_camera_);
 
 	frame_buffer_->unbind();
 }
 
 void EditorLayer::on_event(Event& event) {
 	camera_controller_.on_event(event);
+	editor_camera_.on_event(event);
 
 	EventDispatcher dispatcher(event);
 	dispatcher.dispatch<KeyPressedEvent>(EC_BIND_EVENT_FN(EditorLayer::on_key_pressed));
@@ -233,10 +236,15 @@ void EditorLayer::on_imgui_render() {
 		auto window_height = static_cast<float>(ImGui::GetWindowHeight());
 		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, window_width, window_height);
 
-		auto camera_entity                 = active_scene_->get_primary_camera_entity();
-		const auto& camera                 = camera_entity.get_component<component::Camera>().camera;
-		const glm::mat4& camera_projection = camera.get_projection();
-		glm::mat4 camera_view = glm::inverse(camera_entity.get_component<component::Transform>().get_transform());
+		// Runtime camera from entity:
+		// auto camera_entity                 = active_scene_->get_primary_camera_entity();
+		// const auto& camera                 = camera_entity.get_component<component::Camera>().camera;
+		// const glm::mat4& camera_projection = camera.get_projection();
+		// glm::mat4 camera_view = glm::inverse(camera_entity.get_component<component::Transform>().get_transform());
+
+		// Editor camera:
+		const glm::mat4& camera_projection = editor_camera_.get_projection();
+		glm::mat4 camera_view              = editor_camera_.get_view_matrix();
 
 		auto& trans                = selected_entity.get_component<component::Transform>();
 		glm::mat4 entity_transform = trans.get_transform();

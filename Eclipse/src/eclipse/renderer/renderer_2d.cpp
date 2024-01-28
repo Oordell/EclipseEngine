@@ -110,6 +110,11 @@ void Renderer2D::begin_scene(const RenderCamera& camera) {
 	init_scene(camera.projection * glm::inverse(camera.transform));
 }
 
+void Renderer2D::begin_scene(const EditorCamera& camera) {
+	EC_PROFILE_FUNCTION();
+	init_scene(camera.get_view_projection());
+}
+
 void Renderer2D::begin_scene(const OrthographicCamera& camera) {
 	EC_PROFILE_FUNCTION();
 	init_scene(camera.get_view_projection_matrix());
