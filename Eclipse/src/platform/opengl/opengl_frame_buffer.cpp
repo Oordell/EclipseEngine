@@ -4,7 +4,62 @@
 #include <glad/glad.h>
 
 namespace eclipse {
-OpenGLFrameBuffer::OpenGLFrameBuffer(const FrameBufferSpecification& specs) : specifications_(specs) { invalidate(); }
+
+namespace utils {
+static bool is_multisampling(int num_of_samples) { return num_of_samples > 1; }
+
+static GLenum texture_target(bool multisampling) { return multisampling ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D; }
+
+static void create_textures(bool multisampling, uint32_t* out_id, uint32_t count) {
+	glCreateTextures(texture_target(multisampling), count, out_id);
+}
+
+static void bind_texture(bool multisampling, uint32_t id) { glBindTexture(texture_target(multisampling), id); }
+
+static void apply_mono_sampling_filtering() {
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+}
+
+static void attach_color_texture(uint32_t id, int samples, GLenum format, uint32_t width, uint32_t height, int index) {
+	bool multisampling = is_multisampling(samples);
+	if (multisampling) {
+		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, format, width, height, GL_FALSE);
+	} else {
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+		apply_mono_sampling_filtering();
+	}
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, texture_target(multisampling), id, 0);
+}
+
+static void attach_depth_texture(uint32_t id, int samples, GLenum format, GLenum attachment_type, uint32_t width,
+                                 uint32_t height) {
+	bool multisampling = is_multisampling(samples);
+	if (multisampling) {
+		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, format, width, height, GL_FALSE);
+	} else {
+		glTexStorage2D(GL_TEXTURE_2D, 1, format, width, height);
+		apply_mono_sampling_filtering();
+	}
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, attachment_type, texture_target(multisampling), id, 0);
+}
+}  // namespace utils
+
+OpenGLFrameBuffer::OpenGLFrameBuffer(const FrameBufferSpecification& specs) : specifications_(specs) {
+	for (auto format : specifications_.attachments.attachments) {
+		if (!utils::is_depth_format(format.texture_format)) {
+			color_attachment_specs_.emplace_back(format);
+		} else {
+			depth_attachment_spec_ = format;
+		}
+	}
+	invalidate();
+}
 
 OpenGLFrameBuffer::~OpenGLFrameBuffer() {
 	EC_PROFILE_FUNCTION();
@@ -40,18 +95,42 @@ void OpenGLFrameBuffer::invalidate() {
 	glCreateFramebuffers(1, &renderer_id_);
 	glBindFramebuffer(GL_FRAMEBUFFER, renderer_id_);
 
-	glCreateTextures(GL_TEXTURE_2D, 1, &color_attachment_);
-	glBindTexture(GL_TEXTURE_2D, color_attachment_);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, specifications_.width, specifications_.height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-	             nullptr);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color_attachment_, 0);
+	bool multisampling = utils::is_multisampling(specifications_.samples);
 
-	glCreateTextures(GL_TEXTURE_2D, 1, &depth_attachment_);
-	glBindTexture(GL_TEXTURE_2D, depth_attachment_);
-	glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, specifications_.width, specifications_.height);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depth_attachment_, 0);
+	// Attachments
+	if (!color_attachment_specs_.empty()) {
+		color_attachment_ids_.resize(color_attachment_specs_.size());
+		utils::create_textures(multisampling, color_attachment_ids_.data(), color_attachment_ids_.size());
+
+		for (size_t i = 0; i < color_attachment_ids_.size(); i++) {
+			utils::bind_texture(multisampling, color_attachment_ids_[i]);
+
+			if (color_attachment_specs_[i].texture_format == FramebufferTextureFormat::rgba8) {
+				utils::attach_color_texture(color_attachment_ids_[i], specifications_.samples, GL_RGBA8, specifications_.width,
+				                            specifications_.height, i);
+			}
+		}
+	}
+
+	if (depth_attachment_spec_.texture_format != FramebufferTextureFormat::none) {
+		utils::create_textures(multisampling, &depth_attachment_id_, 1);
+		utils::bind_texture(multisampling, depth_attachment_id_);
+		switch (depth_attachment_spec_.texture_format) {
+			case FramebufferTextureFormat::depth24stencil8: {
+				utils::attach_depth_texture(depth_attachment_id_, specifications_.samples, GL_DEPTH24_STENCIL8,
+				                            GL_DEPTH_STENCIL_ATTACHMENT, specifications_.width, specifications_.height);
+				break;
+			}
+		}
+	}
+
+	if (color_attachment_ids_.size() > 1) {
+		EC_CORE_ASSERT(color_attachment_ids_.size() <= 4, "Eclipse don't support more than 4 color attachments!");
+		GLenum buffers[4] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3};
+		glDrawBuffers(color_attachment_ids_.size(), buffers);
+	} else if (color_attachment_ids_.empty()) {
+		glDrawBuffer(GL_NONE);
+	}
 
 	EC_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
 
@@ -60,7 +139,9 @@ void OpenGLFrameBuffer::invalidate() {
 
 void OpenGLFrameBuffer::reset() {
 	glDeleteFramebuffers(1, &renderer_id_);
-	glDeleteTextures(1, &color_attachment_);
-	glDeleteTextures(1, &depth_attachment_);
+	glDeleteTextures(color_attachment_ids_.size(), color_attachment_ids_.data());
+	glDeleteTextures(1, &depth_attachment_id_);
+	color_attachment_ids_.clear();
+	depth_attachment_id_ = 0;
 }
 }  // namespace eclipse

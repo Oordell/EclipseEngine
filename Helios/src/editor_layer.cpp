@@ -16,7 +16,10 @@ void EditorLayer::on_attach() {
 	checkerboard_texture_   = Texture2D::create("assets/textures/Checkerboard.png");
 	olliver_ordell_texture_ = Texture2D::create("assets/textures/olliver_ordell_logo.png");
 
-	frame_buffer_ = FrameBuffer::create({.width = 1600, .height = 900});
+	frame_buffer_ = FrameBuffer::create({.width       = 1600,
+	                                     .height      = 900,
+	                                     .attachments = {FramebufferTextureFormat::rgba8, FramebufferTextureFormat::rgba8,
+	                                                     FramebufferTextureFormat::depth}});
 
 	active_scene_ = make_ref<Scene>();
 	/*

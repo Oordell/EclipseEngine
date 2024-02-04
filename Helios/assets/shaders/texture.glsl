@@ -1,7 +1,7 @@
 // Basic texture shader
 
 #type vertex
-#version 330 core
+#version 450
 			
 layout(location = 0) in vec3 position_;
 layout(location = 1) in vec4 color_;
@@ -13,7 +13,7 @@ uniform mat4 view_projection;
 
 out vec4 v_color;
 out vec2 v_tex_coord_;
-out float v_tex_index_;
+out flat float v_tex_index_;
 out float v_tiling_factor_;
 
 void main() {
@@ -25,13 +25,14 @@ void main() {
 }
 
 #type fragment
-#version 330 core
+#version 450
 			
 layout(location = 0) out vec4 color;
+layout(location = 1) out vec4 color2; // second render target
 
 in vec4 v_color;
 in vec2 v_tex_coord_;
-in float v_tex_index_;
+in flat float v_tex_index_;
 in float v_tiling_factor_;
 
 uniform sampler2D u_textures[32];
@@ -75,5 +76,6 @@ void main() {
 		case 31: tex_color *= texture(u_textures[31], v_tex_coord_ * v_tiling_factor_); break;
 	}
 	color = tex_color;
+	color2 = vec4(0.9, 0.2, 0.3, 1.0); // Static red for now, but should be updated
 
 }

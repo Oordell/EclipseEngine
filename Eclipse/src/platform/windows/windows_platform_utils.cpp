@@ -15,12 +15,16 @@ namespace eclipse {
 
 FileDialogResult FileDialogs::open_file(const char* filter) {
 	OPENFILENAMEA ofn;
-	CHAR sz_file[260] = {0};
+	CHAR sz_file[260]     = {0};
+	CHAR current_dir[256] = {0};
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));
-	ofn.lStructSize  = sizeof(OPENFILENAME);
-	ofn.hwndOwner    = glfwGetWin32Window(static_cast<GLFWwindow*>(Application::get().get_window().get_native_window()));
-	ofn.lpstrFile    = sz_file;
-	ofn.nMaxFile     = sizeof(sz_file);
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner   = glfwGetWin32Window(static_cast<GLFWwindow*>(Application::get().get_window().get_native_window()));
+	ofn.lpstrFile   = sz_file;
+	ofn.nMaxFile    = sizeof(sz_file);
+	if (GetCurrentDirectoryA(256, current_dir)) {
+		ofn.lpstrInitialDir = current_dir;
+	}
 	ofn.lpstrFilter  = filter;
 	ofn.nFilterIndex = 1;
 	ofn.Flags        = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
@@ -32,12 +36,16 @@ FileDialogResult FileDialogs::open_file(const char* filter) {
 
 FileDialogResult FileDialogs::save_file(const char* filter) {
 	OPENFILENAMEA ofn;
-	CHAR sz_file[260] = {0};
+	CHAR sz_file[260]     = {0};
+	CHAR current_dir[256] = {0};
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));
-	ofn.lStructSize  = sizeof(OPENFILENAME);
-	ofn.hwndOwner    = glfwGetWin32Window(static_cast<GLFWwindow*>(Application::get().get_window().get_native_window()));
-	ofn.lpstrFile    = sz_file;
-	ofn.nMaxFile     = sizeof(sz_file);
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner   = glfwGetWin32Window(static_cast<GLFWwindow*>(Application::get().get_window().get_native_window()));
+	ofn.lpstrFile   = sz_file;
+	ofn.nMaxFile    = sizeof(sz_file);
+	if (GetCurrentDirectoryA(256, current_dir)) {
+		ofn.lpstrInitialDir = current_dir;
+	}
 	ofn.lpstrFilter  = filter;
 	ofn.nFilterIndex = 1;
 	ofn.Flags        = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
