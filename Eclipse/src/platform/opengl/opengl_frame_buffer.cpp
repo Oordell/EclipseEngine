@@ -24,12 +24,13 @@ static void apply_mono_sampling_filtering() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
-static void attach_color_texture(uint32_t id, int samples, GLenum format, uint32_t width, uint32_t height, int index) {
+static void attach_color_texture(uint32_t id, int samples, GLenum internal_format, GLenum format, uint32_t width,
+                                 uint32_t height, int index) {
 	bool multisampling = is_multisampling(samples);
 	if (multisampling) {
-		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, format, width, height, GL_FALSE);
+		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, internal_format, width, height, GL_FALSE);
 	} else {
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+		glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
 		apply_mono_sampling_filtering();
 	}
 
@@ -85,6 +86,17 @@ void OpenGLFrameBuffer::resize(const WindowSize& size) {
 	invalidate();
 }
 
+int OpenGLFrameBuffer::get_pixel_value(uint32_t attachment_index, int x, int y) {
+	EC_CORE_ASSERT(attachment_index < color_attachment_ids_.size(),
+	               "Trying to read pixel value from a attachment index out of bounds! Number of attachments: {0}, "
+	               "Attachment index: {1}",
+	               color_attachment_ids_.size(), attachment_index);
+	glReadBuffer(GL_COLOR_ATTACHMENT0 + attachment_index);
+	int pixel_data = -1;
+	glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixel_data);
+	return pixel_data;
+}
+
 void OpenGLFrameBuffer::invalidate() {
 	EC_PROFILE_FUNCTION();
 
@@ -100,14 +112,26 @@ void OpenGLFrameBuffer::invalidate() {
 	// Attachments
 	if (!color_attachment_specs_.empty()) {
 		color_attachment_ids_.resize(color_attachment_specs_.size());
-		utils::create_textures(multisampling, color_attachment_ids_.data(), color_attachment_ids_.size());
+		utils::create_textures(multisampling, color_attachment_ids_.data(),
+		                       static_cast<uint32_t>(color_attachment_ids_.size()));
 
 		for (size_t i = 0; i < color_attachment_ids_.size(); i++) {
 			utils::bind_texture(multisampling, color_attachment_ids_[i]);
 
-			if (color_attachment_specs_[i].texture_format == FramebufferTextureFormat::rgba8) {
-				utils::attach_color_texture(color_attachment_ids_[i], specifications_.samples, GL_RGBA8, specifications_.width,
-				                            specifications_.height, i);
+			switch (color_attachment_specs_[i].texture_format) {
+				case FramebufferTextureFormat::rgba8: {
+					utils::attach_color_texture(color_attachment_ids_[i], specifications_.samples, GL_RGBA8, GL_RGBA,
+					                            specifications_.width, specifications_.height, static_cast<int>(i));
+					break;
+				}
+				case FramebufferTextureFormat::red_integer: {
+					utils::attach_color_texture(color_attachment_ids_[i], specifications_.samples, GL_R32I, GL_RED_INTEGER,
+					                            specifications_.width, specifications_.height, static_cast<int>(i));
+					break;
+				}
+				default: {
+					break;
+				}
 			}
 		}
 	}
@@ -127,7 +151,7 @@ void OpenGLFrameBuffer::invalidate() {
 	if (color_attachment_ids_.size() > 1) {
 		EC_CORE_ASSERT(color_attachment_ids_.size() <= 4, "Eclipse don't support more than 4 color attachments!");
 		GLenum buffers[4] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3};
-		glDrawBuffers(color_attachment_ids_.size(), buffers);
+		glDrawBuffers(static_cast<GLsizei>(color_attachment_ids_.size()), buffers);
 	} else if (color_attachment_ids_.empty()) {
 		glDrawBuffer(GL_NONE);
 	}
@@ -139,7 +163,7 @@ void OpenGLFrameBuffer::invalidate() {
 
 void OpenGLFrameBuffer::reset() {
 	glDeleteFramebuffers(1, &renderer_id_);
-	glDeleteTextures(color_attachment_ids_.size(), color_attachment_ids_.data());
+	glDeleteTextures(static_cast<GLsizei>(color_attachment_ids_.size()), color_attachment_ids_.data());
 	glDeleteTextures(1, &depth_attachment_id_);
 	color_attachment_ids_.clear();
 	depth_attachment_id_ = 0;

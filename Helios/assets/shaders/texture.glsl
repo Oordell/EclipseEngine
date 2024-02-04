@@ -28,7 +28,7 @@ void main() {
 #version 450
 			
 layout(location = 0) out vec4 color;
-layout(location = 1) out vec4 color2; // second render target
+layout(location = 1) out int color2;
 
 in vec4 v_color;
 in vec2 v_tex_coord_;
@@ -76,6 +76,6 @@ void main() {
 		case 31: tex_color *= texture(u_textures[31], v_tex_coord_ * v_tiling_factor_); break;
 	}
 	color = tex_color;
-	color2 = vec4(0.9, 0.2, 0.3, 1.0); // Static red for now, but should be updated
+	color2 = 50;
 
 }

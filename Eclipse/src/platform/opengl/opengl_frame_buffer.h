@@ -10,7 +10,8 @@ public:
 	~OpenGLFrameBuffer() override;
 	void bind() override;
 	void unbind() override;
-	void resize(const WindowSize& size);
+	void resize(const WindowSize& size) override;
+	int get_pixel_value(uint32_t attachment_index, int x, int y) override;
 
 	const FrameBufferSpecification& get_specification() const override { return specifications_; }
 

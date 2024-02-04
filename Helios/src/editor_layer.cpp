@@ -16,10 +16,11 @@ void EditorLayer::on_attach() {
 	checkerboard_texture_   = Texture2D::create("assets/textures/Checkerboard.png");
 	olliver_ordell_texture_ = Texture2D::create("assets/textures/olliver_ordell_logo.png");
 
-	frame_buffer_ = FrameBuffer::create({.width       = 1600,
-	                                     .height      = 900,
-	                                     .attachments = {FramebufferTextureFormat::rgba8, FramebufferTextureFormat::rgba8,
-	                                                     FramebufferTextureFormat::depth}});
+	frame_buffer_ =
+	    FrameBuffer::create({.width       = 1600,
+	                         .height      = 900,
+	                         .attachments = {FramebufferTextureFormat::rgba8, FramebufferTextureFormat::red_integer,
+	                                         FramebufferTextureFormat::depth}});
 
 	active_scene_ = make_ref<Scene>();
 	/*
@@ -107,6 +108,20 @@ void EditorLayer::on_update(Timestep timestep) {
 	RenderCommand::clear();
 
 	active_scene_->on_update_editor(timestep, editor_camera_);
+
+	auto [m_x, m_y] = ImGui::GetMousePos();
+	m_x -= viewport_bounds_[0].x;
+	m_y -= viewport_bounds_[0].y;
+	auto viewport_size = viewport_bounds_[1] - viewport_bounds_[0];
+	m_y                = viewport_size.y - m_y;
+	int mouse_x        = static_cast<int>(m_x);
+	int mouse_y        = static_cast<int>(m_y);
+
+	if (mouse_x >= 0 && mouse_y >= 0 && mouse_x < static_cast<int>(viewport_size.x) &&
+	    mouse_y < static_cast<int>(viewport_size.y)) {
+		int pixel_value = frame_buffer_->get_pixel_value(1, mouse_x, mouse_y);
+		EC_CORE_DEBUG("Pixel value: {0}, at mouse Position: {1}, {2}", pixel_value, mouse_x, mouse_y);
+	}
 
 	frame_buffer_->unbind();
 }
@@ -214,6 +229,11 @@ void EditorLayer::on_imgui_render() {
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 {0.0F, 0.0F});
 	ImGui::Begin("Viewport");
+	auto viewport_min_region = ImGui::GetWindowContentRegionMin();
+	auto viewport_max_region = ImGui::GetWindowContentRegionMax();
+	auto viewport_offset     = ImGui::GetWindowPos();
+	viewport_bounds_[0]      = {viewport_min_region.x + viewport_offset.x, viewport_min_region.y + viewport_offset.y};
+	viewport_bounds_[1]      = {viewport_max_region.x + viewport_offset.x, viewport_max_region.y + viewport_offset.y};
 
 	viewport_focused_ = ImGui::IsWindowFocused();
 	viewport_hovered_ = ImGui::IsWindowHovered();
@@ -225,7 +245,7 @@ void EditorLayer::on_imgui_render() {
 	if (viewport_size_.width != temp_width || viewport_size_.height != temp_height) {
 		viewport_size_ = {.width = temp_width, .height = temp_height};
 	}
-	uint64_t texture_id = static_cast<uint64_t>(frame_buffer_->get_color_attachment_renderer_id());
+	uint64_t texture_id = static_cast<uint64_t>(frame_buffer_->get_color_attachment_renderer_id(0));
 	ImGui::Image(reinterpret_cast<void*>(texture_id), ImVec2 {viewport_panel_size.x, viewport_panel_size.y}, ImVec2 {0, 1},
 	             ImVec2 {1, 0});
 
@@ -235,9 +255,9 @@ void EditorLayer::on_imgui_render() {
 		ImGuizmo::SetOrthographic(false);
 		ImGuizmo::SetDrawlist();
 
-		auto window_width  = static_cast<float>(ImGui::GetWindowWidth());
-		auto window_height = static_cast<float>(ImGui::GetWindowHeight());
-		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, window_width, window_height);
+		auto window_width  = viewport_bounds_[1].x - viewport_bounds_[0].x;
+		auto window_height = viewport_bounds_[1].y - viewport_bounds_[0].y;
+		ImGuizmo::SetRect(viewport_bounds_[0].x, viewport_bounds_[0].y, window_width, window_height);
 
 		// Runtime camera from entity:
 		// auto camera_entity                 = active_scene_->get_primary_camera_entity();

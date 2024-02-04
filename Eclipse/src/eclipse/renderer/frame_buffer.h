@@ -7,7 +7,7 @@
 
 namespace eclipse {
 
-enum class FramebufferTextureFormat { none, rgba8, depth24stencil8, depth = depth24stencil8 };
+enum class FramebufferTextureFormat { none, rgba8, red_integer, depth24stencil8, depth = depth24stencil8 };
 
 namespace utils {
 
@@ -49,6 +49,7 @@ public:
 	virtual void bind()                                                         = 0;
 	virtual void unbind()                                                       = 0;
 	virtual void resize(const WindowSize& size)                                 = 0;
+	virtual int get_pixel_value(uint32_t attachment_index, int x, int y)        = 0;
 	virtual const FrameBufferSpecification& get_specification() const           = 0;
 	virtual uint32_t get_color_attachment_renderer_id(uint32_t index = 0) const = 0;
 
