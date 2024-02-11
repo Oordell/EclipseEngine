@@ -43,6 +43,8 @@ void SceneHierarchyPanel::on_imgui_render() {
 	ImGui::End();
 }
 
+void SceneHierarchyPanel::set_selected_entity(Entity entity) { selection_context_ = entity; }
+
 void SceneHierarchyPanel::draw_entity_node(Entity entity) {
 	auto& tag_component = entity.get_component<component::Tag>();
 	uint64_t entity_id  = static_cast<uint64_t>(entity);

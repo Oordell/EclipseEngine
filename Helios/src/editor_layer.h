@@ -21,6 +21,7 @@ private:
 	void open_scene();
 	void save_scene_as();
 	bool on_key_pressed(KeyPressedEvent& event);
+	bool on_mouse_button_pressed(MouseButtonPressedEvent& event);
 
 	OrthographicCameraController camera_controller_ {1280.0F / 720.0F, EnableCameraRotation::yes};
 

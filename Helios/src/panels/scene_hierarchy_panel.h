@@ -10,6 +10,7 @@ public:
 	SceneHierarchyPanel(const ref<Scene>& context);
 	void set_context(const ref<Scene>& context);
 	void on_imgui_render();
+	void set_selected_entity(Entity entity);
 
 	[[nodiscard]] Entity get_selected_entity() const { return selection_context_; }
 
@@ -28,7 +29,7 @@ private:
 		float reset_value        = 0.0F;
 		float column_width       = 100.0F;
 	};
-	
+
 	void draw_vec3_control(const Vec3Controls& controls);
 
 	ref<Scene> context_;

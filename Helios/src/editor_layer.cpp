@@ -135,6 +135,7 @@ void EditorLayer::on_event(Event& event) {
 
 	EventDispatcher dispatcher(event);
 	dispatcher.dispatch<KeyPressedEvent>(EC_BIND_EVENT_FN(EditorLayer::on_key_pressed));
+	dispatcher.dispatch<MouseButtonPressedEvent>(EC_BIND_EVENT_FN(EditorLayer::on_mouse_button_pressed));
 }
 
 void EditorLayer::on_imgui_render() {
@@ -287,7 +288,7 @@ void EditorLayer::on_imgui_render() {
 		                     static_cast<ImGuizmo::OPERATION>(gizmo_type_), ImGuizmo::LOCAL, glm::value_ptr(entity_transform),
 		                     nullptr, snap ? snap_values : nullptr);
 
-		if (ImGuizmo::IsUsing()) {
+		if (ImGuizmo::IsUsing() && !InputManager::is_key_pressed(KeyCode::left_alt)) {
 			auto decomposed_transform = utils::decompose_transform(entity_transform);
 			if (decomposed_transform.has_value()) {
 				glm::vec3 delta_rotation = decomposed_transform.value().rotation - trans.rotation;
@@ -379,6 +380,15 @@ bool EditorLayer::on_key_pressed(KeyPressedEvent& event) {
 			break;
 	}
 
+	return false;
+}
+
+bool EditorLayer::on_mouse_button_pressed(MouseButtonPressedEvent& event) {
+	if (event.get_mouse_button() == MouseCode::button_left) {
+		if (viewport_hovered_ && !ImGuizmo::IsOver() && !InputManager::is_key_pressed(KeyCode::left_alt)) {
+			scene_hierarchy_panel_.set_selected_entity(hovered_entity_);
+		}
+	}
 	return false;
 }
 }  // namespace eclipse
