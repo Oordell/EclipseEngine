@@ -30,6 +30,7 @@ private:
 	Entity red_square_entity_;
 	Entity camera_entity_;
 	Entity second_camera_;
+	Entity hovered_entity_;
 	bool use_primary_camera_ = true;
 	ref<Texture2D> checkerboard_texture_;
 	ref<Texture2D> olliver_ordell_texture_;

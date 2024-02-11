@@ -75,7 +75,16 @@ void OpenGLVertexArray::add_vertex_buffer(const ref<VertexBuffer>& vertex_buffer
 			case ShaderDataType::floatvec1:
 			case ShaderDataType::floatvec2:
 			case ShaderDataType::floatvec3:
-			case ShaderDataType::floatvec4:
+			case ShaderDataType::floatvec4: {
+				glEnableVertexAttribArray(vertex_buffer_index_);
+				uint64_t offset = static_cast<uint64_t>(element.offset);
+				glVertexAttribPointer(vertex_buffer_index_, element.get_component_count(),
+				                      shader_data_type_to_opengl_base_type(element.type), element.normalized ? GL_TRUE : GL_FALSE,
+				                      layout.get_stride(), reinterpret_cast<const void*>(offset));
+				vertex_buffer_index_++;
+				break;
+			}
+
 			case ShaderDataType::intvec1:
 			case ShaderDataType::intvec2:
 			case ShaderDataType::intvec3:
@@ -83,9 +92,9 @@ void OpenGLVertexArray::add_vertex_buffer(const ref<VertexBuffer>& vertex_buffer
 			case ShaderDataType::boolean: {
 				glEnableVertexAttribArray(vertex_buffer_index_);
 				uint64_t offset = static_cast<uint64_t>(element.offset);
-				glVertexAttribPointer(vertex_buffer_index_, element.get_component_count(),
-				                      shader_data_type_to_opengl_base_type(element.type), element.normalized ? GL_TRUE : GL_FALSE,
-				                      layout.get_stride(), reinterpret_cast<const void*>(offset));
+				glVertexAttribIPointer(vertex_buffer_index_, element.get_component_count(),
+				                       shader_data_type_to_opengl_base_type(element.type), layout.get_stride(),
+				                       reinterpret_cast<const void*>(offset));
 				vertex_buffer_index_++;
 				break;
 			}

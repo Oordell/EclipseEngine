@@ -49,6 +49,23 @@ static void attach_depth_texture(uint32_t id, int samples, GLenum format, GLenum
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, attachment_type, texture_target(multisampling), id, 0);
 }
+
+static GLenum eclipse_frame_buffer_texture_format_to_gl_format(FramebufferTextureFormat format) {
+	using enum FramebufferTextureFormat;
+	switch (format) {
+		case rgba8: {
+			return GL_RGBA8;
+		}
+		case red_integer: {
+			return GL_RED_INTEGER;
+		}
+		case none:
+		case depth24stencil8: {
+			EC_CORE_ASSERT(false, "Unsupported FrameBufferTextureFormat supplied!: {0}", static_cast<int>(format));
+		}
+	}
+	return 0;
+}
 }  // namespace utils
 
 OpenGLFrameBuffer::OpenGLFrameBuffer(const FrameBufferSpecification& specs) : specifications_(specs) {
@@ -95,6 +112,17 @@ int OpenGLFrameBuffer::get_pixel_value(uint32_t attachment_index, int x, int y) 
 	int pixel_data = -1;
 	glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixel_data);
 	return pixel_data;
+}
+
+void OpenGLFrameBuffer::clear_attachment(uint32_t attachment_index, int value) {
+	EC_CORE_ASSERT(attachment_index < color_attachment_ids_.size(),
+	               "Trying to read pixel value from a attachment index out of bounds! Number of attachments: {0}, "
+	               "Attachment index: {1}",
+	               color_attachment_ids_.size(), attachment_index);
+
+	auto& specs = color_attachment_specs_[attachment_index];
+	glClearTexImage(color_attachment_ids_[attachment_index], 0,
+	                utils::eclipse_frame_buffer_texture_format_to_gl_format(specs.texture_format), GL_INT, &value);
 }
 
 void OpenGLFrameBuffer::invalidate() {

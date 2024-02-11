@@ -6,6 +6,7 @@
 #include "eclipse/renderer/editor_camera.h"
 #include "eclipse/renderer/texture.h"
 #include "eclipse/common_types/must_init.h"
+#include "eclipse/scene/components.h"
 
 namespace eclipse {
 
@@ -68,10 +69,18 @@ struct QuadMetaDataTransformTexture {
 	MustInit<ref<Texture2D>> texture;
 };
 
+struct SpriteMetaDataTransform {
+	QuadMetaDataCommon common {};
+	glm::mat4 transform {1.0F};
+	component::SpriteRenderer component {};
+	int entity_id {-1};
+};
+
 struct QuadDrawingDataImpl {
 	ref<Texture2D> texture;
 	glm::mat4 transform {1.0F};
 	QuadMetaDataCommon common {};
+	int entity_id {-1};
 };
 
 struct RendererStatistics {
@@ -104,6 +113,8 @@ public:
 	static void draw_quad(const QuadMetaDataPosition2DTexture& info);
 	static void draw_quad(const QuadMetaDataPosition3DTexture& info);
 	static void draw_quad(const QuadMetaDataTransformTexture& info);
+
+	static void draw_sprite(const SpriteMetaDataTransform& info);
 
 private:
 	static void draw_quad_impl(const QuadDrawingDataImpl& info);

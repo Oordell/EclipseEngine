@@ -17,7 +17,7 @@ Entity Scene::create_entity(const std::string& name) {
 
 void Scene::destroy_entity(Entity entity) { registry_.destroy(entity); }
 
-Entity Scene::get_primary_camera_entity() { 
+Entity Scene::get_primary_camera_entity() {
 	auto view = registry_.view<component::Camera>();
 	for (auto entity : view) {
 		const auto& camera = view.get<component::Camera>(entity);
@@ -34,13 +34,17 @@ void Scene::on_update_editor(Timestep timestep, EditorCamera& camera) {
 	auto color_group = registry_.view<component::Transform, component::Color>();
 	for (auto entity : color_group) {
 		const auto& [trans, color] = color_group.get<component::Transform, component::Color>(entity);
-		Renderer2D::draw_quad({.transform = trans.get_transform(), .common = {.color = color}});
+		//	Renderer2D::draw_quad({.transform = trans.get_transform(), .common = {.color = color}});
+		Renderer2D::draw_sprite({.transform = trans.get_transform(),
+		                         .component = component::SpriteRenderer(color.color),
+		                         .entity_id = static_cast<int>(entity)});
 	}
 
 	auto sprite_group = registry_.view<component::Transform, component::SpriteRenderer>();
 	for (auto entity : sprite_group) {
 		const auto& [trans, sprite_renderer] = sprite_group.get<component::Transform, component::SpriteRenderer>(entity);
-		Renderer2D::draw_quad({.transform = trans.get_transform(), .common = {.color = sprite_renderer.color}});
+		Renderer2D::draw_sprite(
+		    {.transform = trans.get_transform(), .component = sprite_renderer, .entity_id = static_cast<int>(entity)});
 	}
 
 	Renderer2D::end_scene();
@@ -77,13 +81,17 @@ void Scene::on_update_runtime(Timestep timestep) {
 		auto color_group = registry_.view<component::Transform, component::Color>();
 		for (auto entity : color_group) {
 			const auto& [trans, color] = color_group.get<component::Transform, component::Color>(entity);
-			Renderer2D::draw_quad({.transform = trans.get_transform(), .common = {.color = color}});
+			//	Renderer2D::draw_quad({.transform = trans.get_transform(), .common = {.color = color}});
+			Renderer2D::draw_sprite({.transform = trans.get_transform(),
+			                         .component = component::SpriteRenderer(color.color),
+			                         .entity_id = static_cast<int>(entity)});
 		}
 
 		auto sprite_group = registry_.view<component::Transform, component::SpriteRenderer>();
 		for (auto entity : sprite_group) {
 			const auto& [trans, sprite_renderer] = sprite_group.get<component::Transform, component::SpriteRenderer>(entity);
-			Renderer2D::draw_quad({.transform = trans.get_transform(), .common = {.color = sprite_renderer.color}});
+			Renderer2D::draw_sprite(
+			    {.transform = trans.get_transform(), .component = sprite_renderer, .entity_id = static_cast<int>(entity)});
 		}
 
 		Renderer2D::end_scene();

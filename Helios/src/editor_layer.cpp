@@ -107,6 +107,9 @@ void EditorLayer::on_update(Timestep timestep) {
 	RenderCommand::set_clear_color({red, green, blue, alpha});
 	RenderCommand::clear();
 
+	// Clear the entity ID attachment for the clear color to -1;
+	frame_buffer_->clear_attachment(1, -1);
+
 	active_scene_->on_update_editor(timestep, editor_camera_);
 
 	auto [m_x, m_y] = ImGui::GetMousePos();
@@ -120,7 +123,7 @@ void EditorLayer::on_update(Timestep timestep) {
 	if (mouse_x >= 0 && mouse_y >= 0 && mouse_x < static_cast<int>(viewport_size.x) &&
 	    mouse_y < static_cast<int>(viewport_size.y)) {
 		int pixel_value = frame_buffer_->get_pixel_value(1, mouse_x, mouse_y);
-		EC_CORE_DEBUG("Pixel value: {0}, at mouse Position: {1}, {2}", pixel_value, mouse_x, mouse_y);
+		hovered_entity_ = pixel_value == -1 ? Entity() : Entity(static_cast<entt::entity>(pixel_value), active_scene_.get());
 	}
 
 	frame_buffer_->unbind();
@@ -215,6 +218,9 @@ void EditorLayer::on_imgui_render() {
 	scene_hierarchy_panel_.on_imgui_render();
 
 	ImGui::Begin("Settings");
+
+	std::string name = hovered_entity_ ? hovered_entity_.get_component<component::Tag>().tag : "None";
+	ImGui::Text("Hovered Entity: %s", name.c_str());
 
 	auto stats = Renderer2D::get_statistics();
 	ImGui::Text("Renderer2D Statistics:");

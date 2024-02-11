@@ -15,6 +15,9 @@ struct QuadVertex {
 	glm::vec2 tex_coord {0.0F, 0.0F};
 	float texture_index {0.0F};
 	float tiling_factor {1.0F};
+
+	// Editor only:
+	int entity_id {-1};
 };
 
 struct Renderer2DData {
@@ -55,7 +58,8 @@ void Renderer2D::init() {
 	                                     {ShaderDataType::floatvec4, "color_"},
 	                                     {ShaderDataType::floatvec2, "tex_coord_"},
 	                                     {ShaderDataType::floatvec1, "tex_index_"},
-	                                     {ShaderDataType::floatvec1, "tiling_factor_"}});
+	                                     {ShaderDataType::floatvec1, "tiling_factor_"},
+	                                     {ShaderDataType::intvec1, "entity_id"}});
 	data.quad_vertex_array->add_vertex_buffer(data.quad_vertex_buffer);
 
 	data.quad_vertex_buffer_base = new QuadVertex[data.MAX_VERTICES];
@@ -186,6 +190,17 @@ void Renderer2D::draw_quad(const QuadMetaDataTransformTexture& info) {
 	draw_quad_impl({.texture = info.texture, .transform = info.transform, .common = info.common});
 }
 
+void Renderer2D::draw_sprite(const SpriteMetaDataTransform& info) {
+	EC_PROFILE_FUNCTION();
+	draw_quad_impl(
+	    {.texture   = data.white_texture,  // Replace this with info.component.texture once SpriteRenderer gets a texture.
+	     .transform = info.transform,
+	     .common    = {.tiling_factor  = info.common.tiling_factor,
+	                   .color          = info.component.color,
+	                   .texture_coords = info.common.texture_coords},
+	     .entity_id = info.entity_id});
+}
+
 void Renderer2D::draw_quad_impl(const QuadDrawingDataImpl& info) {
 	EC_PROFILE_FUNCTION();
 
@@ -223,6 +238,7 @@ void Renderer2D::draw_quad_impl(const QuadDrawingDataImpl& info) {
 			data.quad_vertex_buffer_ptr->tex_coord     = info.common.texture_coords[i];
 			data.quad_vertex_buffer_ptr->texture_index = texture_index;
 			data.quad_vertex_buffer_ptr->tiling_factor = info.common.tiling_factor;
+			data.quad_vertex_buffer_ptr->entity_id     = info.entity_id;
 			data.quad_vertex_buffer_ptr++;
 		}
 	}

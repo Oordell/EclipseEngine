@@ -12,6 +12,7 @@ public:
 	void unbind() override;
 	void resize(const WindowSize& size) override;
 	int get_pixel_value(uint32_t attachment_index, int x, int y) override;
+	void clear_attachment(uint32_t attachment_index, int value) override;
 
 	const FrameBufferSpecification& get_specification() const override { return specifications_; }
 
