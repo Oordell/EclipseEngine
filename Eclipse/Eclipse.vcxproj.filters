@@ -46,6 +46,9 @@
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
     </Filter>
+    <Filter Include="vendor\au">
+      <UniqueIdentifier>{B88F53DE-24FA-0755-6D38-B9FAD9E1E5A9}</UniqueIdentifier>
+    </Filter>
     <Filter Include="vendor\glm">
       <UniqueIdentifier>{829FC5A8-6E57-07F6-D75E-E051C335A2E6}</UniqueIdentifier>
     </Filter>
@@ -94,6 +97,9 @@
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\common_types\transform.h">
+      <Filter>src\eclipse\common_types</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\common_types\screen_velocity_2d.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\common_types\window_size.h">
@@ -169,6 +175,9 @@
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\renderer\camera.h">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\renderer\editor_camera.h">
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\renderer\frame_buffer.h">
@@ -275,6 +284,12 @@
     </ClInclude>
     <ClInclude Include="src\platform\windows\windows_window.h">
       <Filter>src\platform\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\au\au.hh">
+      <Filter>vendor\au</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\au\au_noio.hh">
+      <Filter>vendor\au</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\glm\common.hpp">
       <Filter>vendor\glm\glm</Filter>
@@ -1530,8 +1545,9 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\renderer\editor_camera.h" />
-    <ClInclude Include="src\eclipse\common_types\velocity_2d.h" />
+    <ClInclude Include="src\eclipse\common_types\dimensions\dim_pixel.h" />
+    <ClInclude Include="src\eclipse\common_types\units\pixel.h" />
+    <ClInclude Include="src\eclipse\common_types\units\pixels_per_seconds.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\core\application.cpp">
@@ -1557,6 +1573,9 @@
     </ClCompile>
     <ClCompile Include="src\eclipse\layer\layer_stack.cpp">
       <Filter>src\eclipse\layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\renderer\editor_camera.cpp">
+      <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\renderer\frame_buffer.cpp">
       <Filter>src\eclipse\renderer</Filter>
@@ -1666,6 +1685,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\eclipse\renderer\editor_camera.cpp" />
   </ItemGroup>
 </Project>
