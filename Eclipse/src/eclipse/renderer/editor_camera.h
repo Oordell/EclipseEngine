@@ -5,7 +5,7 @@
 #include "eclipse/events/event.h"
 #include "eclipse/events/mouse_events.h"
 #include "eclipse/common_types/window_size.h"
-#include "eclipse/common_types/velocity_2d.h"
+#include "eclipse/common_types/screen_velocity_2d.h"
 
 #include <glm/glm.hpp>
 
@@ -60,7 +60,7 @@ private:
 	void mouse_rotate(const glm::vec2& delta);
 	void mouse_zoom(float delta);
 	glm::vec3 calculate_position() const;
-	Velocity2D pan_speed() const;
+	ScreenVelocity2D pan_speed() const;
 	float rotation_speed() const;
 	float zoom_speed() const;
 

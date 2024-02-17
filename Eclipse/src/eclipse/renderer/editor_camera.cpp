@@ -78,8 +78,8 @@ bool EditorCamera::on_mouse_scroll(MouseScrolledEvent& e) {
 
 void EditorCamera::mouse_pan(const glm::vec2& delta) {
 	auto [x_speed, y_speed] = pan_speed();
-	focal_point_ += -get_right_direction() * delta.x * x_speed * distance_;
-	focal_point_ += get_up_direction() * delta.y * y_speed * distance_;
+	focal_point_ += -get_right_direction() * delta.x * x_speed.in(pixels_per_seconds) * distance_;
+	focal_point_ += get_up_direction() * delta.y * y_speed.in(pixels_per_seconds) *distance_;
 }
 
 void EditorCamera::mouse_rotate(const glm::vec2& delta) {
@@ -98,14 +98,14 @@ void EditorCamera::mouse_zoom(float delta) {
 
 glm::vec3 EditorCamera::calculate_position() const { return focal_point_ - get_forward_direction() * distance_; }
 
-Velocity2D EditorCamera::pan_speed() const {
+ScreenVelocity2D EditorCamera::pan_speed() const {
 	float x       = std::min(viewport_width_ / 1000.0F, 2.4F);  // max = 2.4f
 	float xFactor = 0.0366F * (x * x) - 0.1778F * x + 0.3021F;
 
 	float y       = std::min(viewport_height_ / 1000.0F, 2.4F);  // max = 2.4f
 	float yFactor = 0.0366F * (y * y) - 0.1778F * y + 0.3021F;
 
-	return {.vel_x = xFactor, .vel_y = yFactor};
+	return {.vel_x = pixels_per_seconds(xFactor), .vel_y = pixels_per_seconds(yFactor)};
 }
 
 float EditorCamera::rotation_speed() const { return 0.8F; }
