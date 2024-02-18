@@ -43,7 +43,7 @@ private:
 	glm::mat4 projection_matrix_ {};
 	glm::mat4 view_matrix_ {};
 	glm::mat4 view_projection_matrix_ {};
-	glm::vec3 position_ {0, 0, 0};
+	glm::vec3 position_ {0.0F, 0.0F, 0.0F};
 	au::Quantity<au::Degrees, float> rotation_ {au::degrees(0.0F)};
 };
 

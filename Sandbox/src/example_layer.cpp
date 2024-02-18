@@ -122,7 +122,7 @@ ExampleLayer::ExampleLayer() : Layer("Example") {
 void ExampleLayer::on_update(eclipse::Timestep timestep) {
 	camera_controller_.on_update(timestep);
 
-	frame_rate_ = static_cast<unsigned int>(1.0F / timestep);
+	frame_rate_ = static_cast<unsigned int>(1.0F / timestep.get().in(au::seconds));
 	EC_TRACE_THROTTLED(0.25, "Frame rate: {0}Hz", frame_rate_);
 
 	static const float red   = 0.1F;

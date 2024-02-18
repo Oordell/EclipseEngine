@@ -46,7 +46,7 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 
 	camera_controller_.on_update(timestep);
 
-	frame_rate_ = static_cast<unsigned int>(1.0F / timestep);
+	frame_rate_ = static_cast<unsigned int>(1.0F / timestep.get().in(au::seconds));
 	EC_TRACE_THROTTLED(1.0, "Frame rate: {0}Hz", frame_rate_);
 
 	static const float red   = 0.1F;
@@ -65,7 +65,7 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 		EC_PROFILE_SCOPE("Renderer Draw");
 
 		static float rotation = 0.0F;
-		rotation += timestep * 1.0F;
+		rotation += timestep.get().in(au::seconds) *1.0F;
 
 		eclipse::Renderer2D::begin_scene(camera_controller_.get_camera());
 

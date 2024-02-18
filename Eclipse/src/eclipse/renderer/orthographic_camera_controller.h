@@ -50,7 +50,8 @@ private:
 	EnableCameraRotation rotate_camera_;
 	glm::vec3 camera_position_ {0.0F, 0.0F, 0.0F};
 	au::Quantity<au::Degrees, float> camera_rotation_ {au::degrees(0.0F)};
-	float camera_move_speed_ = 2.0F;  // [units / sec]
+	au::Quantity<decltype(units::Pixels {} / au::Seconds {}), float> camera_move_speed_ {units::pixels(2.0F) /
+	                                                                                     au::seconds(1.0F)};
 	au::Quantity<decltype(au::Degrees {} / au::Seconds {}), float> camera_rotate_speed_ {au::degrees(90.0F) /
 	                                                                                     au::seconds(1.0F)};
 	unsigned int frame_rate_ = 0;

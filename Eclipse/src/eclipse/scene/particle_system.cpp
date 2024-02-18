@@ -26,9 +26,9 @@ void ParticleSystem::on_update(Timestep timestep) {
 			continue;
 		}
 
-		particle.life_remaining -= timestep;
-		particle.position += particle.velocity * static_cast<float>(timestep);
-		particle.rotation += 0.01f * timestep;
+		particle.life_remaining -= timestep.get().in<float>(au::seconds);
+		particle.position += particle.velocity * timestep.get().in<float>(au::seconds);
+		particle.rotation += 0.01f * timestep.get().in<float>(au::seconds);
 	}
 }
 

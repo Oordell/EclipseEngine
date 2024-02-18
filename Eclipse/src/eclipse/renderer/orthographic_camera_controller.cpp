@@ -25,23 +25,21 @@ void OrthographicCameraController::on_update(Timestep timestep) {
 	EC_PROFILE_FUNCTION();
 
 	if (InputManager::is_key_pressed(KeyCode::A)) {
-		camera_position_.x -= camera_move_speed_ * timestep;
+		camera_position_.x -= (camera_move_speed_ * timestep.get()).in(units::pixels);
 	} else if (InputManager::is_key_pressed(KeyCode::D)) {
-		camera_position_.x += camera_move_speed_ * timestep;
+		camera_position_.x += (camera_move_speed_ * timestep.get()).in(units::pixels);
 	}
 	if (InputManager::is_key_pressed(KeyCode::W)) {
-		camera_position_.y += camera_move_speed_ * timestep;
+		camera_position_.y += (camera_move_speed_ * timestep.get()).in(units::pixels);
 	} else if (InputManager::is_key_pressed(KeyCode::S)) {
-		camera_position_.y -= camera_move_speed_ * timestep;
+		camera_position_.y -= (camera_move_speed_ * timestep.get()).in(units::pixels);
 	}
-
-	auto ts = au::seconds(static_cast<float>(timestep));
 
 	if (rotate_camera_ == EnableCameraRotation::yes) {
 		if (InputManager::is_key_pressed(KeyCode::Q)) {
-			camera_rotation_ += camera_rotate_speed_ * ts;
+			camera_rotation_ += camera_rotate_speed_ * timestep.get();
 		} else if (InputManager::is_key_pressed(KeyCode::E)) {
-			camera_rotation_ -= camera_rotate_speed_ * ts;
+			camera_rotation_ -= camera_rotate_speed_ * timestep.get();
 		}
 
 		if (camera_rotation_ > au::degrees(utils::num::DEGREES_180_F)) {

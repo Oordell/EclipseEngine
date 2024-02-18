@@ -19,7 +19,7 @@ void Level::on_update(eclipse::Timestep timestep) {
 		return;
 	}
 
-	pillar_hsv_.hue += 0.05F * timestep;
+	pillar_hsv_.hue += 0.05F * timestep.get().in(au::seconds);
 	if (pillar_hsv_.hue > 1.0F) {
 		pillar_hsv_.hue = 0.0F;
 	}

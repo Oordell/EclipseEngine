@@ -45,9 +45,9 @@ void ParticleSystem::on_update(eclipse::Timestep timestep) {
 			continue;
 		}
 
-		particle.life_remaining -= timestep;
-		particle.position += particle.velocity * static_cast<float>(timestep);
-		particle.rotation += 0.01F * static_cast<float>(timestep);
+		particle.life_remaining -= timestep.get().in(au::seconds);
+		particle.position += particle.velocity * timestep.get().in(au::seconds);
+		particle.rotation += 0.01F * timestep.get().in(au::seconds);
 	}
 }
 

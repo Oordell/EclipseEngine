@@ -93,7 +93,7 @@ void EditorLayer::on_update(Timestep timestep) {
 	}
 	editor_camera_.on_update(timestep);
 
-	frame_rate_ = static_cast<unsigned int>(1.0F / timestep);
+	frame_rate_ = static_cast<unsigned int>(1.0F / timestep.get().in(au::seconds));
 	EC_TRACE_THROTTLED(1.0, "Frame rate: {0}Hz", frame_rate_);
 
 	static const float red   = 0.1F;

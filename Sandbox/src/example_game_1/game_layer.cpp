@@ -16,7 +16,7 @@ void GameLayer::on_attach() {
 void GameLayer::on_detach() {}
 
 void GameLayer::on_update(eclipse::Timestep timestep) {
-	time_ += timestep;
+	time_ += timestep.get().in(au::seconds);
 
 	if (static_cast<int>(time_ * 10.0f) % 8 > 4) {
 		blink_ = !blink_;
