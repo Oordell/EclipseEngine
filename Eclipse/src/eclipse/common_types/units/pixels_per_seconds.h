@@ -3,7 +3,7 @@
 #include <au_noio.hh>
 #include "pixel.h"
 
-namespace eclipse {
+namespace eclipse::units {
 
 struct PixelsPerSeconds : decltype(Pixels {} / au::Seconds {}) {
 	static constexpr inline const char label[] = "px/s";
@@ -17,4 +17,4 @@ namespace symbols {
 constexpr auto pxprs = au::SymbolFor<PixelsPerSeconds> {};
 }
 
-}  // namespace eclipse
+}  // namespace eclipse::units

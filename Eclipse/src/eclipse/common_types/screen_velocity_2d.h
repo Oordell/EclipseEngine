@@ -7,8 +7,8 @@
 namespace eclipse {
 
 struct ECLIPSE_API ScreenVelocity2D {
-	au::Quantity<PixelsPerSeconds, float> vel_x = pixels_per_seconds(0.0F);
-	au::Quantity<PixelsPerSeconds, float> vel_y = pixels_per_seconds(0.0F);
+	au::Quantity<units::PixelsPerSeconds, float> vel_x = units::pixels_per_seconds(0.0F);
+	au::Quantity<units::PixelsPerSeconds, float> vel_y = units::pixels_per_seconds(0.0F);
 };
 
 }  // namespace eclipse

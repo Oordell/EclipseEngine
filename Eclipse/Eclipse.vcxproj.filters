@@ -1545,7 +1545,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\common_types\dimensions\dim_pixel.h" />
+    <ClInclude Include="src\eclipse\common_types\dimensions\pixel.h" />
     <ClInclude Include="src\eclipse\common_types\units\pixel.h" />
     <ClInclude Include="src\eclipse\common_types\units\pixels_per_seconds.h" />
   </ItemGroup>
