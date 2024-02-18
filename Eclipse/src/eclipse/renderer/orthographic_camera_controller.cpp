@@ -34,17 +34,20 @@ void OrthographicCameraController::on_update(Timestep timestep) {
 	} else if (InputManager::is_key_pressed(KeyCode::S)) {
 		camera_position_.y -= camera_move_speed_ * timestep;
 	}
+
+	auto ts = au::seconds(static_cast<float>(timestep));
+
 	if (rotate_camera_ == EnableCameraRotation::yes) {
 		if (InputManager::is_key_pressed(KeyCode::Q)) {
-			camera_rotation_ += camera_rotate_speed_ * timestep;
+			camera_rotation_ += camera_rotate_speed_ * ts;
 		} else if (InputManager::is_key_pressed(KeyCode::E)) {
-			camera_rotation_ -= camera_rotate_speed_ * timestep;
+			camera_rotation_ -= camera_rotate_speed_ * ts;
 		}
 
-		if (camera_rotation_ > utils::num::DEGREES_180_F) {
-			camera_rotation_ -= 2 * utils::num::DEGREES_180_F;
-		} else if (camera_rotation_ <= -utils::num::DEGREES_180_F) {
-			camera_rotation_ += 2 * utils::num::DEGREES_180_F;
+		if (camera_rotation_ > au::degrees(utils::num::DEGREES_180_F)) {
+			camera_rotation_ -= 2 * au::degrees(utils::num::DEGREES_180_F);
+		} else if (camera_rotation_ <= -au::degrees(utils::num::DEGREES_180_F)) {
+			camera_rotation_ += 2 * au::degrees(utils::num::DEGREES_180_F);
 		}
 
 		camera_.set_rotation(camera_rotation_);

@@ -25,8 +25,8 @@ void OrthographicCamera::calculate_view_matrix() {
 	static const glm::mat4 identity_matrix = glm::mat4(1.0F);
 	static const glm::vec3 rotation_axis   = glm::vec3(0, 0, 1);
 
-	glm::mat4 transform =
-	    glm::translate(identity_matrix, position_) * glm::rotate(identity_matrix, glm::radians(rotation_), rotation_axis);
+	glm::mat4 transform = glm::translate(identity_matrix, position_) *
+	                      glm::rotate(identity_matrix, rotation_.in(au::radians), rotation_axis);
 
 	view_matrix_ = glm::inverse(transform);
 	calculate_view_projection_matrix();
