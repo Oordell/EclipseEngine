@@ -8,11 +8,12 @@
 #include "eclipse/common_types/screen_velocity_2d.h"
 
 #include <glm/glm.hpp>
+#include <au_noio.hh>
 
 namespace eclipse {
 
 struct EditorCameraSpecs {
-	float fov {};
+	au::Quantity<au::Degrees, float> fov {};
 	float aspect_ratio {};
 	float near_clip {};
 	float far_clip {};
@@ -48,9 +49,9 @@ public:
 
 	glm::quat get_orientation() const;
 
-	float get_pitch() const { return pitch_; }
+	au::Quantity<au::Radians, float> get_pitch() const { return pitch_; }
 
-	float get_yaw() const { return yaw_; }
+	au::Quantity<au::Radians, float> get_yaw() const { return yaw_; }
 
 private:
 	void update_projection();
@@ -64,7 +65,7 @@ private:
 	float rotation_speed() const;
 	float zoom_speed() const;
 
-	float fov_ {45.0F};
+	au::Quantity<au::Degrees, float> fov_ {au::degrees(45.0F)};
 	float aspect_ratio_ {1.778F};
 	float near_clip_ {0.1F};
 	float far_clip_ {1000.0F};
@@ -72,8 +73,8 @@ private:
 	float distance_ {10.0F};
 	float viewport_width_ {1280.0F};
 	float viewport_height_ {720.0F};
-	float pitch_ {0.0F};
-	float yaw_ {0.0F};
+	au::Quantity<au::Radians, float> pitch_ {au::radians(0.0F)};
+	au::Quantity<au::Radians, float> yaw_ {au::radians(0.0F)};
 
 	glm::mat4 view_matrix_ {};
 	glm::vec3 position_ {0.0F, 0.0F, 0.0F};

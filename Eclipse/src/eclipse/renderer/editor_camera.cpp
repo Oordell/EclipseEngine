@@ -17,7 +17,7 @@ EditorCamera::EditorCamera(const EditorCameraSpecs& specs)
       aspect_ratio_(specs.aspect_ratio),
       near_clip_(specs.near_clip),
       far_clip_(specs.far_clip),
-      Camera(glm::perspective(utils::deg_to_rad(specs.fov), specs.aspect_ratio, specs.near_clip, specs.far_clip)) {
+      Camera(glm::perspective(specs.fov.in(au::radians), specs.aspect_ratio, specs.near_clip, specs.far_clip)) {
 	update_view();
 }
 
@@ -54,15 +54,17 @@ glm::vec3 EditorCamera::get_forward_direction() const {
 	return glm::rotate(get_orientation(), glm::vec3(0.0F, 0.0F, -1.0F));
 }
 
-glm::quat EditorCamera::get_orientation() const { return glm::quat(glm::vec3(-pitch_, -yaw_, 0.0F)); }
+glm::quat EditorCamera::get_orientation() const {
+	return glm::quat(glm::vec3(-pitch_.in(au::radians), -yaw_.in(au::radians), 0.0F));
+}
 
 void EditorCamera::update_projection() {
 	aspect_ratio_ = viewport_width_ / viewport_height_;
-	projection_   = glm::perspective(utils::deg_to_rad(fov_), aspect_ratio_, near_clip_, far_clip_);
+	projection_   = glm::perspective(fov_.in(au::radians), aspect_ratio_, near_clip_, far_clip_);
 }
 
 void EditorCamera::update_view() {
-	// yaw_ = 0.0F; pitch_ = 0.0F; // Lock the camera's rotation
+	// yaw_ = au::radians(0.0F); pitch_ = au::radians(0.0F); // Lock the camera's rotation
 	position_             = calculate_position();
 	glm::quat orientation = get_orientation();
 	view_matrix_          = glm::translate(glm::mat4(1.0F), position_) * glm::toMat4(orientation);
@@ -84,8 +86,8 @@ void EditorCamera::mouse_pan(const glm::vec2& delta) {
 
 void EditorCamera::mouse_rotate(const glm::vec2& delta) {
 	float yaw_sign = get_up_direction().y < 0 ? -1.0F : 1.0F;
-	yaw_ += yaw_sign * delta.x * rotation_speed();
-	pitch_ += delta.y * rotation_speed();
+	yaw_ += au::radians(yaw_sign * delta.x * rotation_speed());
+	pitch_ += au::radians(delta.y * rotation_speed());
 }
 
 void EditorCamera::mouse_zoom(float delta) {

@@ -43,7 +43,7 @@ void SceneCamera::set_orthographic_far_clip(float far_clip) {
 	recalculate_projection();
 }
 
-void SceneCamera::set_perspective_vertical_fov(float fov_rad) {
+void SceneCamera::set_perspective_vertical_fov(au::Quantity<au::Radians, float> fov_rad) {
 	perspective_fov_ = fov_rad;
 	recalculate_projection();
 }
@@ -60,7 +60,7 @@ void SceneCamera::set_perspective_far_clip(float far_clip) {
 
 void SceneCamera::recalculate_projection() {
 	if (projection_type_ == ProjectionType::perspective) {
-		projection_ = glm::perspective(perspective_fov_, aspect_ratio_, perspective_near_, perspective_far_);
+		projection_ = glm::perspective(perspective_fov_.in(au::radians), aspect_ratio_, perspective_near_, perspective_far_);
 	} else if (projection_type_ == ProjectionType::orthographic) {
 		static const float one_half = 0.5F;
 		float ortho_left            = -orthographic_size_ * aspect_ratio_ * one_half;

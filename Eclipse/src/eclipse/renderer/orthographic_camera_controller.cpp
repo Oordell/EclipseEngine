@@ -3,6 +3,7 @@
 #include "eclipse/core/input_manager.h"
 #include "eclipse/core/key_codes.h"
 #include "eclipse/utils/math.h"
+#include "eclipse/utils/numbers.h"
 
 namespace eclipse {
 
@@ -40,12 +41,10 @@ void OrthographicCameraController::on_update(Timestep timestep) {
 			camera_rotation_ -= camera_rotate_speed_ * timestep;
 		}
 
-		static const auto HALF_CIRCLE_DEGREES = static_cast<float>(utils::rad_to_deg(std::numbers::pi));
-
-		if (camera_rotation_ > HALF_CIRCLE_DEGREES) {
-			camera_rotation_ -= 2 * HALF_CIRCLE_DEGREES;
-		} else if (camera_rotation_ <= -HALF_CIRCLE_DEGREES) {
-			camera_rotation_ += 2 * HALF_CIRCLE_DEGREES;
+		if (camera_rotation_ > utils::num::DEGREES_180_F) {
+			camera_rotation_ -= 2 * utils::num::DEGREES_180_F;
+		} else if (camera_rotation_ <= -utils::num::DEGREES_180_F) {
+			camera_rotation_ += 2 * utils::num::DEGREES_180_F;
 		}
 
 		camera_.set_rotation(camera_rotation_);

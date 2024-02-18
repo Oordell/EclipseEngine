@@ -36,7 +36,8 @@ private:
 	ref<Texture2D> checkerboard_texture_;
 	ref<Texture2D> olliver_ordell_texture_;
 	unsigned int frame_rate_ = 0;
-	EditorCamera editor_camera_ {{.fov = 30.0F, .aspect_ratio = 1.778F, .near_clip = 0.1F, .far_clip = 1000.0F}};
+	EditorCamera editor_camera_ {
+	    {.fov = au::degrees(30.0F), .aspect_ratio = 1.778F, .near_clip = 0.1F, .far_clip = 1000.0F}};
 
 	WindowSize viewport_size_ {.width = 0, .height = 0};
 	glm::vec2 viewport_bounds_[2];

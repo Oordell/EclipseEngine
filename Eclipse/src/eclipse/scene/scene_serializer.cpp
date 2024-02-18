@@ -4,6 +4,7 @@
 #include "entity.h"
 
 #include <yaml-cpp/yaml.h>
+#include <au_noio.hh>
 
 namespace YAML {
 
@@ -107,7 +108,8 @@ static void serialize_entity(YAML::Emitter& out, Entity entity) {
 		out << YAML::Key << serializer_keys::CAMERA;
 		out << YAML::BeginMap;
 		out << YAML::Key << serializer_keys::PROJECTION_TYPE << YAML::Value << static_cast<int>(camera.get_projection_type());
-		out << YAML::Key << serializer_keys::PERSPECTIVE_VERTICAL_FOV << YAML::Value << camera.get_perspective_vertical_fov();
+		out << YAML::Key << serializer_keys::PERSPECTIVE_VERTICAL_FOV << YAML::Value
+		    << camera.get_perspective_vertical_fov().in(au::radians);
 		out << YAML::Key << serializer_keys::PERSPECTIVE_NEAR << YAML::Value << camera.get_perspective_near_clip();
 		out << YAML::Key << serializer_keys::PERSPECTIVE_FAR << YAML::Value << camera.get_perspective_far_clip();
 		out << YAML::Key << serializer_keys::ORTHOGRAPHIC_SIZE << YAML::Value << camera.get_orthographic_size();
@@ -207,7 +209,8 @@ bool SceneSerializer::deserialize_text(const FilePath& file_path) {
 			auto camera_props = camera_component[serializer_keys::CAMERA];
 			cc.camera.set_projection_type(static_cast<ProjectionType>(camera_props[serializer_keys::PROJECTION_TYPE].as<int>()));
 
-			cc.camera.set_perspective_vertical_fov(camera_props[serializer_keys::PERSPECTIVE_VERTICAL_FOV].as<float>());
+			cc.camera.set_perspective_vertical_fov(
+			    au::radians(camera_props[serializer_keys::PERSPECTIVE_VERTICAL_FOV].as<float>()));
 			cc.camera.set_perspective_near_clip(camera_props[serializer_keys::PERSPECTIVE_NEAR].as<float>());
 			cc.camera.set_perspective_far_clip(camera_props[serializer_keys::PERSPECTIVE_FAR].as<float>());
 
