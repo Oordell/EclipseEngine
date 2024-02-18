@@ -59,7 +59,7 @@ glm::quat EditorCamera::get_orientation() const {
 }
 
 void EditorCamera::update_projection() {
-	aspect_ratio_ = viewport_width_ / viewport_height_;
+	aspect_ratio_ = viewport_width_.in<float>(units::pixels) / viewport_height_.in<float>(units::pixels);
 	projection_   = glm::perspective(fov_.in(au::radians), aspect_ratio_, near_clip_, far_clip_);
 }
 
@@ -101,10 +101,10 @@ void EditorCamera::mouse_zoom(float delta) {
 glm::vec3 EditorCamera::calculate_position() const { return focal_point_ - get_forward_direction() * distance_; }
 
 ScreenVelocity2D EditorCamera::pan_speed() const {
-	float x       = std::min(viewport_width_ / 1000.0F, 2.4F);  // max = 2.4f
+	float x       = std::min(viewport_width_.in<float>(units::pixels) / 1000.0F, 2.4F);  // max = 2.4f
 	float xFactor = 0.0366F * (x * x) - 0.1778F * x + 0.3021F;
 
-	float y       = std::min(viewport_height_ / 1000.0F, 2.4F);  // max = 2.4f
+	float y       = std::min(viewport_height_.in<float>(units::pixels) / 1000.0F, 2.4F);  // max = 2.4f
 	float yFactor = 0.0366F * (y * y) - 0.1778F * y + 0.3021F;
 
 	return {.vel_x = units::pixels_per_seconds(xFactor), .vel_y = units::pixels_per_seconds(yFactor)};

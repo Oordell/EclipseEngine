@@ -32,8 +32,8 @@ public:
 	inline void set_distance(float d) { distance_ = d; }
 
 	inline void set_viewport_size(const WindowSize& size) {
-		viewport_width_  = size.width.in<float>(units::pixels);
-		viewport_height_ = size.height.in<float>(units::pixels);
+		viewport_width_  = size.width;
+		viewport_height_ = size.height;
 		update_projection();
 	}
 
@@ -71,8 +71,8 @@ private:
 	float far_clip_ {1000.0F};
 
 	float distance_ {10.0F};
-	float viewport_width_ {1280.0F};
-	float viewport_height_ {720.0F};
+	au::Quantity<units::Pixels, uint32_t> viewport_width_ {units::pixels(1280)};
+	au::Quantity<units::Pixels, uint32_t> viewport_height_ {units::pixels(720)};
 	au::Quantity<au::Radians, float> pitch_ {au::radians(0.0F)};
 	au::Quantity<au::Radians, float> yaw_ {au::radians(0.0F)};
 
