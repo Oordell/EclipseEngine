@@ -64,7 +64,7 @@ void OrthographicCameraController::on_event(Event& e) {
 void OrthographicCameraController::on_resize(const WindowSize& new_size) {
 	EC_PROFILE_FUNCTION();
 
-	aspect_ratio_ = static_cast<float>(new_size.width) / static_cast<float>(new_size.height);
+	aspect_ratio_ = new_size.get_aspect_ratio();
 	set_bounds_and_camera_projection();
 }
 

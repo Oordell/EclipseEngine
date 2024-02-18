@@ -98,7 +98,7 @@ bool Application::on_window_closed(WindowClosedEvent& e) {
 bool Application::on_window_resize(WindowResizeEvent& e) {
 	EC_PROFILE_FUNCTION();
 
-	if (e.get_width() == 0 || e.get_height() == 0) {
+	if (e.get_width() == units::pixels(0) || e.get_height() == units::pixels(0)) {
 		minimized_ = true;
 		return false;
 	}

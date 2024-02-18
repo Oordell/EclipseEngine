@@ -8,7 +8,7 @@
 #include "eclipse/common_types/screen_velocity_2d.h"
 
 #include <glm/glm.hpp>
-#include <au_noio.hh>
+#include <au.hh>
 
 namespace eclipse {
 
@@ -32,8 +32,8 @@ public:
 	inline void set_distance(float d) { distance_ = d; }
 
 	inline void set_viewport_size(const WindowSize& size) {
-		viewport_width_  = static_cast<float>(size.width);
-		viewport_height_ = static_cast<float>(size.height);
+		viewport_width_  = size.width.in<float>(units::pixels);
+		viewport_height_ = size.height.in<float>(units::pixels);
 		update_projection();
 	}
 

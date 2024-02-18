@@ -86,14 +86,15 @@ OpenGLFrameBuffer::~OpenGLFrameBuffer() {
 
 void OpenGLFrameBuffer::bind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, renderer_id_);
-	glViewport(0, 0, specifications_.width, specifications_.height);
+	glViewport(0, 0, specifications_.width.in(units::pixels), specifications_.height.in(units::pixels));
 }
 
 void OpenGLFrameBuffer::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 
 void OpenGLFrameBuffer::resize(const WindowSize& size) {
-	static const uint32_t MAX_FRAME_BUFFER_SIZE = 8192;
-	if (size.width == 0 || size.height == 0 || size.width > MAX_FRAME_BUFFER_SIZE || size.height > MAX_FRAME_BUFFER_SIZE) {
+	static const auto MAX_FRAME_BUFFER_SIZE = units::pixels(8192);
+	if (size.width == units::pixels(0) || size.height == units::pixels(0) || size.width > MAX_FRAME_BUFFER_SIZE ||
+	    size.height > MAX_FRAME_BUFFER_SIZE) {
 		EC_CORE_ERROR("Invalid frame buffer resize attempt. Tried resizing to: ({0}, {1})", size.width, size.height);
 		return;
 	}
@@ -149,12 +150,14 @@ void OpenGLFrameBuffer::invalidate() {
 			switch (color_attachment_specs_[i].texture_format) {
 				case FramebufferTextureFormat::rgba8: {
 					utils::attach_color_texture(color_attachment_ids_[i], specifications_.samples, GL_RGBA8, GL_RGBA,
-					                            specifications_.width, specifications_.height, static_cast<int>(i));
+					                            specifications_.width.in(units::pixels), specifications_.height.in(units::pixels),
+					                            static_cast<int>(i));
 					break;
 				}
 				case FramebufferTextureFormat::red_integer: {
 					utils::attach_color_texture(color_attachment_ids_[i], specifications_.samples, GL_R32I, GL_RED_INTEGER,
-					                            specifications_.width, specifications_.height, static_cast<int>(i));
+					                            specifications_.width.in(units::pixels), specifications_.height.in(units::pixels),
+					                            static_cast<int>(i));
 					break;
 				}
 				default: {
@@ -170,7 +173,8 @@ void OpenGLFrameBuffer::invalidate() {
 		switch (depth_attachment_spec_.texture_format) {
 			case FramebufferTextureFormat::depth24stencil8: {
 				utils::attach_depth_texture(depth_attachment_id_, specifications_.samples, GL_DEPTH24_STENCIL8,
-				                            GL_DEPTH_STENCIL_ATTACHMENT, specifications_.width, specifications_.height);
+				                            GL_DEPTH_STENCIL_ATTACHMENT, specifications_.width.in(units::pixels),
+				                            specifications_.height.in(units::pixels));
 				break;
 			}
 		}

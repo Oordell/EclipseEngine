@@ -4,7 +4,7 @@
 #include "eclipse/common_types/window_size.h"
 #include "eclipse/utils/math.h"
 
-#include <au_noio.hh>
+#include <au.hh>
 
 namespace eclipse {
 

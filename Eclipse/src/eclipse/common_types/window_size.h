@@ -1,14 +1,17 @@
 #pragma once
 
 #include "eclipse/core/core.h"
+#include "eclipse/common_types/units/pixel.h"
 
 namespace eclipse {
 
 struct ECLIPSE_API WindowSize {
-	uint32_t width {0};
-	uint32_t height {0};
+	au::Quantity<units::Pixels, uint32_t> width {units::pixels(0)};
+	au::Quantity<units::Pixels, uint32_t> height {units::pixels(0)};
 
-	float get_aspect_ratio() const { return static_cast<float>(width) / static_cast<float>(height); }
+	[[nodiscard]] inline float get_aspect_ratio() const {
+		return width.in<float>(units::pixels) / height.in<float>(units::pixels);
+	}
 };
 
 }  // namespace eclipse

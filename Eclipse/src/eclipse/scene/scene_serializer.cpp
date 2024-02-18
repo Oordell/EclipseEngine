@@ -4,7 +4,7 @@
 #include "entity.h"
 
 #include <yaml-cpp/yaml.h>
-#include <au_noio.hh>
+#include <au.hh>
 
 namespace YAML {
 

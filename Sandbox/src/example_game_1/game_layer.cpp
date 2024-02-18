@@ -118,7 +118,7 @@ bool GameLayer::on_mouse_scrolled(eclipse::MouseScrolledEvent& e) {
 }
 
 void GameLayer::create_camera(const eclipse::WindowSize& size) {
-	aspect_ratio_      = static_cast<float>(size.width) / static_cast<float>(size.height);
+	aspect_ratio_      = size.get_aspect_ratio();
 	float camera_width = 8.0F;
 	float bottom       = -camera_width;
 	float top          = camera_width;
