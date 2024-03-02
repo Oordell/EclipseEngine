@@ -11,9 +11,9 @@ class ECLIPSE_API MouseMovedEvent : public Event {
 public:
 	MouseMovedEvent(const Point2D& current_position) : pose_(current_position) {};
 
-	inline float get_x() const { return pose_.x; }
+	inline au::QuantityF<units::Pixels> get_x() const { return pose_.x; }
 
-	inline float get_y() const { return pose_.y; }
+	inline au::QuantityF<units::Pixels> get_y() const { return pose_.y; }
 
 	EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	EVENT_CLASS_TYPE(MouseMoved)

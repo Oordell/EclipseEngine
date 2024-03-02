@@ -23,7 +23,8 @@ EditorCamera::EditorCamera(const EditorCameraSpecs& specs)
 
 void EditorCamera::on_update(Timestep ts) {
 	if (InputManager::is_key_pressed(KeyCode::left_alt)) {
-		const glm::vec2& mouse {InputManager::get_mouse_pose_x(), InputManager::get_mouse_pose_y()};
+		const glm::vec2& mouse {InputManager::get_mouse_pose_x().in(units::pixels),
+		                        InputManager::get_mouse_pose_y().in(units::pixels)};
 		glm::vec2 delta         = (mouse - initial_mouse_position_) * 0.003F;
 		initial_mouse_position_ = mouse;
 

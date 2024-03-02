@@ -10,6 +10,12 @@
     <Filter Include="src\eclipse\common_types">
       <UniqueIdentifier>{AD68BA6C-998D-09ED-C2D8-EE7CAE5C080B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\eclipse\common_types\dimensions">
+      <UniqueIdentifier>{7561C58D-E11A-3038-6A7A-4A12D632E6A7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\eclipse\common_types\units">
+      <UniqueIdentifier>{AF3E29B4-9B64-F31A-84AA-78E6706F18E7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\eclipse\core">
       <UniqueIdentifier>{D9127BAA-C50B-9AFC-EE3D-7F81DA957908}</UniqueIdentifier>
     </Filter>
@@ -78,6 +84,9 @@
     <ClInclude Include="src\Eclipse.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\common_types\dimensions\pixel.h">
+      <Filter>src\eclipse\common_types\dimensions</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\common_types\file_path.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
@@ -96,11 +105,17 @@
     <ClInclude Include="src\eclipse\common_types\profile_results.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\common_types\screen_velocity_2d.h">
+      <Filter>src\eclipse\common_types</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\common_types\transform.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\common_types\screen_velocity_2d.h">
-      <Filter>src\eclipse\common_types</Filter>
+    <ClInclude Include="src\eclipse\common_types\units\pixel.h">
+      <Filter>src\eclipse\common_types\units</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\common_types\units\pixels_per_seconds.h">
+      <Filter>src\eclipse\common_types\units</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\common_types\window_size.h">
       <Filter>src\eclipse\common_types</Filter>
@@ -247,6 +262,9 @@
       <Filter>src\eclipse\scene</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\utils\math.h">
+      <Filter>src\eclipse\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\utils\numbers.h">
       <Filter>src\eclipse\utils</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\utils\platform_utils.h">
@@ -1545,10 +1563,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\common_types\dimensions\pixel.h" />
-    <ClInclude Include="src\eclipse\common_types\units\pixel.h" />
-    <ClInclude Include="src\eclipse\common_types\units\pixels_per_seconds.h" />
-    <ClInclude Include="src\eclipse\utils\numbers.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\core\application.cpp">

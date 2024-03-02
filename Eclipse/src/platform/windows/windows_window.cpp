@@ -157,7 +157,8 @@ void WindowsWindow::set_glfw_callbacks() {
 	glfwSetCursorPosCallback(window_, [](GLFWwindow* window, double x_pose, double y_pose) {
 		WindowData& data = *(WindowData*) glfwGetWindowUserPointer(window);
 
-		MouseMovedEvent event({.x = static_cast<float>(x_pose), .y = static_cast<float>(y_pose)});
+		MouseMovedEvent event(
+		    {.x = units::pixels(static_cast<float>(x_pose)), .y = units::pixels(static_cast<float>(y_pose))});
 		data.event_callback(event);
 	});
 }

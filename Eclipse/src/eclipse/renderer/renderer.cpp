@@ -16,7 +16,7 @@ void Renderer::init() {
 void Renderer::shutdown() { Renderer2D::shutdown(); }
 
 void Renderer::on_window_resize(const WindowSize& window_size) {
-	RenderCommand::set_viewport({.x = 0, .y = 0}, window_size);
+	RenderCommand::set_viewport({.x = units::pixels(0.F), .y = units::pixels(0.F)}, window_size);
 }
 
 void Renderer::begin_scene(OrthographicCamera& camera) {
