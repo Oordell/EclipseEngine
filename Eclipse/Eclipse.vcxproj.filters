@@ -147,9 +147,6 @@
     <ClInclude Include="src\eclipse\core\platform_detection.h">
       <Filter>src\eclipse\core</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\core\timestep.h">
-      <Filter>src\eclipse\core</Filter>
-    </ClInclude>
     <ClInclude Include="src\eclipse\core\window.h">
       <Filter>src\eclipse\core</Filter>
     </ClInclude>

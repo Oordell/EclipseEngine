@@ -6,7 +6,7 @@ class ExampleLayer : public eclipse::Layer {
 public:
 	ExampleLayer();
 	~ExampleLayer() = default;
-	void on_update(eclipse::Timestep timestep) override;
+	void on_update(au::QuantityF<au::Seconds> timestep) override;
 	void on_imgui_render() override;
 	void on_event(eclipse::Event& event);
 

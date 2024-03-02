@@ -4,6 +4,7 @@
 #include "level.h"
 
 #include <imgui/imgui.h>
+#include <au.hh>
 
 class GameLayer : public eclipse::Layer {
 public:
@@ -11,7 +12,7 @@ public:
 	~GameLayer() override = default;
 	void on_attach() override;
 	void on_detach() override;
-	void on_update(eclipse::Timestep timestep) override;
+	void on_update(au::QuantityF<au::Seconds> timestep) override;
 	void on_event(eclipse::Event& event) override;
 	void on_imgui_render() override;
 	void add_imgui_text_player_score(ImVec2& window_pose);

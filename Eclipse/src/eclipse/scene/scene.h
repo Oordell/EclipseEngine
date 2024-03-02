@@ -1,6 +1,5 @@
 #pragma once
 
-#include "eclipse/core/timestep.h"
 #include "eclipse/common_types/window_size.h"
 #include "eclipse/renderer/editor_camera.h"
 
@@ -8,15 +7,14 @@
 
 namespace eclipse {
 
-// Forward declaration
 class Entity;
 
 class Scene {
 public:
 	Scene()  = default;
 	~Scene() = default;
-	void on_update_editor(Timestep timestep, EditorCamera& camera);
-	void on_update_runtime(Timestep timestep);
+	void on_update_editor(au::QuantityF<au::Seconds> timestep, EditorCamera& camera);
+	void on_update_runtime(au::QuantityF<au::Seconds> timestep);
 	void on_viewport_resize(const WindowSize& new_size);
 
 	Entity create_entity(const std::string& name = "");

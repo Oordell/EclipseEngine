@@ -64,9 +64,9 @@ void Application::run() {
 	while (running_) {
 		EC_PROFILE_SCOPE("**Application Run Loop**");
 
-		auto time         = static_cast<float>(glfwGetTime());
-		Timestep timestep = Timestep(time - last_frame_time_);
-		last_frame_time_  = time;
+		auto time                           = static_cast<float>(glfwGetTime());
+		au::QuantityF<au::Seconds> timestep = au::seconds(time - last_frame_time_);
+		last_frame_time_                    = time;
 
 		if (!minimized_) {
 			{

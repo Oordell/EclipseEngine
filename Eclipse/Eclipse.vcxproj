@@ -169,7 +169,6 @@
     <ClInclude Include="src\eclipse\core\log.h" />
     <ClInclude Include="src\eclipse\core\mouse_button_codes.h" />
     <ClInclude Include="src\eclipse\core\platform_detection.h" />
-    <ClInclude Include="src\eclipse\core\timestep.h" />
     <ClInclude Include="src\eclipse\core\window.h" />
     <ClInclude Include="src\eclipse\debug\instrumentor.h" />
     <ClInclude Include="src\eclipse\debug\timer.h" />

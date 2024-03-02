@@ -21,25 +21,25 @@ void OrthographicCameraController::set_zoom_level(float lvl) {
 	set_bounds_and_camera_projection();
 }
 
-void OrthographicCameraController::on_update(Timestep timestep) {
+void OrthographicCameraController::on_update(au::QuantityF<au::Seconds> timestep) {
 	EC_PROFILE_FUNCTION();
 
 	if (InputManager::is_key_pressed(KeyCode::A)) {
-		camera_position_.x -= (camera_move_speed_ * timestep.get()).in(units::pixels);
+		camera_position_.x -= (camera_move_speed_ * timestep).in(units::pixels);
 	} else if (InputManager::is_key_pressed(KeyCode::D)) {
-		camera_position_.x += (camera_move_speed_ * timestep.get()).in(units::pixels);
+		camera_position_.x += (camera_move_speed_ * timestep).in(units::pixels);
 	}
 	if (InputManager::is_key_pressed(KeyCode::W)) {
-		camera_position_.y += (camera_move_speed_ * timestep.get()).in(units::pixels);
+		camera_position_.y += (camera_move_speed_ * timestep).in(units::pixels);
 	} else if (InputManager::is_key_pressed(KeyCode::S)) {
-		camera_position_.y -= (camera_move_speed_ * timestep.get()).in(units::pixels);
+		camera_position_.y -= (camera_move_speed_ * timestep).in(units::pixels);
 	}
 
 	if (rotate_camera_ == EnableCameraRotation::yes) {
 		if (InputManager::is_key_pressed(KeyCode::Q)) {
-			camera_rotation_ += camera_rotate_speed_ * timestep.get();
+			camera_rotation_ += camera_rotate_speed_ * timestep;
 		} else if (InputManager::is_key_pressed(KeyCode::E)) {
-			camera_rotation_ -= camera_rotate_speed_ * timestep.get();
+			camera_rotation_ -= camera_rotate_speed_ * timestep;
 		}
 
 		if (camera_rotation_ > au::degrees(utils::num::DEGREES_180_F)) {

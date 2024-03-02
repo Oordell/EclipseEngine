@@ -18,7 +18,7 @@ protected:
 
 	virtual void on_destroy() {}
 
-	virtual void on_update(Timestep timestep) {}
+	virtual void on_update(au::QuantityF<au::Seconds> timestep) {}
 
 private:
 	Entity entity_;

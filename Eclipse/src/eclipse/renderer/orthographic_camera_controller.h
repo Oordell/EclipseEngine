@@ -2,7 +2,6 @@
 
 #include "eclipse/core/core.h"
 #include "eclipse/renderer/orthographic_camera.h"
-#include "eclipse/core/timestep.h"
 #include "eclipse/events/application_events.h"
 #include "eclipse/events/window_events.h"
 #include "eclipse/events/mouse_events.h"
@@ -33,7 +32,7 @@ public:
 	const OrthographicCameraBounds& get_bounds() const { return bounds_; }
 
 	void set_zoom_level(float lvl);
-	void on_update(Timestep timestep);
+	void on_update(au::QuantityF<au::Seconds> timestep);
 	void on_event(Event& e);
 	void on_resize(const WindowSize& new_size);
 

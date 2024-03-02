@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Eclipse.h>
+#include <au.hh>
 
 #include "particle_system.h"
 
@@ -10,7 +11,7 @@ public:
 	~Player() = default;
 
 	void load_asserts();
-	void on_update(eclipse::Timestep timestep);
+	void on_update(au::QuantityF<au::Seconds> timestep);
 	void on_render();
 	void on_imgui_render();
 	void reset();

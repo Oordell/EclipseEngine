@@ -15,7 +15,7 @@ ParticleSystem::ParticleSystem(uint32_t max_particles) {
 	pool_index_ = max_particles - 1;
 }
 
-void ParticleSystem::on_update(Timestep timestep) {
+void ParticleSystem::on_update(au::QuantityF<au::Seconds> timestep) {
 	for (auto& particle : particle_pool_) {
 		if (!particle.active) {
 			continue;
@@ -26,9 +26,9 @@ void ParticleSystem::on_update(Timestep timestep) {
 			continue;
 		}
 
-		particle.life_remaining -= timestep.get().in<float>(au::seconds);
-		particle.position += particle.velocity * timestep.get().in<float>(au::seconds);
-		particle.rotation += 0.01f * timestep.get().in<float>(au::seconds);
+		particle.life_remaining -= timestep.in<float>(au::seconds);
+		particle.position += particle.velocity * timestep.in<float>(au::seconds);
+		particle.rotation += 0.01f * timestep.in<float>(au::seconds);
 	}
 }
 

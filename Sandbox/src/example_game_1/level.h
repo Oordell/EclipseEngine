@@ -6,10 +6,12 @@
 #include "random.h"
 #include "player.h"
 
+#include <au.hh>
+
 class Level {
 public:
 	void init();
-	void on_update(eclipse::Timestep timestep);
+	void on_update(au::QuantityF<au::Seconds> timestep);
 	void on_render();
 	void on_imgui_render();
 	void reset();

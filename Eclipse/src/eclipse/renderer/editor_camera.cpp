@@ -21,7 +21,7 @@ EditorCamera::EditorCamera(const EditorCameraSpecs& specs)
 	update_view();
 }
 
-void EditorCamera::on_update(Timestep ts) {
+void EditorCamera::on_update(au::QuantityF<au::Seconds> ts) {
 	if (InputManager::is_key_pressed(KeyCode::left_alt)) {
 		const glm::vec2& mouse {InputManager::get_mouse_pose_x().in(units::pixels),
 		                        InputManager::get_mouse_pose_y().in(units::pixels)};

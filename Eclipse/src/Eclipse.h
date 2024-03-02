@@ -6,7 +6,6 @@
 #include "eclipse/layer/layer.h"
 #include "eclipse/core/log.h"
 
-#include "eclipse/core/timestep.h"
 #include "eclipse/debug/timer.h"
 #include "eclipse/debug/instrumentor.h"
 

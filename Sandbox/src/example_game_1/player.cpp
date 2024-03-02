@@ -42,8 +42,8 @@ Player::Player() {
 
 void Player::load_asserts() { ship_texture_ = eclipse::Texture2D::create("assets/textures/ship.png"); }
 
-void Player::on_update(eclipse::Timestep timestep) {
-	time_ += timestep.get().in(au::seconds);
+void Player::on_update(au::QuantityF<au::Seconds> timestep) {
+	time_ += timestep.in(au::seconds);
 
 	if (eclipse::InputManager::is_key_pressed(eclipse::KeyCode::space)) {
 		velocity_.y += engine_power_;
@@ -64,7 +64,7 @@ void Player::on_update(eclipse::Timestep timestep) {
 	}
 
 	velocity_.y = glm::clamp(velocity_.y, -20.0F, 20.0F);
-	position_ += velocity_ * timestep.get().in(au::seconds);
+	position_ += velocity_ * timestep.in(au::seconds);
 
 	// Particles
 	if (time_ > smoke_next_emit_time_) {

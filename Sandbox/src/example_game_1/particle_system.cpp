@@ -34,7 +34,7 @@ void ParticleSystem::emit(const ParticleProps& particle_prop) {
 	pool_index_ = --pool_index_ % particle_pool_.size();
 }
 
-void ParticleSystem::on_update(eclipse::Timestep timestep) {
+void ParticleSystem::on_update(au::QuantityF<au::Seconds> timestep) {
 	for (auto& particle : particle_pool_) {
 		if (!particle.active) {
 			continue;
@@ -45,9 +45,9 @@ void ParticleSystem::on_update(eclipse::Timestep timestep) {
 			continue;
 		}
 
-		particle.life_remaining -= timestep.get().in(au::seconds);
-		particle.position += particle.velocity * timestep.get().in(au::seconds);
-		particle.rotation += 0.01F * timestep.get().in(au::seconds);
+		particle.life_remaining -= timestep.in(au::seconds);
+		particle.position += particle.velocity * timestep.in(au::seconds);
+		particle.rotation += 0.01F * timestep.in(au::seconds);
 	}
 }
 

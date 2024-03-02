@@ -12,7 +12,7 @@ public:
 	virtual ~EditorLayer() = default;
 	void on_attach() override;
 	void on_detach() override;
-	void on_update(Timestep timestep) override;
+	void on_update(au::QuantityF<au::Seconds> timestep) override;
 	void on_event(Event& event) override;
 	void on_imgui_render() override;
 

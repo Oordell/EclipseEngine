@@ -1,7 +1,6 @@
 #pragma once
 
 #include "camera.h"
-#include "eclipse/core/timestep.h"
 #include "eclipse/events/event.h"
 #include "eclipse/events/mouse_events.h"
 #include "eclipse/common_types/window_size.h"
@@ -24,7 +23,7 @@ public:
 	EditorCamera() = default;
 	EditorCamera(const EditorCameraSpecs& specs);
 
-	void on_update(Timestep ts);
+	void on_update(au::QuantityF<au::Seconds> ts);
 	void on_event(Event& e);
 
 	inline float get_distance() const { return distance_; }

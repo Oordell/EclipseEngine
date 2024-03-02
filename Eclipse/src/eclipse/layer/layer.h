@@ -1,8 +1,9 @@
 #pragma once
 
 #include "eclipse/core/core.h"
-#include "eclipse/core/timestep.h"
 #include "eclipse/events/event.h"
+
+#include <au.hh>
 
 namespace eclipse {
 
@@ -15,7 +16,7 @@ public:
 
 	virtual void on_detach() {}
 
-	virtual void on_update(Timestep timestep) {}
+	virtual void on_update(au::QuantityF<au::Seconds> timestep) {}
 
 	virtual void on_event(Event& event) {}
 

@@ -48,7 +48,7 @@ void EditorLayer::on_attach() {
 
 	 void on_destroy() override {}
 
-	 void on_update(Timestep timestep) override {
+	 void on_update(au::QuantityF<au::Seconds> timestep) override {
 	  auto& translation = get_component<component::Transform>().translation;
 
 	  static const float camera_move_speed = 5.0F;
@@ -75,7 +75,7 @@ void EditorLayer::on_attach() {
 
 void EditorLayer::on_detach() { EC_PROFILE_FUNCTION(); }
 
-void EditorLayer::on_update(Timestep timestep) {
+void EditorLayer::on_update(au::QuantityF<au::Seconds> timestep) {
 	EC_PROFILE_FUNCTION();
 
 	if (auto specs = frame_buffer_->get_specification();
@@ -93,7 +93,7 @@ void EditorLayer::on_update(Timestep timestep) {
 	}
 	editor_camera_.on_update(timestep);
 
-	frame_rate_ = static_cast<unsigned int>(1.0F / timestep.get().in(au::seconds));
+	frame_rate_ = static_cast<unsigned int>(1.0F / timestep.in(au::seconds));
 	EC_TRACE_THROTTLED(1.0, "Frame rate: {0}Hz", frame_rate_);
 
 	static const float red   = 0.1F;
