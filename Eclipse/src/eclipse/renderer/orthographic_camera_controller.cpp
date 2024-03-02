@@ -72,7 +72,7 @@ void OrthographicCameraController::on_resize(const WindowSize& new_size) {
 bool OrthographicCameraController::on_mouse_scrolled(MouseScrolledEvent& e) {
 	EC_PROFILE_FUNCTION();
 
-	zoom_level_ -= e.get_y_offset() * 0.1F;
+	zoom_level_ -= e.get_y_offset().in(units::pixels) * 0.1F;
 	zoom_level_ = std::max(zoom_level_, 0.25F);
 	set_bounds_and_camera_projection();
 	return false;

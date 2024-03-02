@@ -150,7 +150,8 @@ void WindowsWindow::set_glfw_callbacks() {
 	glfwSetScrollCallback(window_, [](GLFWwindow* window, double x_offset, double y_offset) {
 		WindowData& data = *(WindowData*) glfwGetWindowUserPointer(window);
 
-		MouseScrolledEvent event({.x = static_cast<float>(x_offset), .y = static_cast<float>(y_offset)});
+		MouseScrolledEvent event(
+		    {.x = units::pixels(static_cast<float>(x_offset)), .y = units::pixels(static_cast<float>(y_offset))});
 		data.event_callback(event);
 	});
 

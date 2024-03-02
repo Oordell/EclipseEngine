@@ -32,9 +32,9 @@ class ECLIPSE_API MouseScrolledEvent : public Event {
 public:
 	MouseScrolledEvent(const MouseScrollOffset& offset) : offset_(offset) {}
 
-	inline float get_x_offset() const { return offset_.x; }
+	inline au::QuantityF<units::Pixels> get_x_offset() const { return offset_.x; }
 
-	inline float get_y_offset() const { return offset_.y; }
+	inline au::QuantityF<units::Pixels> get_y_offset() const { return offset_.y; }
 
 	EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	EVENT_CLASS_TYPE(MouseScrolled)

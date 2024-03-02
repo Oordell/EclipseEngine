@@ -108,7 +108,7 @@ bool GameLayer::on_window_resize(eclipse::WindowResizeEvent& e) {
 }
 
 bool GameLayer::on_mouse_scrolled(eclipse::MouseScrolledEvent& e) {
-	zoom_level_ -= e.get_y_offset() * 0.1F;
+	zoom_level_ -= e.get_y_offset().in(eclipse::units::pixels) * 0.1F;
 	zoom_level_ = std::max(zoom_level_, 0.25F);
 	camera_->set_projection({.left   = -aspect_ratio_ * zoom_level_,
 	                         .right  = aspect_ratio_ * zoom_level_,

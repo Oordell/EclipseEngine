@@ -73,7 +73,7 @@ void EditorCamera::update_view() {
 }
 
 bool EditorCamera::on_mouse_scroll(MouseScrolledEvent& e) {
-	float delta = e.get_y_offset() * 0.1F;
+	float delta = e.get_y_offset().in(units::pixels) * 0.1F;
 	mouse_zoom(delta);
 	update_view();
 	return false;
