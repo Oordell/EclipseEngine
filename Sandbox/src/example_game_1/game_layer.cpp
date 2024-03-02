@@ -87,7 +87,7 @@ void GameLayer::add_imgui_text_player_score(ImVec2& window_pose) {
 
 void GameLayer::add_imgui_text_click_to_play(ImVec2& window_pose) {
 	auto width = eclipse::Application::get().get_window().get_width();
-	window_pose.x -= width * 0.5F;
+	window_pose.x -= width.in(eclipse::units::pixels) * 0.5F;
 	if (blink_) {
 		ImGui::GetForegroundDrawList()->AddText(font_, 120.0f, window_pose, 0xffffffff, "Click to Play!");
 	}

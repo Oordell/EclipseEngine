@@ -48,7 +48,7 @@ void Level::on_render() {
 	for (auto& pillar : pillars_) {
 		eclipse::Renderer2D::draw_quad(
 		    eclipse::QuadMetaDataPosition3DTexture {.spatial_info = {.position     = pillar.top_position,
-		                                                             .rotation_rad = eclipse::utils::deg_to_rad(180.0F),
+		                                                             .rotation_rad = au::degrees(180.0F).in(au::radians),
 		                                                             .size         = pillar.top_scale},
 		                                            .common       = {.color = color},
 		                                            .texture      = triangle_texture_});
