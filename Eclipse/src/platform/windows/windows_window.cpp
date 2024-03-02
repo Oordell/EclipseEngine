@@ -52,7 +52,7 @@ void WindowsWindow::init(const WindowProps& props) {
 		}
 #endif
 
-		window_ = glfwCreateWindow(static_cast<int>(props.window_size.width), static_cast<int>(props.window_size.height),
+		window_ = glfwCreateWindow(props.window_size.width.in(units::pixels), props.window_size.height.in(units::pixels),
 		                           data_.props.title.c_str(), nullptr, nullptr);
 	}
 	++GLFW_initialized;
@@ -77,10 +77,11 @@ void WindowsWindow::shutdown() {
 void WindowsWindow::set_glfw_callbacks() {
 	glfwSetWindowSizeCallback(window_, [](GLFWwindow* window, int width, int height) {
 		WindowData& data              = *(WindowData*) glfwGetWindowUserPointer(window);
-		data.props.window_size.width  = width;
-		data.props.window_size.height = height;
+		data.props.window_size.width  = units::pixels(static_cast<uint32_t>(width));
+		data.props.window_size.height = units::pixels(static_cast<uint32_t>(height));
 
-		WindowResizeEvent event({.width = static_cast<unsigned int>(width), .height = static_cast<unsigned int>(height)});
+		WindowResizeEvent event(
+		    {.width = units::pixels(static_cast<uint32_t>(width)), .height = units::pixels(static_cast<uint32_t>(height))});
 		data.event_callback(event);
 	});
 
@@ -149,14 +150,16 @@ void WindowsWindow::set_glfw_callbacks() {
 	glfwSetScrollCallback(window_, [](GLFWwindow* window, double x_offset, double y_offset) {
 		WindowData& data = *(WindowData*) glfwGetWindowUserPointer(window);
 
-		MouseScrolledEvent event({.x = static_cast<float>(x_offset), .y = static_cast<float>(y_offset)});
+		MouseScrolledEvent event(
+		    {.x = units::pixels(static_cast<float>(x_offset)), .y = units::pixels(static_cast<float>(y_offset))});
 		data.event_callback(event);
 	});
 
 	glfwSetCursorPosCallback(window_, [](GLFWwindow* window, double x_pose, double y_pose) {
 		WindowData& data = *(WindowData*) glfwGetWindowUserPointer(window);
 
-		MouseMovedEvent event({.x = static_cast<float>(x_pose), .y = static_cast<float>(y_pose)});
+		MouseMovedEvent event(
+		    {.x = units::pixels(static_cast<float>(x_pose)), .y = units::pixels(static_cast<float>(y_pose))});
 		data.event_callback(event);
 	});
 }

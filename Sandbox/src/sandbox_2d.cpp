@@ -1,5 +1,6 @@
 #include "sandbox_2d.h"
 #include "imgui/imgui.h"
+#include "eclipse/common_types/units/pixel.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -10,19 +11,23 @@ void Sandbox2D::on_attach() {
 	checkerboard_texture_   = eclipse::Texture2D::create("assets/textures/Checkerboard.png");
 	olliver_ordell_texture_ = eclipse::Texture2D::create("assets/textures/olliver_ordell_logo.png");
 	tiny_town_texture_      = eclipse::Texture2D::create("assets/games/tiny_town/Tilemap/tilemap_packed.png");
-	tiny_town_sheet_ =
-	    eclipse::make_ref<eclipse::TextureSheet>(eclipse::TextureSheetProperties {.texture            = tiny_town_texture_,
-	                                                                              .sub_tile_width     = 16,
-	                                                                              .sub_tile_height    = 16,
-	                                                                              .sub_tile_spacing_x = 0,
-	                                                                              .sub_tile_spacing_y = 0});
+	tiny_town_sheet_        = eclipse::make_ref<eclipse::TextureSheet>(
+     eclipse::TextureSheetProperties {.texture            = tiny_town_texture_,
+	                                            .sub_tile_width     = eclipse::units::pixels(16),
+	                                            .sub_tile_height    = eclipse::units::pixels(16),
+	                                            .sub_tile_spacing_x = eclipse::units::pixels(0),
+	                                            .sub_tile_spacing_y = eclipse::units::pixels(0)});
 
 	EC_DEBUG(tiny_town_sheet_->get_debug_string());
 
 	sub_texture_key_ = eclipse::make_ref<eclipse::SubTexture2D>(
-	    eclipse::SubTexture2DProperties {.texture_sheet = tiny_town_sheet_, .tile_index_x = 9, .tile_index_y = 1});
+	    eclipse::SubTexture2DProperties {.texture_sheet = tiny_town_sheet_,
+	                                     .tile_index_x  = eclipse::units::pixels(9),
+	                                     .tile_index_y  = eclipse::units::pixels(1)});
 	sub_texture_door_ = eclipse::make_ref<eclipse::SubTexture2D>(
-	    eclipse::SubTexture2DProperties {.texture_sheet = tiny_town_sheet_, .tile_index_x = 6, .tile_index_y = 4});
+	    eclipse::SubTexture2DProperties {.texture_sheet = tiny_town_sheet_,
+	                                     .tile_index_x  = eclipse::units::pixels(6),
+	                                     .tile_index_y  = eclipse::units::pixels(4)});
 
 	eclipse::utils::Random::init();
 
@@ -41,12 +46,12 @@ void Sandbox2D::on_attach() {
 
 void Sandbox2D::on_detach() { EC_PROFILE_FUNCTION(); }
 
-void Sandbox2D::on_update(eclipse::Timestep timestep) {
+void Sandbox2D::on_update(au::QuantityF<au::Seconds> timestep) {
 	EC_PROFILE_FUNCTION();
 
 	camera_controller_.on_update(timestep);
 
-	frame_rate_ = static_cast<unsigned int>(1.0F / timestep);
+	frame_rate_ = static_cast<unsigned int>(1.0F / timestep.in(au::seconds));
 	EC_TRACE_THROTTLED(1.0, "Frame rate: {0}Hz", frame_rate_);
 
 	static const float red   = 0.1F;
@@ -65,20 +70,20 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 		EC_PROFILE_SCOPE("Renderer Draw");
 
 		static float rotation = 0.0F;
-		rotation += timestep * 1.0F;
+		rotation += timestep.in(au::seconds) *1.0F;
 
 		eclipse::Renderer2D::begin_scene(camera_controller_.get_camera());
 
 		if (eclipse::InputManager::is_mouse_button_pressed(eclipse::MouseCode::button_left)) {
 			auto [x, y] = eclipse::InputManager::get_mouse_pose();
-			auto width  = eclipse::Application::get().get_window().get_width();
-			auto height = eclipse::Application::get().get_window().get_height();
+			auto width  = eclipse::Application::get().get_window().get_width().as<float>(eclipse::units::pixels);
+			auto height = eclipse::Application::get().get_window().get_height().as<float>(eclipse::units::pixels);
 
 			auto bounds              = camera_controller_.get_bounds();
 			auto pos                 = camera_controller_.get_camera().get_position();
-			x                        = (x / width) * bounds.get_width() - bounds.get_width() * 0.5f;
-			y                        = bounds.get_height() * 0.5f - (y / height) * bounds.get_height();
-			particle_props_.position = {x + pos.x, y + pos.y};
+			x                        = eclipse::units::pixels((x / width) * bounds.get_width() - bounds.get_width() * 0.5F);
+			y                        = eclipse::units::pixels(bounds.get_height() * 0.5F - (y / height) * bounds.get_height());
+			particle_props_.position = {x.in(eclipse::units::pixels) + pos.x, y.in(eclipse::units::pixels) + pos.y};
 			for (int i = 0; i < 5; i++) {
 				particle_system_.emit(particle_props_);
 			}
@@ -128,13 +133,15 @@ void Sandbox2D::on_update(eclipse::Timestep timestep) {
 
 		eclipse::Renderer2D::draw_quad({
 		    .spatial_info = {.position = {0.0F, 1.0F, 0.5F},
-		                     .size     = {sub_texture_key_->get_width(), sub_texture_key_->get_height()}},
+		                     .size     = {sub_texture_key_->get_width().in(eclipse::units::pixels),
+		                                  sub_texture_key_->get_height().in(eclipse::units::pixels)}},
 		    .common       = {.texture_coords = sub_texture_key_->get_texture_coords()},
 		    .texture      = sub_texture_key_->get_texture(),
 		});
 		eclipse::Renderer2D::draw_quad({
 		    .spatial_info = {.position = {1.0F, 1.0F, 0.5F},
-		                     .size     = {sub_texture_door_->get_width(), sub_texture_door_->get_height()}},
+		                     .size     = {sub_texture_door_->get_width().in(eclipse::units::pixels),
+		                                  sub_texture_door_->get_height().in(eclipse::units::pixels)}},
 		    .common       = {.texture_coords = sub_texture_door_->get_texture_coords()},
 		    .texture      = sub_texture_door_->get_texture(),
 		});

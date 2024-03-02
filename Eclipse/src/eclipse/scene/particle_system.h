@@ -1,6 +1,5 @@
 #pragma once
 
-#include "eclipse/core/timestep.h"
 #include "eclipse/renderer/orthographic_camera.h"
 
 #include <glm/glm.hpp>
@@ -35,7 +34,7 @@ struct Particle {
 class ParticleSystem {
 public:
 	ParticleSystem(uint32_t max_particles = 1000);
-	void on_update(Timestep timestep);
+	void on_update(au::QuantityF<au::Seconds> timestep);
 	void on_render(OrthographicCamera& camera);
 	void emit(const ParticleProperties& particleProps);
 

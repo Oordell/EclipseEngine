@@ -83,7 +83,7 @@ void Renderer2D::init() {
 	data.quad_vertex_array->set_index_buffer(quad_index_buffer_);
 	delete[] quad_indices;
 
-	data.white_texture          = Texture2D::create(WindowSize {1, 1});
+	data.white_texture          = Texture2D::create(WindowSize {units::pixels(1), units::pixels(1)});
 	uint32_t white_texture_data = 0xffffffff;
 	data.white_texture->set_data(&white_texture_data, sizeof(white_texture_data));
 

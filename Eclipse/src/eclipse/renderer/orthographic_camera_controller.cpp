@@ -3,6 +3,7 @@
 #include "eclipse/core/input_manager.h"
 #include "eclipse/core/key_codes.h"
 #include "eclipse/utils/math.h"
+#include "eclipse/utils/numbers.h"
 
 namespace eclipse {
 
@@ -20,19 +21,20 @@ void OrthographicCameraController::set_zoom_level(float lvl) {
 	set_bounds_and_camera_projection();
 }
 
-void OrthographicCameraController::on_update(Timestep timestep) {
+void OrthographicCameraController::on_update(au::QuantityF<au::Seconds> timestep) {
 	EC_PROFILE_FUNCTION();
 
 	if (InputManager::is_key_pressed(KeyCode::A)) {
-		camera_position_.x -= camera_move_speed_ * timestep;
+		camera_position_.x -= (camera_move_speed_ * timestep).in(units::pixels);
 	} else if (InputManager::is_key_pressed(KeyCode::D)) {
-		camera_position_.x += camera_move_speed_ * timestep;
+		camera_position_.x += (camera_move_speed_ * timestep).in(units::pixels);
 	}
 	if (InputManager::is_key_pressed(KeyCode::W)) {
-		camera_position_.y += camera_move_speed_ * timestep;
+		camera_position_.y += (camera_move_speed_ * timestep).in(units::pixels);
 	} else if (InputManager::is_key_pressed(KeyCode::S)) {
-		camera_position_.y -= camera_move_speed_ * timestep;
+		camera_position_.y -= (camera_move_speed_ * timestep).in(units::pixels);
 	}
+
 	if (rotate_camera_ == EnableCameraRotation::yes) {
 		if (InputManager::is_key_pressed(KeyCode::Q)) {
 			camera_rotation_ += camera_rotate_speed_ * timestep;
@@ -40,12 +42,10 @@ void OrthographicCameraController::on_update(Timestep timestep) {
 			camera_rotation_ -= camera_rotate_speed_ * timestep;
 		}
 
-		static const auto HALF_CIRCLE_DEGREES = static_cast<float>(utils::rad_to_deg(std::numbers::pi));
-
-		if (camera_rotation_ > HALF_CIRCLE_DEGREES) {
-			camera_rotation_ -= 2 * HALF_CIRCLE_DEGREES;
-		} else if (camera_rotation_ <= -HALF_CIRCLE_DEGREES) {
-			camera_rotation_ += 2 * HALF_CIRCLE_DEGREES;
+		if (camera_rotation_ > au::degrees(utils::num::DEGREES_180_F)) {
+			camera_rotation_ -= 2 * au::degrees(utils::num::DEGREES_180_F);
+		} else if (camera_rotation_ <= -au::degrees(utils::num::DEGREES_180_F)) {
+			camera_rotation_ += 2 * au::degrees(utils::num::DEGREES_180_F);
 		}
 
 		camera_.set_rotation(camera_rotation_);
@@ -65,14 +65,14 @@ void OrthographicCameraController::on_event(Event& e) {
 void OrthographicCameraController::on_resize(const WindowSize& new_size) {
 	EC_PROFILE_FUNCTION();
 
-	aspect_ratio_ = static_cast<float>(new_size.width) / static_cast<float>(new_size.height);
+	aspect_ratio_ = new_size.get_aspect_ratio();
 	set_bounds_and_camera_projection();
 }
 
 bool OrthographicCameraController::on_mouse_scrolled(MouseScrolledEvent& e) {
 	EC_PROFILE_FUNCTION();
 
-	zoom_level_ -= e.get_y_offset() * 0.1F;
+	zoom_level_ -= e.get_y_offset().in(units::pixels) * 0.1F;
 	zoom_level_ = std::max(zoom_level_, 0.25F);
 	set_bounds_and_camera_projection();
 	return false;

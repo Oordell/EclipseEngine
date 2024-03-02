@@ -16,8 +16,10 @@ TextureSheet::TextureSheet(const TextureSheetProperties& props)
 		tile_height_ = texture_->get_height();
 	}
 
-	max_x_index_ = static_cast<int32_t>(texture_->get_width() / tile_width_);
-	max_y_index_ = static_cast<int32_t>(texture_->get_height() / tile_height_);
+	max_x_index_ = units::pixels(
+	    static_cast<uint32_t>(texture_->get_width().in<float>(units::pixels) / tile_width_.in<float>(units::pixels)));
+	max_y_index_ = units::pixels(
+	    static_cast<uint32_t>(texture_->get_height().in<float>(units::pixels) / tile_height_.in<float>(units::pixels)));
 }
 
 std::string TextureSheet::get_debug_string() const {

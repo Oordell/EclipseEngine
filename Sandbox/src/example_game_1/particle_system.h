@@ -3,6 +3,8 @@
 #include "eclipse.h"
 #include "color.h"
 
+#include <au.hh>
+
 struct ParticleProps {
 	glm::vec2 position;
 	glm::vec2 velocity;
@@ -20,7 +22,7 @@ public:
 	ParticleSystem();
 	~ParticleSystem() = default;
 	void emit(const ParticleProps& particle_prop);
-	void on_update(eclipse::Timestep timestep);
+	void on_update(au::QuantityF<au::Seconds> timestep);
 	void on_render();
 
 private:

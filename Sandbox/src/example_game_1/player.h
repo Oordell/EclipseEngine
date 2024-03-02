@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Eclipse.h>
+#include <au.hh>
 
 #include "particle_system.h"
 
@@ -10,14 +11,14 @@ public:
 	~Player() = default;
 
 	void load_asserts();
-	void on_update(eclipse::Timestep timestep);
+	void on_update(au::QuantityF<au::Seconds> timestep);
 	void on_render();
 	void on_imgui_render();
 	void reset();
 
 	const glm::vec2& get_position() const { return position_; }
 
-	float get_rotation() { return eclipse::utils::deg_to_rad(velocity_.y * 4.0F - 90.0F); }
+	float get_rotation() { return au::degrees(velocity_.y * 4.0F - 90.0F).in(au::radians); }
 
 	uint32_t get_score() const { return static_cast<uint32_t>((position_.x + 10.0F) / 10.0F); }
 

@@ -1,18 +1,18 @@
 #pragma once
 
 #include "camera.h"
-#include "eclipse/core/timestep.h"
 #include "eclipse/events/event.h"
 #include "eclipse/events/mouse_events.h"
 #include "eclipse/common_types/window_size.h"
-#include "eclipse/common_types/velocity_2d.h"
+#include "eclipse/common_types/screen_velocity_2d.h"
 
 #include <glm/glm.hpp>
+#include <au.hh>
 
 namespace eclipse {
 
 struct EditorCameraSpecs {
-	float fov {};
+	au::Quantity<au::Degrees, float> fov {};
 	float aspect_ratio {};
 	float near_clip {};
 	float far_clip {};
@@ -23,7 +23,7 @@ public:
 	EditorCamera() = default;
 	EditorCamera(const EditorCameraSpecs& specs);
 
-	void on_update(Timestep ts);
+	void on_update(au::QuantityF<au::Seconds> ts);
 	void on_event(Event& e);
 
 	inline float get_distance() const { return distance_; }
@@ -31,8 +31,8 @@ public:
 	inline void set_distance(float d) { distance_ = d; }
 
 	inline void set_viewport_size(const WindowSize& size) {
-		viewport_width_  = static_cast<float>(size.width);
-		viewport_height_ = static_cast<float>(size.height);
+		viewport_width_  = size.width;
+		viewport_height_ = size.height;
 		update_projection();
 	}
 
@@ -48,9 +48,9 @@ public:
 
 	glm::quat get_orientation() const;
 
-	float get_pitch() const { return pitch_; }
+	au::Quantity<au::Radians, float> get_pitch() const { return pitch_; }
 
-	float get_yaw() const { return yaw_; }
+	au::Quantity<au::Radians, float> get_yaw() const { return yaw_; }
 
 private:
 	void update_projection();
@@ -60,20 +60,20 @@ private:
 	void mouse_rotate(const glm::vec2& delta);
 	void mouse_zoom(float delta);
 	glm::vec3 calculate_position() const;
-	Velocity2D pan_speed() const;
+	ScreenVelocity2D pan_speed() const;
 	float rotation_speed() const;
 	float zoom_speed() const;
 
-	float fov_ {45.0F};
+	au::Quantity<au::Degrees, float> fov_ {au::degrees(45.0F)};
 	float aspect_ratio_ {1.778F};
 	float near_clip_ {0.1F};
 	float far_clip_ {1000.0F};
 
 	float distance_ {10.0F};
-	float viewport_width_ {1280.0F};
-	float viewport_height_ {720.0F};
-	float pitch_ {0.0F};
-	float yaw_ {0.0F};
+	au::Quantity<units::Pixels, uint32_t> viewport_width_ {units::pixels(1280)};
+	au::Quantity<units::Pixels, uint32_t> viewport_height_ {units::pixels(720)};
+	au::Quantity<au::Radians, float> pitch_ {au::radians(0.0F)};
+	au::Quantity<au::Radians, float> yaw_ {au::radians(0.0F)};
 
 	glm::mat4 view_matrix_ {};
 	glm::vec3 position_ {0.0F, 0.0F, 0.0F};

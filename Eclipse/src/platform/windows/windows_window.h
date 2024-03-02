@@ -14,9 +14,9 @@ public:
 
 	void on_update() override;
 
-	inline unsigned int get_width() const override { return data_.props.window_size.width; }
+	inline au::Quantity<units::Pixels, uint32_t> get_width() const override { return data_.props.window_size.width; }
 
-	inline unsigned int get_height() const override { return data_.props.window_size.height; }
+	inline au::Quantity<units::Pixels, uint32_t> get_height() const override { return data_.props.window_size.height; }
 
 	inline void set_event_callback(const EventCallbackfn& callback) override { data_.event_callback = callback; }
 

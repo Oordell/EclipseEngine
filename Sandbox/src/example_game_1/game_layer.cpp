@@ -15,8 +15,8 @@ void GameLayer::on_attach() {
 
 void GameLayer::on_detach() {}
 
-void GameLayer::on_update(eclipse::Timestep timestep) {
-	time_ += timestep;
+void GameLayer::on_update(au::QuantityF<au::Seconds> timestep) {
+	time_ += timestep.in(au::seconds);
 
 	if (static_cast<int>(time_ * 10.0f) % 8 > 4) {
 		blink_ = !blink_;
@@ -87,7 +87,7 @@ void GameLayer::add_imgui_text_player_score(ImVec2& window_pose) {
 
 void GameLayer::add_imgui_text_click_to_play(ImVec2& window_pose) {
 	auto width = eclipse::Application::get().get_window().get_width();
-	window_pose.x -= width * 0.5F;
+	window_pose.x -= width.in(eclipse::units::pixels) * 0.5F;
 	if (blink_) {
 		ImGui::GetForegroundDrawList()->AddText(font_, 120.0f, window_pose, 0xffffffff, "Click to Play!");
 	}
@@ -108,7 +108,7 @@ bool GameLayer::on_window_resize(eclipse::WindowResizeEvent& e) {
 }
 
 bool GameLayer::on_mouse_scrolled(eclipse::MouseScrolledEvent& e) {
-	zoom_level_ -= e.get_y_offset() * 0.1F;
+	zoom_level_ -= e.get_y_offset().in(eclipse::units::pixels) * 0.1F;
 	zoom_level_ = std::max(zoom_level_, 0.25F);
 	camera_->set_projection({.left   = -aspect_ratio_ * zoom_level_,
 	                         .right  = aspect_ratio_ * zoom_level_,
@@ -118,7 +118,7 @@ bool GameLayer::on_mouse_scrolled(eclipse::MouseScrolledEvent& e) {
 }
 
 void GameLayer::create_camera(const eclipse::WindowSize& size) {
-	aspect_ratio_      = static_cast<float>(size.width) / static_cast<float>(size.height);
+	aspect_ratio_      = size.get_aspect_ratio();
 	float camera_width = 8.0F;
 	float bottom       = -camera_width;
 	float top          = camera_width;

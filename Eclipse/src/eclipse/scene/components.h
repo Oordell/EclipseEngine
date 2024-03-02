@@ -2,7 +2,6 @@
 
 #include "eclipse/scene/scene_camera.h"
 #include "eclipse/scene/scriptable_entity.h"
-#include "eclipse/core/timestep.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

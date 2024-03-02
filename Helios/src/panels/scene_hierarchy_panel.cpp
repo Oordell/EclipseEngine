@@ -4,6 +4,8 @@
 #include <imgui/imgui_internal.h>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <au.hh>
+
 namespace eclipse {
 
 SceneHierarchyPanel::SceneHierarchyPanel(const ref<Scene>& context) { set_context(context); }
@@ -202,9 +204,9 @@ void SceneHierarchyPanel::draw_camera_component(Entity entity) {
 		}
 
 		if (camera.get_projection_type() == ProjectionType::perspective) {
-			float perspective_fov = utils::rad_to_deg(camera.get_perspective_vertical_fov());
+			float perspective_fov = camera.get_perspective_vertical_fov().in(au::degrees);
 			if (ImGui::DragFloat("Vertical FOV", &perspective_fov)) {
-				camera.set_perspective_vertical_fov(utils::deg_to_rad(perspective_fov));
+				camera.set_perspective_vertical_fov(au::degrees(perspective_fov).as(au::radians));
 			}
 
 			float perspective_near_clip = camera.get_perspective_near_clip();

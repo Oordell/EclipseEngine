@@ -12,8 +12,8 @@ public:
 	static bool is_key_pressed(KeyCode keycode);
 	static bool is_mouse_button_pressed(MouseCode button);
 	static Point2D get_mouse_pose();
-	static float get_mouse_pose_x();
-	static float get_mouse_pose_y();
+	static au::QuantityF<units::Pixels> get_mouse_pose_x();
+	static au::QuantityF<units::Pixels> get_mouse_pose_y();
 };
 
 }  // namespace eclipse

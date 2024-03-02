@@ -11,7 +11,7 @@ void Level::init() {
 	}
 }
 
-void Level::on_update(eclipse::Timestep timestep) {
+void Level::on_update(au::QuantityF<au::Seconds> timestep) {
 	player_.on_update(timestep);
 
 	if (collision_check()) {
@@ -19,7 +19,7 @@ void Level::on_update(eclipse::Timestep timestep) {
 		return;
 	}
 
-	pillar_hsv_.hue += 0.05F * timestep;
+	pillar_hsv_.hue += 0.05F * timestep.in(au::seconds);
 	if (pillar_hsv_.hue > 1.0F) {
 		pillar_hsv_.hue = 0.0F;
 	}
@@ -48,7 +48,7 @@ void Level::on_render() {
 	for (auto& pillar : pillars_) {
 		eclipse::Renderer2D::draw_quad(
 		    eclipse::QuadMetaDataPosition3DTexture {.spatial_info = {.position     = pillar.top_position,
-		                                                             .rotation_rad = eclipse::utils::deg_to_rad(180.0F),
+		                                                             .rotation_rad = au::degrees(180.0F).in(au::radians),
 		                                                             .size         = pillar.top_scale},
 		                                            .common       = {.color = color},
 		                                            .texture      = triangle_texture_});

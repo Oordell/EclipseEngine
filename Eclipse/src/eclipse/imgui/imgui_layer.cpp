@@ -96,8 +96,8 @@ void ImGuiLayer::end() {
 
 	ImGuiIO& io      = ImGui::GetIO();
 	Application& app = Application::get();
-	io.DisplaySize =
-	    ImVec2(static_cast<float>(app.get_window().get_width()), static_cast<float>(app.get_window().get_height()));
+	io.DisplaySize   = ImVec2(app.get_window().get_width().in<float>(units::pixels),
+	                          app.get_window().get_height().in<float>(units::pixels));
 
 	//	Rendering
 	ImGui::Render();

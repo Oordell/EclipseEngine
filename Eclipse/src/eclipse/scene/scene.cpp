@@ -28,7 +28,7 @@ Entity Scene::get_primary_camera_entity() {
 	return {};
 }
 
-void Scene::on_update_editor(Timestep timestep, EditorCamera& camera) {
+void Scene::on_update_editor(au::QuantityF<au::Seconds> timestep, EditorCamera& camera) {
 	Renderer2D::begin_scene(camera);
 
 	auto color_group = registry_.view<component::Transform, component::Color>();
@@ -50,7 +50,7 @@ void Scene::on_update_editor(Timestep timestep, EditorCamera& camera) {
 	Renderer2D::end_scene();
 }
 
-void Scene::on_update_runtime(Timestep timestep) {
+void Scene::on_update_runtime(au::QuantityF<au::Seconds> timestep) {
 	// Update scripts
 	registry_.view<component::NativeScript>().each([=](auto entity, auto& nsc) {
 		if (nsc.instance == nullptr) {

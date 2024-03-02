@@ -12,9 +12,9 @@ public:
 	OpenGLTexture2D(const std::string& path);
 	virtual ~OpenGLTexture2D();
 
-	uint32_t get_width() const override { return width_; }
+	au::Quantity<units::Pixels, uint32_t> get_width() const override { return width_; }
 
-	uint32_t get_height() const override { return height_; }
+	au::Quantity<units::Pixels, uint32_t> get_height() const override { return height_; }
 
 	uint32_t get_renderer_id() const override { return renderer_id_; }
 
@@ -24,8 +24,8 @@ public:
 
 private:
 	std::string path_;
-	uint32_t width_;
-	uint32_t height_;
+	au::Quantity<units::Pixels, uint32_t> width_;
+	au::Quantity<units::Pixels, uint32_t> height_;
 	uint32_t renderer_id_;
 	GLenum internal_format_;
 	GLenum data_format_;

@@ -6,7 +6,6 @@
 #include "eclipse/events/event.h"
 #include "eclipse/events/window_events.h"
 #include "eclipse/imgui/imgui_layer.h"
-#include "eclipse/core/timestep.h"
 
 int main(int argc, char** argv);
 

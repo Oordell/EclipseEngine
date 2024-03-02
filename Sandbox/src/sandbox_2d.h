@@ -9,7 +9,7 @@ public:
 	virtual ~Sandbox2D() = default;
 	void on_attach() override;
 	void on_detach() override;
-	void on_update(eclipse::Timestep timestep) override;
+	void on_update(au::QuantityF<au::Seconds> timestep) override;
 	void on_event(eclipse::Event& event) override;
 	void on_imgui_render() override;
 

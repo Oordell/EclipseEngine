@@ -35,8 +35,8 @@ struct FramebufferAttachmentSpecification {
 };
 
 struct FrameBufferSpecification {
-	int32_t width;
-	int32_t height;
+	au::Quantity<units::Pixels, uint32_t> width;
+	au::Quantity<units::Pixels, uint32_t> height;
 	FramebufferAttachmentSpecification attachments;
 	int32_t samples        = 1;
 	bool swap_chain_target = false;

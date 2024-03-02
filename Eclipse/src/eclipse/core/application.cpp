@@ -64,9 +64,9 @@ void Application::run() {
 	while (running_) {
 		EC_PROFILE_SCOPE("**Application Run Loop**");
 
-		auto time         = static_cast<float>(glfwGetTime());
-		Timestep timestep = Timestep(time - last_frame_time_);
-		last_frame_time_  = time;
+		auto time                           = static_cast<float>(glfwGetTime());
+		au::QuantityF<au::Seconds> timestep = au::seconds(time - last_frame_time_);
+		last_frame_time_                    = time;
 
 		if (!minimized_) {
 			{
@@ -98,7 +98,7 @@ bool Application::on_window_closed(WindowClosedEvent& e) {
 bool Application::on_window_resize(WindowResizeEvent& e) {
 	EC_PROFILE_FUNCTION();
 
-	if (e.get_width() == 0 || e.get_height() == 0) {
+	if (e.get_width() == units::pixels(0) || e.get_height() == units::pixels(0)) {
 		minimized_ = true;
 		return false;
 	}

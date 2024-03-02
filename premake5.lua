@@ -24,6 +24,7 @@ IncludeDir["stb_image"] = "Eclipse/vendor/stb_image"
 IncludeDir["entt"] = "Eclipse/vendor/entt/include"
 IncludeDir["yaml_cpp"] = "Eclipse/vendor/yaml-cpp/include"
 IncludeDir["imguizmo"] = "Eclipse/vendor/imguizmo"
+IncludeDir["au"] = "Eclipse/vendor/au"
 
 group "Dependencies"
 	include "Eclipse/vendor/GLFW_fork"
@@ -54,6 +55,7 @@ project "Eclipse"
 		"%{prj.name}/vendor/glm/glm/**.inl",
 		"%{prj.name}/vendor/imguizmo/ImGuizmo.h",
 		"%{prj.name}/vendor/imguizmo/ImGuizmo.cpp",
+		"%{prj.name}/vendor/au/**.hh",
 	}
 
 	defines {
@@ -73,6 +75,7 @@ project "Eclipse"
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.yaml_cpp}",
 		"%{IncludeDir.imguizmo}",
+		"%{IncludeDir.au}",
 	}
 
 	links {
@@ -135,7 +138,8 @@ project "Sandbox"
 		"Eclipse/src",
 		"Eclipse/vendor",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.au}"
 	}
 
 	links {
@@ -191,6 +195,7 @@ project "Helios"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.imguizmo}",
+		"%{IncludeDir.au}"
 	}
 
 	links {

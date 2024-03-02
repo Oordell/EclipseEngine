@@ -3,6 +3,7 @@
 #include "eclipse/common_types/orthographic.h"
 
 #include <glm/glm.hpp>
+#include <au.hh>
 
 namespace eclipse {
 
@@ -17,14 +18,14 @@ public:
 
 	const glm::vec3& get_position() const { return position_; }
 
-	float get_rotation() const { return rotation_; }
+	au::Quantity<au::Degrees, float> get_rotation() const { return rotation_; }
 
 	void set_position(const glm::vec3& position) {
 		position_ = position;
 		calculate_view_matrix();
 	}
 
-	void set_rotation(float rotation) {
+	void set_rotation(au::Quantity<au::Degrees, float> rotation) {
 		rotation_ = rotation;
 		calculate_view_matrix();
 	}
@@ -42,8 +43,8 @@ private:
 	glm::mat4 projection_matrix_ {};
 	glm::mat4 view_matrix_ {};
 	glm::mat4 view_projection_matrix_ {};
-	glm::vec3 position_ {0, 0, 0};
-	float rotation_ {0.0F};
+	glm::vec3 position_ {0.0F, 0.0F, 0.0F};
+	au::Quantity<au::Degrees, float> rotation_ {au::degrees(0.0F)};
 };
 
 }  // namespace eclipse

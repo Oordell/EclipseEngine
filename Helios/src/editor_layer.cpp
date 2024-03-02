@@ -17,8 +17,8 @@ void EditorLayer::on_attach() {
 	olliver_ordell_texture_ = Texture2D::create("assets/textures/olliver_ordell_logo.png");
 
 	frame_buffer_ =
-	    FrameBuffer::create({.width       = 1600,
-	                         .height      = 900,
+	    FrameBuffer::create({.width       = units::pixels(1600),
+	                         .height      = units::pixels(900),
 	                         .attachments = {FramebufferTextureFormat::rgba8, FramebufferTextureFormat::red_integer,
 	                                         FramebufferTextureFormat::depth}});
 
@@ -48,7 +48,7 @@ void EditorLayer::on_attach() {
 
 	 void on_destroy() override {}
 
-	 void on_update(Timestep timestep) override {
+	 void on_update(au::QuantityF<au::Seconds> timestep) override {
 	  auto& translation = get_component<component::Transform>().translation;
 
 	  static const float camera_move_speed = 5.0F;
@@ -75,11 +75,11 @@ void EditorLayer::on_attach() {
 
 void EditorLayer::on_detach() { EC_PROFILE_FUNCTION(); }
 
-void EditorLayer::on_update(Timestep timestep) {
+void EditorLayer::on_update(au::QuantityF<au::Seconds> timestep) {
 	EC_PROFILE_FUNCTION();
 
 	if (auto specs = frame_buffer_->get_specification();
-	    viewport_size_.width > 0 && viewport_size_.height > 0 &&
+	    viewport_size_.width > units::pixels(0) && viewport_size_.height > units::pixels(0) &&
 	    (specs.width != viewport_size_.width || specs.height != viewport_size_.height)) {
 		frame_buffer_->resize(viewport_size_);
 		camera_controller_.on_resize(viewport_size_);
@@ -93,7 +93,7 @@ void EditorLayer::on_update(Timestep timestep) {
 	}
 	editor_camera_.on_update(timestep);
 
-	frame_rate_ = static_cast<unsigned int>(1.0F / timestep);
+	frame_rate_ = static_cast<unsigned int>(1.0F / timestep.in(au::seconds));
 	EC_TRACE_THROTTLED(1.0, "Frame rate: {0}Hz", frame_rate_);
 
 	static const float red   = 0.1F;
@@ -247,8 +247,8 @@ void EditorLayer::on_imgui_render() {
 	Application::get().get_imgui_layer()->set_block_events(!viewport_focused_ && !viewport_hovered_);
 
 	ImVec2 viewport_panel_size = ImGui::GetContentRegionAvail();
-	uint32_t temp_width        = static_cast<uint32_t>(viewport_panel_size.x);
-	uint32_t temp_height       = static_cast<uint32_t>(viewport_panel_size.y);
+	auto temp_width            = units::pixels(static_cast<uint32_t>(viewport_panel_size.x));
+	auto temp_height           = units::pixels(static_cast<uint32_t>(viewport_panel_size.y));
 	if (viewport_size_.width != temp_width || viewport_size_.height != temp_height) {
 		viewport_size_ = {.width = temp_width, .height = temp_height};
 	}
