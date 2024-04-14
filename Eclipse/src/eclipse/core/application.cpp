@@ -9,7 +9,8 @@ namespace eclipse {
 
 Application* Application::instance_ = nullptr;
 
-Application::Application(const WindowProps& window_properties) {
+Application::Application(const WindowProps& window_properties, const ApplicationCommandLineArgs& args)
+    : command_line_args_(args) {
 	EC_PROFILE_FUNCTION();
 	EC_CORE_ASSERT(!instance_, "Application already exists!");
 	instance_ = this;

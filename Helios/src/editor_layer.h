@@ -40,7 +40,7 @@ private:
 	    {.fov = au::degrees(30.0F), .aspect_ratio = 1.778F, .near_clip = 0.1F, .far_clip = 1000.0F}};
 
 	WindowSize viewport_size_ {};
-	glm::vec2 viewport_bounds_[2];
+	glm::vec2 viewport_bounds_[2] {};
 	bool viewport_focused_ {false};
 	bool viewport_hovered_ {false};
 

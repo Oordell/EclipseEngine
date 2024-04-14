@@ -6,7 +6,10 @@
 
 class Sandbox : public eclipse::Application {
 public:
-	Sandbox() : Application({.title = "Sandbox App"}) {
+	Sandbox(const eclipse::ApplicationCommandLineArgs& args)
+	    : Application({.title       = "Sandbox App",
+	                   .window_size = {.width = eclipse::units::pixels(1600), .height = eclipse::units::pixels(900)}},
+	                  args) {
 		//	push_layer(new ExampleLayer());
 		push_layer(new Sandbox2D());
 		//	push_layer(new GameLayer());
@@ -15,4 +18,4 @@ public:
 	~Sandbox() {}
 };
 
-eclipse::Application* eclipse::create_application() { return new Sandbox(); }
+eclipse::Application* eclipse::create_application(const ApplicationCommandLineArgs& args) { return new Sandbox(args); }

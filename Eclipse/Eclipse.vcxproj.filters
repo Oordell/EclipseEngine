@@ -147,6 +147,9 @@
     <ClInclude Include="src\eclipse\core\platform_detection.h">
       <Filter>src\eclipse\core</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\core\timer.h">
+      <Filter>src\eclipse\core</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\core\window.h">
       <Filter>src\eclipse\core</Filter>
     </ClInclude>
@@ -231,6 +234,9 @@
     <ClInclude Include="src\eclipse\renderer\texture_sheet.h">
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\renderer\uniform_buffer.h">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\renderer\vertex_array.h">
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
@@ -289,6 +295,9 @@
       <Filter>src\platform\opengl</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\opengl\opengl_texture.h">
+      <Filter>src\platform\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\platform\opengl\opengl_uniform_buffer.h">
       <Filter>src\platform\opengl</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\opengl\opengl_vertex_array.h">
@@ -1628,6 +1637,9 @@
     <ClCompile Include="src\eclipse\renderer\texture_sheet.cpp">
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\eclipse\renderer\uniform_buffer.cpp">
+      <Filter>src\eclipse\renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\eclipse\renderer\vertex_array.cpp">
       <Filter>src\eclipse\renderer</Filter>
     </ClCompile>
@@ -1674,6 +1686,9 @@
       <Filter>src\platform\opengl</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\opengl\opengl_texture.cpp">
+      <Filter>src\platform\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\platform\opengl\opengl_uniform_buffer.cpp">
       <Filter>src\platform\opengl</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\opengl\opengl_vertex_array.cpp">

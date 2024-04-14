@@ -136,6 +136,10 @@ void Scene::on_component_added<component::SpriteRenderer>(Entity entity, compone
 
 template <>
 void Scene::on_component_added<component::Camera>(Entity entity, component::Camera& component) {
+	if (!(viewport_size_.width.in(units::pixels) > 0 && viewport_size_.height.in(units::pixels) > 0)) {
+		EC_CORE_ERROR("Viewport is invalid! Width: {0}, height: {1}", viewport_size_.width, viewport_size_.height);
+		return;
+	}
 	component.camera.set_viewport_size(viewport_size_);
 }
 

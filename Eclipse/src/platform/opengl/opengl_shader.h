@@ -40,10 +40,19 @@ public:
 private:
 	std::string read_file(const FilePath& filepath);
 	std::unordered_map<GLenum, std::string> pre_process(const std::string& vertes_src);
-	void compile(const std::unordered_map<GLenum, std::string>& shader_srcs);
+	void compile_or_get_vulkan_binaries(const std::unordered_map<GLenum, std::string>& shader_sources);
+	void compile_or_get_opengl_binaries();
+	void create_program();
+	void reflect(GLenum stage, const std::vector<uint32_t>& shader_data);
+	void init(const std::unordered_map<GLenum, std::string>& sources);
 
 	uint32_t renderer_id_ = 0;
+	FilePath file_path_ {""};
 	std::string name_ {};
+
+	std::unordered_map<GLenum, std::vector<uint32_t>> vulkan_spirv_;
+	std::unordered_map<GLenum, std::vector<uint32_t>> opengl_spirv_;
+	std::unordered_map<GLenum, std::string> opengl_source_code_;
 };
 
 }  // namespace eclipse

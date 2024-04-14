@@ -1,11 +1,13 @@
 #include "ecpch.h"
 #include "renderer_2d.h"
+#include "eclipse/renderer/uniform_buffer.h"
 
 #include "vertex_array.h"
 #include "shader.h"
 #include "render_command.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace eclipse {
 
@@ -44,6 +46,13 @@ struct Renderer2DData {
 	glm::vec4 quad_vertex_positions[defaults::NUM_OF_QUAD_CORNERS];
 
 	RendererStatistics stats;
+
+	struct CameraData {
+		glm::mat4 view_projection {};
+	};
+
+	CameraData camera_buffer;
+	ref<UniformBuffer> camera_uniform_buffer;
 };
 
 static Renderer2DData data;
@@ -93,8 +102,6 @@ void Renderer2D::init() {
 	}
 
 	data.texture_shader = Shader::create(FilePath("assets/shaders/texture.glsl"));
-	data.texture_shader->bind();
-	data.texture_shader->set_int_array("u_textures", samplers, data.MAX_TEXTURE_SLOTS);
 
 	data.texture_slots[0] = data.white_texture;
 
@@ -102,6 +109,8 @@ void Renderer2D::init() {
 	data.quad_vertex_positions[1] = {0.5F, -0.5F, 0.0F, 1.0F};
 	data.quad_vertex_positions[2] = {0.5F, 0.5F, 0.0F, 1.0F};
 	data.quad_vertex_positions[3] = {-0.5F, 0.5F, 0.0F, 1.0F};
+
+	data.camera_uniform_buffer = UniformBuffer::create({.size = sizeof(Renderer2DData::CameraData), .binding = 0});
 }
 
 void Renderer2D::shutdown() {
@@ -111,12 +120,16 @@ void Renderer2D::shutdown() {
 
 void Renderer2D::begin_scene(const RenderCamera& camera) {
 	EC_PROFILE_FUNCTION();
-	init_scene(camera.projection * glm::inverse(camera.transform));
+	data.camera_buffer.view_projection = camera.projection * glm::inverse(camera.transform);
+	data.camera_uniform_buffer->set_data(&data.camera_buffer, {.size = sizeof(Renderer2DData::CameraData), .offset = 0});
+	reset_data();
 }
 
 void Renderer2D::begin_scene(const EditorCamera& camera) {
 	EC_PROFILE_FUNCTION();
-	init_scene(camera.get_view_projection());
+	data.camera_buffer.view_projection = camera.get_view_projection();
+	data.camera_uniform_buffer->set_data(&data.camera_buffer, {.size = sizeof(Renderer2DData::CameraData), .offset = 0});
+	reset_data();
 }
 
 void Renderer2D::begin_scene(const OrthographicCamera& camera) {
@@ -144,6 +157,7 @@ void Renderer2D::flush() {
 	for (uint32_t i = 0; i < data.texture_slot_index; i++) {
 		data.texture_slots[i]->bind(i);
 	}
+	data.texture_shader->bind();
 	RenderCommand::draw_indexed(data.quad_vertex_array, data.quad_index_count);
 	data.stats.draw_calls++;
 }

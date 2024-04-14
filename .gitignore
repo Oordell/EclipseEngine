@@ -42,3 +42,6 @@ bin-int/
 **/*/Eclipse.log
 Helios/logs/*
 Helios\logs\*
+Eclipse/vendor/VulkanSDK
+Helios/assets/cache
+scripts/__pycache__

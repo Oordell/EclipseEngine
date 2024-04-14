@@ -11,9 +11,19 @@ int main(int argc, char** argv);
 
 namespace eclipse {
 
+struct ApplicationCommandLineArgs {
+	int count   = 0;
+	char** args = nullptr;
+
+	[[nodiscard]] const char* operator[](int index) const {
+		EC_CORE_ASSERT(index < count || index >= 0, "Index less than count! index = {0}, count = {1}", index, count);
+		return args[index];
+	}
+};
+
 class ECLIPSE_API Application {
 public:
-	Application(const WindowProps& window_properties);
+	Application(const WindowProps& window_properties, const ApplicationCommandLineArgs& args = {});
 	virtual ~Application();
 	void close();
 
@@ -29,6 +39,8 @@ public:
 
 	inline static Application& get() { return *instance_; }
 
+	[[nodiscard]] ApplicationCommandLineArgs get_command_line_args() const { return command_line_args_; }
+
 private:
 	void run();
 	bool on_window_closed(WindowClosedEvent& e);
@@ -41,11 +53,12 @@ private:
 	bool minimized_ = false;
 	LayerStack layer_stack_;
 	float last_frame_time_ {};
+	ApplicationCommandLineArgs command_line_args_ {};
 
 	friend int ::main(int argc, char** argv);
 };
 
 // To be defined in client
-Application* create_application();
+Application* create_application(const ApplicationCommandLineArgs& args);
 
 }  // namespace eclipse

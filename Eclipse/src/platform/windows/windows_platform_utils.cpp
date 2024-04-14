@@ -13,7 +13,7 @@
 
 namespace eclipse {
 
-FileDialogResult FileDialogs::open_file(const char* filter) {
+std::optional<FilePath> FileDialogs::open_file(const char* filter) {
 	OPENFILENAMEA ofn;
 	CHAR sz_file[260]     = {0};
 	CHAR current_dir[256] = {0};
@@ -29,12 +29,12 @@ FileDialogResult FileDialogs::open_file(const char* filter) {
 	ofn.nFilterIndex = 1;
 	ofn.Flags        = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 	if (GetOpenFileNameA(&ofn) == TRUE) {
-		return {.success = true, .file_path = FilePath {ofn.lpstrFile}};
+		return FilePath {ofn.lpstrFile};
 	}
-	return {.success = false};
+	return std::nullopt;
 }
 
-FileDialogResult FileDialogs::save_file(const char* filter) {
+std::optional<FilePath> FileDialogs::save_file(const char* filter) {
 	OPENFILENAMEA ofn;
 	CHAR sz_file[260]     = {0};
 	CHAR current_dir[256] = {0};
@@ -50,9 +50,9 @@ FileDialogResult FileDialogs::save_file(const char* filter) {
 	ofn.nFilterIndex = 1;
 	ofn.Flags        = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 	if (GetSaveFileNameA(&ofn) == TRUE) {
-		return {.success = true, .file_path = FilePath {ofn.lpstrFile}};
+		return FilePath {ofn.lpstrFile};
 	}
-	return {.success = false};
+	return std::nullopt;
 }
 
 }  // namespace eclipse

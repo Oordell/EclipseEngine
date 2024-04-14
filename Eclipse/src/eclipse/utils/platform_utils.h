@@ -7,15 +7,10 @@
 
 namespace eclipse {
 
-struct FileDialogResult {
-	bool success {false};
-	std::optional<FilePath> file_path = std::nullopt;
-};
-
 class FileDialogs {
 public:
-	static FileDialogResult open_file(const char* filter);
-	static FileDialogResult save_file(const char* filter);
+	static std::optional<FilePath> open_file(const char* filter);
+	static std::optional<FilePath> save_file(const char* filter);
 };
 
 }  // namespace eclipse

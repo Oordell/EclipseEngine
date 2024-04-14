@@ -23,6 +23,14 @@ void EditorLayer::on_attach() {
 	                                         FramebufferTextureFormat::depth}});
 
 	active_scene_ = make_ref<Scene>();
+
+	auto command_line_args = Application::get().get_command_line_args();
+	if (command_line_args.count > 1) {
+		EC_DEBUG("Loading command line arguments...");
+		auto scene_file_path = FilePath(command_line_args[1]);
+		SceneSerializer serializer(active_scene_);
+		serializer.deserialize_text(scene_file_path);
+	}
 	/*
 	square_entity_ = active_scene_->create_entity("Green square");
 	square_entity_.add_component<component::Color>(glm::vec4 {0.2F, 0.9F, 0.3F, 1.0F});
@@ -314,20 +322,24 @@ void EditorLayer::create_new_active_scene() {
 void EditorLayer::open_scene() {
 	auto result = FileDialogs::open_file(WINDOWS_FILE_DIALOG_FILTER.data());
 
-	if (result.success) {
+	if (result.has_value()) {
 		create_new_active_scene();
 
 		SceneSerializer serializer(active_scene_);
-		serializer.deserialize_text(result.file_path.value());
+		serializer.deserialize_text(result.value());
+	} else {
+		EC_CORE_ERROR("Couldn't open scene, as we didn't find a file path...");
 	}
 }
 
 void EditorLayer::save_scene_as() {
 	auto result = FileDialogs::save_file(WINDOWS_FILE_DIALOG_FILTER.data());
 
-	if (result.success) {
+	if (result.has_value()) {
 		SceneSerializer serializer(active_scene_);
-		serializer.serialize_text(result.file_path.value());
+		serializer.serialize_text(result.value());
+	} else {
+		EC_CORE_ERROR("Couldn't save scene, as we didn't find a file path...");
 	}
 }
 

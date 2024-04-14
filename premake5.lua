@@ -1,3 +1,5 @@
+-- include "dependencies.lua"
+
 workspace "Eclipse"
 	architecture "x86_64"
 	startproject "Helios"
@@ -14,17 +16,40 @@ workspace "Eclipse"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+VULKAN_SDK = os.getenv("VULKAN_SDK")
+
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
-IncludeDir["GLFW"] = "Eclipse/vendor/GLFW_fork/include"
-IncludeDir["Glad"] = "Eclipse/vendor/GLAD/include"
-IncludeDir["ImGui"] = "Eclipse/vendor/imgui"
-IncludeDir["glm"] = "Eclipse/vendor/glm"
-IncludeDir["stb_image"] = "Eclipse/vendor/stb_image"
-IncludeDir["entt"] = "Eclipse/vendor/entt/include"
-IncludeDir["yaml_cpp"] = "Eclipse/vendor/yaml-cpp/include"
-IncludeDir["imguizmo"] = "Eclipse/vendor/imguizmo"
-IncludeDir["au"] = "Eclipse/vendor/au"
+IncludeDir["GLFW"] = "%{wks.location}/Eclipse/vendor/GLFW_fork/include"
+IncludeDir["Glad"] = "%{wks.location}/Eclipse/vendor/GLAD/include"
+IncludeDir["ImGui"] = "%{wks.location}/Eclipse/vendor/imgui"
+IncludeDir["glm"] = "%{wks.location}/Eclipse/vendor/glm"
+IncludeDir["stb_image"] = "%{wks.location}/Eclipse/vendor/stb_image"
+IncludeDir["entt"] = "%{wks.location}/Eclipse/vendor/entt/include"
+IncludeDir["yaml_cpp"] = "%{wks.location}/Eclipse/vendor/yaml-cpp/include"
+IncludeDir["imguizmo"] = "%{wks.location}/Eclipse/vendor/imguizmo"
+IncludeDir["au"] = "%{wks.location}/Eclipse/vendor/au"
+IncludeDir["shaderc"] = "%{wks.location}/Eclipse/vendor/shaderc/include"
+IncludeDir["SPIRV_Cross"] = "%{wks.location}/Eclipse/vendor/SPIRV-Cross"
+IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
+
+LibraryDir = {}
+
+LibraryDir["VulkanSDK"] = "%{VULKAN_SDK}/Lib"
+LibraryDir["VulkanSDK_Debug"] = "%{wks.location}/Eclipse/vendor/VulkanSDK/Lib"
+
+Library = {}
+Library["Vulkan"] = "%{LibraryDir.VulkanSDK}/vulkan-1.lib"
+Library["VulkanUtils"] = "%{LibraryDir.VulkanSDK}/VkLayer_utils.lib"
+
+Library["ShaderC_Debug"] = "%{LibraryDir.VulkanSDK_Debug}/shaderc_sharedd.lib"
+Library["SPIRV_Cross_Debug"] = "%{LibraryDir.VulkanSDK_Debug}/spirv-cross-cored.lib"
+Library["SPIRV_Cross_GLSL_Debug"] = "%{LibraryDir.VulkanSDK_Debug}/spirv-cross-glsld.lib"
+Library["SPIRV_Tools_Debug"] = "%{LibraryDir.VulkanSDK_Debug}/SPIRV-Toolsd.lib"
+
+Library["ShaderC_Release"] = "%{LibraryDir.VulkanSDK}/shaderc_shared.lib"
+Library["SPIRV_Cross_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-core.lib"
+Library["SPIRV_Cross_GLSL_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-glsl.lib"
 
 group "Dependencies"
 	include "Eclipse/vendor/GLFW_fork"
@@ -38,7 +63,7 @@ project "Eclipse"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++20"
-	staticruntime "on"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -76,6 +101,7 @@ project "Eclipse"
 		"%{IncludeDir.yaml_cpp}",
 		"%{IncludeDir.imguizmo}",
 		"%{IncludeDir.au}",
+		"%{IncludeDir.VulkanSDK}"
 	}
 
 	links {
@@ -103,22 +129,40 @@ project "Eclipse"
 		runtime "Debug"
 		symbols "on"
 
+		links {
+			"%{Library.ShaderC_Debug}",
+			"%{Library.SPIRV_Cross_Debug}",
+			"%{Library.SPIRV_Cross_GLSL_Debug}"
+		}
+
 	filter "configurations:Release"
 		defines "ECLIPSE_RELEASE"
 		runtime "Release"
 		optimize "on"
+
+		links {
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}"
+		}
 
 	filter "configurations:Dist"
 		defines "ECLIPSE_DIST"
 		runtime "Release"
 		optimize "on"
 
+		links {
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}"
+		}
+
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
-	staticruntime "on"
+	staticruntime "off"
 	cppdialect "C++20"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -173,7 +217,7 @@ project "Helios"
 	location "Helios"
 	kind "ConsoleApp"
 	language "C++"
-	staticruntime "on"
+	staticruntime "off"
 	cppdialect "C++20"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")

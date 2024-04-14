@@ -7,7 +7,7 @@ namespace eclipse {
 
 class ECLIPSE_API FilePath {
 public:
-	explicit FilePath(const std::string& p) : value_(p) {}
+	constexpr explicit FilePath(const std::string& p) : value_(p) {}
 
 	explicit operator std::string_view() const { return value_; }
 
@@ -16,7 +16,7 @@ public:
 	const std::string& value() const { return value_; }
 
 private:
-	std::string value_;
+	std::string value_ {};
 };
 
 }  // namespace eclipse
