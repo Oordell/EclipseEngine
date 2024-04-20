@@ -225,6 +225,7 @@ void EditorLayer::on_imgui_render() {
 	}
 
 	scene_hierarchy_panel_.on_imgui_render();
+	content_browser_panel_.on_imgui_render();
 
 	ImGui::Begin("Settings");
 

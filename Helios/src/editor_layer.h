@@ -2,6 +2,7 @@
 
 #include "eclipse.h"
 #include "panels/scene_hierarchy_panel.h"
+#include "panels/content_browser_panel.h"
 
 namespace eclipse {
 
@@ -45,6 +46,7 @@ private:
 	bool viewport_hovered_ {false};
 
 	SceneHierarchyPanel scene_hierarchy_panel_;
+	ContentBrowserPanel content_browser_panel_;
 
 	int gizmo_type_ = -1;
 

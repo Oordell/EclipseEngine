@@ -139,11 +139,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\editor_layer.h" />
+    <ClInclude Include="src\panels\content_browser_panel.h" />
     <ClInclude Include="src\panels\scene_hierarchy_panel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\editor_layer.cpp" />
     <ClCompile Include="src\helios_app.cpp" />
+    <ClCompile Include="src\panels\content_browser_panel.cpp" />
     <ClCompile Include="src\panels\scene_hierarchy_panel.cpp" />
   </ItemGroup>
   <ItemGroup>
