@@ -265,6 +265,17 @@ void EditorLayer::on_imgui_render() {
 	ImGui::Image(reinterpret_cast<void*>(texture_id), ImVec2 {viewport_panel_size.x, viewport_panel_size.y}, ImVec2 {0, 1},
 	             ImVec2 {1, 0});
 
+	if (ImGui::BeginDragDropTarget()) {
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(ContentBrowserPanel::DRAG_DROP_ID)) {
+			const wchar_t* path              = reinterpret_cast<const wchar_t*>(payload->Data);
+			std::filesystem::path scene_path = std::filesystem::path(ContentBrowserPanel::ASSETS_DIRECTORY) / path;
+			if (scene_path.has_extension() && scene_path.extension() == ".eclipse") {
+				open_scene(scene_path);
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+
 	// Gizmos:
 	auto selected_entity = scene_hierarchy_panel_.get_selected_entity();
 	if (selected_entity && gizmo_type_ > -1) {
@@ -324,13 +335,18 @@ void EditorLayer::open_scene() {
 	auto result = FileDialogs::open_file(WINDOWS_FILE_DIALOG_FILTER.data());
 
 	if (result.has_value()) {
-		create_new_active_scene();
-
-		SceneSerializer serializer(active_scene_);
-		serializer.deserialize_text(result.value());
+		open_scene(std::filesystem::path(result.value().value()));
 	} else {
 		EC_CORE_ERROR("Couldn't open scene, as we didn't find a file path...");
 	}
+}
+
+void EditorLayer::open_scene(const std::filesystem::path& path) {
+	EC_CORE_DEBUG("Opening file: \"{}\"", path.string());
+	create_new_active_scene();
+
+	SceneSerializer serializer(active_scene_);
+	serializer.deserialize_text(FilePath(path.string()));
 }
 
 void EditorLayer::save_scene_as() {

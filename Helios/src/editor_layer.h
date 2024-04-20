@@ -20,6 +20,7 @@ public:
 private:
 	void create_new_active_scene();
 	void open_scene();
+	void open_scene(const std::filesystem::path& path);
 	void save_scene_as();
 	bool on_key_pressed(KeyPressedEvent& event);
 	bool on_mouse_button_pressed(MouseButtonPressedEvent& event);
