@@ -120,16 +120,12 @@ void Renderer2D::shutdown() {
 
 void Renderer2D::begin_scene(const RenderCamera& camera) {
 	EC_PROFILE_FUNCTION();
-	data.camera_buffer.view_projection = camera.projection * glm::inverse(camera.transform);
-	data.camera_uniform_buffer->set_data(&data.camera_buffer, {.size = sizeof(Renderer2DData::CameraData), .offset = 0});
-	reset_data();
+	init_scene(camera.projection * glm::inverse(camera.transform));
 }
 
 void Renderer2D::begin_scene(const EditorCamera& camera) {
 	EC_PROFILE_FUNCTION();
-	data.camera_buffer.view_projection = camera.get_view_projection();
-	data.camera_uniform_buffer->set_data(&data.camera_buffer, {.size = sizeof(Renderer2DData::CameraData), .offset = 0});
-	reset_data();
+	init_scene(camera.get_view_projection());
 }
 
 void Renderer2D::begin_scene(const OrthographicCamera& camera) {
@@ -280,9 +276,8 @@ void Renderer2D::end_scene_and_start_new_batch() {
 void Renderer2D::init_scene(const glm::mat4& view_projection) {
 	EC_PROFILE_FUNCTION();
 
-	data.texture_shader->bind();
-	data.texture_shader->set_mat4("view_projection", view_projection);
-
+	data.camera_buffer.view_projection = view_projection;
+	data.camera_uniform_buffer->set_data(&data.camera_buffer, {.size = sizeof(Renderer2DData::CameraData), .offset = 0});
 	reset_data();
 }
 
