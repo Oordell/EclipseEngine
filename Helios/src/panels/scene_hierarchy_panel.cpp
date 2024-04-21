@@ -1,4 +1,5 @@
 #include "scene_hierarchy_panel.h"
+#include "content_browser_panel.h"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
@@ -247,8 +248,26 @@ void SceneHierarchyPanel::draw_color_component(Entity entity) {
 }
 
 void SceneHierarchyPanel::draw_sprite_renderer_component(Entity entity) {
-	draw_component<component::SpriteRenderer>(
-	    "Sprite Renderer", entity, [](auto& component) { ImGui::ColorEdit4("Color", glm::value_ptr(component.color)); });
+	draw_component<component::SpriteRenderer>("Sprite Renderer", entity, [](auto& component) {
+		ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
+
+		ImGui::Button("Texture", ImVec2(100.F, 0.F));
+
+		if (ImGui::BeginDragDropTarget()) {
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(ContentBrowserPanel::DRAG_DROP_ID)) {
+				const wchar_t* path                = reinterpret_cast<const wchar_t*>(payload->Data);
+				std::filesystem::path texture_path = std::filesystem::path(ContentBrowserPanel::ASSETS_DIRECTORY) / path;
+				if (texture_path.has_extension() && texture_path.extension() == ".png") {
+					component.texture = Texture2D::create(texture_path.string());
+				} else {
+					EC_CORE_TRACE("Only \".png\" is currently supported as textures.");
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
+
+		ImGui::DragFloat("Tiling Factor", &component.tiling_factor, 0.1F, 0.F, 100.F);
+	});
 }
 
 void SceneHierarchyPanel::draw_vec3_control(const Vec3Controls& controls) {

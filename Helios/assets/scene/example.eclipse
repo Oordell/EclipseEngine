@@ -2,23 +2,23 @@ scene: Untitled scene
 entities:
   - entity: 3
     tag_component:
-      tag: Green square
-    transform_component:
-      translation: [0.5, 0.600000024, 0]
-      rotation: [0, 0, 0]
-      scale: [1, 1, 1]
-    color_component:
-      color: [0.200000003, 0.899999976, 0.300000012, 1]
-  - entity: 2
-    tag_component:
-      tag: Red square
+      tag: Second camera
     transform_component:
       translation: [0, 0, 0]
       rotation: [0, 0, 0]
       scale: [1, 1, 1]
-    sprite_renderer_component:
-      color: [0.899999976, 0.200000003, 0.300000012, 1]
-  - entity: 1
+    camera_component:
+      camera:
+        projection_type: 1
+        perspective_vertical_fov: 0.785398185
+        perspective_near: 0.00999999978
+        perspective_far: 1000
+        orthographic_size: 10
+        orthographic_near: -1
+        orthographic_far: 1
+      primary: false
+      fixed_aspect_ratio: false
+  - entity: 2
     tag_component:
       tag: Camera Entity
     transform_component:
@@ -36,21 +36,25 @@ entities:
         orthographic_far: 1
       primary: true
       fixed_aspect_ratio: false
-  - entity: 0
+  - entity: 1
     tag_component:
-      tag: Second camera
+      tag: Red square
     transform_component:
       translation: [0, 0, 0]
       rotation: [0, 0, 0]
       scale: [1, 1, 1]
-    camera_component:
-      camera:
-        projection_type: 1
-        perspective_vertical_fov: 0.785398185
-        perspective_near: 0.00999999978
-        perspective_far: 1000
-        orthographic_size: 10
-        orthographic_near: -1
-        orthographic_far: 1
-      primary: false
-      fixed_aspect_ratio: false
+    sprite_renderer_component:
+      color: [0.899999976, 0.200000003, 0.300000012, 1]
+      texture_path: ""
+      texture_width: 0
+      texture_height: 0
+      tiling_factor: 1
+  - entity: 0
+    tag_component:
+      tag: Green square
+    transform_component:
+      translation: [0.5, 0.600000024, 0]
+      rotation: [0, 0, 0]
+      scale: [1, 1, 1]
+    color_component:
+      color: [0.200000003, 0.899999976, 0.300000012, 1]

@@ -2,6 +2,7 @@
 
 #include "eclipse/core/core.h"
 #include <string>
+#include <optional>
 #include "eclipse/common_types/window_size.h"
 
 namespace eclipse {
@@ -20,6 +21,8 @@ class ECLIPSE_API Texture2D : public Texture {
 public:
 	static ref<Texture2D> create(const WindowSize& size);
 	static ref<Texture2D> create(const std::string& path);
+
+	virtual std::optional<std::string> get_path() const { return std::nullopt; }
 
 private:
 	template <typename T>

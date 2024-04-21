@@ -52,6 +52,10 @@ static constexpr std::string_view COLOR           = "color";
 
 // component::SpriteRenderer
 static constexpr std::string_view SPRITE_RENDERER_COMPONENT = "sprite_renderer_component";
+static constexpr std::string_view TEXTURE_WIDTH             = "texture_width";
+static constexpr std::string_view TEXTURE_HEIGHT            = "texture_height";
+static constexpr std::string_view TEXTURE_PATH              = "texture_path";
+static constexpr std::string_view TILING_FACTOR             = "tiling_factor";
 }  // namespace serializer_keys
 
 }  // namespace eclipse

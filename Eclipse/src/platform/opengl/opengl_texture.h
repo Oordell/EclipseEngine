@@ -18,12 +18,19 @@ public:
 
 	uint32_t get_renderer_id() const override { return renderer_id_; }
 
+	std::optional<std::string> get_path() const override {
+		if (path_.empty()) {
+			return std::nullopt;
+		}
+		return path_;
+	}
+
 	void set_data(void* data, uint32_t size) override;
 
 	void bind(uint32_t slot = 0) const override;
 
 private:
-	std::string path_;
+	std::string path_ {};
 	au::Quantity<units::Pixels, uint32_t> width_;
 	au::Quantity<units::Pixels, uint32_t> height_;
 	uint32_t renderer_id_;
