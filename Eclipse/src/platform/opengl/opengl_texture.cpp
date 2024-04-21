@@ -14,7 +14,7 @@ OpenGLTexture2D::OpenGLTexture2D(const WindowSize& size) : width_(size.width), h
 	glTextureStorage2D(renderer_id_, 1, internal_format_, width_.in(units::pixels), height_.in(units::pixels));
 
 	glTextureParameteri(renderer_id_, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTextureParameteri(renderer_id_, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTextureParameteri(renderer_id_, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glTextureParameteri(renderer_id_, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTextureParameteri(renderer_id_, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -56,7 +56,7 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : path_(path) {
 	glTextureStorage2D(renderer_id_, 1, internal_format, width_.in(units::pixels), height_.in(units::pixels));
 
 	glTextureParameteri(renderer_id_, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTextureParameteri(renderer_id_, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTextureParameteri(renderer_id_, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glTextureParameteri(renderer_id_, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTextureParameteri(renderer_id_, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -65,6 +65,8 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : path_(path) {
 	                    GL_UNSIGNED_BYTE, data);
 
 	stbi_image_free(data);
+
+	EC_CORE_DEBUG("Texture from path \"{0}\" for ID {1}", path, renderer_id_);
 }
 
 OpenGLTexture2D::~OpenGLTexture2D() {

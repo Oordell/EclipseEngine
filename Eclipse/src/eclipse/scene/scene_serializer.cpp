@@ -136,6 +136,19 @@ static void serialize_entity(YAML::Emitter& out, Entity entity) {
 		out << YAML::Key << serializer_keys::SPRITE_RENDERER_COMPONENT;
 		out << YAML::BeginMap;
 		out << YAML::Key << serializer_keys::COLOR << YAML::Value << sprite_renderer_component.color;
+		if (sprite_renderer_component.texture) {
+			out << YAML::Key << serializer_keys::TEXTURE_PATH << YAML::Value
+			    << sprite_renderer_component.texture->get_path().value_or("");
+			out << YAML::Key << serializer_keys::TEXTURE_WIDTH << YAML::Value
+			    << sprite_renderer_component.texture->get_width().in(units::pixels);
+			out << YAML::Key << serializer_keys::TEXTURE_HEIGHT << YAML::Value
+			    << sprite_renderer_component.texture->get_height().in(units::pixels);
+		} else {
+			out << YAML::Key << serializer_keys::TEXTURE_PATH << YAML::Value << "";
+			out << YAML::Key << serializer_keys::TEXTURE_WIDTH << YAML::Value << 0;
+			out << YAML::Key << serializer_keys::TEXTURE_HEIGHT << YAML::Value << 0;
+		}
+		out << YAML::Key << serializer_keys::TILING_FACTOR << YAML::Value << sprite_renderer_component.tiling_factor;
 		out << YAML::EndMap;
 	}
 
@@ -230,8 +243,19 @@ bool SceneSerializer::deserialize_text(const FilePath& file_path) {
 
 		auto sprite_renderer_component = e[serializer_keys::SPRITE_RENDERER_COMPONENT];
 		if (sprite_renderer_component) {
-			auto& src = deserialized_entity.add_component<component::SpriteRenderer>();
-			src.color = sprite_renderer_component[serializer_keys::COLOR].as<glm::vec4>();
+			auto& src                = deserialized_entity.add_component<component::SpriteRenderer>();
+			src.color                = sprite_renderer_component[serializer_keys::COLOR].as<glm::vec4>();
+			src.tiling_factor        = sprite_renderer_component[serializer_keys::TILING_FACTOR].as<float>();
+			std::string texture_path = sprite_renderer_component[serializer_keys::TEXTURE_PATH].as<std::string>();
+			uint32_t texture_width   = sprite_renderer_component[serializer_keys::TEXTURE_WIDTH].as<uint32_t>();
+			uint32_t texture_height  = sprite_renderer_component[serializer_keys::TEXTURE_HEIGHT].as<uint32_t>();
+			ref<Texture2D> texture   = nullptr;
+			if (!texture_path.empty()) {
+				texture = Texture2D::create(texture_path);
+			} else if (texture_width != 0 && texture_height != 0) {
+				texture = Texture2D::create({.width = units::pixels(texture_width), .height = units::pixels(texture_height)});
+			}
+			src.texture = texture;
 		}
 	}
 

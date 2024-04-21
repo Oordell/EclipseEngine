@@ -2,6 +2,7 @@
 
 #include "eclipse/scene/scene_camera.h"
 #include "eclipse/scene/scriptable_entity.h"
+#include "eclipse/renderer/texture.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -59,6 +60,8 @@ struct SpriteRenderer {
 	SpriteRenderer(const glm::vec4& color) : color(color) {}
 
 	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
+	ref<Texture2D> texture = nullptr;
+	float tiling_factor    = 1.F;
 };
 
 struct Camera {

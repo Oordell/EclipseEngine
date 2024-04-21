@@ -206,13 +206,12 @@ void Renderer2D::draw_quad(const QuadMetaDataTransformTexture& info) {
 
 void Renderer2D::draw_sprite(const SpriteMetaDataTransform& info) {
 	EC_PROFILE_FUNCTION();
-	draw_quad_impl(
-	    {.texture   = data.white_texture,  // Replace this with info.component.texture once SpriteRenderer gets a texture.
-	     .transform = info.transform,
-	     .common    = {.tiling_factor  = info.common.tiling_factor,
-	                   .color          = info.component.color,
-	                   .texture_coords = info.common.texture_coords},
-	     .entity_id = info.entity_id});
+	draw_quad_impl({.texture   = info.component.texture ? info.component.texture : data.white_texture,
+	                .transform = info.transform,
+	                .common    = {.tiling_factor  = info.component.tiling_factor,
+	                              .color          = info.component.color,
+	                              .texture_coords = info.common.texture_coords},
+	                .entity_id = info.entity_id});
 }
 
 void Renderer2D::draw_quad_impl(const QuadDrawingDataImpl& info) {

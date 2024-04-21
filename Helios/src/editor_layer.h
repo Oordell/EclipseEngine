@@ -2,6 +2,7 @@
 
 #include "eclipse.h"
 #include "panels/scene_hierarchy_panel.h"
+#include "panels/content_browser_panel.h"
 
 namespace eclipse {
 
@@ -19,6 +20,7 @@ public:
 private:
 	void create_new_active_scene();
 	void open_scene();
+	void open_scene(const std::filesystem::path& path);
 	void save_scene_as();
 	bool on_key_pressed(KeyPressedEvent& event);
 	bool on_mouse_button_pressed(MouseButtonPressedEvent& event);
@@ -45,6 +47,7 @@ private:
 	bool viewport_hovered_ {false};
 
 	SceneHierarchyPanel scene_hierarchy_panel_;
+	ContentBrowserPanel content_browser_panel_;
 
 	int gizmo_type_ = -1;
 
