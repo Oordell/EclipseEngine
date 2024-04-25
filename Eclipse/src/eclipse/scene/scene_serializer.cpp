@@ -179,7 +179,14 @@ void SceneSerializer::serialize_binary(const FilePath& file_path) {
 }
 
 bool SceneSerializer::deserialize_text(const FilePath& file_path) {
-	YAML::Node data = YAML::LoadFile(file_path.value());
+	YAML::Node data;
+	try {
+		data = YAML::LoadFile(file_path.value());
+	} catch (YAML::ParserException& e) {
+		EC_CORE_ERROR("Error: {0}", e.msg);
+		return false;
+	}
+
 	if (!data[serializer_keys::SCENE]) {
 		EC_CORE_ERROR("Error loading eclipse file. Could identify Scene...");
 		return false;

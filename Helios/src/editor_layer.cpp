@@ -355,6 +355,10 @@ void EditorLayer::open_scene() {
 }
 
 void EditorLayer::open_scene(const std::filesystem::path& path) {
+	if (!path.has_extension() || path.extension().string() != ".eclipse") {
+		EC_ERROR("Couldn't load \"{}\". It's not a \".eclipse\" file.", path.filename().string());
+		return;
+	}
 	EC_CORE_DEBUG("Opening file: \"{}\"", path.string());
 	create_new_active_scene();
 
