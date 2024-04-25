@@ -15,6 +15,8 @@ void EditorLayer::on_attach() {
 
 	checkerboard_texture_   = Texture2D::create("assets/textures/Checkerboard.png");
 	olliver_ordell_texture_ = Texture2D::create("assets/textures/olliver_ordell_logo.png");
+	icon_play_              = Texture2D::create("resources/icons/play_button.png");
+	icon_stop_              = Texture2D::create("resources/icons/stop_button.png");
 
 	frame_buffer_ =
 	    FrameBuffer::create({.width       = units::pixels(1600),
@@ -118,7 +120,16 @@ void EditorLayer::on_update(au::QuantityF<au::Seconds> timestep) {
 	// Clear the entity ID attachment for the clear color to -1;
 	frame_buffer_->clear_attachment(1, -1);
 
-	active_scene_->on_update_editor(timestep, editor_camera_);
+	switch (scene_state_) {
+		case SceneState::edit: {
+			active_scene_->on_update_editor(timestep, editor_camera_);
+			break;
+		}
+		case SceneState::play: {
+			active_scene_->on_update_runtime(timestep);
+			break;
+		}
+	}
 
 	auto [m_x, m_y] = ImGui::GetMousePos();
 	m_x -= viewport_bounds_[0].x;
@@ -322,6 +333,8 @@ void EditorLayer::on_imgui_render() {
 	ImGui::End();
 	ImGui::PopStyleVar();
 
+	draw_ui_toolbar();
+
 	ImGui::End();
 }
 
@@ -419,5 +432,38 @@ bool EditorLayer::on_mouse_button_pressed(MouseButtonPressedEvent& event) {
 		}
 	}
 	return false;
+}
+
+void EditorLayer::on_scene_play() { scene_state_ = SceneState::play; }
+
+void EditorLayer::on_scene_stop() { scene_state_ = SceneState::edit; }
+
+void EditorLayer::draw_ui_toolbar() {
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+	auto& colors               = ImGui::GetStyle().Colors;
+	const auto& button_hovered = colors[ImGuiCol_ButtonHovered];
+	const auto& button_active  = colors[ImGuiCol_ButtonActive];
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(button_hovered.x, button_hovered.y, button_hovered.z, .5F));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(button_active.x, button_active.y, button_active.z, .5F));
+
+	ImGui::Begin("##toolbar", nullptr,
+	             ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+	float icon_size = ImGui::GetWindowHeight() - 4.F;
+	auto icon       = scene_state_ == SceneState::edit ? icon_play_ : icon_stop_;
+	auto id         = static_cast<uint64_t>(icon->get_renderer_id());
+	ImGui::SameLine((ImGui::GetWindowContentRegionMax().x * .5F) - (icon_size * .5F));
+	if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(id), ImVec2(icon_size, icon_size), ImVec2(0, 0), ImVec2(1, 1),
+	                       0)) {
+		if (scene_state_ == SceneState::edit) {
+			on_scene_play();
+		} else if (scene_state_ == SceneState::play) {
+			on_scene_stop();
+		}
+	}
+	ImGui::PopStyleVar(2);
+	ImGui::PopStyleColor(3);
+	ImGui::End();
 }
 }  // namespace eclipse

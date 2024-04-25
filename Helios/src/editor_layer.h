@@ -24,6 +24,12 @@ private:
 	void save_scene_as();
 	bool on_key_pressed(KeyPressedEvent& event);
 	bool on_mouse_button_pressed(MouseButtonPressedEvent& event);
+	void on_scene_play();
+	void on_scene_stop();
+	void draw_ui_toolbar();
+
+	enum class SceneState { edit, play };
+	SceneState scene_state_ {SceneState::edit};
 
 	OrthographicCameraController camera_controller_ {1280.0F / 720.0F, EnableCameraRotation::yes};
 
@@ -37,6 +43,8 @@ private:
 	bool use_primary_camera_ = true;
 	ref<Texture2D> checkerboard_texture_;
 	ref<Texture2D> olliver_ordell_texture_;
+	ref<Texture2D> icon_play_;
+	ref<Texture2D> icon_stop_;
 	unsigned int frame_rate_ = 0;
 	EditorCamera editor_camera_ {
 	    {.fov = au::degrees(30.0F), .aspect_ratio = 1.778F, .near_clip = 0.1F, .far_clip = 1000.0F}};
