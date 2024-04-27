@@ -27,6 +27,7 @@ private:
 	void on_scene_play();
 	void on_scene_stop();
 	void draw_ui_toolbar();
+	void calculate_framerate(const au::QuantityF<au::Seconds>& timestep);
 
 	enum class SceneState { edit, play };
 	SceneState scene_state_ {SceneState::edit};

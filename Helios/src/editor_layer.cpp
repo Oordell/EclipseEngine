@@ -103,8 +103,7 @@ void EditorLayer::on_update(au::QuantityF<au::Seconds> timestep) {
 	}
 	editor_camera_.on_update(timestep);
 
-	frame_rate_ = static_cast<unsigned int>(1.0F / timestep.in(au::seconds));
-	EC_TRACE_THROTTLED(1.0, "Frame rate: {0}Hz", frame_rate_);
+	calculate_framerate(timestep);
 
 	static const float red   = 0.1F;
 	static const float green = 0.1F;
@@ -249,6 +248,7 @@ void EditorLayer::on_imgui_render() {
 	ImGui::Text("Quad count: %d", stats.quad_count);
 	ImGui::Text("Vertices  : %d", stats.get_total_vertex_count());
 	ImGui::Text("Indices   : %d", stats.get_total_index_count());
+	ImGui::Text("Framerate : %dHz", frame_rate_);
 
 	ImGui::Separator();
 
@@ -469,5 +469,16 @@ void EditorLayer::draw_ui_toolbar() {
 	ImGui::PopStyleVar(2);
 	ImGui::PopStyleColor(3);
 	ImGui::End();
+}
+
+void EditorLayer::calculate_framerate(const au::QuantityF<au::Seconds>& timestep) {
+	static constexpr au::QuantityF<au::Seconds> update_rate = au::milli(au::seconds)(250.F);
+	static std::chrono::steady_clock::time_point last_hit;
+	auto now = std::chrono::steady_clock::now();
+	if (std::chrono::duration_cast<std::chrono::microseconds>(now - last_hit).count() >=
+	    (update_rate.in(au::seconds) *1'000'000.0)) {
+		last_hit    = std::chrono::steady_clock::now();
+		frame_rate_ = static_cast<unsigned int>(1.0F / timestep.in(au::seconds));
+	}
 }
 }  // namespace eclipse
