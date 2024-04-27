@@ -56,6 +56,21 @@ static constexpr std::string_view TEXTURE_WIDTH             = "texture_width";
 static constexpr std::string_view TEXTURE_HEIGHT            = "texture_height";
 static constexpr std::string_view TEXTURE_PATH              = "texture_path";
 static constexpr std::string_view TILING_FACTOR             = "tiling_factor";
+
+// component::RigidBody2D
+static constexpr std::string_view RIGID_BODY_2D_COMPONENT      = "rigid_body_2d_component";
+static constexpr std::string_view RIGID_BODY_2D_TYPE           = "rigid_body_2d_type";
+static constexpr std::string_view RIGID_BODY_2D_FIXED_ROTATION = "rigid_body_2d_fixed_rotation";
+
+// component::BoxCollider2D
+static constexpr std::string_view BOX_COLLIDER_2D_COMPONENT             = "box_collider_2d_component";
+static constexpr std::string_view BOX_COLLIDER_2D_OFFSET                = "box_collider_2d_offset";
+static constexpr std::string_view BOX_COLLIDER_2D_SIZE                  = "box_collider_2d_size";
+static constexpr std::string_view BOX_COLLIDER_2D_DENSITY               = "box_collider_2d_density";
+static constexpr std::string_view BOX_COLLIDER_2D_FRICTION              = "box_collider_2d_friction";
+static constexpr std::string_view BOX_COLLIDER_2D_RESTITUTION           = "box_collider_2d_restitution";
+static constexpr std::string_view BOX_COLLIDER_2D_RESTITUTION_THRESHOLD = "box_collider_2d_restitution_threshold";
+
 }  // namespace serializer_keys
 
 }  // namespace eclipse

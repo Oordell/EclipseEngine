@@ -9,6 +9,26 @@
 namespace YAML {
 
 template <>
+struct convert<glm::vec2> {
+	static Node encode(const glm::vec2& rhs) {
+		Node node;
+		node.push_back(rhs.x);
+		node.push_back(rhs.y);
+		node.SetStyle(EmitterStyle::Flow);
+		return node;
+	}
+
+	static bool decode(const Node& node, glm::vec2& rhs) {
+		if (!node.IsSequence() || node.size() != 2) {
+			return false;
+		}
+		rhs.x = node[0].as<float>();
+		rhs.y = node[1].as<float>();
+		return true;
+	}
+};
+
+template <>
 struct convert<glm::vec3> {
 	static Node encode(const glm::vec3& rhs) {
 		Node node;
@@ -56,6 +76,12 @@ struct convert<glm::vec4> {
 
 Emitter& operator<<(Emitter& out, const std::string_view& v) {
 	out << v.data();
+	return out;
+}
+
+Emitter& operator<<(Emitter& out, const glm::vec2& v) {
+	out << Flow;
+	out << BeginSeq << v.x << v.y << EndSeq;
 	return out;
 }
 
@@ -149,6 +175,32 @@ static void serialize_entity(YAML::Emitter& out, Entity entity) {
 			out << YAML::Key << serializer_keys::TEXTURE_HEIGHT << YAML::Value << 0;
 		}
 		out << YAML::Key << serializer_keys::TILING_FACTOR << YAML::Value << sprite_renderer_component.tiling_factor;
+		out << YAML::EndMap;
+	}
+
+	if (entity.has_component<component::RigidBody2D>()) {
+		auto& rigid_body_2d_component = entity.get_component<component::RigidBody2D>();
+		out << YAML::Key << serializer_keys::RIGID_BODY_2D_COMPONENT;
+		out << YAML::BeginMap;
+		out << YAML::Key << serializer_keys::RIGID_BODY_2D_TYPE << YAML::Value
+		    << component::RigidBody2D::to_string(rigid_body_2d_component.type);
+		out << YAML::Key << serializer_keys::RIGID_BODY_2D_FIXED_ROTATION << YAML::Value
+		    << rigid_body_2d_component.fixed_rotation;
+		out << YAML::EndMap;
+	}
+
+	if (entity.has_component<component::BoxCollider2D>()) {
+		auto& box_collider_2d_component = entity.get_component<component::BoxCollider2D>();
+		out << YAML::Key << serializer_keys::BOX_COLLIDER_2D_COMPONENT;
+		out << YAML::BeginMap;
+		out << YAML::Key << serializer_keys::BOX_COLLIDER_2D_OFFSET << YAML::Value << box_collider_2d_component.offset;
+		out << YAML::Key << serializer_keys::BOX_COLLIDER_2D_SIZE << YAML::Value << box_collider_2d_component.size;
+		out << YAML::Key << serializer_keys::BOX_COLLIDER_2D_DENSITY << YAML::Value << box_collider_2d_component.density;
+		out << YAML::Key << serializer_keys::BOX_COLLIDER_2D_FRICTION << YAML::Value << box_collider_2d_component.friction;
+		out << YAML::Key << serializer_keys::BOX_COLLIDER_2D_RESTITUTION << YAML::Value
+		    << box_collider_2d_component.restitution;
+		out << YAML::Key << serializer_keys::BOX_COLLIDER_2D_RESTITUTION_THRESHOLD << YAML::Value
+		    << box_collider_2d_component.restitution_threshold;
 		out << YAML::EndMap;
 	}
 
@@ -263,6 +315,26 @@ bool SceneSerializer::deserialize_text(const FilePath& file_path) {
 				texture = Texture2D::create({.width = units::pixels(texture_width), .height = units::pixels(texture_height)});
 			}
 			src.texture = texture;
+		}
+
+		auto rigid_body_2d_component = e[serializer_keys::RIGID_BODY_2D_COMPONENT];
+		if (rigid_body_2d_component) {
+			auto& src = deserialized_entity.add_component<component::RigidBody2D>();
+			src.type  = component::RigidBody2D::from_string(
+       rigid_body_2d_component[serializer_keys::RIGID_BODY_2D_TYPE].as<std::string>());
+			src.fixed_rotation = rigid_body_2d_component[serializer_keys::RIGID_BODY_2D_FIXED_ROTATION].as<bool>();
+		}
+
+		auto box_collider_2d_component = e[serializer_keys::BOX_COLLIDER_2D_COMPONENT];
+		if (box_collider_2d_component) {
+			auto& src       = deserialized_entity.add_component<component::BoxCollider2D>();
+			src.offset      = box_collider_2d_component[serializer_keys::BOX_COLLIDER_2D_OFFSET].as<glm::vec2>();
+			src.size        = box_collider_2d_component[serializer_keys::BOX_COLLIDER_2D_SIZE].as<glm::vec2>();
+			src.density     = box_collider_2d_component[serializer_keys::BOX_COLLIDER_2D_DENSITY].as<float>();
+			src.friction    = box_collider_2d_component[serializer_keys::BOX_COLLIDER_2D_FRICTION].as<float>();
+			src.restitution = box_collider_2d_component[serializer_keys::BOX_COLLIDER_2D_RESTITUTION].as<float>();
+			src.restitution_threshold =
+			    box_collider_2d_component[serializer_keys::BOX_COLLIDER_2D_RESTITUTION_THRESHOLD].as<float>();
 		}
 	}
 

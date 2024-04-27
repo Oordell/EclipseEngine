@@ -4,7 +4,6 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 #include <glm/gtc/type_ptr.hpp>
-
 #include <au.hh>
 
 namespace eclipse {
@@ -128,6 +127,8 @@ void SceneHierarchyPanel::draw_components(Entity entity) {
 	draw_camera_component(entity);
 	draw_color_component(entity);
 	draw_sprite_renderer_component(entity);
+	draw_rigid_body_2d_component(entity);
+	draw_box_collider_2d_component(entity);
 }
 
 void SceneHierarchyPanel::draw_tag_component(Entity entity) {
@@ -152,23 +153,23 @@ void SceneHierarchyPanel::draw_tag_component(Entity entity) {
 		ImGui::OpenPopup("AddComponent");
 	}
 	if (ImGui::BeginPopup("AddComponent")) {
-		if (!entity.has_component<component::Camera>() && ImGui::MenuItem("Camera")) {
-			selection_context_.add_component<component::Camera>();
-			ImGui::CloseCurrentPopup();
-		}
-		if (!entity.has_component<component::SpriteRenderer>() && ImGui::MenuItem("Sprite Renderer")) {
-			selection_context_.add_component<component::SpriteRenderer>();
-			ImGui::CloseCurrentPopup();
-		}
-		if (!entity.has_component<component::Color>() && ImGui::MenuItem("Color")) {
-			selection_context_.add_component<component::Color>();
-			ImGui::CloseCurrentPopup();
-		}
-
+		add_pop_up_option<component::Camera>(entity, "Camera");
+		add_pop_up_option<component::SpriteRenderer>(entity, "Sprite Renderer");
+		add_pop_up_option<component::Color>(entity, "Color");
+		add_pop_up_option<component::RigidBody2D>(entity, "Rigid Body 2D");
+		add_pop_up_option<component::BoxCollider2D>(entity, "Box Collider 2D");
 		ImGui::EndPopup();
 	}
 	ImGui::PopItemWidth();
 	ImGui::PopStyleVar(2);
+}
+
+template <class Component>
+void SceneHierarchyPanel::add_pop_up_option(Entity entity, const std::string& menu_item) {
+	if (!entity.has_component<Component>() && ImGui::MenuItem(menu_item.c_str())) {
+		selection_context_.add_component<Component>();
+		ImGui::CloseCurrentPopup();
+	}
 }
 
 void SceneHierarchyPanel::draw_transform_component(Entity entity) {
@@ -267,6 +268,39 @@ void SceneHierarchyPanel::draw_sprite_renderer_component(Entity entity) {
 		}
 
 		ImGui::DragFloat("Tiling Factor", &component.tiling_factor, 0.1F, 0.F, 100.F);
+	});
+}
+
+void SceneHierarchyPanel::draw_rigid_body_2d_component(Entity entity) {
+	draw_component<component::RigidBody2D>("Rigid Body 2D", entity, [](auto& component) {
+		auto current_body_type_string = component::RigidBody2D::to_string(component.type);
+
+		if (ImGui::BeginCombo("Body Type", current_body_type_string.c_str())) {
+			for (const auto* body_type_string : component::RigidBody2D::body_type_strings) {
+				bool is_selected = current_body_type_string.c_str() == body_type_string;
+				if (ImGui::Selectable(body_type_string, is_selected)) {
+					current_body_type_string = body_type_string;
+					component.type           = component::RigidBody2D::from_string(body_type_string);
+				}
+				if (is_selected) {
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndCombo();
+		}
+
+		ImGui::Checkbox("Fixed Rotation", &component.fixed_rotation);
+	});
+}
+
+void SceneHierarchyPanel::draw_box_collider_2d_component(Entity entity) {
+	draw_component<component::BoxCollider2D>("Box Collider 2D", entity, [](auto& component) {
+		ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
+		ImGui::DragFloat2("Size", glm::value_ptr(component.size));
+		ImGui::DragFloat("Density", &component.density, .01F, .0F, 1.F);
+		ImGui::DragFloat("Friction", &component.friction, .01F, .0F, 1.F);
+		ImGui::DragFloat("Restitution", &component.restitution, .01F, .0F, 1.F);
+		ImGui::DragFloat("Restitution Threshold", &component.restitution_threshold, .01F, .0F);
 	});
 }
 

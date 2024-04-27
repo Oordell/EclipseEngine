@@ -1,0 +1,66 @@
+scene: Untitled scene
+entities:
+  - entity: 2
+    tag_component:
+      tag: Camera
+    transform_component:
+      translation: [0.0127264857, 0, 7.67981911]
+      rotation: [0, 0, 0]
+      scale: [1, 1, 1]
+    camera_component:
+      camera:
+        projection_type: 0
+        perspective_vertical_fov: 0.785398185
+        perspective_near: 0.00999999978
+        perspective_far: 1000
+        orthographic_size: 10
+        orthographic_near: -1
+        orthographic_far: 1
+      primary: true
+      fixed_aspect_ratio: false
+  - entity: 1
+    tag_component:
+      tag: Sprite
+    transform_component:
+      translation: [-0.153080925, 1.09093142, 0]
+      rotation: [0, 0, 2.09488201]
+      scale: [0.99998033, 0.99998033, 1]
+    sprite_renderer_component:
+      color: [0, 0.803088665, 1, 1]
+      texture_path: ""
+      texture_width: 0
+      texture_height: 0
+      tiling_factor: 1
+    rigid_body_2d_component:
+      rigid_body_2d_type: Dynamic
+      rigid_body_2d_fixed_rotation: false
+    box_collider_2d_component:
+      box_collider_2d_offset: [0, 0]
+      box_collider_2d_size: [0.5, 0.5]
+      box_collider_2d_density: 1
+      box_collider_2d_friction: 0.5
+      box_collider_2d_restitution: 0.839999974
+      box_collider_2d_restitution_threshold: 0.5
+  - entity: 0
+    tag_component:
+      tag: Floor
+    transform_component:
+      translation: [-7.4505806e-09, -2.20170355, 0]
+      rotation: [0, 0, 0]
+      scale: [16.8170109, 0.307735503, 1]
+    sprite_renderer_component:
+      color: [0.957528949, 0.25139758, 0.25139758, 1]
+      texture_path: ""
+      texture_width: 0
+      texture_height: 0
+      tiling_factor: 1
+    rigid_body_2d_component:
+      rigid_body_2d_type: Static
+      rigid_body_2d_fixed_rotation: false
+    box_collider_2d_component:
+      box_collider_2d_offset: [0, 0]
+      box_collider_2d_size: [0.5, 0.5]
+      box_collider_2d_density: 1
+      box_collider_2d_friction: 0.5
+      box_collider_2d_restitution: 0
+      box_collider_2d_restitution_threshold: 0.5

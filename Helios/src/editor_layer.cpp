@@ -438,9 +438,15 @@ bool EditorLayer::on_mouse_button_pressed(MouseButtonPressedEvent& event) {
 	return false;
 }
 
-void EditorLayer::on_scene_play() { scene_state_ = SceneState::play; }
+void EditorLayer::on_scene_play() {
+	active_scene_->on_runtime_start();
+	scene_state_ = SceneState::play;
+}
 
-void EditorLayer::on_scene_stop() { scene_state_ = SceneState::edit; }
+void EditorLayer::on_scene_stop() {
+	active_scene_->on_runtime_stop();
+	scene_state_ = SceneState::edit;
+}
 
 void EditorLayer::draw_ui_toolbar() {
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
