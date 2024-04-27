@@ -16,3 +16,6 @@
 [submodule "Eclipse/vendor/imguizmo"]
 	path = Eclipse/vendor/imguizmo
 	url = https://github.com/Oordell/ImGuizmo
+[submodule "Eclipse/vendor/box2d"]
+	path = Eclipse/vendor/box2d
+	url = https://github.com/Oordell/box2d
