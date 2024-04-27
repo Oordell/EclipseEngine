@@ -5,17 +5,21 @@
 
 #include <entt/entt.hpp>
 
+class b2World;
+
 namespace eclipse {
 
 class Entity;
 
 class Scene {
 public:
-	Scene()  = default;
-	~Scene() = default;
+	Scene() = default;
+	~Scene();
 	void on_update_editor(au::QuantityF<au::Seconds> timestep, EditorCamera& camera);
 	void on_update_runtime(au::QuantityF<au::Seconds> timestep);
 	void on_viewport_resize(const WindowSize& new_size);
+	void on_runtime_start();
+	void on_runtime_stop();
 
 	Entity create_entity(const std::string& name = "");
 	void destroy_entity(Entity entity);
@@ -30,6 +34,7 @@ public:
 private:
 	entt::registry registry_;
 	WindowSize viewport_size_ {};
+	b2World* physics_world_ = nullptr;
 };
 
 }  // namespace eclipse

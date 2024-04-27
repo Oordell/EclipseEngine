@@ -95,4 +95,53 @@ struct NativeScript {
 	}
 };
 
+struct RigidBody2D {
+	static constexpr uint32_t NUM_OF_TYPES = 3;
+	enum class BodyType { Static, Dynamic, Kinematic };
+	static constexpr std::array<const char*, NUM_OF_TYPES> body_type_strings {"Static", "Dynamic", "Kinematic"};
+
+	static std::string to_string(BodyType type) {
+		static std::map<BodyType, std::string> conversion;
+		using enum BodyType;
+#define BODY_TYPE_TO_STRING(t) conversion.emplace(t, #t);
+		BODY_TYPE_TO_STRING(Static);
+		BODY_TYPE_TO_STRING(Dynamic);
+		BODY_TYPE_TO_STRING(Kinematic);
+#undef BODY_TYPE_TO_STRING
+		return conversion[type];
+	}
+
+	static BodyType from_string(const std::string& type) {
+		using enum BodyType;
+		if (type == to_string(Static)) {
+			return Static;
+		} else if (type == to_string(Dynamic)) {
+			return Dynamic;
+		} else if (type == to_string(Kinematic)) {
+			return Kinematic;
+		}
+		EC_CORE_ASSERT(false, "String not recognized as BodyType!: {0}", type);
+		return Static;
+	}
+
+	BodyType type = BodyType::Static;
+	bool fixed_rotation {false};
+
+	// Storage for runtime
+	void* runtime_body = nullptr;
+};
+
+struct BoxCollider2D {
+	glm::vec2 offset {0.F, 0.F};
+	glm::vec2 size {.5F, .5F};
+
+	float density {1.F};
+	float friction {.5F};
+	float restitution {0.F};
+	float restitution_threshold {.5F};
+
+	// Storage for runtime
+	void* runtime_fixture = nullptr;
+};
+
 }  // namespace eclipse::component

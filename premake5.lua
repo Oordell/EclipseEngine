@@ -32,6 +32,7 @@ IncludeDir["au"] = "%{wks.location}/Eclipse/vendor/au"
 IncludeDir["shaderc"] = "%{wks.location}/Eclipse/vendor/shaderc/include"
 IncludeDir["SPIRV_Cross"] = "%{wks.location}/Eclipse/vendor/SPIRV-Cross"
 IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
+IncludeDir["box2d"] = "%{wks.location}/Eclipse/vendor/box2d/include"
 
 LibraryDir = {}
 
@@ -52,6 +53,7 @@ Library["SPIRV_Cross_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-core.lib"
 Library["SPIRV_Cross_GLSL_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-glsl.lib"
 
 group "Dependencies"
+	include "Eclipse/vendor/box2d"
 	include "Eclipse/vendor/GLFW_fork"
 	include "Eclipse/vendor/Glad"
 	include "Eclipse/vendor/imgui"
@@ -92,6 +94,7 @@ project "Eclipse"
 	includedirs {
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.box2d}",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
@@ -105,6 +108,7 @@ project "Eclipse"
 	}
 
 	links {
+		"box2d",
 		"GLFW",
 		"Glad",
 		"ImGui",
