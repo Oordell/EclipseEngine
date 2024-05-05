@@ -1,45 +1,6 @@
 scene: Untitled scene
 entities:
-  - entity: 3
-    tag_component:
-      tag: Left
-    transform_component:
-      translation: [-0.349999994, 0, 0.349999994]
-      rotation: [0, -0.785398185, 0]
-      scale: [1, 1, 1]
-    sprite_renderer_component:
-      color: [1, 0, 0.949019611, 1]
-      texture_path: ""
-      texture_width: 0
-      texture_height: 0
-      tiling_factor: 1
-  - entity: 2
-    tag_component:
-      tag: Right
-    transform_component:
-      translation: [0.349999994, 0, 0.349999994]
-      rotation: [0, 0.785398185, 0]
-      scale: [1, 1, 1]
-    sprite_renderer_component:
-      color: [0.549019635, 0, 0.588235319, 1]
-      texture_path: ""
-      texture_width: 0
-      texture_height: 0
-      tiling_factor: 1
-  - entity: 1
-    tag_component:
-      tag: Top
-    transform_component:
-      translation: [0, 0.5, 0]
-      rotation: [1.57079637, -0.785398185, 0]
-      scale: [0.999999881, 0.999997795, 0.999992609]
-    sprite_renderer_component:
-      color: [0.874509811, 0, 0.835294127, 1]
-      texture_path: ""
-      texture_width: 0
-      texture_height: 0
-      tiling_factor: 1
-  - entity: 0
+  - entity: 17291806652680837471
     tag_component:
       tag: Camera
     transform_component:
@@ -57,3 +18,42 @@ entities:
         orthographic_far: 1
       primary: true
       fixed_aspect_ratio: false
+  - entity: 17580220086338001667
+    tag_component:
+      tag: Top
+    transform_component:
+      translation: [0, 0.5, 0]
+      rotation: [1.57079637, -0.785398185, 0]
+      scale: [0.999999881, 0.999997795, 0.999992609]
+    sprite_renderer_component:
+      color: [0.874509811, 0, 0.835294127, 1]
+      texture_path: ""
+      texture_width: 0
+      texture_height: 0
+      tiling_factor: 1
+  - entity: 9814178782417343093
+    tag_component:
+      tag: Right
+    transform_component:
+      translation: [0.349999994, 0, 0.349999994]
+      rotation: [0, 0.785398185, 0]
+      scale: [1, 1, 1]
+    sprite_renderer_component:
+      color: [0.549019635, 0, 0.588235319, 1]
+      texture_path: ""
+      texture_width: 0
+      texture_height: 0
+      tiling_factor: 1
+  - entity: 14290453953438213335
+    tag_component:
+      tag: Left
+    transform_component:
+      translation: [-0.349999994, 0, 0.349999994]
+      rotation: [0, -0.785398185, 0]
+      scale: [1, 1, 1]
+    sprite_renderer_component:
+      color: [1, 0, 0.949019611, 1]
+      texture_path: ""
+      texture_width: 0
+      texture_height: 0
+      tiling_factor: 1

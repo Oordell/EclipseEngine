@@ -1,6 +1,8 @@
 #pragma once
 
 #include "eclipse/scene/scene.h"
+#include "eclipse/core/uuid.h"
+#include "eclipse/scene/components.h"
 #include <entt/entt.hpp>
 
 namespace eclipse {
@@ -40,6 +42,8 @@ public:
 		validate_members();
 		return scene_->get_registry().try_get<T>(entity_handle_) ? true : false;
 	}
+
+	[[nodiscard]] UUID get_uuid() { return get_component<component::ID>().id; }
 
 	operator bool() { return ((scene_ != nullptr) && (entity_handle_ != entt::null)); }
 

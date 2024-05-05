@@ -1,6 +1,6 @@
 scene: Untitled scene
 entities:
-  - entity: 2
+  - entity: 10586153178748280011
     tag_component:
       tag: Camera
     transform_component:
@@ -18,7 +18,7 @@ entities:
         orthographic_far: 1
       primary: true
       fixed_aspect_ratio: false
-  - entity: 1
+  - entity: 14666639390132720233
     tag_component:
       tag: Sprite
     transform_component:
@@ -41,7 +41,7 @@ entities:
       box_collider_2d_friction: 0.5
       box_collider_2d_restitution: 0.839999974
       box_collider_2d_restitution_threshold: 0.5
-  - entity: 0
+  - entity: 6939846514210509168
     tag_component:
       tag: Floor
     transform_component:

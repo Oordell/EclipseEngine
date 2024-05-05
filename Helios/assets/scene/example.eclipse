@@ -1,6 +1,6 @@
 scene: Untitled scene
 entities:
-  - entity: 3
+  - entity: 8199062657765550385
     tag_component:
       tag: Second camera
     transform_component:
@@ -18,7 +18,7 @@ entities:
         orthographic_far: 1
       primary: false
       fixed_aspect_ratio: false
-  - entity: 2
+  - entity: 3892290999290775785
     tag_component:
       tag: Camera Entity
     transform_component:
@@ -36,7 +36,7 @@ entities:
         orthographic_far: 1
       primary: true
       fixed_aspect_ratio: false
-  - entity: 1
+  - entity: 5163254781970922090
     tag_component:
       tag: Red square
     transform_component:
@@ -49,7 +49,7 @@ entities:
       texture_width: 0
       texture_height: 0
       tiling_factor: 1
-  - entity: 0
+  - entity: 17805404121151143218
     tag_component:
       tag: Green square
     transform_component:

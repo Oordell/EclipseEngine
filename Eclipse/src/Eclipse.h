@@ -21,6 +21,7 @@
 
 #include "eclipse/scene/scene.h"
 #include "eclipse/scene/components.h"
+#include "eclipse/scene/native_script_component.h"
 #include "eclipse/scene/entity.h"
 #include "eclipse/scene/scriptable_entity.h"
 #include "eclipse/scene/particle_system.h"

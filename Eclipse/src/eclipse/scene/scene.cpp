@@ -1,6 +1,7 @@
 #include "ecpch.h"
 #include "scene.h"
 #include "eclipse/scene/components.h"
+#include "eclipse/scene/native_script_component.h"
 #include "eclipse/renderer/renderer_2d.h"
 #include "eclipse/scene/entity.h"
 
@@ -33,12 +34,15 @@ static b2BodyType eclipse_rigid_body_2d_type_to_box_2d_type(component::RigidBody
 
 Scene::~Scene() { delete physics_world_; }
 
-Entity Scene::create_entity(const std::string& name) {
+Entity Scene::create_entity_from_uuid(const UUID& id, const std::string& tag) {
 	Entity e {registry_.create(), this};
+	e.add_component<component::ID>(id);
 	e.add_component<component::Transform>();
-	e.add_component<component::Tag>(name.empty() ? "Entity" : name);
+	e.add_component<component::Tag>(tag.empty() ? "Entity" : tag);
 	return e;
 }
+
+Entity Scene::create_entity(const std::string& tag) { return create_entity_from_uuid(UUID(), tag); }
 
 void Scene::destroy_entity(Entity entity) { registry_.destroy(entity); }
 
@@ -194,6 +198,11 @@ void Scene::on_runtime_stop() {
 template <typename Component>
 void Scene::on_component_added(Entity entity, Component& component) {
 	EC_CORE_ASSERT(false, "We need a specialization of \"Scene::on_component_added\"!")
+}
+
+template <>
+void Scene::on_component_added<component::ID>(Entity entity, component::ID& component) {
+	// Do nothing
 }
 
 template <>

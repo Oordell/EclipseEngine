@@ -2,6 +2,7 @@
 
 #include "eclipse/common_types/window_size.h"
 #include "eclipse/renderer/editor_camera.h"
+#include "eclipse/core/uuid.h"
 
 #include <entt/entt.hpp>
 
@@ -21,7 +22,8 @@ public:
 	void on_runtime_start();
 	void on_runtime_stop();
 
-	Entity create_entity(const std::string& name = "");
+	Entity create_entity(const std::string& tag = "");
+	Entity create_entity_from_uuid(const UUID& id, const std::string& tag = "");
 	void destroy_entity(Entity entity);
 
 	entt::registry& get_registry() { return registry_; }

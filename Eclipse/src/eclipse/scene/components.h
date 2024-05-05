@@ -1,9 +1,10 @@
 #pragma once
 
 #include "eclipse/scene/scene_camera.h"
-#include "eclipse/scene/scriptable_entity.h"
 #include "eclipse/renderer/texture.h"
+#include "eclipse/core/uuid.h"
 
+#include <map>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -11,6 +12,10 @@
 #include <glm/gtx/quaternion.hpp>
 
 namespace eclipse::component {
+
+struct ID {
+	UUID id {};
+};
 
 struct Tag {
 	Tag()           = default;
@@ -72,27 +77,6 @@ struct Camera {
 	SceneCamera camera;
 	bool primary {true};
 	bool fixed_aspect_ratio {false};
-};
-
-template <typename T>
-concept ScriptableType = std::derived_from<T, ScriptableEntity>;
-
-struct NativeScript {
-	scope<ScriptableEntity> instance = nullptr;
-
-	scope<ScriptableEntity> (*instantiate_script_func)();
-	void (*destroy_script_func)(NativeScript*);
-
-	template <ScriptableType T>
-	void bind() {
-		instantiate_script_func = []() { return static_cast<scope<ScriptableEntity>>(make_scope<T>()); };
-		/* clang-format off */
-		destroy_script_func     = [](NativeScript* ns) {
-			ns->instance.reset();
-			ns->instance = nullptr;
-		};
-		/* clang-format on */
-	}
 };
 
 struct RigidBody2D {

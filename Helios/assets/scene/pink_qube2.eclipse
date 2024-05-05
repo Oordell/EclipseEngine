@@ -1,6 +1,45 @@
 scene: Untitled scene
 entities:
-  - entity: 3
+  - entity: 11141537563755584521
+    tag_component:
+      tag: Left
+    transform_component:
+      translation: [-0.349999994, 0, 0.349999994]
+      rotation: [0, -0.785398185, 0]
+      scale: [1, 1, 1]
+    sprite_renderer_component:
+      color: [1, 0, 0.949019611, 1]
+      texture_path: assets\textures\Checkerboard.png
+      texture_width: 64
+      texture_height: 64
+      tiling_factor: 1
+  - entity: 12502691215492750474
+    tag_component:
+      tag: Right
+    transform_component:
+      translation: [0.349999994, 0, 0.349999994]
+      rotation: [0, 0.785398185, 0]
+      scale: [1, 1, 1]
+    sprite_renderer_component:
+      color: [0.549019635, 0, 0.588235319, 1]
+      texture_path: assets\textures\olliver_ordell_logo.png
+      texture_width: 1000
+      texture_height: 1000
+      tiling_factor: 1
+  - entity: 1989096589094940447
+    tag_component:
+      tag: Top
+    transform_component:
+      translation: [0, 0.5, 0]
+      rotation: [1.57079637, -0.785398185, 0]
+      scale: [0.999999881, 0.999997795, 0.999992609]
+    sprite_renderer_component:
+      color: [0.874509811, 0, 0.835294127, 1]
+      texture_path: assets\textures\olliver_ordell_logo.png
+      texture_width: 1000
+      texture_height: 1000
+      tiling_factor: 1
+  - entity: 8215520564652362488
     tag_component:
       tag: Camera
     transform_component:
@@ -18,42 +57,3 @@ entities:
         orthographic_far: 1
       primary: true
       fixed_aspect_ratio: false
-  - entity: 2
-    tag_component:
-      tag: Top
-    transform_component:
-      translation: [0, 0.5, 0]
-      rotation: [1.57079637, -0.785398185, 0]
-      scale: [0.999999881, 0.999997795, 0.999992609]
-    sprite_renderer_component:
-      color: [0.874509811, 0, 0.835294127, 1]
-      texture_path: assets\textures\olliver_ordell_logo.png
-      texture_width: 1000
-      texture_height: 1000
-      tiling_factor: 1
-  - entity: 1
-    tag_component:
-      tag: Right
-    transform_component:
-      translation: [0.349999994, 0, 0.349999994]
-      rotation: [0, 0.785398185, 0]
-      scale: [1, 1, 1]
-    sprite_renderer_component:
-      color: [0.549019635, 0, 0.588235319, 1]
-      texture_path: assets\textures\olliver_ordell_logo.png
-      texture_width: 1000
-      texture_height: 1000
-      tiling_factor: 1
-  - entity: 0
-    tag_component:
-      tag: Left
-    transform_component:
-      translation: [-0.349999994, 0, 0.349999994]
-      rotation: [0, -0.785398185, 0]
-      scale: [1, 1, 1]
-    sprite_renderer_component:
-      color: [1, 0, 0.949019611, 1]
-      texture_path: assets\textures\Checkerboard.png
-      texture_width: 64
-      texture_height: 64
-      tiling_factor: 1

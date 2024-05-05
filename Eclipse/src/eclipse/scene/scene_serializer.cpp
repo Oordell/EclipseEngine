@@ -103,8 +103,10 @@ namespace eclipse {
 SceneSerializer::SceneSerializer(const ref<Scene>& scene) : scene_(scene) {}
 
 static void serialize_entity(YAML::Emitter& out, Entity entity) {
+	EC_CORE_ASSERT(entity.has_component<component::ID>(), "Entity does not have an UUID component!");
+
 	out << YAML::BeginMap;
-	out << YAML::Key << serializer_keys::ENTITY << YAML::Value << static_cast<uint32_t>(entity);
+	out << YAML::Key << serializer_keys::ENTITY << YAML::Value << entity.get_uuid().value();
 
 	if (entity.has_component<component::Tag>()) {
 		auto& tag = entity.get_component<component::Tag>().tag;
@@ -240,7 +242,7 @@ bool SceneSerializer::deserialize_text(const FilePath& file_path) {
 	}
 
 	if (!data[serializer_keys::SCENE]) {
-		EC_CORE_ERROR("Error loading eclipse file. Could identify Scene...");
+		EC_CORE_ERROR("Error loading eclipse file. Couldn't identify Scene...");
 		return false;
 	}
 
@@ -254,16 +256,16 @@ bool SceneSerializer::deserialize_text(const FilePath& file_path) {
 	}
 
 	for (auto e : entities) {
-		uint64_t uuid = e[serializer_keys::ENTITY].as<uint64_t>();
+		UUID uuid = UUID(e[serializer_keys::ENTITY].as<uint64_t>());
 
 		std::string name {};
 		auto tag_component = e[serializer_keys::TAG_COMPONENT];
 		if (tag_component) {
 			name = tag_component[serializer_keys::TAG].as<std::string>();
 		}
-		EC_CORE_DEBUG("Deserialized entity with ID \"{0}\", name \"{1}\"", uuid, name);
+		EC_CORE_DEBUG("Deserialized entity with ID \"{0}\", name \"{1}\"", uuid.value(), name);
 
-		Entity deserialized_entity = scene_->create_entity(name);
+		Entity deserialized_entity = scene_->create_entity_from_uuid(uuid, name);
 
 		auto transform_component = e[serializer_keys::TRANSFORM_COMPONENT];
 		if (transform_component) {
