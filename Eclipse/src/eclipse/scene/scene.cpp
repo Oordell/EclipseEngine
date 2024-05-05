@@ -57,6 +57,67 @@ Entity Scene::get_primary_camera_entity() {
 	return {};
 }
 
+template <typename Component>
+static void copy_component(entt::registry& destination, entt::registry& source,
+                           const std::unordered_map<UUID, entt::entity>& entt_map) {
+	auto view = source.view<Component>();
+	for (auto e : view) {
+		UUID uuid = source.get<component::ID>(e).id;
+		EC_CORE_ASSERT(entt_map.find(uuid) != entt_map.end(), "Couldn't find entity with uuid: {0} in the map...",
+		               uuid.value());
+
+		entt::entity dst_entity_id = entt_map.at(uuid);
+		auto& component            = source.get<Component>(e);
+		destination.emplace_or_replace<Component>(dst_entity_id, component);
+	}
+}
+
+template <typename Component>
+static void copy_component_if_exists(Entity source, Entity destination) {
+	if (source.has_component<Component>()) {
+		destination.add_or_replace_component<Component>(source.get_component<Component>());
+	}
+}
+
+ref<Scene> Scene::copy(ref<Scene> other) {
+	auto new_scene            = make_ref<Scene>();
+	new_scene->viewport_size_ = other->viewport_size_;
+
+	auto& src_scene_registry = other->registry_;
+	auto& dst_scene_registry = new_scene->registry_;
+	std::unordered_map<UUID, entt::entity> entt_map;
+
+	auto id_view = src_scene_registry.view<component::ID>();
+	for (auto e : id_view) {
+		UUID uuid         = src_scene_registry.get<component::ID>(e).id;
+		const auto& tag   = src_scene_registry.get<component::Tag>(e).tag;
+		Entity new_entity = new_scene->create_entity_from_uuid(uuid, tag);
+		entt_map[uuid]    = static_cast<entt::entity>(new_entity);
+	}
+
+	copy_component<component::Transform>(dst_scene_registry, src_scene_registry, entt_map);
+	copy_component<component::Color>(dst_scene_registry, src_scene_registry, entt_map);
+	copy_component<component::SpriteRenderer>(dst_scene_registry, src_scene_registry, entt_map);
+	copy_component<component::Camera>(dst_scene_registry, src_scene_registry, entt_map);
+	copy_component<component::RigidBody2D>(dst_scene_registry, src_scene_registry, entt_map);
+	copy_component<component::BoxCollider2D>(dst_scene_registry, src_scene_registry, entt_map);
+	copy_component<component::NativeScript>(dst_scene_registry, src_scene_registry, entt_map);
+
+	return new_scene;
+}
+
+void Scene::duplicate_entity(Entity entity) {
+	Entity new_entity = create_entity(entity.get_name());
+
+	copy_component_if_exists<component::Transform>(entity, new_entity);
+	copy_component_if_exists<component::Color>(entity, new_entity);
+	copy_component_if_exists<component::SpriteRenderer>(entity, new_entity);
+	copy_component_if_exists<component::Camera>(entity, new_entity);
+	copy_component_if_exists<component::RigidBody2D>(entity, new_entity);
+	copy_component_if_exists<component::BoxCollider2D>(entity, new_entity);
+	copy_component_if_exists<component::NativeScript>(entity, new_entity);
+}
+
 void Scene::on_update_editor(au::QuantityF<au::Seconds> timestep, EditorCamera& camera) {
 	Renderer2D::begin_scene(camera);
 

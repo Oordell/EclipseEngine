@@ -9,14 +9,13 @@ template <typename T>
 concept ScriptableType = std::derived_from<T, ScriptableEntity>;
 
 struct NativeScript {
-	scope<ScriptableEntity> instance = nullptr;
-
-	scope<ScriptableEntity> (*instantiate_script_func)();
+	ref<ScriptableEntity> instance = nullptr;
+	ref<ScriptableEntity> (*instantiate_script_func)();
 	void (*destroy_script_func)(NativeScript*);
 
 	template <ScriptableType T>
 	void bind() {
-		instantiate_script_func = []() { return static_cast<scope<ScriptableEntity>>(make_scope<T>()); };
+		instantiate_script_func = []() { return static_cast<ref<ScriptableEntity>>(make_ref<T>()); };
 		/* clang-format off */
 		destroy_script_func     = [](NativeScript* ns) {
 			ns->instance.reset();

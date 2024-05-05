@@ -7,11 +7,12 @@ namespace eclipse {
 class UUID {
 public:
 	UUID();
-	UUID(const UUID&)            = default;
-	UUID(UUID&&)                 = default;
-	UUID& operator=(const UUID&) = default;
-	UUID& operator=(UUID&&)      = default;
-	~UUID()                      = default;
+	UUID(const UUID&)                   = default;
+	UUID(UUID&&)                        = default;
+	UUID& operator=(const UUID&)        = default;
+	UUID& operator=(UUID&&)             = default;
+	~UUID()                             = default;
+	auto operator<=>(const UUID&) const = default;
 
 	explicit UUID(uint64_t id) : uuid_(id) {}
 

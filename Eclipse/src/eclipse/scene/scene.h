@@ -33,6 +33,10 @@ public:
 
 	[[nodiscard]] Entity get_primary_camera_entity();
 
+	[[nodiscard]] static ref<Scene> copy(ref<Scene> other);
+
+	void duplicate_entity(Entity entity);
+
 private:
 	entt::registry registry_;
 	WindowSize viewport_size_ {};

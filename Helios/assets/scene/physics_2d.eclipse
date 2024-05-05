@@ -1,5 +1,28 @@
 scene: Untitled scene
 entities:
+  - entity: 10859443263506456056
+    tag_component:
+      tag: Floor
+    transform_component:
+      translation: [-2.29018784, -1.39493632, 0]
+      rotation: [0, 0, -0.622330129]
+      scale: [16.8170128, 0.307735413, 1]
+    sprite_renderer_component:
+      color: [0.957528949, 0.25139758, 0.25139758, 1]
+      texture_path: ""
+      texture_width: 0
+      texture_height: 0
+      tiling_factor: 1
+    rigid_body_2d_component:
+      rigid_body_2d_type: Static
+      rigid_body_2d_fixed_rotation: false
+    box_collider_2d_component:
+      box_collider_2d_offset: [0, 0]
+      box_collider_2d_size: [0.5, 0.5]
+      box_collider_2d_density: 1
+      box_collider_2d_friction: 0.5
+      box_collider_2d_restitution: 0
+      box_collider_2d_restitution_threshold: 0.5
   - entity: 10586153178748280011
     tag_component:
       tag: Camera
@@ -45,9 +68,9 @@ entities:
     tag_component:
       tag: Floor
     transform_component:
-      translation: [-7.4505806e-09, -2.20170355, 0]
-      rotation: [0, 0, 0]
-      scale: [16.8170109, 0.307735503, 1]
+      translation: [2.19624925, -1.10254407, 0]
+      rotation: [0, 0, 0.438895762]
+      scale: [16.8170109, 0.307735443, 1]
     sprite_renderer_component:
       color: [0.957528949, 0.25139758, 0.25139758, 1]
       texture_path: ""

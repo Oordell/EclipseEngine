@@ -33,52 +33,6 @@ void EditorLayer::on_attach() {
 		SceneSerializer serializer(active_scene_);
 		serializer.deserialize_text(scene_file_path);
 	}
-	/*
-	square_entity_ = active_scene_->create_entity("Green square");
-	square_entity_.add_component<component::Color>(glm::vec4 {0.2F, 0.9F, 0.3F, 1.0F});
-
-	red_square_entity_ = active_scene_->create_entity("Red square");
-	red_square_entity_.add_component<component::SpriteRenderer>(glm::vec4 {0.9F, 0.2F, 0.3F, 1.0F});
-
-	camera_entity_ = active_scene_->create_entity("Camera Entity");
-	camera_entity_.add_component<component::Camera>();
-
-	second_camera_ = active_scene_->create_entity("Second camera");
-	auto& cam      = second_camera_.add_component<component::Camera>();
-	cam.primary    = false;
-
-	class CameraController : public ScriptableEntity {
-	public:
-	 ~CameraController() override = default;
-
-	 void on_create() override {
-	  auto& transform         = get_component<component::Transform>();
-	  transform.translation.x = rand() % 10 - 5.0F;
-	 }
-
-	 void on_destroy() override {}
-
-	 void on_update(au::QuantityF<au::Seconds> timestep) override {
-	  auto& translation = get_component<component::Transform>().translation;
-
-	  static const float camera_move_speed = 5.0F;
-	  if (InputManager::is_key_pressed(KeyCode::A)) {
-	   translation.x -= camera_move_speed * timestep;
-	  } else if (InputManager::is_key_pressed(KeyCode::D)) {
-	   translation.x += camera_move_speed * timestep;
-	  }
-	  if (InputManager::is_key_pressed(KeyCode::W)) {
-	   translation.y += camera_move_speed * timestep;
-	  } else if (InputManager::is_key_pressed(KeyCode::S)) {
-	   translation.y -= camera_move_speed * timestep;
-	  }
-	 }
-	};
-
-	camera_entity_.add_component<component::NativeScript>().bind<CameraController>();
-	second_camera_.add_component<component::NativeScript>().bind<CameraController>();
-
-	*/
 
 	scene_hierarchy_panel_.set_context(active_scene_);
 }
@@ -342,6 +296,7 @@ void EditorLayer::create_new_active_scene() {
 	active_scene_ = make_ref<Scene>();
 	active_scene_->on_viewport_resize(viewport_size_);
 	scene_hierarchy_panel_.set_context(active_scene_);
+	editor_scene_path_ = std::filesystem::path();
 }
 
 void EditorLayer::open_scene() {
@@ -355,26 +310,50 @@ void EditorLayer::open_scene() {
 }
 
 void EditorLayer::open_scene(const std::filesystem::path& path) {
+	if (scene_state_ != SceneState::edit) {
+		on_scene_stop();
+	}
+
 	if (!path.has_extension() || path.extension().string() != ".eclipse") {
 		EC_ERROR("Couldn't load \"{}\". It's not a \".eclipse\" file.", path.filename().string());
 		return;
 	}
 	EC_CORE_DEBUG("Opening file: \"{}\"", path.string());
-	create_new_active_scene();
 
-	SceneSerializer serializer(active_scene_);
-	serializer.deserialize_text(FilePath(path.string()));
+	ref<Scene> new_scene = make_ref<Scene>();
+	new_scene->on_viewport_resize(viewport_size_);
+	SceneSerializer serializer(new_scene);
+	if (serializer.deserialize_text(FilePath(path.string()))) {
+		editor_scene_ = new_scene;
+		editor_scene_->on_viewport_resize(viewport_size_);
+		scene_hierarchy_panel_.set_context(editor_scene_);
+		active_scene_      = editor_scene_;
+		editor_scene_path_ = path;
+	}
 }
 
 void EditorLayer::save_scene_as() {
 	auto result = FileDialogs::save_file(WINDOWS_FILE_DIALOG_FILTER.data());
 
 	if (result.has_value()) {
-		SceneSerializer serializer(active_scene_);
-		serializer.serialize_text(result.value());
+		serialize_scene(active_scene_, result.value().value());
+		editor_scene_path_ = result.value().value();
 	} else {
 		EC_CORE_ERROR("Couldn't save scene, as we didn't find a file path...");
 	}
+}
+
+void EditorLayer::save_scene() {
+	if (!editor_scene_path_.empty()) {
+		serialize_scene(active_scene_, editor_scene_path_);
+	} else {
+		save_scene_as();
+	}
+}
+
+void EditorLayer::serialize_scene(ref<Scene> scene, const std::filesystem::path& path) {
+	SceneSerializer serializer(scene);
+	serializer.serialize_text(FilePath(path.string()));
 }
 
 bool EditorLayer::on_key_pressed(KeyPressedEvent& event) {
@@ -401,8 +380,18 @@ bool EditorLayer::on_key_pressed(KeyPressedEvent& event) {
 			break;
 		}
 		case KeyCode::S: {
-			if (control_pressed && shift_pressed) {
-				save_scene_as();
+			if (control_pressed) {
+				if (shift_pressed) {
+					save_scene_as();
+				} else {
+					save_scene();
+				}
+			}
+			break;
+		}
+		case KeyCode::D: {
+			if (control_pressed) {
+				on_duplicate_entity();
 			}
 			break;
 		}
@@ -439,13 +428,30 @@ bool EditorLayer::on_mouse_button_pressed(MouseButtonPressedEvent& event) {
 }
 
 void EditorLayer::on_scene_play() {
-	active_scene_->on_runtime_start();
 	scene_state_ = SceneState::play;
+
+	active_scene_ = Scene::copy(editor_scene_);
+	active_scene_->on_runtime_start();
+
+	scene_hierarchy_panel_.set_context(active_scene_);
 }
 
 void EditorLayer::on_scene_stop() {
-	active_scene_->on_runtime_stop();
 	scene_state_ = SceneState::edit;
+
+	active_scene_->on_runtime_stop();
+	active_scene_ = editor_scene_;
+
+	scene_hierarchy_panel_.set_context(active_scene_);
+}
+
+void EditorLayer::on_duplicate_entity() {
+	if (scene_state_ != SceneState::edit) {
+		return;
+	}
+	if (auto selected_entity = scene_hierarchy_panel_.get_selected_entity(); selected_entity) {
+		editor_scene_->duplicate_entity(selected_entity);
+	}
 }
 
 void EditorLayer::draw_ui_toolbar() {

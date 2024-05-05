@@ -23,6 +23,14 @@ public:
 		return component;
 	}
 
+	template <typename T, typename... Args>
+	T& add_or_replace_component(Args&&... args) {
+		validate_members();
+		T& component = scene_->get_registry().emplace_or_replace<T>(entity_handle_, std::forward<Args>(args)...);
+		scene_->on_component_added<T>(*this, component);
+		return component;
+	}
+
 	template <typename T>
 	void remove_component() {
 		validate_members();
@@ -44,6 +52,8 @@ public:
 	}
 
 	[[nodiscard]] UUID get_uuid() { return get_component<component::ID>().id; }
+
+	[[nodiscard]] const std::string& get_name() { return get_component<component::Tag>().tag; }
 
 	operator bool() { return ((scene_ != nullptr) && (entity_handle_ != entt::null)); }
 

@@ -22,10 +22,13 @@ private:
 	void open_scene();
 	void open_scene(const std::filesystem::path& path);
 	void save_scene_as();
+	void save_scene();
+	void serialize_scene(ref<Scene> scene, const std::filesystem::path& path);
 	bool on_key_pressed(KeyPressedEvent& event);
 	bool on_mouse_button_pressed(MouseButtonPressedEvent& event);
 	void on_scene_play();
 	void on_scene_stop();
+	void on_duplicate_entity();
 	void draw_ui_toolbar();
 	void calculate_framerate(const au::QuantityF<au::Seconds>& timestep);
 
@@ -36,12 +39,9 @@ private:
 
 	ref<FrameBuffer> frame_buffer_;
 	ref<Scene> active_scene_;
-	Entity square_entity_;
-	Entity red_square_entity_;
-	Entity camera_entity_;
-	Entity second_camera_;
+	ref<Scene> editor_scene_;
+	std::filesystem::path editor_scene_path_;
 	Entity hovered_entity_;
-	bool use_primary_camera_ = true;
 	ref<Texture2D> checkerboard_texture_;
 	ref<Texture2D> olliver_ordell_texture_;
 	ref<Texture2D> icon_play_;
