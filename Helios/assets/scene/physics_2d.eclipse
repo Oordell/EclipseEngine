@@ -1,12 +1,24 @@
 scene: Untitled scene
 entities:
-  - entity: 10859443263506456056
+  - entity: 3206952419433833922
+    tag_component:
+      tag: Circle
+    transform_component:
+      translation: [-0.54307723, -1.05847907, 0.0641540885]
+      rotation: [0, 0, 0]
+      scale: [1.16479981, 1.16479981, 1.16479981]
+    circle_renderer_component:
+      circle_renderer_color: [0, 1, 0.084941864, 1]
+      circle_renderer_radius: 0.5
+      circle_renderer_thickness: 0.200000003
+      circle_renderer_fade: 0.00499999989
+  - entity: 6939846514210509168
     tag_component:
       tag: Floor
     transform_component:
-      translation: [-2.29018784, -1.39493632, 0]
-      rotation: [0, 0, -0.622330129]
-      scale: [16.8170128, 0.307735413, 1]
+      translation: [2.19624925, -1.10254407, 0]
+      rotation: [0, 0, 0.438895762]
+      scale: [16.8170109, 0.307735443, 1]
     sprite_renderer_component:
       color: [0.957528949, 0.25139758, 0.25139758, 1]
       texture_path: ""
@@ -22,6 +34,29 @@ entities:
       box_collider_2d_density: 1
       box_collider_2d_friction: 0.5
       box_collider_2d_restitution: 0
+      box_collider_2d_restitution_threshold: 0.5
+  - entity: 14666639390132720233
+    tag_component:
+      tag: Sprite
+    transform_component:
+      translation: [-0.15308094, 1.09093142, 0]
+      rotation: [0, 0, 2.09488201]
+      scale: [0.99998033, 0.99998033, 1]
+    sprite_renderer_component:
+      color: [0, 0.803088665, 1, 1]
+      texture_path: ""
+      texture_width: 0
+      texture_height: 0
+      tiling_factor: 1
+    rigid_body_2d_component:
+      rigid_body_2d_type: Dynamic
+      rigid_body_2d_fixed_rotation: false
+    box_collider_2d_component:
+      box_collider_2d_offset: [0, 0]
+      box_collider_2d_size: [0.5, 0.5]
+      box_collider_2d_density: 1
+      box_collider_2d_friction: 0.5
+      box_collider_2d_restitution: 0.839999974
       box_collider_2d_restitution_threshold: 0.5
   - entity: 10586153178748280011
     tag_component:
@@ -41,36 +76,13 @@ entities:
         orthographic_far: 1
       primary: true
       fixed_aspect_ratio: false
-  - entity: 14666639390132720233
-    tag_component:
-      tag: Sprite
-    transform_component:
-      translation: [-0.153080925, 1.09093142, 0]
-      rotation: [0, 0, 2.09488201]
-      scale: [0.99998033, 0.99998033, 1]
-    sprite_renderer_component:
-      color: [0, 0.803088665, 1, 1]
-      texture_path: ""
-      texture_width: 0
-      texture_height: 0
-      tiling_factor: 1
-    rigid_body_2d_component:
-      rigid_body_2d_type: Dynamic
-      rigid_body_2d_fixed_rotation: false
-    box_collider_2d_component:
-      box_collider_2d_offset: [0, 0]
-      box_collider_2d_size: [0.5, 0.5]
-      box_collider_2d_density: 1
-      box_collider_2d_friction: 0.5
-      box_collider_2d_restitution: 0.839999974
-      box_collider_2d_restitution_threshold: 0.5
-  - entity: 6939846514210509168
+  - entity: 10859443263506456056
     tag_component:
       tag: Floor
     transform_component:
-      translation: [2.19624925, -1.10254407, 0]
-      rotation: [0, 0, 0.438895762]
-      scale: [16.8170109, 0.307735443, 1]
+      translation: [-2.29018784, -1.39493632, 0]
+      rotation: [0, 0, -0.622330129]
+      scale: [16.8170128, 0.307735413, 1]
     sprite_renderer_component:
       color: [0.957528949, 0.25139758, 0.25139758, 1]
       texture_path: ""

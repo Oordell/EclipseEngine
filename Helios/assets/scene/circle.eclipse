@@ -1,0 +1,14 @@
+scene: Untitled scene
+entities:
+  - entity: 15515939326684082897
+    tag_component:
+      tag: Empty entity
+    transform_component:
+      translation: [0, 0, 0]
+      rotation: [0, 0, 0]
+      scale: [1, 1, 1]
+    circle_renderer_component:
+      circle_renderer_color: [1, 0.254826248, 0, 1]
+      circle_renderer_radius: 0.5
+      circle_renderer_thickness: 0.224999994
+      circle_renderer_fade: 0.00499999989

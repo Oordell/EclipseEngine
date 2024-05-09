@@ -98,6 +98,7 @@ ref<Scene> Scene::copy(ref<Scene> other) {
 	copy_component<component::Transform>(dst_scene_registry, src_scene_registry, entt_map);
 	copy_component<component::Color>(dst_scene_registry, src_scene_registry, entt_map);
 	copy_component<component::SpriteRenderer>(dst_scene_registry, src_scene_registry, entt_map);
+	copy_component<component::CircleRenderer>(dst_scene_registry, src_scene_registry, entt_map);
 	copy_component<component::Camera>(dst_scene_registry, src_scene_registry, entt_map);
 	copy_component<component::RigidBody2D>(dst_scene_registry, src_scene_registry, entt_map);
 	copy_component<component::BoxCollider2D>(dst_scene_registry, src_scene_registry, entt_map);
@@ -112,19 +113,17 @@ void Scene::duplicate_entity(Entity entity) {
 	copy_component_if_exists<component::Transform>(entity, new_entity);
 	copy_component_if_exists<component::Color>(entity, new_entity);
 	copy_component_if_exists<component::SpriteRenderer>(entity, new_entity);
+	copy_component_if_exists<component::CircleRenderer>(entity, new_entity);
 	copy_component_if_exists<component::Camera>(entity, new_entity);
 	copy_component_if_exists<component::RigidBody2D>(entity, new_entity);
 	copy_component_if_exists<component::BoxCollider2D>(entity, new_entity);
 	copy_component_if_exists<component::NativeScript>(entity, new_entity);
 }
 
-void Scene::on_update_editor(au::QuantityF<au::Seconds> timestep, EditorCamera& camera) {
-	Renderer2D::begin_scene(camera);
-
+void Scene::draw_sprite_and_circles() const {
 	auto color_group = registry_.view<component::Transform, component::Color>();
 	for (auto entity : color_group) {
 		const auto& [trans, color] = color_group.get<component::Transform, component::Color>(entity);
-		//	Renderer2D::draw_quad({.transform = trans.get_transform(), .common = {.color = color}});
 		Renderer2D::draw_sprite({.transform = trans.get_transform(),
 		                         .component = component::SpriteRenderer(color.color),
 		                         .entity_id = static_cast<int>(entity)});
@@ -136,6 +135,20 @@ void Scene::on_update_editor(au::QuantityF<au::Seconds> timestep, EditorCamera& 
 		Renderer2D::draw_sprite(
 		    {.transform = trans.get_transform(), .component = sprite_renderer, .entity_id = static_cast<int>(entity)});
 	}
+
+	auto circle_view = registry_.view<component::Transform, component::CircleRenderer>();
+	for (auto entity : circle_view) {
+		const auto& [trans, circle_renderer] = circle_view.get<component::Transform, component::CircleRenderer>(entity);
+
+		Renderer2D::draw_circle(
+		    {.transform = trans.get_transform(), .component = circle_renderer, .entity_id = static_cast<int>(entity)});
+	}
+}
+
+void Scene::on_update_editor(au::QuantityF<au::Seconds> timestep, EditorCamera& camera) {
+	Renderer2D::begin_scene(camera);
+
+	draw_sprite_and_circles();
 
 	Renderer2D::end_scene();
 }
@@ -187,20 +200,7 @@ void Scene::on_update_runtime(au::QuantityF<au::Seconds> timestep) {
 	if (main_camera != nullptr) {
 		Renderer2D::begin_scene({.projection = main_camera->get_projection(), .transform = camera_transform});
 
-		auto color_group = registry_.view<component::Transform, component::Color>();
-		for (auto entity : color_group) {
-			const auto& [trans, color] = color_group.get<component::Transform, component::Color>(entity);
-			Renderer2D::draw_sprite({.transform = trans.get_transform(),
-			                         .component = component::SpriteRenderer(color.color),
-			                         .entity_id = static_cast<int>(entity)});
-		}
-
-		auto sprite_group = registry_.view<component::Transform, component::SpriteRenderer>();
-		for (auto entity : sprite_group) {
-			const auto& [trans, sprite_renderer] = sprite_group.get<component::Transform, component::SpriteRenderer>(entity);
-			Renderer2D::draw_sprite(
-			    {.transform = trans.get_transform(), .component = sprite_renderer, .entity_id = static_cast<int>(entity)});
-		}
+		draw_sprite_and_circles();
 
 		Renderer2D::end_scene();
 	}
@@ -283,6 +283,11 @@ void Scene::on_component_added<component::Color>(Entity entity, component::Color
 
 template <>
 void Scene::on_component_added<component::SpriteRenderer>(Entity entity, component::SpriteRenderer& component) {
+	// Do nothing
+}
+
+template <>
+void Scene::on_component_added<component::CircleRenderer>(Entity entity, component::CircleRenderer& component) {
 	// Do nothing
 }
 

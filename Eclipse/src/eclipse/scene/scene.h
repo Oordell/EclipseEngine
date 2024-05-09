@@ -38,6 +38,8 @@ public:
 	void duplicate_entity(Entity entity);
 
 private:
+	void draw_sprite_and_circles() const;
+
 	entt::registry registry_;
 	WindowSize viewport_size_ {};
 	b2World* physics_world_ = nullptr;

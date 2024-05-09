@@ -180,6 +180,18 @@ static void serialize_entity(YAML::Emitter& out, Entity entity) {
 		out << YAML::EndMap;
 	}
 
+	if (entity.has_component<component::CircleRenderer>()) {
+		auto& circle_component = entity.get_component<component::CircleRenderer>();
+		out << YAML::Key << serializer_keys::CIRCLE_RENDERER_COMPONENT;
+		out << YAML::BeginMap;
+		out << YAML::Key << serializer_keys::CIRCLE_RENDERER_COLOR << YAML::Value << circle_component.color;
+		out << YAML::Key << serializer_keys::CIRCLE_RENDERER_RADIUS << YAML::Value << circle_component.radius.in(au::meters);
+		out << YAML::Key << serializer_keys::CIRCLE_RENDERER_THICKNESS << YAML::Value
+		    << circle_component.thickness.in(au::unos);
+		out << YAML::Key << serializer_keys::CIRCLE_RENDERER_FADE << YAML::Value << circle_component.fade.in(au::unos);
+		out << YAML::EndMap;
+	}
+
 	if (entity.has_component<component::RigidBody2D>()) {
 		auto& rigid_body_2d_component = entity.get_component<component::RigidBody2D>();
 		out << YAML::Key << serializer_keys::RIGID_BODY_2D_COMPONENT;
@@ -317,6 +329,15 @@ bool SceneSerializer::deserialize_text(const FilePath& file_path) {
 				texture = Texture2D::create({.width = units::pixels(texture_width), .height = units::pixels(texture_height)});
 			}
 			src.texture = texture;
+		}
+
+		auto circle_component = e[serializer_keys::CIRCLE_RENDERER_COMPONENT];
+		if (circle_component) {
+			auto& src     = deserialized_entity.add_component<component::CircleRenderer>();
+			src.color     = circle_component[serializer_keys::CIRCLE_RENDERER_COLOR].as<glm::vec4>();
+			src.radius    = au::meters(circle_component[serializer_keys::CIRCLE_RENDERER_RADIUS].as<float>());
+			src.thickness = au::unos(circle_component[serializer_keys::CIRCLE_RENDERER_THICKNESS].as<float>());
+			src.fade      = au::unos(circle_component[serializer_keys::CIRCLE_RENDERER_FADE].as<float>());
 		}
 
 		auto rigid_body_2d_component = e[serializer_keys::RIGID_BODY_2D_COMPONENT];

@@ -127,6 +127,7 @@ void SceneHierarchyPanel::draw_components(Entity entity) {
 	draw_camera_component(entity);
 	draw_color_component(entity);
 	draw_sprite_renderer_component(entity);
+	draw_circle_renderer_component(entity);
 	draw_rigid_body_2d_component(entity);
 	draw_box_collider_2d_component(entity);
 }
@@ -155,6 +156,7 @@ void SceneHierarchyPanel::draw_tag_component(Entity entity) {
 	if (ImGui::BeginPopup("AddComponent")) {
 		add_pop_up_option<component::Camera>(entity, "Camera");
 		add_pop_up_option<component::SpriteRenderer>(entity, "Sprite Renderer");
+		add_pop_up_option<component::CircleRenderer>(entity, "Circle Renderer");
 		add_pop_up_option<component::Color>(entity, "Color");
 		add_pop_up_option<component::RigidBody2D>(entity, "Rigid Body 2D");
 		add_pop_up_option<component::BoxCollider2D>(entity, "Box Collider 2D");
@@ -268,6 +270,20 @@ void SceneHierarchyPanel::draw_sprite_renderer_component(Entity entity) {
 		}
 
 		ImGui::DragFloat("Tiling Factor", &component.tiling_factor, 0.1F, 0.F, 100.F);
+	});
+}
+
+void SceneHierarchyPanel::draw_circle_renderer_component(Entity entity) {
+	draw_component<component::CircleRenderer>("Circle Renderer", entity, [](auto& component) {
+		ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
+
+		float thickness = component.thickness.in(au::unos);
+		ImGui::DragFloat("Thickness", &thickness, 0.025F, 0.F, 1.F);
+		component.thickness = au::unos(thickness);
+
+		float fade = component.fade.in(au::unos);
+		ImGui::DragFloat("Face", &fade, 0.00025F, 0.F, 1.F);
+		component.fade = au::unos(fade);
 	});
 }
 

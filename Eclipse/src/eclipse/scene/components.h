@@ -7,6 +7,7 @@
 #include <map>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <au.hh>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
@@ -67,6 +68,21 @@ struct SpriteRenderer {
 	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
 	ref<Texture2D> texture = nullptr;
 	float tiling_factor    = 1.F;
+};
+
+struct CircleRenderer {
+	CircleRenderer()                      = default;
+	~CircleRenderer()                     = default;
+	CircleRenderer(const CircleRenderer&) = default;
+
+	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
+	au::QuantityF<au::Meters> radius {au::meters(0.5F)};
+
+	// 1 = filled completely, 0.5 = filled half, 0.0 = infinite thin ring
+	au::QuantityF<au::Unos> thickness {au::unos(1.0F)};
+
+	// 1.0 = very blurry, 0.0 = Sharp
+	au::QuantityF<au::Unos> fade {au::unos(0.005F)};
 };
 
 struct Camera {

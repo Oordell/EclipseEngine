@@ -22,6 +22,7 @@ private:
 	void draw_camera_component(Entity entity);
 	void draw_color_component(Entity entity);
 	void draw_sprite_renderer_component(Entity entity);
+	void draw_circle_renderer_component(Entity entity);
 	void draw_rigid_body_2d_component(Entity entity);
 	void draw_box_collider_2d_component(Entity entity);
 

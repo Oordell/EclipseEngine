@@ -8,6 +8,8 @@
 #include "eclipse/common_types/must_init.h"
 #include "eclipse/scene/components.h"
 
+#include <au.hh>
+
 namespace eclipse {
 
 namespace defaults {
@@ -69,6 +71,12 @@ struct QuadMetaDataTransformTexture {
 	MustInit<ref<Texture2D>> texture;
 };
 
+struct CircleMetaData {
+	glm::mat4 transform {1.0F};
+	component::CircleRenderer component;
+	int entity_id {-1};
+};
+
 struct SpriteMetaDataTransform {
 	QuadMetaDataCommon common {};
 	glm::mat4 transform {1.0F};
@@ -114,6 +122,8 @@ public:
 	static void draw_quad(const QuadMetaDataPosition3DTexture& info);
 	static void draw_quad(const QuadMetaDataTransformTexture& info);
 
+	static void draw_circle(const CircleMetaData& info);
+
 	static void draw_sprite(const SpriteMetaDataTransform& info);
 
 private:
@@ -122,6 +132,9 @@ private:
 	static void end_scene_and_start_new_batch();
 	static void init_scene(const glm::mat4& view_projection);
 	static void reset_data();
+
+	static void flush_quads();
+	static void flush_circles();
 
 public:
 	static void reset_statistics();
