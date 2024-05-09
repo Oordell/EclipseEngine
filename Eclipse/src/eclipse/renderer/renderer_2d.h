@@ -77,6 +77,32 @@ struct CircleMetaData {
 	int entity_id {-1};
 };
 
+struct LineMetaData {
+	glm::vec3 start {0.0F, 0.0F, 0.0F};
+	glm::vec3 end {0.0F, 0.0F, 0.0F};
+	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
+	int entity_id {-1};
+};
+
+struct LineLoopMetaData {
+	std::vector<glm::vec3> line_vertices;
+	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
+	int entity_id {-1};
+};
+
+struct RectangleMetaDataPosition {
+	glm::vec3 position {0.0F, 0.0F, 0.0F};
+	glm::vec2 size {0.0F, 0.0F};
+	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
+	int entity_id {-1};
+};
+
+struct RectangleMetaDataTransform {
+	glm::mat4 transform {1.0F};
+	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
+	int entity_id {-1};
+};
+
 struct SpriteMetaDataTransform {
 	QuadMetaDataCommon common {};
 	glm::mat4 transform {1.0F};
@@ -123,8 +149,16 @@ public:
 	static void draw_quad(const QuadMetaDataTransformTexture& info);
 
 	static void draw_circle(const CircleMetaData& info);
+	static void draw_line(const LineMetaData& info);
+	static void draw_line_loop(const LineLoopMetaData& info);
+
+	static void draw_rectangle(const RectangleMetaDataPosition& info);
+	static void draw_rectangle(const RectangleMetaDataTransform& info);
 
 	static void draw_sprite(const SpriteMetaDataTransform& info);
+
+	static au::QuantityF<units::Pixels> get_line_width();
+	static void set_line_width(au::QuantityF<units::Pixels> width);
 
 private:
 	static void draw_quad_impl(const QuadDrawingDataImpl& info);
@@ -135,6 +169,7 @@ private:
 
 	static void flush_quads();
 	static void flush_circles();
+	static void flush_lines();
 
 public:
 	static void reset_statistics();

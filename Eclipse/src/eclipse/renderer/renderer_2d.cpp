@@ -33,6 +33,14 @@ struct CircleVertex {
 	int entity_id {-1};
 };
 
+struct LineVertex {
+	glm::vec3 position {0.0F, 0.0F, 0.0F};
+	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
+
+	// Editor only:
+	int entity_id {-1};
+};
+
 struct Renderer2DData {
 	static constexpr uint32_t MAX_QUADS                  = 10000;
 	static constexpr uint32_t MAX_VERTICES               = MAX_QUADS * 4;
@@ -50,6 +58,10 @@ struct Renderer2DData {
 	ref<VertexBuffer> circle_vertex_buffer;
 	ref<Shader> circle_shader;
 
+	ref<VertexArray> line_vertex_array;
+	ref<VertexBuffer> line_vertex_buffer;
+	ref<Shader> line_shader;
+
 	uint32_t quad_index_count           = 0;
 	QuadVertex* quad_vertex_buffer_base = nullptr;
 	QuadVertex* quad_vertex_buffer_ptr  = nullptr;
@@ -57,6 +69,12 @@ struct Renderer2DData {
 	uint32_t circle_index_count             = 0;
 	CircleVertex* circle_vertex_buffer_base = nullptr;
 	CircleVertex* circle_vertex_buffer_ptr  = nullptr;
+
+	uint32_t line_vertex_count          = 0;
+	LineVertex* line_vertex_buffer_base = nullptr;
+	LineVertex* line_vertex_buffer_ptr  = nullptr;
+
+	au::QuantityF<units::Pixels> line_width = units::pixels(2.0F);
 
 	std::array<ref<Texture2D>, MAX_TEXTURE_SLOTS> texture_slots;
 	uint32_t texture_slot_index = 1;  // index 0 = white texture.
@@ -78,8 +96,7 @@ static Renderer2DData data;
 void Renderer2D::init() {
 	EC_PROFILE_FUNCTION();
 
-	data.quad_vertex_array = VertexArray::create();
-
+	data.quad_vertex_array  = VertexArray::create();
 	data.quad_vertex_buffer = VertexBuffer::create(data.MAX_VERTICES * sizeof(QuadVertex));
 	data.quad_vertex_buffer->set_layout({{ShaderDataType::floatvec3, "position_"},
 	                                     {ShaderDataType::floatvec4, "color_"},
@@ -110,8 +127,7 @@ void Renderer2D::init() {
 	data.quad_vertex_array->set_index_buffer(quad_index_buffer_);
 	delete[] quad_indices;
 
-	data.circle_vertex_array = VertexArray::create();
-
+	data.circle_vertex_array  = VertexArray::create();
 	data.circle_vertex_buffer = VertexBuffer::create(data.MAX_VERTICES * sizeof(CircleVertex));
 	data.circle_vertex_buffer->set_layout({{ShaderDataType::floatvec3, "world_position_"},
 	                                       {ShaderDataType::floatvec3, "local_position_"},
@@ -122,6 +138,14 @@ void Renderer2D::init() {
 	data.circle_vertex_array->add_vertex_buffer(data.circle_vertex_buffer);
 	data.circle_vertex_array->set_index_buffer(quad_index_buffer_);
 	data.circle_vertex_buffer_base = new CircleVertex[data.MAX_VERTICES];
+
+	data.line_vertex_array  = VertexArray::create();
+	data.line_vertex_buffer = VertexBuffer::create(data.MAX_VERTICES * sizeof(LineVertex));
+	data.line_vertex_buffer->set_layout({{ShaderDataType::floatvec3, "position_"},
+	                                     {ShaderDataType::floatvec4, "color_"},
+	                                     {ShaderDataType::intvec1, "entity_id_"}});
+	data.line_vertex_array->add_vertex_buffer(data.line_vertex_buffer);
+	data.line_vertex_buffer_base = new LineVertex[data.MAX_VERTICES];
 
 	data.white_texture          = Texture2D::create(WindowSize {units::pixels(1), units::pixels(1)});
 	uint32_t white_texture_data = 0xffffffff;
@@ -134,6 +158,7 @@ void Renderer2D::init() {
 
 	data.quad_shader   = Shader::create(FilePath("assets/shaders/renderer2d_quad.glsl"));
 	data.circle_shader = Shader::create(FilePath("assets/shaders/renderer2d_circle.glsl"));
+	data.line_shader   = Shader::create(FilePath("assets/shaders/renderer2d_line.glsl"));
 
 	data.texture_slots[0] = data.white_texture;
 
@@ -149,6 +174,7 @@ void Renderer2D::shutdown() {
 	EC_PROFILE_FUNCTION();
 	delete[] data.quad_vertex_buffer_base;
 	delete[] data.circle_vertex_buffer_base;
+	delete[] data.line_vertex_buffer_base;
 }
 
 void Renderer2D::begin_scene(const RenderCamera& camera) {
@@ -176,6 +202,7 @@ void Renderer2D::flush() {
 	EC_PROFILE_FUNCTION();
 	flush_quads();
 	flush_circles();
+	flush_lines();
 }
 
 void Renderer2D::draw_quad(const QuadMetaDataPosition2D& info) {
@@ -236,6 +263,50 @@ void Renderer2D::draw_circle(const CircleMetaData& info) {
 	data.stats.quad_count++;
 }
 
+void Renderer2D::draw_line(const LineMetaData& info) {
+	EC_PROFILE_FUNCTION();
+
+	data.line_vertex_buffer_ptr->position  = info.start;
+	data.line_vertex_buffer_ptr->color     = info.color;
+	data.line_vertex_buffer_ptr->entity_id = info.entity_id;
+	data.line_vertex_buffer_ptr++;
+
+	data.line_vertex_buffer_ptr->position  = info.end;
+	data.line_vertex_buffer_ptr->color     = info.color;
+	data.line_vertex_buffer_ptr->entity_id = info.entity_id;
+	data.line_vertex_buffer_ptr++;
+
+	data.line_vertex_count += 2;
+}
+
+void Renderer2D::draw_line_loop(const LineLoopMetaData& info) {
+	auto size = info.line_vertices.size();
+	for (size_t i = 0; i < size; i++) {
+		draw_line({.start     = info.line_vertices[i],
+		           .end       = info.line_vertices[(i + 1) % size],
+		           .color     = info.color,
+		           .entity_id = info.entity_id});
+	}
+}
+
+void Renderer2D::draw_rectangle(const RectangleMetaDataPosition& info) {
+	const std::vector<glm::vec3> positions {
+	    {{info.position.x - info.size.x * 0.5F, info.position.y - info.size.y * 0.5F, info.position.z},
+	     {info.position.x + info.size.x * 0.5F, info.position.y - info.size.y * 0.5F, info.position.z},
+	     {info.position.x + info.size.x * 0.5F, info.position.y + info.size.y * 0.5F, info.position.z},
+	     {info.position.x - info.size.x * 0.5F, info.position.y + info.size.y * 0.5F, info.position.z}}};
+	draw_line_loop({.line_vertices = positions, .color = info.color, .entity_id = info.entity_id});
+}
+
+void Renderer2D::draw_rectangle(const RectangleMetaDataTransform& info) {
+	std::vector<glm::vec3> positions;
+	positions.resize(defaults::NUM_OF_QUAD_CORNERS);
+	for (size_t i = 0; i < defaults::NUM_OF_QUAD_CORNERS; i++) {
+		positions[i] = info.transform * data.quad_vertex_positions[i];
+	}
+	draw_line_loop({.line_vertices = positions, .color = info.color, .entity_id = info.entity_id});
+}
+
 void Renderer2D::draw_sprite(const SpriteMetaDataTransform& info) {
 	EC_PROFILE_FUNCTION();
 	draw_quad_impl({.texture   = info.component.texture ? info.component.texture : data.white_texture,
@@ -245,6 +316,10 @@ void Renderer2D::draw_sprite(const SpriteMetaDataTransform& info) {
 	                              .texture_coords = info.common.texture_coords},
 	                .entity_id = info.entity_id});
 }
+
+au::QuantityF<units::Pixels> Renderer2D::get_line_width() { return data.line_width; }
+
+void Renderer2D::set_line_width(au::QuantityF<units::Pixels> width) { data.line_width = width; }
 
 void Renderer2D::draw_quad_impl(const QuadDrawingDataImpl& info) {
 	EC_PROFILE_FUNCTION();
@@ -324,13 +399,16 @@ void Renderer2D::reset_data() {
 	data.circle_index_count       = 0;
 	data.circle_vertex_buffer_ptr = data.circle_vertex_buffer_base;
 
+	data.line_vertex_count      = 0;
+	data.line_vertex_buffer_ptr = data.line_vertex_buffer_base;
+
 	data.texture_slot_index = 1;
 }
 
 void Renderer2D::flush_quads() {
 	EC_PROFILE_FUNCTION();
 
-	if (data.quad_index_count == 0) {
+	if (data.quad_index_count < 1) {
 		return;  // Nothing to draw
 	}
 
@@ -349,7 +427,7 @@ void Renderer2D::flush_quads() {
 void Renderer2D::flush_circles() {
 	EC_PROFILE_FUNCTION();
 
-	if (data.circle_index_count == 0) {
+	if (data.circle_index_count < 1) {
 		return;  // Nothing to draw
 	}
 
@@ -359,6 +437,23 @@ void Renderer2D::flush_circles() {
 
 	data.circle_shader->bind();
 	RenderCommand::draw_indexed(data.circle_vertex_array, data.circle_index_count);
+	data.stats.draw_calls++;
+}
+
+void Renderer2D::flush_lines() {
+	EC_PROFILE_FUNCTION();
+
+	if (data.line_vertex_count < 1) {
+		return;  // Nothing to draw
+	}
+
+	uint32_t data_size = static_cast<uint32_t>(reinterpret_cast<uint8_t*>(data.line_vertex_buffer_ptr) -
+	                                           reinterpret_cast<uint8_t*>(data.line_vertex_buffer_base));
+	data.line_vertex_buffer->set_data(data.line_vertex_buffer_base, data_size);
+
+	data.line_shader->bind();
+	RenderCommand::set_line_width(data.line_width);
+	RenderCommand::draw_lines(data.line_vertex_array, data.line_vertex_count);
 	data.stats.draw_calls++;
 }
 

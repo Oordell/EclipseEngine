@@ -43,6 +43,7 @@ void OpenGLRendererAPI::init() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LINE_SMOOTH);
 }
 
 void OpenGLRendererAPI::set_viewport(const Point2D& origin, const WindowSize& size) {
@@ -62,5 +63,12 @@ void OpenGLRendererAPI::draw_indexed(const ref<VertexArray>& vertex_array, uint3
 	vertex_array->bind();
 	glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, nullptr);
 }
+
+void OpenGLRendererAPI::draw_lines(const ref<VertexArray>& vertex_array, uint32_t vertex_count) {
+	vertex_array->bind();
+	glDrawArrays(GL_LINES, 0, vertex_count);
+}
+
+void OpenGLRendererAPI::set_line_width(au::QuantityF<units::Pixels> width) { glLineWidth(width.in(units::pixels)); }
 
 }  // namespace eclipse

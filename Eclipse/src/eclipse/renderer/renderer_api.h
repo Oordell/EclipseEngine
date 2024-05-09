@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include "eclipse/common_types/point_2d.h"
 #include "eclipse/common_types/window_size.h"
+#include <au.hh>
 
 namespace eclipse {
 
@@ -19,6 +20,8 @@ public:
 	virtual void clear()                                                                  = 0;
 	virtual void draw_indexed(const ref<VertexArray>& vertex_array)                       = 0;
 	virtual void draw_indexed(const ref<VertexArray>& vertex_array, uint32_t index_count) = 0;
+	virtual void draw_lines(const ref<VertexArray>& vertex_array, uint32_t vertex_count)  = 0;
+	virtual void set_line_width(au::QuantityF<units::Pixels> width)                       = 0;
 
 	inline static API get_api() { return api_; }
 
