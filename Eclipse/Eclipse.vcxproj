@@ -157,6 +157,8 @@
     <ClInclude Include="src\eclipse\common_types\profile_results.h" />
     <ClInclude Include="src\eclipse\common_types\screen_velocity_2d.h" />
     <ClInclude Include="src\eclipse\common_types\transform.h" />
+    <ClInclude Include="src\eclipse\common_types\units\densities.h" />
+    <ClInclude Include="src\eclipse\common_types\units\newtons.h" />
     <ClInclude Include="src\eclipse\common_types\units\pixel.h" />
     <ClInclude Include="src\eclipse\common_types\units\pixels_per_seconds.h" />
     <ClInclude Include="src\eclipse\common_types\window_size.h" />

@@ -3,6 +3,8 @@
 #include "eclipse/scene/scene_camera.h"
 #include "eclipse/renderer/texture.h"
 #include "eclipse/core/uuid.h"
+#include "eclipse/common_types/units/newtons.h"
+#include "eclipse/common_types/units/densities.h"
 
 #include <map>
 #include <glm/glm.hpp>
@@ -135,10 +137,10 @@ struct BoxCollider2D {
 	glm::vec2 offset {0.F, 0.F};
 	glm::vec2 size {.5F, .5F};
 
-	float density {1.F};
-	float friction {.5F};
-	float restitution {0.F};
-	float restitution_threshold {.5F};
+	au::QuantityF<units::Densities> density {units::densities(1.F)};
+	au::QuantityF<units::Newtons> friction {units::newtons(.5F)};
+	au::QuantityF<au::Unos> restitution {au::unos(0.F)};
+	au::QuantityF<au::Unos> restitution_threshold {au::unos(.5F)};
 
 	// Storage for runtime
 	void* runtime_fixture = nullptr;
@@ -148,10 +150,10 @@ struct CircleCollider2D {
 	glm::vec2 offset {0.F, 0.F};
 	au::QuantityF<au::Meters> radius {au::meters(0.5F)};
 
-	float density {1.F};
-	float friction {.5F};
-	float restitution {0.F};
-	float restitution_threshold {.5F};
+	au::QuantityF<units::Densities> density {units::densities(1.F)};
+	au::QuantityF<units::Newtons> friction {units::newtons(.5F)};
+	au::QuantityF<au::Unos> restitution {au::unos(0.F)};
+	au::QuantityF<au::Unos> restitution_threshold {au::unos(.5F)};
 
 	// Storage for runtime
 	void* runtime_fixture = nullptr;

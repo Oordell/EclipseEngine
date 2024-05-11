@@ -245,10 +245,10 @@ void Scene::on_runtime_start() {
 
 			b2FixtureDef fixture_def;
 			fixture_def.shape                = &box_shape;
-			fixture_def.density              = box_collider_2d.density;
-			fixture_def.friction             = box_collider_2d.friction;
-			fixture_def.restitution          = box_collider_2d.restitution;
-			fixture_def.restitutionThreshold = box_collider_2d.restitution_threshold;
+			fixture_def.density              = box_collider_2d.density.in(units::densities);
+			fixture_def.friction             = box_collider_2d.friction.in(units::newtons);
+			fixture_def.restitution          = box_collider_2d.restitution.in(au::unos);
+			fixture_def.restitutionThreshold = box_collider_2d.restitution_threshold.in(au::unos);
 			body->CreateFixture(&fixture_def);
 		}
 
@@ -261,10 +261,10 @@ void Scene::on_runtime_start() {
 
 			b2FixtureDef fixture_def;
 			fixture_def.shape                = &circle_shape;
-			fixture_def.density              = circle_collider_2d.density;
-			fixture_def.friction             = circle_collider_2d.friction;
-			fixture_def.restitution          = circle_collider_2d.restitution;
-			fixture_def.restitutionThreshold = circle_collider_2d.restitution_threshold;
+			fixture_def.density              = circle_collider_2d.density.in(units::densities);
+			fixture_def.friction             = circle_collider_2d.friction.in(units::newtons);
+			fixture_def.restitution          = circle_collider_2d.restitution.in(au::unos);
+			fixture_def.restitutionThreshold = circle_collider_2d.restitution_threshold.in(au::unos);
 			body->CreateFixture(&fixture_def);
 		}
 	}

@@ -315,10 +315,21 @@ void SceneHierarchyPanel::draw_box_collider_2d_component(Entity entity) {
 	draw_component<component::BoxCollider2D>("Box Collider 2D", entity, [](auto& component) {
 		ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
 		ImGui::DragFloat2("Size", glm::value_ptr(component.size));
-		ImGui::DragFloat("Density", &component.density, .01F, .0F, 1.F);
-		ImGui::DragFloat("Friction", &component.friction, .01F, .0F, 1.F);
-		ImGui::DragFloat("Restitution", &component.restitution, .01F, .0F, 1.F);
-		ImGui::DragFloat("Restitution Threshold", &component.restitution_threshold, .01F, .0F);
+
+		float density               = component.density.in(units::densities);
+		float friction              = component.friction.in(units::newtons);
+		float restitution           = component.restitution.in(au::unos);
+		float restitution_threshold = component.restitution_threshold.in(au::unos);
+
+		ImGui::DragFloat("Density", &density, .01F, .0F, 1.F);
+		ImGui::DragFloat("Friction", &friction, .01F, .0F, 1.F);
+		ImGui::DragFloat("Restitution", &restitution, .01F, .0F, 1.F);
+		ImGui::DragFloat("Restitution Threshold", &restitution_threshold, .01F, .0F);
+
+		component.density               = units::densities(density);
+		component.friction              = units::newtons(friction);
+		component.restitution           = au::unos(restitution);
+		component.restitution_threshold = au::unos(restitution_threshold);
 	});
 }
 
@@ -326,14 +337,23 @@ void SceneHierarchyPanel::draw_circle_collider_2d_component(Entity entity) {
 	draw_component<component::CircleCollider2D>("Circle Collider 2D", entity, [](auto& component) {
 		ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
 
-		float radius = component.radius.in(au::meters);
-		ImGui::DragFloat("Radius", &radius);
-		component.radius = au::meters(radius);
+		float radius                = component.radius.in(au::meters);
+		float density               = component.density.in(units::densities);
+		float friction              = component.friction.in(units::newtons);
+		float restitution           = component.restitution.in(au::unos);
+		float restitution_threshold = component.restitution_threshold.in(au::unos);
 
-		ImGui::DragFloat("Density", &component.density, .01F, .0F, 1.F);
-		ImGui::DragFloat("Friction", &component.friction, .01F, .0F, 1.F);
-		ImGui::DragFloat("Restitution", &component.restitution, .01F, .0F, 1.F);
-		ImGui::DragFloat("Restitution Threshold", &component.restitution_threshold, .01F, .0F);
+		ImGui::DragFloat("Radius", &radius);
+		ImGui::DragFloat("Density", &density, .01F, .0F, 1.F);
+		ImGui::DragFloat("Friction", &friction, .01F, .0F, 1.F);
+		ImGui::DragFloat("Restitution", &restitution, .01F, .0F, 1.F);
+		ImGui::DragFloat("Restitution Threshold", &restitution_threshold, .01F, .0F);
+
+		component.radius                = au::meters(radius);
+		component.density               = units::densities(density);
+		component.friction              = units::newtons(friction);
+		component.restitution           = au::unos(restitution);
+		component.restitution_threshold = au::unos(restitution_threshold);
 	});
 }
 
