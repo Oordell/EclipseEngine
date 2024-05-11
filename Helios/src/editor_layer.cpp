@@ -178,8 +178,16 @@ void EditorLayer::on_imgui_render() {
 				open_scene();
 			}
 
+			if (ImGui::MenuItem("Save scene", "Ctrl+S")) {
+				save_scene();
+			}
+
 			if (ImGui::MenuItem("Save as...", "Ctrl+Shift+S")) {
 				save_scene_as();
+			}
+
+			if (ImGui::MenuItem("Duplicate entity", "Ctrl+D")) {
+				on_duplicate_entity();
 			}
 
 			if (ImGui::MenuItem("Exit")) {
