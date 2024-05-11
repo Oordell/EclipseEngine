@@ -218,6 +218,24 @@ static void serialize_entity(YAML::Emitter& out, Entity entity) {
 		out << YAML::EndMap;
 	}
 
+	if (entity.has_component<component::CircleCollider2D>()) {
+		auto& circle_collider_2d_component = entity.get_component<component::CircleCollider2D>();
+		out << YAML::Key << serializer_keys::CIRCLE_COLLIDER_2D_COMPONENT;
+		out << YAML::BeginMap;
+		out << YAML::Key << serializer_keys::CIRCLE_COLLIDER_2D_OFFSET << YAML::Value << circle_collider_2d_component.offset;
+		out << YAML::Key << serializer_keys::CIRCLE_COLLIDER_2D_RADIUS << YAML::Value
+		    << circle_collider_2d_component.radius.in(au::meters);
+		out << YAML::Key << serializer_keys::CIRCLE_COLLIDER_2D_DENSITY << YAML::Value
+		    << circle_collider_2d_component.density;
+		out << YAML::Key << serializer_keys::CIRCLE_COLLIDER_2D_FRICTION << YAML::Value
+		    << circle_collider_2d_component.friction;
+		out << YAML::Key << serializer_keys::CIRCLE_COLLIDER_2D_RESTITUTION << YAML::Value
+		    << circle_collider_2d_component.restitution;
+		out << YAML::Key << serializer_keys::CIRCLE_COLLIDER_2D_RESTITUTION_THRESHOLD << YAML::Value
+		    << circle_collider_2d_component.restitution_threshold;
+		out << YAML::EndMap;
+	}
+
 	out << YAML::EndMap;
 }
 
@@ -358,6 +376,18 @@ bool SceneSerializer::deserialize_text(const FilePath& file_path) {
 			src.restitution = box_collider_2d_component[serializer_keys::BOX_COLLIDER_2D_RESTITUTION].as<float>();
 			src.restitution_threshold =
 			    box_collider_2d_component[serializer_keys::BOX_COLLIDER_2D_RESTITUTION_THRESHOLD].as<float>();
+		}
+
+		auto circle_collider_2d_component = e[serializer_keys::CIRCLE_COLLIDER_2D_COMPONENT];
+		if (circle_collider_2d_component) {
+			auto& src       = deserialized_entity.add_component<component::CircleCollider2D>();
+			src.offset      = circle_collider_2d_component[serializer_keys::CIRCLE_COLLIDER_2D_OFFSET].as<glm::vec2>();
+			src.radius      = au::meters(circle_collider_2d_component[serializer_keys::CIRCLE_COLLIDER_2D_RADIUS].as<float>());
+			src.density     = circle_collider_2d_component[serializer_keys::CIRCLE_COLLIDER_2D_DENSITY].as<float>();
+			src.friction    = circle_collider_2d_component[serializer_keys::CIRCLE_COLLIDER_2D_FRICTION].as<float>();
+			src.restitution = circle_collider_2d_component[serializer_keys::CIRCLE_COLLIDER_2D_RESTITUTION].as<float>();
+			src.restitution_threshold =
+			    circle_collider_2d_component[serializer_keys::CIRCLE_COLLIDER_2D_RESTITUTION_THRESHOLD].as<float>();
 		}
 	}
 

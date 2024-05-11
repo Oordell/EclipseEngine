@@ -77,6 +77,15 @@ static constexpr std::string_view CIRCLE_RENDERER_COLOR     = "circle_renderer_c
 static constexpr std::string_view CIRCLE_RENDERER_RADIUS    = "circle_renderer_radius";
 static constexpr std::string_view CIRCLE_RENDERER_THICKNESS = "circle_renderer_thickness";
 static constexpr std::string_view CIRCLE_RENDERER_FADE      = "circle_renderer_fade";
+
+// component::BoxCollider2D
+static constexpr std::string_view CIRCLE_COLLIDER_2D_COMPONENT             = "circle_collider_2d_component";
+static constexpr std::string_view CIRCLE_COLLIDER_2D_OFFSET                = "circle_collider_2d_offset";
+static constexpr std::string_view CIRCLE_COLLIDER_2D_RADIUS                = "circle_collider_2d_radius";
+static constexpr std::string_view CIRCLE_COLLIDER_2D_DENSITY               = "circle_collider_2d_density";
+static constexpr std::string_view CIRCLE_COLLIDER_2D_FRICTION              = "circle_collider_2d_friction";
+static constexpr std::string_view CIRCLE_COLLIDER_2D_RESTITUTION           = "circle_collider_2d_restitution";
+static constexpr std::string_view CIRCLE_COLLIDER_2D_RESTITUTION_THRESHOLD = "circle_collider_2d_restitution_threshold";
 }  // namespace serializer_keys
 
 }  // namespace eclipse

@@ -25,6 +25,7 @@ private:
 	void draw_circle_renderer_component(Entity entity);
 	void draw_rigid_body_2d_component(Entity entity);
 	void draw_box_collider_2d_component(Entity entity);
+	void draw_circle_collider_2d_component(Entity entity);
 
 	template <class Component>
 	void add_pop_up_option(Entity entity, const std::string& menu_item);

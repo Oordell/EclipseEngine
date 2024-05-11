@@ -130,6 +130,7 @@ void SceneHierarchyPanel::draw_components(Entity entity) {
 	draw_circle_renderer_component(entity);
 	draw_rigid_body_2d_component(entity);
 	draw_box_collider_2d_component(entity);
+	draw_circle_collider_2d_component(entity);
 }
 
 void SceneHierarchyPanel::draw_tag_component(Entity entity) {
@@ -160,6 +161,7 @@ void SceneHierarchyPanel::draw_tag_component(Entity entity) {
 		add_pop_up_option<component::Color>(entity, "Color");
 		add_pop_up_option<component::RigidBody2D>(entity, "Rigid Body 2D");
 		add_pop_up_option<component::BoxCollider2D>(entity, "Box Collider 2D");
+		add_pop_up_option<component::CircleCollider2D>(entity, "Circle Collider 2D");
 		ImGui::EndPopup();
 	}
 	ImGui::PopItemWidth();
@@ -313,6 +315,21 @@ void SceneHierarchyPanel::draw_box_collider_2d_component(Entity entity) {
 	draw_component<component::BoxCollider2D>("Box Collider 2D", entity, [](auto& component) {
 		ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
 		ImGui::DragFloat2("Size", glm::value_ptr(component.size));
+		ImGui::DragFloat("Density", &component.density, .01F, .0F, 1.F);
+		ImGui::DragFloat("Friction", &component.friction, .01F, .0F, 1.F);
+		ImGui::DragFloat("Restitution", &component.restitution, .01F, .0F, 1.F);
+		ImGui::DragFloat("Restitution Threshold", &component.restitution_threshold, .01F, .0F);
+	});
+}
+
+void SceneHierarchyPanel::draw_circle_collider_2d_component(Entity entity) {
+	draw_component<component::CircleCollider2D>("Circle Collider 2D", entity, [](auto& component) {
+		ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
+
+		float radius = component.radius.in(au::meters);
+		ImGui::DragFloat("Radius", &radius);
+		component.radius = au::meters(radius);
+
 		ImGui::DragFloat("Density", &component.density, .01F, .0F, 1.F);
 		ImGui::DragFloat("Friction", &component.friction, .01F, .0F, 1.F);
 		ImGui::DragFloat("Restitution", &component.restitution, .01F, .0F, 1.F);

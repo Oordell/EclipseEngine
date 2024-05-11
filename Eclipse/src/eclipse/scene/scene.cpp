@@ -10,6 +10,7 @@
 #include <box2d/b2_body.h>
 #include <box2d/b2_fixture.h>
 #include <box2d/b2_polygon_shape.h>
+#include <box2d/b2_circle_shape.h>
 
 namespace eclipse {
 
@@ -102,6 +103,7 @@ ref<Scene> Scene::copy(ref<Scene> other) {
 	copy_component<component::Camera>(dst_scene_registry, src_scene_registry, entt_map);
 	copy_component<component::RigidBody2D>(dst_scene_registry, src_scene_registry, entt_map);
 	copy_component<component::BoxCollider2D>(dst_scene_registry, src_scene_registry, entt_map);
+	copy_component<component::CircleCollider2D>(dst_scene_registry, src_scene_registry, entt_map);
 	copy_component<component::NativeScript>(dst_scene_registry, src_scene_registry, entt_map);
 
 	return new_scene;
@@ -117,6 +119,7 @@ void Scene::duplicate_entity(Entity entity) {
 	copy_component_if_exists<component::Camera>(entity, new_entity);
 	copy_component_if_exists<component::RigidBody2D>(entity, new_entity);
 	copy_component_if_exists<component::BoxCollider2D>(entity, new_entity);
+	copy_component_if_exists<component::CircleCollider2D>(entity, new_entity);
 	copy_component_if_exists<component::NativeScript>(entity, new_entity);
 }
 
@@ -248,6 +251,22 @@ void Scene::on_runtime_start() {
 			fixture_def.restitutionThreshold = box_collider_2d.restitution_threshold;
 			body->CreateFixture(&fixture_def);
 		}
+
+		if (entity.has_component<component::CircleCollider2D>()) {
+			auto& circle_collider_2d = entity.get_component<component::CircleCollider2D>();
+
+			b2CircleShape circle_shape;
+			circle_shape.m_p.Set(circle_collider_2d.offset.x, circle_collider_2d.offset.y);
+			circle_shape.m_radius = circle_collider_2d.radius.in(au::meters);
+
+			b2FixtureDef fixture_def;
+			fixture_def.shape                = &circle_shape;
+			fixture_def.density              = circle_collider_2d.density;
+			fixture_def.friction             = circle_collider_2d.friction;
+			fixture_def.restitution          = circle_collider_2d.restitution;
+			fixture_def.restitutionThreshold = circle_collider_2d.restitution_threshold;
+			body->CreateFixture(&fixture_def);
+		}
 	}
 }
 
@@ -298,6 +317,11 @@ void Scene::on_component_added<component::RigidBody2D>(Entity entity, component:
 
 template <>
 void Scene::on_component_added<component::BoxCollider2D>(Entity entity, component::BoxCollider2D& component) {
+	// Do nothing
+}
+
+template <>
+void Scene::on_component_added<component::CircleCollider2D>(Entity entity, component::CircleCollider2D& component) {
 	// Do nothing
 }
 

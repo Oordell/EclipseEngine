@@ -144,4 +144,17 @@ struct BoxCollider2D {
 	void* runtime_fixture = nullptr;
 };
 
+struct CircleCollider2D {
+	glm::vec2 offset {0.F, 0.F};
+	au::QuantityF<au::Meters> radius {au::meters(0.5F)};
+
+	float density {1.F};
+	float friction {.5F};
+	float restitution {0.F};
+	float restitution_threshold {.5F};
+
+	// Storage for runtime
+	void* runtime_fixture = nullptr;
+};
+
 }  // namespace eclipse::component
