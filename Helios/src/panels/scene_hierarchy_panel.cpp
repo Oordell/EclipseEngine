@@ -284,7 +284,7 @@ void SceneHierarchyPanel::draw_circle_renderer_component(Entity entity) {
 		component.thickness = au::unos(thickness);
 
 		float fade = component.fade.in(au::unos);
-		ImGui::DragFloat("Face", &fade, 0.00025F, 0.F, 1.F);
+		ImGui::DragFloat("Fade", &fade, 0.00025F, 0.F, 1.F);
 		component.fade = au::unos(fade);
 	});
 }
