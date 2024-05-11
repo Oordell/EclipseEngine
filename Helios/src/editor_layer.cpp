@@ -98,6 +98,8 @@ void EditorLayer::on_update(au::QuantityF<au::Seconds> timestep) {
 		hovered_entity_ = pixel_value == -1 ? Entity() : Entity(static_cast<entt::entity>(pixel_value), active_scene_.get());
 	}
 
+	render_overlay();
+
 	frame_buffer_->unbind();
 }
 
@@ -191,7 +193,7 @@ void EditorLayer::on_imgui_render() {
 	scene_hierarchy_panel_.on_imgui_render();
 	content_browser_panel_.on_imgui_render();
 
-	ImGui::Begin("Settings");
+	ImGui::Begin("Stats");
 
 	std::string name = hovered_entity_ ? hovered_entity_.get_component<component::Tag>().tag : "None";
 	ImGui::Text("Hovered Entity: %s", name.c_str());
@@ -206,6 +208,10 @@ void EditorLayer::on_imgui_render() {
 
 	ImGui::Separator();
 
+	ImGui::End();
+
+	ImGui::Begin("Settings");
+	ImGui::Checkbox("Show physics colliders", &show_physics_colliders_);
 	ImGui::End();
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 {0.0F, 0.0F});
@@ -425,6 +431,47 @@ bool EditorLayer::on_mouse_button_pressed(MouseButtonPressedEvent& event) {
 		}
 	}
 	return false;
+}
+
+void EditorLayer::render_overlay() {
+	if (scene_state_ == SceneState::play) {
+		auto camera = active_scene_->get_primary_camera_entity();
+		Renderer2D::begin_scene({.projection = camera.get_component<component::Camera>().camera.get_projection(),
+		                         .transform  = camera.get_component<component::Transform>().get_transform()});
+	} else {
+		Renderer2D::begin_scene(editor_camera_);
+	}
+
+	if (show_physics_colliders_) {
+		auto box_view = active_scene_->get_view_of_all_entities_of_type<component::Transform, component::BoxCollider2D>();
+		for (auto entity : box_view) {
+			auto [transform, box] = box_view.get<component::Transform, component::BoxCollider2D>(entity);
+
+			glm::vec3 translation = transform.translation + glm::vec3(box.offset, 0.001F);
+			glm::vec3 scale       = transform.scale * glm::vec3(box.size * 2.F, 1.F);
+
+			auto trans = utils::create_transform(translation, transform.rotation, scale);
+
+			Renderer2D::draw_rectangle({.transform = trans, .color = {0.F, 1.F, 0.F, 1.F}});
+		}
+
+		auto circle_view =
+		    active_scene_->get_view_of_all_entities_of_type<component::Transform, component::CircleCollider2D>();
+		for (auto entity : circle_view) {
+			auto [transform, circle] = circle_view.get<component::Transform, component::CircleCollider2D>(entity);
+
+			glm::vec3 translation = transform.translation + glm::vec3(circle.offset, 0.001F);
+			glm::vec3 scale       = transform.scale * glm::vec3(circle.radius.in(au::meters) *2.F);
+
+			auto trans = utils::create_transform(translation, {0.F, 0.F, 0.F}, scale);
+
+			Renderer2D::draw_circle(
+			    {.transform = trans,
+			     .component = {.color = {0.F, 1.F, 0.F, 1.F}, .radius = circle.radius, .thickness = au::unos(0.05F)}});
+		}
+	}
+
+	Renderer2D::end_scene();
 }
 
 void EditorLayer::on_scene_play() {

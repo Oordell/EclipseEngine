@@ -257,7 +257,7 @@ void Scene::on_runtime_start() {
 
 			b2CircleShape circle_shape;
 			circle_shape.m_p.Set(circle_collider_2d.offset.x, circle_collider_2d.offset.y);
-			circle_shape.m_radius = circle_collider_2d.radius.in(au::meters);
+			circle_shape.m_radius = transform.scale.x * circle_collider_2d.radius.in(au::meters);
 
 			b2FixtureDef fixture_def;
 			fixture_def.shape                = &circle_shape;

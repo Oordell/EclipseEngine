@@ -26,6 +26,7 @@ private:
 	void serialize_scene(ref<Scene> scene, const std::filesystem::path& path);
 	bool on_key_pressed(KeyPressedEvent& event);
 	bool on_mouse_button_pressed(MouseButtonPressedEvent& event);
+	void render_overlay();
 	void on_scene_play();
 	void on_scene_stop();
 	void on_duplicate_entity();
@@ -57,6 +58,8 @@ private:
 
 	SceneHierarchyPanel scene_hierarchy_panel_;
 	ContentBrowserPanel content_browser_panel_;
+
+	bool show_physics_colliders_ {false};
 
 	int gizmo_type_ = -1;
 

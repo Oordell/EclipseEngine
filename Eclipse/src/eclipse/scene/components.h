@@ -73,10 +73,6 @@ struct SpriteRenderer {
 };
 
 struct CircleRenderer {
-	CircleRenderer()                      = default;
-	~CircleRenderer()                     = default;
-	CircleRenderer(const CircleRenderer&) = default;
-
 	glm::vec4 color {1.0F, 1.0F, 1.0F, 1.0F};
 	au::QuantityF<au::Meters> radius {au::meters(0.5F)};
 

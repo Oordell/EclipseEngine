@@ -37,6 +37,11 @@ public:
 
 	void duplicate_entity(Entity entity);
 
+	template <typename... Components>
+	auto get_view_of_all_entities_of_type() {
+		return registry_.view<Components...>();
+	}
+
 private:
 	void draw_sprite_and_circles() const;
 
