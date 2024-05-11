@@ -14,19 +14,15 @@ void ContentBrowserPanel::on_imgui_render() {
 		}
 	}
 
-	static float padding        = 12.5F;
-	static float thumbnail_size = 64.0F;
-	float cell_size             = padding + thumbnail_size;
-	float panel_width           = ImGui::GetContentRegionAvail().x;
-	int column_count            = std::max(1, static_cast<int>(panel_width / cell_size));
+	static constexpr float padding        = 12.5F;
+	static constexpr float thumbnail_size = 64.0F;
+	float cell_size                       = padding + thumbnail_size;
+	float panel_width                     = ImGui::GetContentRegionAvail().x;
+	int column_count                      = std::max(1, static_cast<int>(panel_width / cell_size));
 
 	ImGui::Columns(column_count, 0, false);
 
 	render_directory_content(thumbnail_size);
-
-	ImGui::Columns(1);
-	ImGui::SliderFloat("Thumbnail size", &thumbnail_size, 16.F, 512.F);
-	ImGui::SliderFloat("Padding", &padding, 0.F, 32.F);
 
 	ImGui::End();
 }
