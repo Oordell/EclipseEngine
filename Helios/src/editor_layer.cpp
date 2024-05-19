@@ -13,10 +13,8 @@ namespace eclipse {
 void EditorLayer::on_attach() {
 	EC_PROFILE_FUNCTION();
 
-	checkerboard_texture_   = Texture2D::create("assets/textures/Checkerboard.png");
-	olliver_ordell_texture_ = Texture2D::create("assets/textures/olliver_ordell_logo.png");
-	icon_play_              = Texture2D::create("resources/icons/play_button.png");
-	icon_stop_              = Texture2D::create("resources/icons/stop_button.png");
+	icon_play_ = Texture2D::create("resources/icons/play_button.png");
+	icon_stop_ = Texture2D::create("resources/icons/stop_button.png");
 
 	frame_buffer_ =
 	    FrameBuffer::create({.width       = units::pixels(1600),
@@ -186,12 +184,14 @@ void EditorLayer::on_imgui_render() {
 				save_scene_as();
 			}
 
-			if (ImGui::MenuItem("Duplicate entity", "Ctrl+D")) {
-				on_duplicate_entity();
-			}
-
 			if (ImGui::MenuItem("Exit")) {
 				Application::get().close();
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Edit")) {
+			if (ImGui::MenuItem("Duplicate entity", "Ctrl+D", nullptr, scene_hierarchy_panel_.get_selected_entity())) {
+				on_duplicate_entity();
 			}
 			ImGui::EndMenu();
 		}
@@ -543,7 +543,7 @@ void EditorLayer::calculate_framerate(const au::QuantityF<au::Seconds>& timestep
 	static std::chrono::steady_clock::time_point last_hit;
 	auto now = std::chrono::steady_clock::now();
 	if (std::chrono::duration_cast<std::chrono::microseconds>(now - last_hit).count() >=
-	    (update_rate.in(au::seconds) *1'000'000.0)) {
+	    (update_rate.in(au::seconds) *1'000'000.0F)) {
 		last_hit    = std::chrono::steady_clock::now();
 		frame_rate_ = static_cast<unsigned int>(1.0F / timestep.in(au::seconds));
 	}

@@ -43,8 +43,6 @@ private:
 	ref<Scene> editor_scene_;
 	std::filesystem::path editor_scene_path_;
 	Entity hovered_entity_;
-	ref<Texture2D> checkerboard_texture_;
-	ref<Texture2D> olliver_ordell_texture_;
 	ref<Texture2D> icon_play_;
 	ref<Texture2D> icon_stop_;
 	unsigned int frame_rate_ = 0;

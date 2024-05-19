@@ -13,7 +13,7 @@ public:
 
 	explicit operator std::string() const { return value_; }
 
-	const std::string& value() const { return value_; }
+	[[deprecated("Use std::filepath instead")]] const std::string& value() const { return value_; }
 
 private:
 	std::string value_ {};
