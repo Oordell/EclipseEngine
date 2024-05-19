@@ -178,16 +178,43 @@ void SceneHierarchyPanel::add_pop_up_option(Entity entity, const std::string& me
 
 void SceneHierarchyPanel::draw_transform_component(Entity entity) {
 	draw_component<component::Transform>("Transform", entity, [this](auto& component) {
-		draw_vec3_control({.values = component.translation, .label = "Translation"});
+		draw_drag_float(
+		    {.label               = "Translation",
+		     .drag_float_settings = {{.button_settings     = {.button_colors = BUTTON_COLORS_RED, .button_text = "X"},
+		                              .drag_float_settings = {.drag_float_tag = "##X", .value_speed = 0.1F}},
+		                             {.button_settings     = {.button_colors = BUTTON_COLORS_GREEN, .button_text = "Y"},
+		                              .drag_float_settings = {.drag_float_tag = "##Y", .value_speed = 0.1F}},
+		                             {.button_settings     = {.button_colors = BUTTON_COLORS_BLUE, .button_text = "Z"},
+		                              .drag_float_settings = {.drag_float_tag = "##Z", .value_speed = 0.1F}}}},
+		    component.translation);
+
 		glm::vec3 rotation = glm::degrees(component.rotation);
-		draw_vec3_control({.values = rotation, .label = "Rotation"});
+		draw_drag_float(
+		    {.label               = "Rotation",
+		     .drag_float_settings = {{.button_settings     = {.button_colors = BUTTON_COLORS_RED, .button_text = "X"},
+		                              .drag_float_settings = {.drag_float_tag = "##X", .value_speed = 0.1F}},
+		                             {.button_settings     = {.button_colors = BUTTON_COLORS_GREEN, .button_text = "Y"},
+		                              .drag_float_settings = {.drag_float_tag = "##Y", .value_speed = 0.1F}},
+		                             {.button_settings     = {.button_colors = BUTTON_COLORS_BLUE, .button_text = "Z"},
+		                              .drag_float_settings = {.drag_float_tag = "##Z", .value_speed = 0.1F}}}},
+		    rotation);
 		component.rotation = glm::radians(rotation);
-		draw_vec3_control({.values = component.scale, .label = "Scale", .reset_value = 1.0F});
+
+		draw_drag_float(
+		    {.label = "Scale",
+		     .drag_float_settings =
+		         {{.button_settings     = {.button_colors = BUTTON_COLORS_RED, .reset_value = 1.0F, .button_text = "X"},
+		           .drag_float_settings = {.drag_float_tag = "##X", .value_speed = 0.1F}},
+		          {.button_settings     = {.button_colors = BUTTON_COLORS_GREEN, .reset_value = 1.0F, .button_text = "Y"},
+		           .drag_float_settings = {.drag_float_tag = "##Y", .value_speed = 0.1F}},
+		          {.button_settings     = {.button_colors = BUTTON_COLORS_BLUE, .reset_value = 1.0F, .button_text = "Z"},
+		           .drag_float_settings = {.drag_float_tag = "##Z", .value_speed = 0.1F}}}},
+		    component.scale);
 	});
 }
 
 void SceneHierarchyPanel::draw_camera_component(Entity entity) {
-	draw_component<component::Camera>("Camera", entity, [](auto& component) {
+	draw_component<component::Camera>("Camera", entity, [this](auto& component) {
 		auto& camera = component.camera;
 
 		ImGui::Checkbox("Primary", &component.primary);
@@ -210,37 +237,45 @@ void SceneHierarchyPanel::draw_camera_component(Entity entity) {
 		}
 
 		if (camera.get_projection_type() == ProjectionType::perspective) {
-			float perspective_fov = camera.get_perspective_vertical_fov().in(au::degrees);
-			if (ImGui::DragFloat("Vertical FOV", &perspective_fov)) {
-				camera.set_perspective_vertical_fov(au::degrees(perspective_fov).as(au::radians));
-			}
-
+			float perspective_fov       = camera.get_perspective_vertical_fov().in(au::degrees);
 			float perspective_near_clip = camera.get_perspective_near_clip();
-			if (ImGui::DragFloat("Near", &perspective_near_clip)) {
-				camera.set_perspective_near_clip(perspective_near_clip);
-			}
+			float perspective_far_clip  = camera.get_perspective_far_clip();
 
-			float perspective_far_clip = camera.get_perspective_far_clip();
-			if (ImGui::DragFloat("Far", &perspective_far_clip)) {
-				camera.set_perspective_far_clip(perspective_far_clip);
-			}
+			draw_drag_float(
+			    {.label               = "Vertical FOV",
+			     .drag_float_settings = {{.button_settings     = {.reset_value = 45.F},
+			                              .drag_float_settings = {.value_speed = 0.1F, .value_min = 0.F, .value_max = 180.F}}}},
+			    perspective_fov);
+			draw_drag_float({.label               = "Near",
+			                 .drag_float_settings = {{.button_settings = {.reset_value = 0.01F}, .drag_float_settings = {}}}},
+			                perspective_near_clip);
+			draw_drag_float({.label               = "Far",
+			                 .drag_float_settings = {{.button_settings = {.reset_value = 1000.F}, .drag_float_settings = {}}}},
+			                perspective_far_clip);
+
+			camera.set_perspective_vertical_fov(au::degrees(perspective_fov).as(au::radians));
+			camera.set_perspective_near_clip(perspective_near_clip);
+			camera.set_perspective_far_clip(perspective_far_clip);
 		}
 
 		if (camera.get_projection_type() == ProjectionType::orthographic) {
-			float ortho_size = camera.get_orthographic_size();
-			if (ImGui::DragFloat("Size", &ortho_size)) {
-				camera.set_orthographic_size(ortho_size);
-			}
-
+			float ortho_size      = camera.get_orthographic_size();
 			float ortho_near_clip = camera.get_orthographic_near_clip();
-			if (ImGui::DragFloat("Near", &ortho_near_clip)) {
-				camera.set_orthographic_near_clip(ortho_near_clip);
-			}
+			float ortho_far_clip  = camera.get_orthographic_far_clip();
 
-			float ortho_far_clip = camera.get_orthographic_far_clip();
-			if (ImGui::DragFloat("Far", &ortho_far_clip)) {
-				camera.set_orthographic_far_clip(ortho_far_clip);
-			}
+			draw_drag_float({.label               = "Size",
+			                 .drag_float_settings = {{.button_settings = {.reset_value = 10.F}, .drag_float_settings = {}}}},
+			                ortho_size);
+			draw_drag_float({.label               = "Near",
+			                 .drag_float_settings = {{.button_settings = {.reset_value = -1.F}, .drag_float_settings = {}}}},
+			                ortho_near_clip);
+			draw_drag_float(
+			    {.label = "Far", .drag_float_settings = {{.button_settings = {.reset_value = 1.F}, .drag_float_settings = {}}}},
+			    ortho_far_clip);
+
+			camera.set_orthographic_size(ortho_size);
+			camera.set_orthographic_near_clip(ortho_near_clip);
+			camera.set_orthographic_far_clip(ortho_far_clip);
 		}
 
 		ImGui::Checkbox("Fixed Aspect Ratio", &component.fixed_aspect_ratio);
@@ -253,7 +288,7 @@ void SceneHierarchyPanel::draw_color_component(Entity entity) {
 }
 
 void SceneHierarchyPanel::draw_sprite_renderer_component(Entity entity) {
-	draw_component<component::SpriteRenderer>("Sprite Renderer", entity, [](auto& component) {
+	draw_component<component::SpriteRenderer>("Sprite Renderer", entity, [this](auto& component) {
 		ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
 
 		ImGui::Button("Texture", ImVec2(100.F, 0.F));
@@ -271,21 +306,35 @@ void SceneHierarchyPanel::draw_sprite_renderer_component(Entity entity) {
 			ImGui::EndDragDropTarget();
 		}
 
-		ImGui::DragFloat("Tiling Factor", &component.tiling_factor, 0.1F, 0.F, 100.F);
+		draw_drag_float(
+		    {.label               = "Tiling Factor",
+		     .drag_float_settings = {{.button_settings     = {.reset_value = 1.F},
+		                              .drag_float_settings = {.value_speed = 0.1F, .value_min = 0.F, .value_max = 100.F}}}},
+		    component.tiling_factor);
 	});
 }
 
 void SceneHierarchyPanel::draw_circle_renderer_component(Entity entity) {
-	draw_component<component::CircleRenderer>("Circle Renderer", entity, [](auto& component) {
+	draw_component<component::CircleRenderer>("Circle Renderer", entity, [this](auto& component) {
 		ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
 
 		float thickness = component.thickness.in(au::unos);
-		ImGui::DragFloat("Thickness", &thickness, 0.025F, 0.F, 1.F);
-		component.thickness = au::unos(thickness);
+		float fade      = component.fade.in(au::unos);
 
-		float fade = component.fade.in(au::unos);
-		ImGui::DragFloat("Fade", &fade, 0.00025F, 0.F, 1.F);
-		component.fade = au::unos(fade);
+		draw_drag_float(
+		    {.label               = "Thickness",
+		     .drag_float_settings = {{.button_settings     = {.reset_value = 1.F},
+		                              .drag_float_settings = {.value_speed = 0.025F, .value_min = 0.F, .value_max = 1.F}}}},
+		    thickness);
+
+		draw_drag_float(
+		    {.label               = "Fade",
+		     .drag_float_settings = {{.button_settings     = {.reset_value = 0.F},
+		                              .drag_float_settings = {.value_speed = 0.0025F, .value_min = 0.F, .value_max = 1.F}}}},
+		    fade);
+
+		component.thickness = au::unos(thickness);
+		component.fade      = au::unos(fade);
 	});
 }
 
@@ -312,19 +361,57 @@ void SceneHierarchyPanel::draw_rigid_body_2d_component(Entity entity) {
 }
 
 void SceneHierarchyPanel::draw_box_collider_2d_component(Entity entity) {
-	draw_component<component::BoxCollider2D>("Box Collider 2D", entity, [](auto& component) {
-		ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
-		ImGui::DragFloat2("Size", glm::value_ptr(component.size));
+	draw_component<component::BoxCollider2D>("Box Collider 2D", entity, [this](auto& component) {
+		draw_drag_float(
+		    {.label               = "Offset",
+		     .text_column_width   = units::pixels(70.F),
+		     .drag_float_settings = {{.button_settings     = {.button_colors = BUTTON_COLORS_RED, .button_text = "X"},
+		                              .drag_float_settings = {.drag_float_tag = "##X", .value_speed = 0.1F}},
+		                             {.button_settings     = {.button_colors = BUTTON_COLORS_GREEN, .button_text = "Y"},
+		                              .drag_float_settings = {.drag_float_tag = "##Y", .value_speed = 0.1F}}}},
+		    component.offset);
+
+		draw_drag_float(
+		    {.label             = "Size",
+		     .text_column_width = units::pixels(70.F),
+		     .drag_float_settings =
+		         {{.button_settings     = {.button_colors = BUTTON_COLORS_RED, .reset_value = 0.5F, .button_text = "Width"},
+		           .drag_float_settings = {.drag_float_tag = "##Width", .value_speed = 0.1F}},
+		          {.button_settings = {.button_colors = BUTTON_COLORS_GREEN, .reset_value = 0.5F, .button_text = "Height"},
+		           .drag_float_settings = {.drag_float_tag = "##Height", .value_speed = 0.1F}}}},
+		    component.size);
 
 		float density               = component.density.in(units::densities);
 		float friction              = component.friction.in(units::newtons);
 		float restitution           = component.restitution.in(au::unos);
 		float restitution_threshold = component.restitution_threshold.in(au::unos);
 
-		ImGui::DragFloat("Density", &density, .01F, .0F, 1.F);
-		ImGui::DragFloat("Friction", &friction, .01F, .0F, 1.F);
-		ImGui::DragFloat("Restitution", &restitution, .01F, .0F, 1.F);
-		ImGui::DragFloat("Restitution Threshold", &restitution_threshold, .01F, .0F);
+		draw_drag_float(
+		    {.label               = "Density",
+		     .text_column_width   = units::pixels(160.F),
+		     .drag_float_settings = {{.button_settings     = {.reset_value = 1.F},
+		                              .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F, .value_max = 1.F}}}},
+		    density);
+
+		draw_drag_float(
+		    {.label               = "Friction",
+		     .text_column_width   = units::pixels(160.F),
+		     .drag_float_settings = {{.button_settings     = {.reset_value = 0.5F},
+		                              .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F, .value_max = 1.F}}}},
+		    friction);
+
+		draw_drag_float(
+		    {.label               = "Restitution",
+		     .text_column_width   = units::pixels(160.F),
+		     .drag_float_settings = {{.button_settings     = {.reset_value = 0.F},
+		                              .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F, .value_max = 1.F}}}},
+		    restitution);
+
+		draw_drag_float({.label               = "Restitution Threshold",
+		                 .text_column_width   = units::pixels(160.F),
+		                 .drag_float_settings = {{.button_settings     = {.reset_value = 0.5F},
+		                                          .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F}}}},
+		                restitution_threshold);
 
 		component.density               = units::densities(density);
 		component.friction              = units::newtons(friction);
@@ -334,8 +421,14 @@ void SceneHierarchyPanel::draw_box_collider_2d_component(Entity entity) {
 }
 
 void SceneHierarchyPanel::draw_circle_collider_2d_component(Entity entity) {
-	draw_component<component::CircleCollider2D>("Circle Collider 2D", entity, [](auto& component) {
-		ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
+	draw_component<component::CircleCollider2D>("Circle Collider 2D", entity, [this](auto& component) {
+		draw_drag_float(
+		    {.label               = "Offset",
+		     .drag_float_settings = {{.button_settings     = {.button_colors = BUTTON_COLORS_RED, .button_text = "X"},
+		                              .drag_float_settings = {.drag_float_tag = "##X", .value_speed = 0.1F}},
+		                             {.button_settings     = {.button_colors = BUTTON_COLORS_GREEN, .button_text = "Y"},
+		                              .drag_float_settings = {.drag_float_tag = "##Y", .value_speed = 0.1F}}}},
+		    component.offset);
 
 		float radius                = component.radius.in(au::meters);
 		float density               = component.density.in(units::densities);
@@ -343,11 +436,38 @@ void SceneHierarchyPanel::draw_circle_collider_2d_component(Entity entity) {
 		float restitution           = component.restitution.in(au::unos);
 		float restitution_threshold = component.restitution_threshold.in(au::unos);
 
-		ImGui::DragFloat("Radius", &radius);
-		ImGui::DragFloat("Density", &density, .01F, .0F, 1.F);
-		ImGui::DragFloat("Friction", &friction, .01F, .0F, 1.F);
-		ImGui::DragFloat("Restitution", &restitution, .01F, .0F, 1.F);
-		ImGui::DragFloat("Restitution Threshold", &restitution_threshold, .01F, .0F);
+		draw_drag_float({.label               = "Radius",
+		                 .text_column_width   = units::pixels(160.F),
+		                 .drag_float_settings = {{.button_settings     = {.reset_value = 0.5F},
+		                                          .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.0000001F}}}},
+		                radius);
+
+		draw_drag_float(
+		    {.label               = "Density",
+		     .text_column_width   = units::pixels(160.F),
+		     .drag_float_settings = {{.button_settings     = {.reset_value = 1.F},
+		                              .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F, .value_max = 1.F}}}},
+		    density);
+
+		draw_drag_float(
+		    {.label               = "Friction",
+		     .text_column_width   = units::pixels(160.F),
+		     .drag_float_settings = {{.button_settings     = {.reset_value = 0.5F},
+		                              .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F, .value_max = 1.F}}}},
+		    friction);
+
+		draw_drag_float(
+		    {.label               = "Restitution",
+		     .text_column_width   = units::pixels(160.F),
+		     .drag_float_settings = {{.button_settings     = {.reset_value = 0.F},
+		                              .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F, .value_max = 1.F}}}},
+		    restitution);
+
+		draw_drag_float({.label               = "Restitution Threshold",
+		                 .text_column_width   = units::pixels(160.F),
+		                 .drag_float_settings = {{.button_settings     = {.reset_value = 0.5F},
+		                                          .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F}}}},
+		                restitution_threshold);
 
 		component.radius                = au::meters(radius);
 		component.density               = units::densities(density);
@@ -357,80 +477,41 @@ void SceneHierarchyPanel::draw_circle_collider_2d_component(Entity entity) {
 	});
 }
 
-void SceneHierarchyPanel::draw_vec3_control(const Vec3Controls& controls) {
+ImFont* SceneHierarchyPanel::get_font(const std::string& font_name) {
 	ImGuiIO& io                      = ImGui::GetIO();
 	auto [font_was_found, font_data] = fonts::FontLibrary::get_font_index_by_name("Roboto-Bold");
 	if (!font_was_found) {
 		EC_FATAL("The font was not found!");
 	}
-	ImFont* bold_font = io.Fonts->Fonts[font_data.index];
+	return io.Fonts->Fonts[font_data.index];
+}
 
-	ImGui::PushID(controls.label.c_str());
-	ImGui::Columns(2);
+ImVec2 SceneHierarchyPanel::get_button_size(const std::string& button_text) {
+	float line_height              = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0F;
+	auto [text_width, text_height] = ImGui::CalcTextSize(button_text.c_str());
+	return {line_height + text_width - 7.F, line_height};
+}
 
-	ImGui::SetColumnWidth(0, controls.column_width);
-	ImGui::Text(controls.label.c_str());
-	ImGui::NextColumn();
-
-	ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2 {4.0F, 2.0F});
-
-	float line_height  = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0F;
-	ImVec2 button_size = {line_height + 3.0F, line_height};
-
-	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 {0.8F, 0.1F, 0.15F, 1.0F});
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 {0.9F, 0.2F, 0.2F, 1.0F});
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 {0.8F, 0.1F, 0.15F, 1.0F});
-	ImGui::PushFont(bold_font);
+void SceneHierarchyPanel::draw_labeled_drag_float(const ButtonAndDragFloatSettings& settings, float& value) {
+	ImGui::PushStyleColor(ImGuiCol_Button, settings.button_and_float_settings.button_settings.button_colors.standard);
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
+	                      settings.button_and_float_settings.button_settings.button_colors.hovered);
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings.button_and_float_settings.button_settings.button_colors.active);
+	ImGui::PushFont(settings.font);
 	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
-	if (ImGui::Button("X", button_size)) {
-		controls.values.x = controls.reset_value;
+	if (ImGui::Button(settings.button_and_float_settings.button_settings.button_text.c_str(), settings.button_size)) {
+		value = settings.button_and_float_settings.button_settings.reset_value;
 	}
 	ImGui::PopFont();
 	ImGui::PopStyleVar(1);
 	ImGui::PopStyleColor(3);
 
 	ImGui::SameLine();
-	ImGui::DragFloat("##X", &controls.values.x, 0.1F, 0.0F, 0.0F, "%.2f");
-	ImGui::PopItemWidth();
-	ImGui::SameLine();
-
-	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 {0.2F, 0.7F, 0.2F, 1.0F});
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 {0.3F, 0.8F, 0.3F, 1.0F});
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 {0.2F, 0.7F, 0.2F, 1.0F});
-	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
-	ImGui::PushFont(bold_font);
-	if (ImGui::Button("Y", button_size)) {
-		controls.values.y = controls.reset_value;
-	}
-	ImGui::PopFont();
-	ImGui::PopStyleVar(1);
-	ImGui::PopStyleColor(3);
-
-	ImGui::SameLine();
-	ImGui::DragFloat("##Y", &controls.values.y, 0.1F, 0.0F, 0.0F, "%.2f");
-	ImGui::PopItemWidth();
-	ImGui::SameLine();
-
-	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4 {0.1F, 0.25F, 0.8F, 1.0F});
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4 {0.2F, 0.35F, 0.9F, 1.0F});
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4 {0.1F, 0.25F, 0.8F, 1.0F});
-	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
-	ImGui::PushFont(bold_font);
-	if (ImGui::Button("Z", button_size)) {
-		controls.values.z = controls.reset_value;
-	}
-	ImGui::PopFont();
-	ImGui::PopStyleVar(1);
-	ImGui::PopStyleColor(3);
-
-	ImGui::SameLine();
-	ImGui::DragFloat("##Z", &controls.values.z, 0.1F, 0.0F, 0.0F, "%.2f");
-	ImGui::PopItemWidth();
-
-	ImGui::PopStyleVar();
-	ImGui::Columns(1);
-	ImGui::PopID();
+	ImGui::DragFloat(settings.button_and_float_settings.drag_float_settings.drag_float_tag.c_str(), &value,
+	                 settings.button_and_float_settings.drag_float_settings.value_speed,
+	                 settings.button_and_float_settings.drag_float_settings.value_min,
+	                 settings.button_and_float_settings.drag_float_settings.value_max,
+	                 settings.button_and_float_settings.drag_float_settings.value_format.c_str());
 }
 
 }  // namespace eclipse
