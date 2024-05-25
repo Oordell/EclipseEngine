@@ -35,6 +35,7 @@ void EditorLayer::on_attach() {
 	}
 
 	scene_hierarchy_panel_.set_context(active_scene_);
+	Renderer2D::set_line_width(units::pixels(4.F));
 }
 
 void EditorLayer::on_detach() { EC_PROFILE_FUNCTION(); }
@@ -110,7 +111,9 @@ void EditorLayer::on_update(au::QuantityF<au::Seconds> timestep) {
 
 void EditorLayer::on_event(Event& event) {
 	camera_controller_.on_event(event);
-	editor_camera_.on_event(event);
+	if (scene_state_ == SceneState::edit) {
+		editor_camera_.on_event(event);
+	}
 
 	EventDispatcher dispatcher(event);
 	dispatcher.dispatch<KeyPressedEvent>(EC_BIND_EVENT_FN(EditorLayer::on_key_pressed));
@@ -227,6 +230,7 @@ void EditorLayer::on_imgui_render() {
 
 	ImGui::Begin("Settings");
 	ImGui::Checkbox("Show physics colliders", &show_physics_colliders_);
+	ImGui::Checkbox("Highlight selected entity", &outline_selected_entity_);
 	ImGui::End();
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2 {0.0F, 0.0F});
@@ -461,6 +465,7 @@ void EditorLayer::render_overlay() {
 	}
 
 	if (show_physics_colliders_) {
+		glm::vec4 outline_color = {0.F, 1.F, 0.F, 1.F};
 		auto box_view = active_scene_->get_view_of_all_entities_of_type<component::Transform, component::BoxCollider2D>();
 		for (auto entity : box_view) {
 			auto [transform, box] = box_view.get<component::Transform, component::BoxCollider2D>(entity);
@@ -470,7 +475,7 @@ void EditorLayer::render_overlay() {
 
 			auto trans = utils::create_transform(translation, transform.rotation, scale);
 
-			Renderer2D::draw_rectangle({.transform = trans, .color = {0.F, 1.F, 0.F, 1.F}});
+			Renderer2D::draw_rectangle({.transform = trans, .color = outline_color});
 		}
 
 		auto circle_view =
@@ -485,7 +490,26 @@ void EditorLayer::render_overlay() {
 
 			Renderer2D::draw_circle(
 			    {.transform = trans,
-			     .component = {.color = {0.F, 1.F, 0.F, 1.F}, .radius = circle.radius, .thickness = au::unos(0.05F)}});
+			     .component = {.color = outline_color, .radius = circle.radius, .thickness = au::unos(0.05F)}});
+		}
+	}
+
+	if (outline_selected_entity_) {
+		if (Entity selected_entity = scene_hierarchy_panel_.get_selected_entity()) {
+			auto transform_component = selected_entity.get_component<component::Transform>();
+			transform_component.translation.z += 0.002F;
+
+			glm::vec4 outline_color = {1.F, 0.5F, 0.F, 1.F};
+
+			if (selected_entity.has_component<component::SpriteRenderer>() ||
+			    selected_entity.has_component<component::Color>()) {
+				Renderer2D::draw_rectangle({.transform = transform_component.get_transform(), .color = outline_color});
+			} else if (selected_entity.has_component<component::CircleRenderer>()) {
+				auto circle_component = selected_entity.get_component<component::CircleRenderer>();
+				Renderer2D::draw_circle(
+				    {.transform = transform_component.get_transform(),
+				     .component = {.color = outline_color, .radius = circle_component.radius, .thickness = au::unos(0.05F)}});
+			}
 		}
 	}
 

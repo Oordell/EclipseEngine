@@ -60,6 +60,7 @@ private:
 	ContentBrowserPanel content_browser_panel_;
 
 	bool show_physics_colliders_ {false};
+	bool outline_selected_entity_ {true};
 
 	int gizmo_type_ = -1;
 
