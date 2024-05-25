@@ -13,8 +13,9 @@ namespace eclipse {
 void EditorLayer::on_attach() {
 	EC_PROFILE_FUNCTION();
 
-	icon_play_ = Texture2D::create("resources/icons/play_button.png");
-	icon_stop_ = Texture2D::create("resources/icons/stop_button.png");
+	icon_play_     = Texture2D::create("resources/icons/play_button.png");
+	icon_simulate_ = Texture2D::create("resources/icons/simulate_button.png");
+	icon_stop_     = Texture2D::create("resources/icons/stop_button.png");
 
 	frame_buffer_ =
 	    FrameBuffer::create({.width       = units::pixels(1600),
@@ -22,7 +23,8 @@ void EditorLayer::on_attach() {
 	                         .attachments = {FramebufferTextureFormat::rgba8, FramebufferTextureFormat::red_integer,
 	                                         FramebufferTextureFormat::depth}});
 
-	active_scene_ = make_ref<Scene>();
+	editor_scene_ = make_ref<Scene>();
+	active_scene_ = editor_scene_;
 
 	auto command_line_args = Application::get().get_command_line_args();
 	if (command_line_args.count > 1) {
@@ -74,6 +76,11 @@ void EditorLayer::on_update(au::QuantityF<au::Seconds> timestep) {
 	switch (scene_state_) {
 		case SceneState::edit: {
 			active_scene_->on_update_editor(timestep, editor_camera_);
+			break;
+		}
+		case SceneState::simulate: {
+			editor_camera_.on_update(timestep);
+			active_scene_->on_update_simulation(timestep, editor_camera_);
 			break;
 		}
 		case SceneState::play: {
@@ -444,6 +451,9 @@ bool EditorLayer::on_mouse_button_pressed(MouseButtonPressedEvent& event) {
 void EditorLayer::render_overlay() {
 	if (scene_state_ == SceneState::play) {
 		auto camera = active_scene_->get_primary_camera_entity();
+		if (!camera) {
+			return;
+		}
 		Renderer2D::begin_scene({.projection = camera.get_component<component::Camera>().camera.get_projection(),
 		                         .transform  = camera.get_component<component::Transform>().get_transform()});
 	} else {
@@ -483,6 +493,9 @@ void EditorLayer::render_overlay() {
 }
 
 void EditorLayer::on_scene_play() {
+	if (scene_state_ == SceneState::simulate) {
+		on_scene_stop();
+	}
 	scene_state_ = SceneState::play;
 
 	active_scene_ = Scene::copy(editor_scene_);
@@ -491,7 +504,23 @@ void EditorLayer::on_scene_play() {
 	scene_hierarchy_panel_.set_context(active_scene_);
 }
 
+void EditorLayer::on_scene_simulate() {
+	if (scene_state_ == SceneState::play) {
+		on_scene_stop();
+	}
+	scene_state_  = SceneState::simulate;
+	active_scene_ = Scene::copy(editor_scene_);
+	active_scene_->on_simulation_start();
+	scene_hierarchy_panel_.set_context(active_scene_);
+}
+
 void EditorLayer::on_scene_stop() {
+	if (scene_state_ == SceneState::play) {
+		active_scene_->on_runtime_stop();
+	} else if (scene_state_ == SceneState::simulate) {
+		active_scene_->on_simulation_stop();
+	}
+
 	scene_state_ = SceneState::edit;
 
 	active_scene_->on_runtime_stop();
@@ -521,16 +550,41 @@ void EditorLayer::draw_ui_toolbar() {
 
 	ImGui::Begin("##toolbar", nullptr,
 	             ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-	float icon_size = ImGui::GetWindowHeight() - 4.F;
-	auto icon       = scene_state_ == SceneState::edit ? icon_play_ : icon_stop_;
-	auto id         = static_cast<uint64_t>(icon->get_renderer_id());
+	float icon_size    = ImGui::GetWindowHeight() - 4.F;
+	auto play_icon     = (scene_state_ != SceneState::play) ? icon_play_ : icon_stop_;
+	auto simulate_icon = (scene_state_ != SceneState::simulate) ? icon_simulate_ : icon_stop_;
+	auto play_id       = static_cast<uint64_t>(play_icon->get_renderer_id());
+	auto simulate_id   = static_cast<uint64_t>(simulate_icon->get_renderer_id());
 	ImGui::SameLine((ImGui::GetWindowContentRegionMax().x * .5F) - (icon_size * .5F));
-	if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(id), ImVec2(icon_size, icon_size), ImVec2(0, 0), ImVec2(1, 1),
-	                       0)) {
-		if (scene_state_ == SceneState::edit) {
-			on_scene_play();
-		} else if (scene_state_ == SceneState::play) {
-			on_scene_stop();
+	if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(play_id), ImVec2(icon_size, icon_size), ImVec2(0, 0),
+	                       ImVec2(1, 1), 0)) {
+		switch (scene_state_) {
+			case SceneState::edit:
+				[[fallthrough]];
+			case SceneState::simulate: {
+				on_scene_play();
+				break;
+			}
+			case SceneState::play: {
+				on_scene_stop();
+				break;
+			}
+		}
+	}
+	ImGui::SameLine();
+	if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(simulate_id), ImVec2(icon_size, icon_size), ImVec2(0, 0),
+	                       ImVec2(1, 1), 0)) {
+		switch (scene_state_) {
+			case SceneState::edit:
+				[[fallthrough]];
+			case SceneState::play: {
+				on_scene_simulate();
+				break;
+			}
+			case SceneState::simulate: {
+				on_scene_stop();
+				break;
+			}
 		}
 	}
 	ImGui::PopStyleVar(2);

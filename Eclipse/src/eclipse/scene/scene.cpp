@@ -1,7 +1,6 @@
 #include "ecpch.h"
 #include "scene.h"
-#include "eclipse/scene/components.h"
-#include "eclipse/scene/native_script_component.h"
+#include "eclipse/scene/component_concept.h"
 #include "eclipse/renderer/renderer_2d.h"
 #include "eclipse/scene/entity.h"
 
@@ -33,32 +32,7 @@ static b2BodyType eclipse_rigid_body_2d_type_to_box_2d_type(component::RigidBody
 	}
 }
 
-Scene::~Scene() { delete physics_world_; }
-
-Entity Scene::create_entity_from_uuid(const UUID& id, const std::string& tag) {
-	Entity e {registry_.create(), this};
-	e.add_component<component::ID>(id);
-	e.add_component<component::Transform>();
-	e.add_component<component::Tag>(tag.empty() ? "Entity" : tag);
-	return e;
-}
-
-Entity Scene::create_entity(const std::string& tag) { return create_entity_from_uuid(UUID(), tag); }
-
-void Scene::destroy_entity(Entity entity) { registry_.destroy(entity); }
-
-Entity Scene::get_primary_camera_entity() {
-	auto view = registry_.view<component::Camera>();
-	for (auto entity : view) {
-		const auto& camera = view.get<component::Camera>(entity);
-		if (camera.primary) {
-			return {entity, this};
-		}
-	}
-	return {};
-}
-
-template <typename Component>
+template <component::IsComponent Component>
 static void copy_component(entt::registry& destination, entt::registry& source,
                            const std::unordered_map<UUID, entt::entity>& entt_map) {
 	auto view = source.view<Component>();
@@ -73,11 +47,98 @@ static void copy_component(entt::registry& destination, entt::registry& source,
 	}
 }
 
-template <typename Component>
+template <component::IsComponent Component>
 static void copy_component_if_exists(Entity source, Entity destination) {
 	if (source.has_component<Component>()) {
 		destination.add_or_replace_component<Component>(source.get_component<Component>());
 	}
+}
+
+Scene::~Scene() { delete physics_world_; }
+
+void Scene::on_update_editor(au::QuantityF<au::Seconds> timestep, EditorCamera& camera) { render_scene(camera); }
+
+void Scene::on_update_runtime(au::QuantityF<au::Seconds> timestep) {
+	// Update scripts
+	registry_.view<component::NativeScript>().each([=](auto entity, auto& nsc) {
+		if (nsc.instance == nullptr) {
+			nsc.instance          = nsc.instantiate_script_func();
+			nsc.instance->entity_ = Entity {entity, this};
+			nsc.instance->on_create();
+		}
+		nsc.instance->on_update(timestep);
+	});
+
+	update_2d_physics(timestep);
+
+	// Render 2D:
+	Camera* main_camera = nullptr;
+	glm::mat4 camera_transform;
+
+	auto camera_view = registry_.view<component::Transform, component::Camera>();
+	for (auto entity : camera_view) {
+		auto [transform, camera] = camera_view.get<component::Transform, component::Camera>(entity);
+		if (camera.primary) {
+			main_camera      = &camera.camera;
+			camera_transform = transform.get_transform();
+			break;
+		}
+	}
+
+	if (main_camera != nullptr) {
+		Renderer2D::begin_scene({.projection = main_camera->get_projection(), .transform = camera_transform});
+
+		draw_sprite_and_circles();
+
+		Renderer2D::end_scene();
+	}
+}
+
+void Scene::on_update_simulation(au::QuantityF<au::Seconds> timestep, EditorCamera& camera) {
+	update_2d_physics(timestep);
+	render_scene(camera);
+}
+
+void Scene::on_viewport_resize(const WindowSize& new_size) {
+	viewport_size_   = new_size;
+	auto camera_view = registry_.view<component::Camera>();
+	for (auto entity : camera_view) {
+		auto& camera = camera_view.get<component::Camera>(entity);
+		if (!camera.fixed_aspect_ratio) {
+			camera.camera.set_viewport_size(viewport_size_);
+		}
+	}
+}
+
+void Scene::on_runtime_start() { init_2d_physics(); }
+
+void Scene::on_runtime_stop() { stop_2d_physics(); }
+
+void Scene::on_simulation_start() { init_2d_physics(); }
+
+void Scene::on_simulation_stop() { stop_2d_physics(); }
+
+Entity Scene::create_entity(const std::string& tag) { return create_entity_from_uuid(UUID(), tag); }
+
+Entity Scene::create_entity_from_uuid(const UUID& id, const std::string& tag) {
+	Entity e {registry_.create(), this};
+	e.add_component<component::ID>(id);
+	e.add_component<component::Transform>();
+	e.add_component<component::Tag>(tag.empty() ? "Entity" : tag);
+	return e;
+}
+
+void Scene::destroy_entity(Entity entity) { registry_.destroy(entity); }
+
+Entity Scene::get_primary_camera_entity() {
+	auto view = registry_.view<component::Camera>();
+	for (auto entity : view) {
+		const auto& camera = view.get<component::Camera>(entity);
+		if (camera.primary) {
+			return {entity, this};
+		}
+	}
+	return {};
 }
 
 ref<Scene> Scene::copy(ref<Scene> other) {
@@ -123,104 +184,7 @@ void Scene::duplicate_entity(Entity entity) {
 	copy_component_if_exists<component::NativeScript>(entity, new_entity);
 }
 
-void Scene::draw_sprite_and_circles() const {
-	auto color_group = registry_.view<component::Transform, component::Color>();
-	for (auto entity : color_group) {
-		const auto& [trans, color] = color_group.get<component::Transform, component::Color>(entity);
-		Renderer2D::draw_sprite({.transform = trans.get_transform(),
-		                         .component = component::SpriteRenderer(color.color),
-		                         .entity_id = static_cast<int>(entity)});
-	}
-
-	auto sprite_group = registry_.view<component::Transform, component::SpriteRenderer>();
-	for (auto entity : sprite_group) {
-		const auto& [trans, sprite_renderer] = sprite_group.get<component::Transform, component::SpriteRenderer>(entity);
-		Renderer2D::draw_sprite(
-		    {.transform = trans.get_transform(), .component = sprite_renderer, .entity_id = static_cast<int>(entity)});
-	}
-
-	auto circle_view = registry_.view<component::Transform, component::CircleRenderer>();
-	for (auto entity : circle_view) {
-		const auto& [trans, circle_renderer] = circle_view.get<component::Transform, component::CircleRenderer>(entity);
-
-		Renderer2D::draw_circle(
-		    {.transform = trans.get_transform(), .component = circle_renderer, .entity_id = static_cast<int>(entity)});
-	}
-}
-
-void Scene::on_update_editor(au::QuantityF<au::Seconds> timestep, EditorCamera& camera) {
-	Renderer2D::begin_scene(camera);
-
-	draw_sprite_and_circles();
-
-	Renderer2D::end_scene();
-}
-
-void Scene::on_update_runtime(au::QuantityF<au::Seconds> timestep) {
-	// Update scripts
-	registry_.view<component::NativeScript>().each([=](auto entity, auto& nsc) {
-		if (nsc.instance == nullptr) {
-			nsc.instance          = nsc.instantiate_script_func();
-			nsc.instance->entity_ = Entity {entity, this};
-			nsc.instance->on_create();
-		}
-		nsc.instance->on_update(timestep);
-	});
-
-	// Physics
-	constexpr uint32_t velocity_iterations = 6;
-	constexpr uint32_t position_iterations = 2;
-	physics_world_->Step(timestep.in(au::seconds), velocity_iterations, position_iterations);
-
-	// Get transform from box2d
-	auto view = registry_.view<component::RigidBody2D>();
-	for (auto e : view) {
-		Entity entity {e, this};
-		auto& transform     = entity.get_component<component::Transform>();
-		auto& rigid_body_2d = entity.get_component<component::RigidBody2D>();
-
-		b2Body* body            = reinterpret_cast<b2Body*>(rigid_body_2d.runtime_body);
-		const auto& position    = body->GetPosition();
-		transform.translation.x = position.x;
-		transform.translation.y = position.y;
-		transform.rotation.z    = body->GetAngle();
-	}
-
-	// Render 2D:
-	Camera* main_camera = nullptr;
-	glm::mat4 camera_transform;
-
-	auto camera_view = registry_.view<component::Transform, component::Camera>();
-	for (auto entity : camera_view) {
-		auto [transform, camera] = camera_view.get<component::Transform, component::Camera>(entity);
-		if (camera.primary) {
-			main_camera      = &camera.camera;
-			camera_transform = transform.get_transform();
-			break;
-		}
-	}
-
-	if (main_camera != nullptr) {
-		Renderer2D::begin_scene({.projection = main_camera->get_projection(), .transform = camera_transform});
-
-		draw_sprite_and_circles();
-
-		Renderer2D::end_scene();
-	}
-}
-
-void Scene::on_viewport_resize(const WindowSize& new_size) {
-	viewport_size_   = new_size;
-	auto camera_view = registry_.view<component::Camera>();
-	for (auto entity : camera_view) {
-		auto& camera = camera_view.get<component::Camera>(entity);
-		if (!camera.fixed_aspect_ratio) {
-			camera.camera.set_viewport_size(viewport_size_);
-		}
-	}
-}
-
-void Scene::on_runtime_start() {
+void Scene::init_2d_physics() {
 	physics_world_ = new b2World({0.F, -9.8F});
 	auto view      = registry_.view<component::RigidBody2D>();
 	for (auto e : view) {
@@ -270,9 +234,62 @@ void Scene::on_runtime_start() {
 	}
 }
 
-void Scene::on_runtime_stop() {
+void Scene::update_2d_physics(const au::QuantityF<au::Seconds>& timestep) {
+	constexpr uint32_t velocity_iterations = 6;
+	constexpr uint32_t position_iterations = 2;
+	physics_world_->Step(timestep.in(au::seconds), velocity_iterations, position_iterations);
+
+	// Get transform from box2d
+	auto view = registry_.view<component::RigidBody2D>();
+	for (auto e : view) {
+		Entity entity {e, this};
+		auto& transform     = entity.get_component<component::Transform>();
+		auto& rigid_body_2d = entity.get_component<component::RigidBody2D>();
+
+		b2Body* body            = reinterpret_cast<b2Body*>(rigid_body_2d.runtime_body);
+		const auto& position    = body->GetPosition();
+		transform.translation.x = position.x;
+		transform.translation.y = position.y;
+		transform.rotation.z    = body->GetAngle();
+	}
+}
+
+void Scene::stop_2d_physics() {
 	delete physics_world_;
 	physics_world_ = nullptr;
+}
+
+void Scene::render_scene(EditorCamera& camera) {
+	Renderer2D::begin_scene(camera);
+
+	draw_sprite_and_circles();
+
+	Renderer2D::end_scene();
+}
+
+void Scene::draw_sprite_and_circles() const {
+	auto color_group = registry_.view<component::Transform, component::Color>();
+	for (auto entity : color_group) {
+		const auto& [trans, color] = color_group.get<component::Transform, component::Color>(entity);
+		Renderer2D::draw_sprite({.transform = trans.get_transform(),
+		                         .component = component::SpriteRenderer(color.color),
+		                         .entity_id = static_cast<int>(entity)});
+	}
+
+	auto sprite_group = registry_.view<component::Transform, component::SpriteRenderer>();
+	for (auto entity : sprite_group) {
+		const auto& [trans, sprite_renderer] = sprite_group.get<component::Transform, component::SpriteRenderer>(entity);
+		Renderer2D::draw_sprite(
+		    {.transform = trans.get_transform(), .component = sprite_renderer, .entity_id = static_cast<int>(entity)});
+	}
+
+	auto circle_view = registry_.view<component::Transform, component::CircleRenderer>();
+	for (auto entity : circle_view) {
+		const auto& [trans, circle_renderer] = circle_view.get<component::Transform, component::CircleRenderer>(entity);
+
+		Renderer2D::draw_circle(
+		    {.transform = trans.get_transform(), .component = circle_renderer, .entity_id = static_cast<int>(entity)});
+	}
 }
 
 template <typename Component>

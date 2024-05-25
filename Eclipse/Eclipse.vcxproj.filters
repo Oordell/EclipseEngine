@@ -111,6 +111,12 @@
     <ClInclude Include="src\eclipse\common_types\transform.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\common_types\units\densities.h">
+      <Filter>src\eclipse\common_types\units</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\common_types\units\newtons.h">
+      <Filter>src\eclipse\common_types\units</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\common_types\units\pixel.h">
       <Filter>src\eclipse\common_types\units</Filter>
     </ClInclude>
@@ -148,6 +154,9 @@
       <Filter>src\eclipse\core</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\core\timer.h">
+      <Filter>src\eclipse\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\core\uuid.h">
       <Filter>src\eclipse\core</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\core\window.h">
@@ -249,6 +258,9 @@
     <ClInclude Include="src\eclipse\scene\entity.h">
       <Filter>src\eclipse\scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\scene\native_script_component.h">
+      <Filter>src\eclipse\scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\scene\particle_system.h">
       <Filter>src\eclipse\scene</Filter>
     </ClInclude>
@@ -337,6 +349,9 @@
       <Filter>vendor\glm\glm\detail</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\glm\detail\compute_common.hpp">
+      <Filter>vendor\glm\glm\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\glm\glm\detail\compute_vector_decl.hpp">
       <Filter>vendor\glm\glm\detail</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\glm\detail\compute_vector_relational.hpp">
@@ -495,7 +510,7 @@
     <ClInclude Include="vendor\glm\glm\detail\type_vec4.inl">
       <Filter>vendor\glm\glm\detail</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\glm\glm\detail\type_vec4_simd.inl">
+    <ClInclude Include="vendor\glm\glm\detail\type_vec_simd.inl">
       <Filter>vendor\glm\glm\detail</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\glm\exponential.hpp">
@@ -1242,7 +1257,7 @@
     <ClInclude Include="vendor\glm\glm\gtx\fast_trigonometry.inl">
       <Filter>vendor\glm\glm\gtx</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\glm\glm\gtx\float_notmalize.inl">
+    <ClInclude Include="vendor\glm\glm\gtx\float_normalize.inl">
       <Filter>vendor\glm\glm\gtx</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\glm\gtx\functions.hpp">
@@ -1366,9 +1381,6 @@
       <Filter>vendor\glm\glm\gtx</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\glm\gtx\number_precision.hpp">
-      <Filter>vendor\glm\glm\gtx</Filter>
-    </ClInclude>
-    <ClInclude Include="vendor\glm\glm\gtx\number_precision.inl">
       <Filter>vendor\glm\glm\gtx</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\glm\gtx\optimum_pow.hpp">
@@ -1569,16 +1581,16 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\core\uuid.h" />
-    <ClInclude Include="src\eclipse\scene\native_script_component.h" />
-    <ClInclude Include="src\eclipse\common_types\units\newtons.h" />
-    <ClInclude Include="src\eclipse\common_types\units\densities.h" />
+    <ClInclude Include="src\eclipse\scene\component_concept.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\core\application.cpp">
       <Filter>src\eclipse\core</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\core\log.cpp">
+      <Filter>src\eclipse\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eclipse\core\uuid.cpp">
       <Filter>src\eclipse\core</Filter>
     </ClCompile>
     <ClCompile Include="src\eclipse\core\window.cpp">
@@ -1716,6 +1728,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\eclipse\core\uuid.cpp" />
   </ItemGroup>
 </Project>
