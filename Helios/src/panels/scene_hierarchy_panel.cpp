@@ -5,6 +5,7 @@
 #include <imgui/imgui_internal.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <au.hh>
+#include <concepts>
 
 namespace eclipse {
 
@@ -79,48 +80,6 @@ void SceneHierarchyPanel::draw_entity_node(Entity entity) {
 	}
 }
 
-template <typename ComponentType>
-static void draw_component(const std::string& name, Entity entity, auto ui_function) {
-	const ImGuiTreeNodeFlags tree_node_flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed |
-	                                           ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding |
-	                                           ImGuiTreeNodeFlags_AllowItemOverlap;
-	if (entity.has_component<ComponentType>()) {
-		auto& component                 = entity.get_component<ComponentType>();
-		ImVec2 content_region_available = ImGui::GetContentRegionAvail();
-
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2 {4.0F, 4.0F});
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
-		float line_height = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0F;
-		ImGui::Separator();
-		bool open =
-		    ImGui::TreeNodeEx(reinterpret_cast<void*>(typeid(ComponentType).hash_code()), tree_node_flags, name.c_str());
-		ImGui::PopStyleVar(2);
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
-		ImGui::SameLine(content_region_available.x - line_height * 0.5F);
-		if (ImGui::Button("+", ImVec2 {line_height, line_height})) {
-			ImGui::OpenPopup("ComponentSettings");
-		}
-		ImGui::PopStyleVar();
-
-		bool remove_component = false;
-		if (ImGui::BeginPopup("ComponentSettings")) {
-			if (ImGui::MenuItem("Remove Component")) {
-				remove_component = true;
-			}
-			ImGui::EndPopup();
-		}
-
-		if (open) {
-			ui_function(component);
-			ImGui::TreePop();
-		}
-
-		if (remove_component) {
-			entity.remove_component<ComponentType>();
-		}
-	}
-}
-
 void SceneHierarchyPanel::draw_components(Entity entity) {
 	draw_tag_component(entity);
 	draw_transform_component(entity);
@@ -151,9 +110,8 @@ void SceneHierarchyPanel::draw_tag_component(Entity entity) {
 	ImGui::SameLine();
 	ImGui::PushItemWidth(-1);
 
-	if (ImGui::Button("Add Component")) {
-		ImGui::OpenPopup("AddComponent");
-	}
+	draw_button("Add Component", {}, []() { ImGui::OpenPopup("AddComponent"); });
+
 	if (ImGui::BeginPopup("AddComponent")) {
 		add_pop_up_option<component::Camera>(entity, "Camera");
 		add_pop_up_option<component::SpriteRenderer>(entity, "Sprite Renderer");
@@ -291,7 +249,7 @@ void SceneHierarchyPanel::draw_sprite_renderer_component(Entity entity) {
 	draw_component<component::SpriteRenderer>("Sprite Renderer", entity, [this](auto& component) {
 		ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
 
-		ImGui::Button("Texture", ImVec2(100.F, 0.F));
+		draw_button("Texture", {}, []() {});
 
 		if (ImGui::BeginDragDropTarget()) {
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(ContentBrowserPanel::DRAG_DROP_ID)) {
@@ -492,26 +450,14 @@ ImVec2 SceneHierarchyPanel::get_button_size(const std::string& button_text) {
 	return {line_height + text_width - 7.F, line_height};
 }
 
-void SceneHierarchyPanel::draw_labeled_drag_float(const ButtonAndDragFloatSettings& settings, float& value) {
-	ImGui::PushStyleColor(ImGuiCol_Button, settings.button_and_float_settings.button_settings.button_colors.standard);
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
-	                      settings.button_and_float_settings.button_settings.button_colors.hovered);
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, settings.button_and_float_settings.button_settings.button_colors.active);
-	ImGui::PushFont(settings.font);
-	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0F);
-	if (ImGui::Button(settings.button_and_float_settings.button_settings.button_text.c_str(), settings.button_size)) {
-		value = settings.button_and_float_settings.button_settings.reset_value;
-	}
-	ImGui::PopFont();
-	ImGui::PopStyleVar(1);
-	ImGui::PopStyleColor(3);
+void SceneHierarchyPanel::draw_labeled_drag_float(const CombinedButtonAndDragFloatSettings& settings, float& value) {
+	draw_button(settings.button_settings.button_text, settings.button_settings.button_colors,
+	            [&]() { value = settings.button_settings.reset_value; });
 
 	ImGui::SameLine();
-	ImGui::DragFloat(settings.button_and_float_settings.drag_float_settings.drag_float_tag.c_str(), &value,
-	                 settings.button_and_float_settings.drag_float_settings.value_speed,
-	                 settings.button_and_float_settings.drag_float_settings.value_min,
-	                 settings.button_and_float_settings.drag_float_settings.value_max,
-	                 settings.button_and_float_settings.drag_float_settings.value_format.c_str());
+	ImGui::DragFloat(settings.drag_float_settings.drag_float_tag.c_str(), &value, settings.drag_float_settings.value_speed,
+	                 settings.drag_float_settings.value_min, settings.drag_float_settings.value_max,
+	                 settings.drag_float_settings.value_format.c_str());
 }
 
 }  // namespace eclipse
