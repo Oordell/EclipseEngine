@@ -112,7 +112,7 @@ static void serialize_entity(YAML::Emitter& out, Entity entity) {
 		auto& tag = entity.get_component<component::Tag>().tag;
 		out << YAML::Key << serializer_keys::TAG_COMPONENT;
 		out << YAML::BeginMap;
-		out << YAML::Key << serializer_keys::TAG << YAML::Value << tag;
+		out << YAML::Key << serializer_keys::TAG_TAG << YAML::Value << tag;
 		out << YAML::EndMap;
 	}
 
@@ -120,9 +120,9 @@ static void serialize_entity(YAML::Emitter& out, Entity entity) {
 		auto& transform = entity.get_component<component::Transform>();
 		out << YAML::Key << serializer_keys::TRANSFORM_COMPONENT;
 		out << YAML::BeginMap;
-		out << YAML::Key << serializer_keys::TRANSLATION << YAML::Value << transform.translation;
-		out << YAML::Key << serializer_keys::ROTATION << YAML::Value << transform.rotation;
-		out << YAML::Key << serializer_keys::SCALE << YAML::Value << transform.scale;
+		out << YAML::Key << serializer_keys::TRANSFORM_TRANSLATION << YAML::Value << transform.translation;
+		out << YAML::Key << serializer_keys::TRANSFORM_ROTATION << YAML::Value << transform.rotation;
+		out << YAML::Key << serializer_keys::TRANSFORM_SCALE << YAML::Value << transform.scale;
 		out << YAML::EndMap;
 	}
 
@@ -133,20 +133,21 @@ static void serialize_entity(YAML::Emitter& out, Entity entity) {
 		out << YAML::Key << serializer_keys::CAMERA_COMPONENT;
 		out << YAML::BeginMap;
 
-		out << YAML::Key << serializer_keys::CAMERA;
+		out << YAML::Key << serializer_keys::CAMERA_CAMERA;
 		out << YAML::BeginMap;
-		out << YAML::Key << serializer_keys::PROJECTION_TYPE << YAML::Value << static_cast<int>(camera.get_projection_type());
-		out << YAML::Key << serializer_keys::PERSPECTIVE_VERTICAL_FOV << YAML::Value
+		out << YAML::Key << serializer_keys::CAMERA_PROJECTION_TYPE << YAML::Value
+		    << static_cast<int>(camera.get_projection_type());
+		out << YAML::Key << serializer_keys::CAMERA_PERSPECTIVE_VERTICAL_FOV << YAML::Value
 		    << camera.get_perspective_vertical_fov().in(au::radians);
-		out << YAML::Key << serializer_keys::PERSPECTIVE_NEAR << YAML::Value << camera.get_perspective_near_clip();
-		out << YAML::Key << serializer_keys::PERSPECTIVE_FAR << YAML::Value << camera.get_perspective_far_clip();
-		out << YAML::Key << serializer_keys::ORTHOGRAPHIC_SIZE << YAML::Value << camera.get_orthographic_size();
-		out << YAML::Key << serializer_keys::ORTHOGRAPHIC_NEAR << YAML::Value << camera.get_orthographic_near_clip();
-		out << YAML::Key << serializer_keys::ORTHOGRAPHIC_FAR << YAML::Value << camera.get_orthographic_far_clip();
+		out << YAML::Key << serializer_keys::CAMERA_PERSPECTIVE_NEAR << YAML::Value << camera.get_perspective_near_clip();
+		out << YAML::Key << serializer_keys::CAMERA_PERSPECTIVE_FAR << YAML::Value << camera.get_perspective_far_clip();
+		out << YAML::Key << serializer_keys::CAMERA_ORTHOGRAPHIC_SIZE << YAML::Value << camera.get_orthographic_size();
+		out << YAML::Key << serializer_keys::CAMERA_ORTHOGRAPHIC_NEAR << YAML::Value << camera.get_orthographic_near_clip();
+		out << YAML::Key << serializer_keys::CAMERA_ORTHOGRAPHIC_FAR << YAML::Value << camera.get_orthographic_far_clip();
 		out << YAML::EndMap;
 
-		out << YAML::Key << serializer_keys::PRIMARY << YAML::Value << camera_component.primary;
-		out << YAML::Key << serializer_keys::FIXED_ASPECT_RATIO << YAML::Value << camera_component.fixed_aspect_ratio;
+		out << YAML::Key << serializer_keys::CAMERA_PRIMARY << YAML::Value << camera_component.primary;
+		out << YAML::Key << serializer_keys::CAMERA_FIXED_ASPECT_RATIO << YAML::Value << camera_component.fixed_aspect_ratio;
 
 		out << YAML::EndMap;
 	}
@@ -155,7 +156,7 @@ static void serialize_entity(YAML::Emitter& out, Entity entity) {
 		auto& color_component = entity.get_component<component::Color>();
 		out << YAML::Key << serializer_keys::COLOR_COMPONENT;
 		out << YAML::BeginMap;
-		out << YAML::Key << serializer_keys::COLOR << YAML::Value << color_component.color;
+		out << YAML::Key << serializer_keys::COLOR_COLOR << YAML::Value << color_component.color;
 		out << YAML::EndMap;
 	}
 
@@ -163,20 +164,21 @@ static void serialize_entity(YAML::Emitter& out, Entity entity) {
 		auto& sprite_renderer_component = entity.get_component<component::SpriteRenderer>();
 		out << YAML::Key << serializer_keys::SPRITE_RENDERER_COMPONENT;
 		out << YAML::BeginMap;
-		out << YAML::Key << serializer_keys::COLOR << YAML::Value << sprite_renderer_component.color;
+		out << YAML::Key << serializer_keys::SPRITE_RENDERER_COLOR << YAML::Value << sprite_renderer_component.color;
 		if (sprite_renderer_component.texture) {
-			out << YAML::Key << serializer_keys::TEXTURE_PATH << YAML::Value
+			out << YAML::Key << serializer_keys::SPRITE_RENDERER_TEXTURE_PATH << YAML::Value
 			    << sprite_renderer_component.texture->get_path().value_or("");
-			out << YAML::Key << serializer_keys::TEXTURE_WIDTH << YAML::Value
+			out << YAML::Key << serializer_keys::SPRITE_RENDERER_TEXTURE_WIDTH << YAML::Value
 			    << sprite_renderer_component.texture->get_width().in(units::pixels);
-			out << YAML::Key << serializer_keys::TEXTURE_HEIGHT << YAML::Value
+			out << YAML::Key << serializer_keys::SPRITE_RENDERER_TEXTURE_HEIGHT << YAML::Value
 			    << sprite_renderer_component.texture->get_height().in(units::pixels);
 		} else {
-			out << YAML::Key << serializer_keys::TEXTURE_PATH << YAML::Value << "";
-			out << YAML::Key << serializer_keys::TEXTURE_WIDTH << YAML::Value << 0;
-			out << YAML::Key << serializer_keys::TEXTURE_HEIGHT << YAML::Value << 0;
+			out << YAML::Key << serializer_keys::SPRITE_RENDERER_TEXTURE_PATH << YAML::Value << "";
+			out << YAML::Key << serializer_keys::SPRITE_RENDERER_TEXTURE_WIDTH << YAML::Value << 0;
+			out << YAML::Key << serializer_keys::SPRITE_RENDERER_TEXTURE_HEIGHT << YAML::Value << 0;
 		}
-		out << YAML::Key << serializer_keys::TILING_FACTOR << YAML::Value << sprite_renderer_component.tiling_factor;
+		out << YAML::Key << serializer_keys::SPRITE_RENDERER_TILING_FACTOR << YAML::Value
+		    << sprite_renderer_component.tiling_factor;
 		out << YAML::EndMap;
 	}
 
@@ -293,7 +295,7 @@ bool SceneSerializer::deserialize_text(const FilePath& file_path) {
 		std::string name {};
 		auto tag_component = e[serializer_keys::TAG_COMPONENT];
 		if (tag_component) {
-			name = tag_component[serializer_keys::TAG].as<std::string>();
+			name = tag_component[serializer_keys::TAG_TAG].as<std::string>();
 		}
 		EC_CORE_DEBUG("Deserialized entity with ID \"{0}\", name \"{1}\"", uuid.value(), name);
 
@@ -303,46 +305,48 @@ bool SceneSerializer::deserialize_text(const FilePath& file_path) {
 		if (transform_component) {
 			// Entities always have transform components!
 			auto& tc       = deserialized_entity.get_component<component::Transform>();
-			tc.translation = transform_component[serializer_keys::TRANSLATION].as<glm::vec3>();
-			tc.rotation    = transform_component[serializer_keys::ROTATION].as<glm::vec3>();
-			tc.scale       = transform_component[serializer_keys::SCALE].as<glm::vec3>();
+			tc.translation = transform_component[serializer_keys::TRANSFORM_TRANSLATION].as<glm::vec3>();
+			tc.rotation    = transform_component[serializer_keys::TRANSFORM_ROTATION].as<glm::vec3>();
+			tc.scale       = transform_component[serializer_keys::TRANSFORM_SCALE].as<glm::vec3>();
 		}
 
 		auto camera_component = e[serializer_keys::CAMERA_COMPONENT];
 		if (camera_component) {
 			auto& cc = deserialized_entity.add_component<component::Camera>();
 
-			auto camera_props = camera_component[serializer_keys::CAMERA];
-			cc.camera.set_projection_type(static_cast<ProjectionType>(camera_props[serializer_keys::PROJECTION_TYPE].as<int>()));
+			auto camera_props = camera_component[serializer_keys::CAMERA_CAMERA];
+			cc.camera.set_projection_type(
+			    static_cast<ProjectionType>(camera_props[serializer_keys::CAMERA_PROJECTION_TYPE].as<int>()));
 
 			cc.camera.set_perspective_vertical_fov(
-			    au::radians(camera_props[serializer_keys::PERSPECTIVE_VERTICAL_FOV].as<float>()));
-			cc.camera.set_perspective_near_clip(camera_props[serializer_keys::PERSPECTIVE_NEAR].as<float>());
-			cc.camera.set_perspective_far_clip(camera_props[serializer_keys::PERSPECTIVE_FAR].as<float>());
+			    au::radians(camera_props[serializer_keys::CAMERA_PERSPECTIVE_VERTICAL_FOV].as<float>()));
+			cc.camera.set_perspective_near_clip(camera_props[serializer_keys::CAMERA_PERSPECTIVE_NEAR].as<float>());
+			cc.camera.set_perspective_far_clip(camera_props[serializer_keys::CAMERA_PERSPECTIVE_FAR].as<float>());
 
-			cc.camera.set_orthographic_size(camera_props[serializer_keys::ORTHOGRAPHIC_SIZE].as<float>());
-			cc.camera.set_orthographic_near_clip(camera_props[serializer_keys::ORTHOGRAPHIC_NEAR].as<float>());
-			cc.camera.set_orthographic_far_clip(camera_props[serializer_keys::ORTHOGRAPHIC_FAR].as<float>());
+			cc.camera.set_orthographic_size(camera_props[serializer_keys::CAMERA_ORTHOGRAPHIC_SIZE].as<float>());
+			cc.camera.set_orthographic_near_clip(camera_props[serializer_keys::CAMERA_ORTHOGRAPHIC_NEAR].as<float>());
+			cc.camera.set_orthographic_far_clip(camera_props[serializer_keys::CAMERA_ORTHOGRAPHIC_FAR].as<float>());
 
-			cc.primary            = camera_component[serializer_keys::PRIMARY].as<bool>();
-			cc.fixed_aspect_ratio = camera_component[serializer_keys::FIXED_ASPECT_RATIO].as<bool>();
+			cc.primary            = camera_component[serializer_keys::CAMERA_PRIMARY].as<bool>();
+			cc.fixed_aspect_ratio = camera_component[serializer_keys::CAMERA_FIXED_ASPECT_RATIO].as<bool>();
 		}
 
 		auto color_component = e[serializer_keys::COLOR_COMPONENT];
 		if (color_component) {
 			auto& color = deserialized_entity.add_component<component::Color>();
-			color.color = color_component[serializer_keys::COLOR].as<glm::vec4>();
+			color.color = color_component[serializer_keys::COLOR_COLOR].as<glm::vec4>();
 		}
 
 		auto sprite_renderer_component = e[serializer_keys::SPRITE_RENDERER_COMPONENT];
 		if (sprite_renderer_component) {
-			auto& src                = deserialized_entity.add_component<component::SpriteRenderer>();
-			src.color                = sprite_renderer_component[serializer_keys::COLOR].as<glm::vec4>();
-			src.tiling_factor        = sprite_renderer_component[serializer_keys::TILING_FACTOR].as<float>();
-			std::string texture_path = sprite_renderer_component[serializer_keys::TEXTURE_PATH].as<std::string>();
-			uint32_t texture_width   = sprite_renderer_component[serializer_keys::TEXTURE_WIDTH].as<uint32_t>();
-			uint32_t texture_height  = sprite_renderer_component[serializer_keys::TEXTURE_HEIGHT].as<uint32_t>();
-			ref<Texture2D> texture   = nullptr;
+			auto& src         = deserialized_entity.add_component<component::SpriteRenderer>();
+			src.color         = sprite_renderer_component[serializer_keys::SPRITE_RENDERER_COLOR].as<glm::vec4>();
+			src.tiling_factor = sprite_renderer_component[serializer_keys::SPRITE_RENDERER_TILING_FACTOR].as<float>();
+			std::string texture_path =
+			    sprite_renderer_component[serializer_keys::SPRITE_RENDERER_TEXTURE_PATH].as<std::string>();
+			uint32_t texture_width  = sprite_renderer_component[serializer_keys::SPRITE_RENDERER_TEXTURE_WIDTH].as<uint32_t>();
+			uint32_t texture_height = sprite_renderer_component[serializer_keys::SPRITE_RENDERER_TEXTURE_HEIGHT].as<uint32_t>();
+			ref<Texture2D> texture  = nullptr;
 			if (!texture_path.empty()) {
 				texture = Texture2D::create(texture_path);
 			} else if (texture_width != 0 && texture_height != 0) {
