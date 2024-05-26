@@ -1,7 +1,6 @@
 #include "ecpch.h"
 #include "scene.h"
-#include "eclipse/scene/components.h"
-#include "eclipse/scene/native_script_component.h"
+#include "eclipse/scene/component_concept.h"
 #include "eclipse/renderer/renderer_2d.h"
 #include "eclipse/scene/entity.h"
 
@@ -33,128 +32,50 @@ static b2BodyType eclipse_rigid_body_2d_type_to_box_2d_type(component::RigidBody
 	}
 }
 
-Scene::~Scene() { delete physics_world_; }
-
-Entity Scene::create_entity_from_uuid(const UUID& id, const std::string& tag) {
-	Entity e {registry_.create(), this};
-	e.add_component<component::ID>(id);
-	e.add_component<component::Transform>();
-	e.add_component<component::Tag>(tag.empty() ? "Entity" : tag);
-	return e;
-}
-
-Entity Scene::create_entity(const std::string& tag) { return create_entity_from_uuid(UUID(), tag); }
-
-void Scene::destroy_entity(Entity entity) { registry_.destroy(entity); }
-
-Entity Scene::get_primary_camera_entity() {
-	auto view = registry_.view<component::Camera>();
-	for (auto entity : view) {
-		const auto& camera = view.get<component::Camera>(entity);
-		if (camera.primary) {
-			return {entity, this};
-		}
-	}
-	return {};
-}
-
-template <typename Component>
+template <component::IsComponent... Component>
 static void copy_component(entt::registry& destination, entt::registry& source,
                            const std::unordered_map<UUID, entt::entity>& entt_map) {
-	auto view = source.view<Component>();
-	for (auto e : view) {
-		UUID uuid = source.get<component::ID>(e).id;
-		EC_CORE_ASSERT(entt_map.find(uuid) != entt_map.end(), "Couldn't find entity with uuid: {0} in the map...",
-		               uuid.value());
+	(
+	    [&]() {
+		    auto view = source.view<Component>();
+		    for (auto e : view) {
+			    UUID uuid = source.get<component::ID>(e).id;
+			    EC_CORE_ASSERT(entt_map.find(uuid) != entt_map.end(), "Couldn't find entity with uuid: {0} in the map...",
+			                   uuid.value());
 
-		entt::entity dst_entity_id = entt_map.at(uuid);
-		auto& component            = source.get<Component>(e);
-		destination.emplace_or_replace<Component>(dst_entity_id, component);
-	}
+			    entt::entity dst_entity_id = entt_map.at(uuid);
+			    auto& component            = source.get<Component>(e);
+			    destination.emplace_or_replace<Component>(dst_entity_id, component);
+		    }
+	    }(),
+	    ...);
 }
 
-template <typename Component>
+template <component::IsComponent... Component>
+static void copy_component(component::ComponentPack<Component...>, entt::registry& destination, entt::registry& source,
+                           const std::unordered_map<UUID, entt::entity>& entt_map) {
+	copy_component<Component...>(destination, source, entt_map);
+}
+
+template <component::IsComponent... Component>
 static void copy_component_if_exists(Entity source, Entity destination) {
-	if (source.has_component<Component>()) {
-		destination.add_or_replace_component<Component>(source.get_component<Component>());
-	}
+	(
+	    [&]() {
+		    if (source.has_component<Component>()) {
+			    destination.add_or_replace_component<Component>(source.get_component<Component>());
+		    }
+	    }(),
+	    ...);
 }
 
-ref<Scene> Scene::copy(ref<Scene> other) {
-	auto new_scene            = make_ref<Scene>();
-	new_scene->viewport_size_ = other->viewport_size_;
-
-	auto& src_scene_registry = other->registry_;
-	auto& dst_scene_registry = new_scene->registry_;
-	std::unordered_map<UUID, entt::entity> entt_map;
-
-	auto id_view = src_scene_registry.view<component::ID>();
-	for (auto e : id_view) {
-		UUID uuid         = src_scene_registry.get<component::ID>(e).id;
-		const auto& tag   = src_scene_registry.get<component::Tag>(e).tag;
-		Entity new_entity = new_scene->create_entity_from_uuid(uuid, tag);
-		entt_map[uuid]    = static_cast<entt::entity>(new_entity);
-	}
-
-	copy_component<component::Transform>(dst_scene_registry, src_scene_registry, entt_map);
-	copy_component<component::Color>(dst_scene_registry, src_scene_registry, entt_map);
-	copy_component<component::SpriteRenderer>(dst_scene_registry, src_scene_registry, entt_map);
-	copy_component<component::CircleRenderer>(dst_scene_registry, src_scene_registry, entt_map);
-	copy_component<component::Camera>(dst_scene_registry, src_scene_registry, entt_map);
-	copy_component<component::RigidBody2D>(dst_scene_registry, src_scene_registry, entt_map);
-	copy_component<component::BoxCollider2D>(dst_scene_registry, src_scene_registry, entt_map);
-	copy_component<component::CircleCollider2D>(dst_scene_registry, src_scene_registry, entt_map);
-	copy_component<component::NativeScript>(dst_scene_registry, src_scene_registry, entt_map);
-
-	return new_scene;
+template <component::IsComponent... Component>
+static void copy_component_if_exists(component::ComponentPack<Component...>, Entity source, Entity destination) {
+	copy_component_if_exists<Component...>(source, destination);
 }
 
-void Scene::duplicate_entity(Entity entity) {
-	Entity new_entity = create_entity(entity.get_name());
+Scene::~Scene() { delete physics_world_; }
 
-	copy_component_if_exists<component::Transform>(entity, new_entity);
-	copy_component_if_exists<component::Color>(entity, new_entity);
-	copy_component_if_exists<component::SpriteRenderer>(entity, new_entity);
-	copy_component_if_exists<component::CircleRenderer>(entity, new_entity);
-	copy_component_if_exists<component::Camera>(entity, new_entity);
-	copy_component_if_exists<component::RigidBody2D>(entity, new_entity);
-	copy_component_if_exists<component::BoxCollider2D>(entity, new_entity);
-	copy_component_if_exists<component::CircleCollider2D>(entity, new_entity);
-	copy_component_if_exists<component::NativeScript>(entity, new_entity);
-}
-
-void Scene::draw_sprite_and_circles() const {
-	auto color_group = registry_.view<component::Transform, component::Color>();
-	for (auto entity : color_group) {
-		const auto& [trans, color] = color_group.get<component::Transform, component::Color>(entity);
-		Renderer2D::draw_sprite({.transform = trans.get_transform(),
-		                         .component = component::SpriteRenderer(color.color),
-		                         .entity_id = static_cast<int>(entity)});
-	}
-
-	auto sprite_group = registry_.view<component::Transform, component::SpriteRenderer>();
-	for (auto entity : sprite_group) {
-		const auto& [trans, sprite_renderer] = sprite_group.get<component::Transform, component::SpriteRenderer>(entity);
-		Renderer2D::draw_sprite(
-		    {.transform = trans.get_transform(), .component = sprite_renderer, .entity_id = static_cast<int>(entity)});
-	}
-
-	auto circle_view = registry_.view<component::Transform, component::CircleRenderer>();
-	for (auto entity : circle_view) {
-		const auto& [trans, circle_renderer] = circle_view.get<component::Transform, component::CircleRenderer>(entity);
-
-		Renderer2D::draw_circle(
-		    {.transform = trans.get_transform(), .component = circle_renderer, .entity_id = static_cast<int>(entity)});
-	}
-}
-
-void Scene::on_update_editor(au::QuantityF<au::Seconds> timestep, EditorCamera& camera) {
-	Renderer2D::begin_scene(camera);
-
-	draw_sprite_and_circles();
-
-	Renderer2D::end_scene();
-}
+void Scene::on_update_editor(au::QuantityF<au::Seconds> timestep, EditorCamera& camera) { render_scene(camera); }
 
 void Scene::on_update_runtime(au::QuantityF<au::Seconds> timestep) {
 	// Update scripts
@@ -167,24 +88,7 @@ void Scene::on_update_runtime(au::QuantityF<au::Seconds> timestep) {
 		nsc.instance->on_update(timestep);
 	});
 
-	// Physics
-	constexpr uint32_t velocity_iterations = 6;
-	constexpr uint32_t position_iterations = 2;
-	physics_world_->Step(timestep.in(au::seconds), velocity_iterations, position_iterations);
-
-	// Get transform from box2d
-	auto view = registry_.view<component::RigidBody2D>();
-	for (auto e : view) {
-		Entity entity {e, this};
-		auto& transform     = entity.get_component<component::Transform>();
-		auto& rigid_body_2d = entity.get_component<component::RigidBody2D>();
-
-		b2Body* body            = reinterpret_cast<b2Body*>(rigid_body_2d.runtime_body);
-		const auto& position    = body->GetPosition();
-		transform.translation.x = position.x;
-		transform.translation.y = position.y;
-		transform.rotation.z    = body->GetAngle();
-	}
+	update_2d_physics(timestep);
 
 	// Render 2D:
 	Camera* main_camera = nullptr;
@@ -209,6 +113,11 @@ void Scene::on_update_runtime(au::QuantityF<au::Seconds> timestep) {
 	}
 }
 
+void Scene::on_update_simulation(au::QuantityF<au::Seconds> timestep, EditorCamera& camera) {
+	update_2d_physics(timestep);
+	render_scene(camera);
+}
+
 void Scene::on_viewport_resize(const WindowSize& new_size) {
 	viewport_size_   = new_size;
 	auto camera_view = registry_.view<component::Camera>();
@@ -220,7 +129,63 @@ void Scene::on_viewport_resize(const WindowSize& new_size) {
 	}
 }
 
-void Scene::on_runtime_start() {
+void Scene::on_runtime_start() { init_2d_physics(); }
+
+void Scene::on_runtime_stop() { stop_2d_physics(); }
+
+void Scene::on_simulation_start() { init_2d_physics(); }
+
+void Scene::on_simulation_stop() { stop_2d_physics(); }
+
+Entity Scene::create_entity(const std::string& tag) { return create_entity_from_uuid(UUID(), tag); }
+
+Entity Scene::create_entity_from_uuid(const UUID& id, const std::string& tag) {
+	Entity e {registry_.create(), this};
+	e.add_component<component::ID>(id);
+	e.add_component<component::Transform>();
+	e.add_component<component::Tag>(tag.empty() ? "Entity" : tag);
+	return e;
+}
+
+void Scene::destroy_entity(Entity entity) { registry_.destroy(entity); }
+
+Entity Scene::get_primary_camera_entity() {
+	auto view = registry_.view<component::Camera>();
+	for (auto entity : view) {
+		const auto& camera = view.get<component::Camera>(entity);
+		if (camera.primary) {
+			return {entity, this};
+		}
+	}
+	return {};
+}
+
+ref<Scene> Scene::copy(ref<Scene> other) {
+	auto new_scene            = make_ref<Scene>();
+	new_scene->viewport_size_ = other->viewport_size_;
+
+	auto& src_scene_registry = other->registry_;
+	auto& dst_scene_registry = new_scene->registry_;
+	std::unordered_map<UUID, entt::entity> entt_map;
+
+	auto id_view = src_scene_registry.view<component::ID>();
+	for (auto e : id_view) {
+		UUID uuid         = src_scene_registry.get<component::ID>(e).id;
+		const auto& tag   = src_scene_registry.get<component::Tag>(e).tag;
+		Entity new_entity = new_scene->create_entity_from_uuid(uuid, tag);
+		entt_map[uuid]    = static_cast<entt::entity>(new_entity);
+	}
+
+	copy_component(component::AllComponents {}, dst_scene_registry, src_scene_registry, entt_map);
+	return new_scene;
+}
+
+void Scene::duplicate_entity(Entity entity) {
+	Entity new_entity = create_entity(entity.get_name());
+	copy_component_if_exists(component::AllComponents {}, entity, new_entity);
+}
+
+void Scene::init_2d_physics() {
 	physics_world_ = new b2World({0.F, -9.8F});
 	auto view      = registry_.view<component::RigidBody2D>();
 	for (auto e : view) {
@@ -270,9 +235,62 @@ void Scene::on_runtime_start() {
 	}
 }
 
-void Scene::on_runtime_stop() {
+void Scene::update_2d_physics(const au::QuantityF<au::Seconds>& timestep) {
+	constexpr uint32_t velocity_iterations = 6;
+	constexpr uint32_t position_iterations = 2;
+	physics_world_->Step(timestep.in(au::seconds), velocity_iterations, position_iterations);
+
+	// Get transform from box2d
+	auto view = registry_.view<component::RigidBody2D>();
+	for (auto e : view) {
+		Entity entity {e, this};
+		auto& transform     = entity.get_component<component::Transform>();
+		auto& rigid_body_2d = entity.get_component<component::RigidBody2D>();
+
+		b2Body* body            = reinterpret_cast<b2Body*>(rigid_body_2d.runtime_body);
+		const auto& position    = body->GetPosition();
+		transform.translation.x = position.x;
+		transform.translation.y = position.y;
+		transform.rotation.z    = body->GetAngle();
+	}
+}
+
+void Scene::stop_2d_physics() {
 	delete physics_world_;
 	physics_world_ = nullptr;
+}
+
+void Scene::render_scene(EditorCamera& camera) {
+	Renderer2D::begin_scene(camera);
+
+	draw_sprite_and_circles();
+
+	Renderer2D::end_scene();
+}
+
+void Scene::draw_sprite_and_circles() const {
+	auto color_group = registry_.view<component::Transform, component::Color>();
+	for (auto entity : color_group) {
+		const auto& [trans, color] = color_group.get<component::Transform, component::Color>(entity);
+		Renderer2D::draw_sprite({.transform = trans.get_transform(),
+		                         .component = component::SpriteRenderer(color.color),
+		                         .entity_id = static_cast<int>(entity)});
+	}
+
+	auto sprite_group = registry_.view<component::Transform, component::SpriteRenderer>();
+	for (auto entity : sprite_group) {
+		const auto& [trans, sprite_renderer] = sprite_group.get<component::Transform, component::SpriteRenderer>(entity);
+		Renderer2D::draw_sprite(
+		    {.transform = trans.get_transform(), .component = sprite_renderer, .entity_id = static_cast<int>(entity)});
+	}
+
+	auto circle_view = registry_.view<component::Transform, component::CircleRenderer>();
+	for (auto entity : circle_view) {
+		const auto& [trans, circle_renderer] = circle_view.get<component::Transform, component::CircleRenderer>(entity);
+
+		Renderer2D::draw_circle(
+		    {.transform = trans.get_transform(), .component = circle_renderer, .entity_id = static_cast<int>(entity)});
+	}
 }
 
 template <typename Component>

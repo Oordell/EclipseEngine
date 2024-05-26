@@ -28,12 +28,13 @@ private:
 	bool on_mouse_button_pressed(MouseButtonPressedEvent& event);
 	void render_overlay();
 	void on_scene_play();
+	void on_scene_simulate();
 	void on_scene_stop();
 	void on_duplicate_entity();
 	void draw_ui_toolbar();
 	void calculate_framerate(const au::QuantityF<au::Seconds>& timestep);
 
-	enum class SceneState { edit, play };
+	enum class SceneState { edit, play, simulate };
 	SceneState scene_state_ {SceneState::edit};
 
 	OrthographicCameraController camera_controller_ {1280.0F / 720.0F, EnableCameraRotation::yes};
@@ -44,6 +45,7 @@ private:
 	std::filesystem::path editor_scene_path_;
 	Entity hovered_entity_;
 	ref<Texture2D> icon_play_;
+	ref<Texture2D> icon_simulate_;
 	ref<Texture2D> icon_stop_;
 	unsigned int frame_rate_ = 0;
 	EditorCamera editor_camera_ {
@@ -58,6 +60,7 @@ private:
 	ContentBrowserPanel content_browser_panel_;
 
 	bool show_physics_colliders_ {false};
+	bool outline_selected_entity_ {true};
 
 	int gizmo_type_ = -1;
 

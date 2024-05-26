@@ -66,6 +66,9 @@ void main()
 		discard;
 
     // Set output color
+	if (Input.Color.a == 0) {
+		discard;
+	}
     o_Color = Input.Color;
 	o_Color.a *= circle;
 
