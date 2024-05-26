@@ -204,8 +204,8 @@
     <ClInclude Include="src\eclipse\renderer\uniform_buffer.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_array.h" />
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h" />
-    <ClInclude Include="src\eclipse\scene\components.h" />
     <ClInclude Include="src\eclipse\scene\component_concept.h" />
+    <ClInclude Include="src\eclipse\scene\components.h" />
     <ClInclude Include="src\eclipse\scene\entity.h" />
     <ClInclude Include="src\eclipse\scene\native_script_component.h" />
     <ClInclude Include="src\eclipse\scene\particle_system.h" />

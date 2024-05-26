@@ -252,6 +252,9 @@
     <ClInclude Include="src\eclipse\renderer\vertex_buffer.h">
       <Filter>src\eclipse\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\scene\component_concept.h">
+      <Filter>src\eclipse\scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\scene\components.h">
       <Filter>src\eclipse\scene</Filter>
     </ClInclude>
@@ -1581,7 +1584,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\scene\component_concept.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\core\application.cpp">

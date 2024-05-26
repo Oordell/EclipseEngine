@@ -318,7 +318,8 @@ void EditorLayer::on_imgui_render() {
 }
 
 void EditorLayer::create_new_active_scene() {
-	active_scene_ = make_ref<Scene>();
+	editor_scene_ = make_ref<Scene>();
+	active_scene_ = editor_scene_;
 	active_scene_->on_viewport_resize(viewport_size_);
 	scene_hierarchy_panel_.set_context(active_scene_);
 	editor_scene_path_ = std::filesystem::path();
