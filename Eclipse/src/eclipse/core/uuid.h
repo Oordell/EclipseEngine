@@ -1,7 +1,5 @@
 #pragma once
 
-#include <xhash>
-
 namespace eclipse {
 
 class UUID {
@@ -28,7 +26,7 @@ namespace std {
 
 template <>
 struct hash<eclipse::UUID> {
-	std::size_t operator()(const eclipse::UUID& uuid) const { return hash<uint64_t>()(uuid.value()); }
+	std::size_t operator()(const eclipse::UUID& uuid) const { return static_cast<std::size_t>(uuid.value()); }
 };
 
 }  // namespace std
