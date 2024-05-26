@@ -89,6 +89,11 @@ void main() {
 		case 30: tex_color *= texture(u_Textures[30], Input.TexCoord * Input.TilingFactor); break;
 		case 31: tex_color *= texture(u_Textures[31], Input.TexCoord * Input.TilingFactor); break;
 	}
+
+	if (tex_color.a == 0.0) {
+		discard;
+	}
+
 	o_color = tex_color;
 	o_EntityID = v_EntityID;
 }
