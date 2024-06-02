@@ -40,10 +40,6 @@ jobs:
     - name: Run win-gen_projects.bat
       shell: cmd
       run: cd scripts && win-gen_projects.bat && cd ..
-
-    - name: generate visual studio project
-      shell: cmd
-      run: premake5 vs2022
         
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.3
