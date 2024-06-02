@@ -25,7 +25,8 @@ void SceneCamera::set_perspective(const PerspectiveProperties& props) {
 
 void SceneCamera::set_viewport_size(const WindowSize& new_size) {
 	EC_CORE_ASSERT(new_size.width.in(units::pixels) > 0 && new_size.height.in(units::pixels) > 0,
-	               "Invalid viewport size! width: {0}, height: {1}", new_size.width, new_size.height);
+	               "Invalid viewport size! width: {0} px, height: {1} px", new_size.width.in(units::pixels),
+	               new_size.height.in(units::pixels));
 	aspect_ratio_ = new_size.get_aspect_ratio();
 	recalculate_projection();
 }

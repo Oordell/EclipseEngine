@@ -95,7 +95,8 @@ void OpenGLFrameBuffer::resize(const WindowSize& size) {
 	static const auto MAX_FRAME_BUFFER_SIZE = units::pixels(8192);
 	if (size.width == units::pixels(0) || size.height == units::pixels(0) || size.width > MAX_FRAME_BUFFER_SIZE ||
 	    size.height > MAX_FRAME_BUFFER_SIZE) {
-		EC_CORE_ERROR("Invalid frame buffer resize attempt. Tried resizing to: ({0}, {1})", size.width, size.height);
+		EC_CORE_ERROR("Invalid frame buffer resize attempt. Tried resizing to: ({0} px, {1} px)", size.width.in(units::pixels),
+		              size.height.in(units::pixels));
 		return;
 	}
 

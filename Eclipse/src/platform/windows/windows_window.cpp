@@ -32,8 +32,8 @@ void WindowsWindow::init(const WindowProps& props) {
 	EC_PROFILE_FUNCTION();
 	data_.props = props;
 
-	EC_CORE_INFO("Creating window \"{0}\" of size ({1}, {2})", props.title, props.window_size.width,
-	             props.window_size.height);
+	EC_CORE_INFO("Creating window \"{0}\" of size ({1} px, {2} px)", props.title, props.window_size.width.in(units::pixels),
+	             props.window_size.height.in(units::pixels));
 
 	if (GLFW_initialized == 0) {
 		EC_PROFILE_SCOPE("WindowsWindow::init(const WindowProps&)::glfwInit()");

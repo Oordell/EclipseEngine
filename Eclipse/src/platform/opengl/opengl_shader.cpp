@@ -118,7 +118,7 @@ void OpenGLShader::init(const std::unordered_map<GLenum, std::string>& sources) 
 	compile_or_get_vulkan_binaries(sources);
 	compile_or_get_opengl_binaries();
 	create_program();
-	EC_CORE_DEBUG("Shader creation took {}", timer.elapsed_milliseconds());
+	EC_CORE_DEBUG("Shader creation took {} ms", timer.elapsed_milliseconds().in<au::Milli<au::Seconds>>());
 }
 
 OpenGLShader::~OpenGLShader() { glDeleteProgram(renderer_id_); }
