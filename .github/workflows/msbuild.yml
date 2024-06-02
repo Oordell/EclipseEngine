@@ -37,11 +37,9 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: nuget restore ${{env.SOLUTION_FILE_PATH}}
 
-    - name: Run Setup.bat
+    - name: Run win-gen_projects.bat
       shell: cmd
-      run: |
-        cd scripts
-        win-gen_projects.bat
+      run: cd scripts && win-gen_projects.bat && cd ..
 
     - name: generate visual studio project
       shell: cmd
