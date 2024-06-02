@@ -1,23 +1,28 @@
 import os
 import subprocess
-import check_python
+import platform
 
-# Make sure everything we need is installed
-check_python.validate_packages()
+from SetupPython import PythonConfiguration as PythonRequirements
 
-import vulkan
+# Make sure everything we need for the setup is installed
+PythonRequirements.Validate()
 
-# Change from Scripts directory to root
-os.chdir("../")
+from SetupPremake import PremakeConfiguration as PremakeRequirements
+from SetupVulkan import VulkanConfiguration as VulkanRequirements
 
-if not vulkan.CheckVulkanSDK():
-    print("Vulkan SDK not installed.")
+os.chdir("./../")  # Change from devtools/scripts directory to root
 
-if not vulkan.CheckVulkanSDKDebugLibs():
-    print("Vulkan SDK debug libs not found.")
+premakeInstalled = PremakeRequirements.Validate()
+VulkanRequirements.Validate()
 
-print("\nUpdating submodules...")
-subprocess.call(["git", "submodule", "update", "--init", "--recursive"])
+# print("\nUpdating submodules...")
+# subprocess.call(["git", "submodule", "update", "--init", "--recursive"])
 
-print("Running premake...")
-subprocess.call(["vendor/bin/premake/premake5.exe", "vs2022"])
+if premakeInstalled:
+    if platform.system() == "Windows":
+        print("\nRunning premake...")
+        subprocess.call([os.path.abspath("./scripts/win-gen_projects.bat"), "nopause"])
+
+    print("\nSetup completed!")
+else:
+    print("Eclipse requires Premake5 to generate project files.")
