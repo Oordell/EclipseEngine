@@ -36,9 +36,9 @@ jobs:
     - name: Setup premake
       uses: abel0b/setup-premake@v1
       
-    - name: Run win-gen_projects.bat
+    - name: Run premake
       shell: cmd
-      run: scripts/win-gen_projects.bat
+      run: premake5 vs2022
 
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
