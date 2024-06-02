@@ -29,20 +29,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+        
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.3
 
     - name: Setup premake
       uses: abel0b/setup-premake@v1
+      
+    - name: Run win-gen_projects.bat
+      shell: cmd
+      run: cd scripts && win-gen_projects.bat && cd ..
 
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: nuget restore ${{env.SOLUTION_FILE_PATH}}
-
-    - name: Run win-gen_projects.bat
-      shell: cmd
-      run: cd scripts && win-gen_projects.bat && cd ..
-        
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.3
 
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
