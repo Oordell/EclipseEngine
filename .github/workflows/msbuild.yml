@@ -58,6 +58,7 @@ jobs:
         $installer.WaitForExit(1800000)  # Wait for a maximum of 30 minutes (1800 seconds)
         if (-not $installer.HasExited) {
           Write-Error "Vulkan SDK installation timed out."
+          Get-Content $logFile | Write-Host
           Stop-Process -Id $installer.Id
           exit 1
         }
