@@ -55,7 +55,7 @@ jobs:
         $logFile = "C:\\VulkanSDK\\install.log"
         Write-Host "Starting Vulkan SDK installer..."
         $installer = Start-Process -FilePath VulkanSDK.exe -PassThru -ArgumentList "/S", "/NCRC", "/LOG=$logFile"
-        $installer.WaitForExit(1800000)  # Wait for a maximum of 30 minutes (1800 seconds)
+        $installer.WaitForExit(180000)  # Wait for a maximum of 30 minutes (1800 seconds)
         if (-not $installer.HasExited) {
           Write-Error "Vulkan SDK installation timed out."
           Get-Content $logFile | Write-Host
