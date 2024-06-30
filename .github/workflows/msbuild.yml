@@ -1,0 +1,116 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+#name: Build project
+#
+#on:
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
+#
+#env:
+#  # Path to the solution file relative to the root of the project.
+#  SOLUTION_FILE_PATH: .
+#
+#  # Configuration type to build.
+#  # You can convert this to a build matrix if you need coverage of multiple configuration types.
+#  # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+#  BUILD_CONFIGURATION: Debug
+#
+#permissions:
+#  contents: read
+#
+#jobs:
+#  build:
+#    runs-on: windows-latest
+#
+#    steps:
+#    - name: Checkout
+#      uses: actions/checkout@v4
+#      with:
+#        fetch-depth: 0
+#        submodules: recursive
+#
+#    - uses: actions/setup-python@v2
+#      with:
+#        python-version: '3.6' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+#        architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+#    
+#    - name: Cache Vulkan SDK
+#      id: cache-vulkan-sdk
+#      uses: actions/cache@v1
+#      with:
+#        path: "C:\\VulkanSDK\\1.3.280.0"
+#        key: vulkan-sdk-1.3.280.0
+#
+#    - name: Setup Vulkan
+#      if: steps.cache-vulkan-sdk.outputs.cache-hit != 'true'
+#      run: |
+#        Write-Host "Starting Vulkan SDK setup..."
+#        Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/1.3.280.0/windows/VulkanSDK-1.3.280.0-Installer.exe" -OutFile VulkanSDK.exe
+#        Write-Host "Vulkan SDK downloaded successfully."
+#
+#        $logFile = "C:\\VulkanSDK\\install.log"
+#        Write-Host "Log file path: $logFile"
+#        
+#        Write-Host "Starting Vulkan SDK installer..."
+#        $installer = Start-Process -FilePath VulkanSDK.exe -PassThru -ArgumentList "/S", "/NCRC", "/LOG=$logFile"
+#        $installer.WaitForExit(180000)  # Wait for a maximum of 30 minutes (1800 seconds)
+#        if (-not $installer.HasExited) {
+#          Write-Error "Vulkan SDK installation timed out."
+#          if (Test-Path $logFile) {
+#            Write-Host "Displaying log file content:"
+#            Get-Content $logFile | Write-Host
+#          } else {
+#            Write-Error "Log file not found at $logFile."
+#          }
+#          Stop-Process -Id $installer.Id
+#          exit 1
+#        }
+#
+#        Write-Host "Vulkan SDK installed successfully."
+#        if (Test-Path $logFile) {
+#          Write-Host "Displaying log file content:"
+#          Get-Content $logFile | Write-Host
+#        } else {
+#          Write-Error "Log file not found at $logFile."
+#        }
+#      shell: pwsh
+#
+#    - name: Add msbuild to PATH
+#      uses: microsoft/setup-msbuild@v1.0.3
+#
+#    - name: Setup premake
+#      uses: abel0b/setup-premake@v2.4
+#      with:
+#        version: "5.0.0-beta2"
+#
+#    - name: Run Setup.bat
+#      shell: cmd
+#      env:
+#        VULKAN_SDK: "C:/VulkanSDK/1.3.280.0"
+#      run: |
+#        pip install requests
+#        cd scripts
+#        Setup.bat
+#      continue-on-error: true
+#      
+#    - name: Run premake
+#      shell: cmd
+#      run: premake5 vs2022
+#
+#    - name: Restore NuGet packages
+#      working-directory: ${{env.GITHUB_WORKSPACE}}
+#      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+#
+#    - name: Build
+#      working-directory: ${{env.GITHUB_WORKSPACE}}
+#      env:
+#        VULKAN_SDK: "C:/VulkanSDK/1.3.280.0"
+#      # Add additional options to the MSBuild command line here (like platform or verbosity level).
+#      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
+#      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+#

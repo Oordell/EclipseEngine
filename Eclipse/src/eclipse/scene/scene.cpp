@@ -346,7 +346,8 @@ void Scene::on_component_added<component::CircleCollider2D>(Entity entity, compo
 template <>
 void Scene::on_component_added<component::Camera>(Entity entity, component::Camera& component) {
 	if (!(viewport_size_.width.in(units::pixels) > 0 && viewport_size_.height.in(units::pixels) > 0)) {
-		EC_CORE_ERROR("Viewport is invalid! Width: {0}, height: {1}", viewport_size_.width, viewport_size_.height);
+		EC_CORE_ERROR("Viewport is invalid! Width: {0} px, height: {1} px", viewport_size_.width.in(units::pixels),
+		              viewport_size_.height.in(units::pixels));
 		return;
 	}
 	component.camera.set_viewport_size(viewport_size_);
