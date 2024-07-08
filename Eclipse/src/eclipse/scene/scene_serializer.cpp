@@ -1,6 +1,7 @@
 #include "ecpch.h"
 #include "scene_serializer.h"
 #include "components.h"
+#include "texture_sheets_components.h"
 #include "entity.h"
 
 #include <yaml-cpp/yaml.h>
@@ -240,6 +241,40 @@ static void serialize_entity(YAML::Emitter& out, Entity entity) {
 		out << YAML::EndMap;
 	}
 
+	if (entity.has_component<component::TextureSheetComponent>()) {
+		auto& texture_sheet_component = entity.get_component<component::TextureSheetComponent>();
+		out << YAML::Key << serializer_keys::TEXTURE_SHEET_COMPONENT;
+		out << YAML::BeginMap;
+		out << YAML::Key << serializer_keys::TEXTURE_SHEET_TEXTURE_PATH << YAML::Value
+		    << texture_sheet_component.texture_sheet->get_texture()->get_path().value_or("");
+		out << YAML::Key << serializer_keys::TEXTURE_SHEET_SUB_TILE_WIDTH << YAML::Value
+		    << texture_sheet_component.texture_sheet->get_tile_width_in_pixels().in(units::pixels);
+		out << YAML::Key << serializer_keys::TEXTURE_SHEET_SUB_TILE_HEIGHT << YAML::Value
+		    << texture_sheet_component.texture_sheet->get_tile_height_in_pixels().in(units::pixels);
+		out << YAML::Key << serializer_keys::TEXTURE_SHEET_SUB_TILE_SPACING_X << YAML::Value
+		    << texture_sheet_component.texture_sheet->get_tile_spacing_x_in_pixels().in(units::pixels);
+		out << YAML::Key << serializer_keys::TEXTURE_SHEET_SUB_TILE_SPACING_Y << YAML::Value
+		    << texture_sheet_component.texture_sheet->get_tile_spacing_y_in_pixels().in(units::pixels);
+		out << YAML::EndMap;
+	}
+
+	if (entity.has_component<component::SubTexture>()) {
+		auto& sub_texture_component = entity.get_component<component::SubTexture>();
+		out << YAML::Key << serializer_keys::SUB_TEXTURE_COMPONENT;
+		out << YAML::BeginMap;
+		out << YAML::Key << serializer_keys::SUB_TEXTURE_TEXTURE_PATH << YAML::Value
+		    << sub_texture_component.sub_texture->get_texture()->get_path().value_or("");
+		out << YAML::Key << serializer_keys::SUB_TEXTURE_TILE_INDEX_X << YAML::Value
+		    << sub_texture_component.sub_texture->get_index_x().in(units::pixels);
+		out << YAML::Key << serializer_keys::SUB_TEXTURE_TILE_INDEX_Y << YAML::Value
+		    << sub_texture_component.sub_texture->get_index_y().in(units::pixels);
+		out << YAML::Key << serializer_keys::SUB_TEXTURE_TILE_WIDTH << YAML::Value
+		    << sub_texture_component.sub_texture->get_width().in(units::pixels);
+		out << YAML::Key << serializer_keys::SUB_TEXTURE_TILE_HEIGHT << YAML::Value
+		    << sub_texture_component.sub_texture->get_height().in(units::pixels);
+		out << YAML::EndMap;
+	}
+
 	out << YAML::EndMap;
 }
 
@@ -288,6 +323,14 @@ bool SceneSerializer::deserialize_text(const FilePath& file_path) {
 		EC_CORE_DEBUG("Scene \"{0}\" didn't contain any entities.", scene_name);
 		return true;
 	}
+
+	struct EntityCollection {
+		Entity eclipse_entity;
+		YAML::iterator::value_type yaml_entity;
+	};
+
+	std::vector<EntityCollection> entities_with_sub_textures;
+	std::vector<ref<TextureSheet>> texture_sheets_loaded;
 
 	for (auto e : entities) {
 		UUID uuid = UUID(e[serializer_keys::ENTITY].as<uint64_t>());
@@ -399,6 +442,67 @@ bool SceneSerializer::deserialize_text(const FilePath& file_path) {
 			    au::unos(circle_collider_2d_component[serializer_keys::CIRCLE_COLLIDER_2D_RESTITUTION].as<float>());
 			src.restitution_threshold =
 			    au::unos(circle_collider_2d_component[serializer_keys::CIRCLE_COLLIDER_2D_RESTITUTION_THRESHOLD].as<float>());
+		}
+
+		auto texture_sheet_component = e[serializer_keys::TEXTURE_SHEET_COMPONENT];
+		if (texture_sheet_component) {
+			auto& src = deserialized_entity.add_component<component::TextureSheetComponent>();
+			au::Quantity<units::Pixels, uint32_t> sub_tile_width =
+			    units::pixels(texture_sheet_component[serializer_keys::TEXTURE_SHEET_SUB_TILE_WIDTH].as<int>());
+			au::Quantity<units::Pixels, uint32_t> sub_tile_height =
+			    units::pixels(texture_sheet_component[serializer_keys::TEXTURE_SHEET_SUB_TILE_HEIGHT].as<int>());
+			au::Quantity<units::Pixels, uint32_t> sub_tile_spacing_x =
+			    units::pixels(texture_sheet_component[serializer_keys::TEXTURE_SHEET_SUB_TILE_SPACING_X].as<int>());
+			au::Quantity<units::Pixels, uint32_t> sub_tile_spacing_y =
+			    units::pixels(texture_sheet_component[serializer_keys::TEXTURE_SHEET_SUB_TILE_SPACING_Y].as<int>());
+
+			std::string texture_path = texture_sheet_component[serializer_keys::TEXTURE_SHEET_TEXTURE_PATH].as<std::string>();
+			ref<Texture2D> texture   = nullptr;
+			if (!texture_path.empty()) {
+				texture = Texture2D::create(texture_path);
+			} else {
+				texture = Texture2D::create({.width = units::pixels(10), .height = units::pixels(10)});
+			}
+			src.texture_sheet = make_ref<TextureSheet>(TextureSheetProperties {.texture            = texture,
+			                                                                   .sub_tile_width     = sub_tile_width,
+			                                                                   .sub_tile_height    = sub_tile_height,
+			                                                                   .sub_tile_spacing_x = sub_tile_spacing_x,
+			                                                                   .sub_tile_spacing_y = sub_tile_spacing_y});
+			texture_sheets_loaded.push_back(src.texture_sheet);
+		}
+
+		// We need to first load all the texture sheets, before creating the sub textures, as they have pointers to the
+		// texture sheets. Thus, we save all the entities with sub textures for now, and create them in a seperate loop after
+		// this.
+		auto sub_texture_component = e[serializer_keys::SUB_TEXTURE_COMPONENT];
+		if (sub_texture_component) {
+			entities_with_sub_textures.push_back({deserialized_entity, e});
+		}
+	}
+
+	// Now that all texture sheets have been loaded, we can create sub textures:
+	for (auto [eclipse_entity, yaml_entity] : entities_with_sub_textures) {
+		auto sub_texture_component     = yaml_entity[serializer_keys::SUB_TEXTURE_COMPONENT];
+		std::string texture_sheet_path = sub_texture_component[serializer_keys::SUB_TEXTURE_TEXTURE_PATH].as<std::string>();
+		for (auto texture_sheet : texture_sheets_loaded) {
+			if (texture_sheet->get_texture()->get_path() == texture_sheet_path) {
+				auto& src = eclipse_entity.add_component<component::SubTexture>();
+
+				au::Quantity<units::Pixels, uint32_t> tile_index_x =
+				    units::pixels(sub_texture_component[serializer_keys::SUB_TEXTURE_TILE_INDEX_X].as<int>());
+				au::Quantity<units::Pixels, uint32_t> tile_index_y =
+				    units::pixels(sub_texture_component[serializer_keys::SUB_TEXTURE_TILE_INDEX_Y].as<int>());
+				au::Quantity<units::Pixels, uint32_t> tile_width =
+				    units::pixels(sub_texture_component[serializer_keys::SUB_TEXTURE_TILE_WIDTH].as<int>());
+				au::Quantity<units::Pixels, uint32_t> tile_height =
+				    units::pixels(sub_texture_component[serializer_keys::SUB_TEXTURE_TILE_HEIGHT].as<int>());
+
+				src.sub_texture = make_ref<SubTexture2D>(SubTexture2DProperties {.texture_sheet = texture_sheet,
+				                                                                 .tile_index_x  = tile_index_x,
+				                                                                 .tile_index_y  = tile_index_y,
+				                                                                 .tile_width    = tile_width,
+				                                                                 .tile_height   = tile_height});
+			}
 		}
 	}
 

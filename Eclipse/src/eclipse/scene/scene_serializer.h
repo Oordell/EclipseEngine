@@ -87,6 +87,23 @@ static constexpr std::string_view CIRCLE_COLLIDER_2D_DENSITY               = "ci
 static constexpr std::string_view CIRCLE_COLLIDER_2D_FRICTION              = "circle_collider_2d_friction";
 static constexpr std::string_view CIRCLE_COLLIDER_2D_RESTITUTION           = "circle_collider_2d_restitution";
 static constexpr std::string_view CIRCLE_COLLIDER_2D_RESTITUTION_THRESHOLD = "circle_collider_2d_restitution_threshold";
+
+// component::SubTexture
+static constexpr std::string_view SUB_TEXTURE_COMPONENT    = "sub_texture_component";
+static constexpr std::string_view SUB_TEXTURE_TEXTURE_PATH = "sub_texture_texture_path";
+static constexpr std::string_view SUB_TEXTURE_TILE_INDEX_X = "sub_texture_tile_index_x";
+static constexpr std::string_view SUB_TEXTURE_TILE_INDEX_Y = "sub_texture_tile_index_y";
+static constexpr std::string_view SUB_TEXTURE_TILE_WIDTH   = "sub_texture_tile_width";
+static constexpr std::string_view SUB_TEXTURE_TILE_HEIGHT  = "sub_texture_tile_height";
+
+// component::TextureSheetComponent
+static constexpr std::string_view TEXTURE_SHEET_COMPONENT          = "texture_sheet_component_component";
+static constexpr std::string_view TEXTURE_SHEET_TEXTURE_PATH       = "texture_sheet_component_texture_path";
+static constexpr std::string_view TEXTURE_SHEET_SUB_TILE_WIDTH     = "texture_sheet_component_sub_tile_width";
+static constexpr std::string_view TEXTURE_SHEET_SUB_TILE_HEIGHT    = "texture_sheet_component_sub_tile_height";
+static constexpr std::string_view TEXTURE_SHEET_SUB_TILE_SPACING_X = "texture_sheet_component_sub_tile_spacing_x";
+static constexpr std::string_view TEXTURE_SHEET_SUB_TILE_SPACING_Y = "texture_sheet_component_sub_tile_spacing_y";
+
 }  // namespace serializer_keys
 
 }  // namespace eclipse
