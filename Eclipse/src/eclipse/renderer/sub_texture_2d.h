@@ -27,11 +27,37 @@ public:
 
 	ref<Texture2D> get_texture() const { return texture_sheet_->get_texture(); }
 
+	au::Quantity<units::Pixels, uint32_t> get_index_x() const { return x_min_; }
+
+	au::Quantity<units::Pixels, uint32_t> get_index_y() const { return y_min_; }
+
 	au::Quantity<units::Pixels, uint32_t> get_width() const { return tile_width_; }
 
 	au::Quantity<units::Pixels, uint32_t> get_height() const { return tile_height_; }
 
+	void set_index_x(au::Quantity<units::Pixels, uint32_t> x) {
+		x_min_ = x;
+		recalculate_coordinates();
+	}
+
+	void set_index_y(au::Quantity<units::Pixels, uint32_t> y) {
+		y_min_ = y;
+		recalculate_coordinates();
+	}
+
+	void set_tile_width(au::Quantity<units::Pixels, uint32_t> width) {
+		tile_width_ = width;
+		recalculate_coordinates();
+	}
+
+	void set_tile_height(au::Quantity<units::Pixels, uint32_t> height) {
+		tile_height_ = height;
+		recalculate_coordinates();
+	}
+
 private:
+	void recalculate_coordinates();
+
 	ref<TextureSheet> texture_sheet_;
 	au::Quantity<units::Pixels, uint32_t> x_min_;
 	au::Quantity<units::Pixels, uint32_t> y_min_;

@@ -9,6 +9,10 @@ SubTexture2D::SubTexture2D(const SubTexture2DProperties& props)
       y_min_(props.tile_index_y),
       tile_width_(props.tile_width),
       tile_height_(props.tile_height) {
+	recalculate_coordinates();
+}
+
+void SubTexture2D::recalculate_coordinates() {
 	float x0 = x_min_.in<float>(units::pixels) * texture_sheet_->get_tile_width_normalized() +
 	           x_min_.in<float>(units::pixels) * texture_sheet_->get_tile_spacing_x_normalized();
 	float y0 = y_min_.in<float>(units::pixels) * texture_sheet_->get_tile_height_normalized() +

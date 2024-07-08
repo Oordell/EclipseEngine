@@ -3,6 +3,7 @@
 #include "eclipse.h"
 #include "panels/scene_hierarchy_panel.h"
 #include "panels/content_browser_panel.h"
+#include "panels/texture_sheet_panel.h"
 
 namespace eclipse {
 
@@ -33,6 +34,7 @@ private:
 	void on_duplicate_entity();
 	void draw_ui_toolbar();
 	void calculate_framerate(const au::QuantityF<au::Seconds>& timestep);
+	void set_panel_context(ref<Scene> new_context);
 
 	enum class SceneState { edit, play, simulate };
 	SceneState scene_state_ {SceneState::edit};
@@ -58,6 +60,7 @@ private:
 
 	SceneHierarchyPanel scene_hierarchy_panel_;
 	ContentBrowserPanel content_browser_panel_;
+	TextureSheetPanel texture_sheet_panel_;
 
 	bool show_physics_colliders_ {false};
 	bool outline_selected_entity_ {true};

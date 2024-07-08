@@ -34,11 +34,15 @@ void EditorLayer::on_attach() {
 		serializer.deserialize_text(scene_file_path);
 	}
 
-	scene_hierarchy_panel_.set_context(active_scene_);
+	set_panel_context(active_scene_);
 	Renderer2D::set_line_width(units::pixels(4.F));
+	texture_sheet_panel_.add_entity_destroyed_subscriber(&scene_hierarchy_panel_);
 }
 
-void EditorLayer::on_detach() { EC_PROFILE_FUNCTION(); }
+void EditorLayer::on_detach() {
+	EC_PROFILE_FUNCTION();
+	texture_sheet_panel_.remove_entity_destroyed_subscriber(&scene_hierarchy_panel_);
+}
 
 void EditorLayer::on_update(au::QuantityF<au::Seconds> timestep) {
 	EC_PROFILE_FUNCTION();
@@ -210,6 +214,7 @@ void EditorLayer::on_imgui_render() {
 
 	scene_hierarchy_panel_.on_imgui_render();
 	content_browser_panel_.on_imgui_render();
+	texture_sheet_panel_.on_imgui_render();
 
 	ImGui::Begin("Stats");
 
@@ -321,7 +326,7 @@ void EditorLayer::create_new_active_scene() {
 	editor_scene_ = make_ref<Scene>();
 	active_scene_ = editor_scene_;
 	active_scene_->on_viewport_resize(viewport_size_);
-	scene_hierarchy_panel_.set_context(active_scene_);
+	set_panel_context(active_scene_);
 	editor_scene_path_ = std::filesystem::path();
 }
 
@@ -352,7 +357,7 @@ void EditorLayer::open_scene(const std::filesystem::path& path) {
 	if (serializer.deserialize_text(FilePath(path.string()))) {
 		editor_scene_ = new_scene;
 		editor_scene_->on_viewport_resize(viewport_size_);
-		scene_hierarchy_panel_.set_context(editor_scene_);
+		set_panel_context(editor_scene_);
 		active_scene_      = editor_scene_;
 		editor_scene_path_ = path;
 	}
@@ -503,7 +508,7 @@ void EditorLayer::render_overlay() {
 			glm::vec4 outline_color = {1.F, 0.5F, 0.F, 1.F};
 
 			if (selected_entity.has_component<component::SpriteRenderer>() ||
-			    selected_entity.has_component<component::Color>()) {
+			    selected_entity.has_component<component::Color>() || selected_entity.has_component<component::SubTexture>()) {
 				Renderer2D::draw_rectangle({.transform = transform_component.get_transform(), .color = outline_color});
 			} else if (selected_entity.has_component<component::CircleRenderer>()) {
 				auto circle_component = selected_entity.get_component<component::CircleRenderer>();
@@ -526,7 +531,7 @@ void EditorLayer::on_scene_play() {
 	active_scene_ = Scene::copy(editor_scene_);
 	active_scene_->on_runtime_start();
 
-	scene_hierarchy_panel_.set_context(active_scene_);
+	set_panel_context(active_scene_);
 }
 
 void EditorLayer::on_scene_simulate() {
@@ -536,7 +541,7 @@ void EditorLayer::on_scene_simulate() {
 	scene_state_  = SceneState::simulate;
 	active_scene_ = Scene::copy(editor_scene_);
 	active_scene_->on_simulation_start();
-	scene_hierarchy_panel_.set_context(active_scene_);
+	set_panel_context(active_scene_);
 }
 
 void EditorLayer::on_scene_stop() {
@@ -551,7 +556,7 @@ void EditorLayer::on_scene_stop() {
 	active_scene_->on_runtime_stop();
 	active_scene_ = editor_scene_;
 
-	scene_hierarchy_panel_.set_context(active_scene_);
+	set_panel_context(active_scene_);
 }
 
 void EditorLayer::on_duplicate_entity() {
@@ -626,5 +631,10 @@ void EditorLayer::calculate_framerate(const au::QuantityF<au::Seconds>& timestep
 		last_hit    = std::chrono::steady_clock::now();
 		frame_rate_ = static_cast<unsigned int>(1.0F / timestep.in(au::seconds));
 	}
+}
+
+void EditorLayer::set_panel_context(ref<Scene> new_context) {
+	scene_hierarchy_panel_.set_context(new_context);
+	texture_sheet_panel_.set_context(new_context);
 }
 }  // namespace eclipse

@@ -7,6 +7,7 @@
 #include "eclipse/renderer/texture.h"
 #include "eclipse/common_types/must_init.h"
 #include "eclipse/scene/components.h"
+#include "eclipse/scene/texture_sheets_components.h"
 
 #include <au.hh>
 
@@ -110,6 +111,13 @@ struct SpriteMetaDataTransform {
 	int entity_id {-1};
 };
 
+struct SubTextureMetaDataTransform {
+	QuadMetaDataCommon common {};
+	glm::mat4 transform {1.0F};
+	component::SubTexture component {};
+	int entity_id {-1};
+};
+
 struct QuadDrawingDataImpl {
 	ref<Texture2D> texture;
 	glm::mat4 transform {1.0F};
@@ -156,6 +164,7 @@ public:
 	static void draw_rectangle(const RectangleMetaDataTransform& info);
 
 	static void draw_sprite(const SpriteMetaDataTransform& info);
+	static void draw_sub_texture(const SubTextureMetaDataTransform& info);
 
 	static au::QuantityF<units::Pixels> get_line_width();
 	static void set_line_width(au::QuantityF<units::Pixels> width);

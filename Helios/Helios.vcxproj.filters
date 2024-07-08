@@ -13,6 +13,9 @@
     <ClInclude Include="src\panels\scene_hierarchy_panel.h">
       <Filter>panels</Filter>
     </ClInclude>
+    <ClInclude Include="src\panels\panel_utils.h" />
+    <ClInclude Include="src\panels\texture_sheet_panel.h" />
+    <ClInclude Include="src\panels\entity_destroyed_interface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\editor_layer.cpp" />
@@ -23,5 +26,6 @@
     <ClCompile Include="src\panels\scene_hierarchy_panel.cpp">
       <Filter>panels</Filter>
     </ClCompile>
+    <ClCompile Include="src\panels\texture_sheet_panel.cpp" />
   </ItemGroup>
 </Project>

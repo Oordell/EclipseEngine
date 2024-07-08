@@ -66,13 +66,13 @@ OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : path_(path) {
 
 	stbi_image_free(data);
 
-	EC_CORE_DEBUG("Texture from path \"{0}\" for ID {1}", path, renderer_id_);
+	EC_CORE_DEBUG("Texture loaded from path \"{0}\" with ID {1}", path, renderer_id_);
 }
 
 OpenGLTexture2D::~OpenGLTexture2D() {
-	EC_PROFILE_FUNCTION();
-
+	EC_PROFILE_FUNCTION()
 	glDeleteTextures(1, &renderer_id_);
+	EC_CORE_DEBUG("Texture deleted from path \"{0}\" with ID {1}", path_, renderer_id_);
 }
 
 void OpenGLTexture2D::set_data(void* data, uint32_t size) {

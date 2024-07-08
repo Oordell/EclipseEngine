@@ -287,9 +287,18 @@ void Scene::draw_sprite_and_circles() const {
 	auto circle_view = registry_.view<component::Transform, component::CircleRenderer>();
 	for (auto entity : circle_view) {
 		const auto& [trans, circle_renderer] = circle_view.get<component::Transform, component::CircleRenderer>(entity);
-
 		Renderer2D::draw_circle(
 		    {.transform = trans.get_transform(), .component = circle_renderer, .entity_id = static_cast<int>(entity)});
+	}
+
+	auto sub_texture_view = registry_.view<component::Transform, component::SubTexture>();
+	for (auto entity : sub_texture_view) {
+		const auto& [trans, sub_texture_component] =
+		    sub_texture_view.get<component::Transform, component::SubTexture>(entity);
+		Renderer2D::draw_sub_texture({.common = {.texture_coords = sub_texture_component.sub_texture->get_texture_coords()},
+		                              .transform = trans.get_transform(),
+		                              .component = sub_texture_component,
+		                              .entity_id = static_cast<int>(entity)});
 	}
 }
 
@@ -325,6 +334,17 @@ void Scene::on_component_added<component::SpriteRenderer>(Entity entity, compone
 
 template <>
 void Scene::on_component_added<component::CircleRenderer>(Entity entity, component::CircleRenderer& component) {
+	// Do nothing
+}
+
+template <>
+void Scene::on_component_added<component::TextureSheetComponent>(Entity entity,
+                                                                 component::TextureSheetComponent& component) {
+	// Do nothing
+}
+
+template <>
+void Scene::on_component_added<component::SubTexture>(Entity entity, component::SubTexture& component) {
 	// Do nothing
 }
 

@@ -317,6 +317,14 @@ void Renderer2D::draw_sprite(const SpriteMetaDataTransform& info) {
 	                .entity_id = info.entity_id});
 }
 
+void Renderer2D::draw_sub_texture(const SubTextureMetaDataTransform& info) {
+	EC_PROFILE_FUNCTION();
+	draw_quad_impl({.texture = info.component.sub_texture ? info.component.sub_texture->get_texture() : data.white_texture,
+	                .transform = info.transform,
+	                .common    = {.texture_coords = info.common.texture_coords},
+	                .entity_id = info.entity_id});
+}
+
 au::QuantityF<units::Pixels> Renderer2D::get_line_width() { return data.line_width; }
 
 void Renderer2D::set_line_width(au::QuantityF<units::Pixels> width) { data.line_width = width; }

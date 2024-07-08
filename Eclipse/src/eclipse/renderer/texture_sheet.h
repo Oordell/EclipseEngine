@@ -16,10 +16,29 @@ struct TextureSheetProperties {
 class TextureSheet {
 public:
 	TextureSheet(const TextureSheetProperties& props);
-
 	~TextureSheet() = default;
 
 	const ref<Texture2D> get_texture() const { return texture_; }
+
+	void set_tile_width(const au::Quantity<units::Pixels, uint32_t> width) {
+		tile_width_ = width;
+		update_values();
+	}
+
+	void set_tile_height(const au::Quantity<units::Pixels, uint32_t> height) {
+		tile_height_ = height;
+		update_values();
+	}
+
+	void set_tile_spacing_x(const au::Quantity<units::Pixels, uint32_t> tile_spacing_x) {
+		tile_spacing_x_ = tile_spacing_x;
+		update_values();
+	}
+
+	void set_tile_spacing_y(const au::Quantity<units::Pixels, uint32_t> tile_spacing_y) {
+		tile_spacing_y_ = tile_spacing_y;
+		update_values();
+	}
 
 	const au::Quantity<units::Pixels, uint32_t> get_tile_width_in_pixels() const { return tile_width_; }
 
@@ -48,6 +67,8 @@ public:
 	std::string get_debug_string() const;
 
 private:
+	void update_values();
+
 	const ref<Texture2D> texture_;
 	au::Quantity<units::Pixels, uint32_t> tile_width_;
 	au::Quantity<units::Pixels, uint32_t> tile_height_;
