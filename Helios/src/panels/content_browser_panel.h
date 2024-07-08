@@ -10,8 +10,9 @@ class ContentBrowserPanel {
 public:
 	void on_imgui_render();
 
-	static constexpr const char* DRAG_DROP_ID     = "CONTENT_BROWSER_ITEM";
-	static constexpr const char* ASSETS_DIRECTORY = "assets";
+	static constexpr const char* DRAG_DROP_ID               = "CONTENT_BROWSER_ITEM";
+	static constexpr const char* DRAG_DROP_TEXTURE_SHEET_ID = "TEXTURE_SHEET_ITEM_";
+	static constexpr const char* ASSETS_DIRECTORY           = "assets";
 
 private:
 	void render_directory_content(float thumbnail_size);

@@ -1,3 +1,4 @@
+#include "ecpch.h"
 #include "scene_hierarchy_panel.h"
 #include "content_browser_panel.h"
 
@@ -9,7 +10,15 @@
 
 namespace eclipse {
 
-SceneHierarchyPanel::SceneHierarchyPanel(const ref<Scene>& context) { set_context(context); }
+SceneHierarchyPanel::SceneHierarchyPanel(const ref<Scene>& context) : EntityDestroyedInterface() {
+	set_context(context);
+}
+
+void SceneHierarchyPanel::on_entity_destroyed(Entity e) {
+	if (selection_context_ == e) {
+		selection_context_ = {};
+	}
+}
 
 void SceneHierarchyPanel::set_context(const ref<Scene>& context) {
 	context_           = context;
@@ -36,7 +45,6 @@ void SceneHierarchyPanel::on_imgui_render() {
 		}
 		ImGui::EndPopup();
 	}
-
 	ImGui::End();
 
 	ImGui::Begin("Properties");
@@ -49,6 +57,10 @@ void SceneHierarchyPanel::on_imgui_render() {
 void SceneHierarchyPanel::set_selected_entity(Entity entity) { selection_context_ = entity; }
 
 void SceneHierarchyPanel::draw_entity_node(Entity entity) {
+	// Filter away entities we don't want to display here:
+	if (entity.has_component<component::TextureSheetComponent>()) {
+		return;
+	}
 	auto& tag_component = entity.get_component<component::Tag>();
 	uint64_t entity_id  = static_cast<uint64_t>(entity);
 
@@ -90,6 +102,7 @@ void SceneHierarchyPanel::draw_components(Entity entity) {
 	draw_rigid_body_2d_component(entity);
 	draw_box_collider_2d_component(entity);
 	draw_circle_collider_2d_component(entity);
+	draw_sub_texture_component(entity);
 }
 
 void SceneHierarchyPanel::draw_tag_component(Entity entity) {
@@ -110,12 +123,13 @@ void SceneHierarchyPanel::draw_tag_component(Entity entity) {
 	ImGui::SameLine();
 	ImGui::PushItemWidth(-1);
 
-	draw_button("Add Component", {}, []() { ImGui::OpenPopup("AddComponent"); });
+	panel_utils::draw_button("Add Component", {}, []() { ImGui::OpenPopup("AddComponent"); });
 
 	if (ImGui::BeginPopup("AddComponent")) {
 		add_pop_up_option<component::Camera>(entity, "Camera");
 		add_pop_up_option<component::SpriteRenderer>(entity, "Sprite Renderer");
 		add_pop_up_option<component::CircleRenderer>(entity, "Circle Renderer");
+		add_pop_up_option<component::SubTexture>(entity, "Sub Texture");
 		add_pop_up_option<component::Color>(entity, "Color");
 		add_pop_up_option<component::RigidBody2D>(entity, "Rigid Body 2D");
 		add_pop_up_option<component::BoxCollider2D>(entity, "Box Collider 2D");
@@ -126,7 +140,7 @@ void SceneHierarchyPanel::draw_tag_component(Entity entity) {
 	ImGui::PopStyleVar(2);
 }
 
-template <class Component>
+template <component::IsComponent Component>
 void SceneHierarchyPanel::add_pop_up_option(Entity entity, const std::string& menu_item) {
 	if (!entity.has_component<Component>() && ImGui::MenuItem(menu_item.c_str())) {
 		selection_context_.add_component<Component>();
@@ -135,44 +149,51 @@ void SceneHierarchyPanel::add_pop_up_option(Entity entity, const std::string& me
 }
 
 void SceneHierarchyPanel::draw_transform_component(Entity entity) {
-	draw_component<component::Transform>("Transform", entity, [this](auto& component) {
-		draw_drag_float(
-		    {.label               = "Translation",
-		     .drag_float_settings = {{.button_settings     = {.button_colors = BUTTON_COLORS_RED, .button_text = "X"},
-		                              .drag_float_settings = {.drag_float_tag = "##X", .value_speed = 0.1F}},
-		                             {.button_settings     = {.button_colors = BUTTON_COLORS_GREEN, .button_text = "Y"},
-		                              .drag_float_settings = {.drag_float_tag = "##Y", .value_speed = 0.1F}},
-		                             {.button_settings     = {.button_colors = BUTTON_COLORS_BLUE, .button_text = "Z"},
-		                              .drag_float_settings = {.drag_float_tag = "##Z", .value_speed = 0.1F}}}},
+	panel_utils::draw_component<component::Transform>("Transform", entity, [this](auto& component) {
+		panel_utils::draw_drag_float(
+		    {.label = "Translation",
+		     .drag_float_settings =
+		         {{.button_settings     = {.button_colors = panel_utils::BUTTON_COLORS_RED, .button_text = "X"},
+		           .drag_float_settings = {.drag_float_tag = "##X", .value_speed = 0.1F}},
+		          {.button_settings     = {.button_colors = panel_utils::BUTTON_COLORS_GREEN, .button_text = "Y"},
+		           .drag_float_settings = {.drag_float_tag = "##Y", .value_speed = 0.1F}},
+		          {.button_settings     = {.button_colors = panel_utils::BUTTON_COLORS_BLUE, .button_text = "Z"},
+		           .drag_float_settings = {.drag_float_tag = "##Z", .value_speed = 0.1F}}}},
 		    component.translation);
 
 		glm::vec3 rotation = glm::degrees(component.rotation);
-		draw_drag_float(
-		    {.label               = "Rotation",
-		     .drag_float_settings = {{.button_settings     = {.button_colors = BUTTON_COLORS_RED, .button_text = "X"},
-		                              .drag_float_settings = {.drag_float_tag = "##X", .value_speed = 0.1F}},
-		                             {.button_settings     = {.button_colors = BUTTON_COLORS_GREEN, .button_text = "Y"},
-		                              .drag_float_settings = {.drag_float_tag = "##Y", .value_speed = 0.1F}},
-		                             {.button_settings     = {.button_colors = BUTTON_COLORS_BLUE, .button_text = "Z"},
-		                              .drag_float_settings = {.drag_float_tag = "##Z", .value_speed = 0.1F}}}},
+		panel_utils::draw_drag_float(
+		    {.label = "Rotation",
+		     .drag_float_settings =
+		         {{.button_settings     = {.button_colors = panel_utils::BUTTON_COLORS_RED, .button_text = "X"},
+		           .drag_float_settings = {.drag_float_tag = "##X", .value_speed = 0.1F}},
+		          {.button_settings     = {.button_colors = panel_utils::BUTTON_COLORS_GREEN, .button_text = "Y"},
+		           .drag_float_settings = {.drag_float_tag = "##Y", .value_speed = 0.1F}},
+		          {.button_settings     = {.button_colors = panel_utils::BUTTON_COLORS_BLUE, .button_text = "Z"},
+		           .drag_float_settings = {.drag_float_tag = "##Z", .value_speed = 0.1F}}}},
 		    rotation);
 		component.rotation = glm::radians(rotation);
 
-		draw_drag_float(
-		    {.label = "Scale",
-		     .drag_float_settings =
-		         {{.button_settings     = {.button_colors = BUTTON_COLORS_RED, .reset_value = 1.0F, .button_text = "X"},
-		           .drag_float_settings = {.drag_float_tag = "##X", .value_speed = 0.1F}},
-		          {.button_settings     = {.button_colors = BUTTON_COLORS_GREEN, .reset_value = 1.0F, .button_text = "Y"},
-		           .drag_float_settings = {.drag_float_tag = "##Y", .value_speed = 0.1F}},
-		          {.button_settings     = {.button_colors = BUTTON_COLORS_BLUE, .reset_value = 1.0F, .button_text = "Z"},
-		           .drag_float_settings = {.drag_float_tag = "##Z", .value_speed = 0.1F}}}},
+		panel_utils::draw_drag_float(
+		    {.label               = "Scale",
+		     .drag_float_settings = {{.button_settings     = {.button_colors = panel_utils::BUTTON_COLORS_RED,
+		                                                      .reset_value   = 1.0F,
+		                                                      .button_text   = "X"},
+		                              .drag_float_settings = {.drag_float_tag = "##X", .value_speed = 0.1F}},
+		                             {.button_settings     = {.button_colors = panel_utils::BUTTON_COLORS_GREEN,
+		                                                      .reset_value   = 1.0F,
+		                                                      .button_text   = "Y"},
+		                              .drag_float_settings = {.drag_float_tag = "##Y", .value_speed = 0.1F}},
+		                             {.button_settings     = {.button_colors = panel_utils::BUTTON_COLORS_BLUE,
+		                                                      .reset_value   = 1.0F,
+		                                                      .button_text   = "Z"},
+		                              .drag_float_settings = {.drag_float_tag = "##Z", .value_speed = 0.1F}}}},
 		    component.scale);
 	});
 }
 
 void SceneHierarchyPanel::draw_camera_component(Entity entity) {
-	draw_component<component::Camera>("Camera", entity, [this](auto& component) {
+	panel_utils::draw_component<component::Camera>("Camera", entity, [this](auto& component) {
 		auto& camera = component.camera;
 
 		ImGui::Checkbox("Primary", &component.primary);
@@ -199,17 +220,19 @@ void SceneHierarchyPanel::draw_camera_component(Entity entity) {
 			float perspective_near_clip = camera.get_perspective_near_clip();
 			float perspective_far_clip  = camera.get_perspective_far_clip();
 
-			draw_drag_float(
+			panel_utils::draw_drag_float(
 			    {.label               = "Vertical FOV",
 			     .drag_float_settings = {{.button_settings     = {.reset_value = 45.F},
 			                              .drag_float_settings = {.value_speed = 0.1F, .value_min = 0.F, .value_max = 180.F}}}},
 			    perspective_fov);
-			draw_drag_float({.label               = "Near",
-			                 .drag_float_settings = {{.button_settings = {.reset_value = 0.01F}, .drag_float_settings = {}}}},
-			                perspective_near_clip);
-			draw_drag_float({.label               = "Far",
-			                 .drag_float_settings = {{.button_settings = {.reset_value = 1000.F}, .drag_float_settings = {}}}},
-			                perspective_far_clip);
+			panel_utils::draw_drag_float(
+			    {.label               = "Near",
+			     .drag_float_settings = {{.button_settings = {.reset_value = 0.01F}, .drag_float_settings = {}}}},
+			    perspective_near_clip);
+			panel_utils::draw_drag_float(
+			    {.label               = "Far",
+			     .drag_float_settings = {{.button_settings = {.reset_value = 1000.F}, .drag_float_settings = {}}}},
+			    perspective_far_clip);
 
 			camera.set_perspective_vertical_fov(au::degrees(perspective_fov).as(au::radians));
 			camera.set_perspective_near_clip(perspective_near_clip);
@@ -221,13 +244,15 @@ void SceneHierarchyPanel::draw_camera_component(Entity entity) {
 			float ortho_near_clip = camera.get_orthographic_near_clip();
 			float ortho_far_clip  = camera.get_orthographic_far_clip();
 
-			draw_drag_float({.label               = "Size",
-			                 .drag_float_settings = {{.button_settings = {.reset_value = 10.F}, .drag_float_settings = {}}}},
-			                ortho_size);
-			draw_drag_float({.label               = "Near",
-			                 .drag_float_settings = {{.button_settings = {.reset_value = -1.F}, .drag_float_settings = {}}}},
-			                ortho_near_clip);
-			draw_drag_float(
+			panel_utils::draw_drag_float(
+			    {.label               = "Size",
+			     .drag_float_settings = {{.button_settings = {.reset_value = 10.F}, .drag_float_settings = {}}}},
+			    ortho_size);
+			panel_utils::draw_drag_float(
+			    {.label               = "Near",
+			     .drag_float_settings = {{.button_settings = {.reset_value = -1.F}, .drag_float_settings = {}}}},
+			    ortho_near_clip);
+			panel_utils::draw_drag_float(
 			    {.label = "Far", .drag_float_settings = {{.button_settings = {.reset_value = 1.F}, .drag_float_settings = {}}}},
 			    ortho_far_clip);
 
@@ -241,15 +266,15 @@ void SceneHierarchyPanel::draw_camera_component(Entity entity) {
 }
 
 void SceneHierarchyPanel::draw_color_component(Entity entity) {
-	draw_component<component::Color>("Color", entity,
-	                                 [](auto& component) { ImGui::ColorEdit4("Color", glm::value_ptr(component.color)); });
+	panel_utils::draw_component<component::Color>(
+	    "Color", entity, [](auto& component) { ImGui::ColorEdit4("Color", glm::value_ptr(component.color)); });
 }
 
 void SceneHierarchyPanel::draw_sprite_renderer_component(Entity entity) {
-	draw_component<component::SpriteRenderer>("Sprite Renderer", entity, [this](auto& component) {
+	panel_utils::draw_component<component::SpriteRenderer>("Sprite Renderer", entity, [this](auto& component) {
 		ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
 
-		draw_button("Texture", {}, []() {});
+		panel_utils::draw_button("Texture", {}, []() {});
 
 		if (ImGui::BeginDragDropTarget()) {
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(ContentBrowserPanel::DRAG_DROP_ID)) {
@@ -264,7 +289,7 @@ void SceneHierarchyPanel::draw_sprite_renderer_component(Entity entity) {
 			ImGui::EndDragDropTarget();
 		}
 
-		draw_drag_float(
+		panel_utils::draw_drag_float(
 		    {.label               = "Tiling Factor",
 		     .drag_float_settings = {{.button_settings     = {.reset_value = 1.F},
 		                              .drag_float_settings = {.value_speed = 0.1F, .value_min = 0.F, .value_max = 100.F}}}},
@@ -273,19 +298,19 @@ void SceneHierarchyPanel::draw_sprite_renderer_component(Entity entity) {
 }
 
 void SceneHierarchyPanel::draw_circle_renderer_component(Entity entity) {
-	draw_component<component::CircleRenderer>("Circle Renderer", entity, [this](auto& component) {
+	panel_utils::draw_component<component::CircleRenderer>("Circle Renderer", entity, [this](auto& component) {
 		ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
 
 		float thickness = component.thickness.in(au::unos);
 		float fade      = component.fade.in(au::unos);
 
-		draw_drag_float(
+		panel_utils::draw_drag_float(
 		    {.label               = "Thickness",
 		     .drag_float_settings = {{.button_settings     = {.reset_value = 1.F},
 		                              .drag_float_settings = {.value_speed = 0.025F, .value_min = 0.F, .value_max = 1.F}}}},
 		    thickness);
 
-		draw_drag_float(
+		panel_utils::draw_drag_float(
 		    {.label               = "Fade",
 		     .drag_float_settings = {{.button_settings     = {.reset_value = 0.F},
 		                              .drag_float_settings = {.value_speed = 0.0025F, .value_min = 0.F, .value_max = 1.F}}}},
@@ -297,7 +322,7 @@ void SceneHierarchyPanel::draw_circle_renderer_component(Entity entity) {
 }
 
 void SceneHierarchyPanel::draw_rigid_body_2d_component(Entity entity) {
-	draw_component<component::RigidBody2D>("Rigid Body 2D", entity, [](auto& component) {
+	panel_utils::draw_component<component::RigidBody2D>("Rigid Body 2D", entity, [](auto& component) {
 		auto current_body_type_string = component::RigidBody2D::to_string(component.type);
 
 		if (ImGui::BeginCombo("Body Type", current_body_type_string.c_str())) {
@@ -319,24 +344,28 @@ void SceneHierarchyPanel::draw_rigid_body_2d_component(Entity entity) {
 }
 
 void SceneHierarchyPanel::draw_box_collider_2d_component(Entity entity) {
-	draw_component<component::BoxCollider2D>("Box Collider 2D", entity, [this](auto& component) {
-		draw_drag_float(
-		    {.label               = "Offset",
-		     .text_column_width   = units::pixels(70.F),
-		     .drag_float_settings = {{.button_settings     = {.button_colors = BUTTON_COLORS_RED, .button_text = "X"},
-		                              .drag_float_settings = {.drag_float_tag = "##X", .value_speed = 0.1F}},
-		                             {.button_settings     = {.button_colors = BUTTON_COLORS_GREEN, .button_text = "Y"},
-		                              .drag_float_settings = {.drag_float_tag = "##Y", .value_speed = 0.1F}}}},
-		    component.offset);
-
-		draw_drag_float(
-		    {.label             = "Size",
+	panel_utils::draw_component<component::BoxCollider2D>("Box Collider 2D", entity, [this](auto& component) {
+		panel_utils::draw_drag_float(
+		    {.label             = "Offset",
 		     .text_column_width = units::pixels(70.F),
 		     .drag_float_settings =
-		         {{.button_settings     = {.button_colors = BUTTON_COLORS_RED, .reset_value = 0.5F, .button_text = "Width"},
-		           .drag_float_settings = {.drag_float_tag = "##Width", .value_speed = 0.1F}},
-		          {.button_settings = {.button_colors = BUTTON_COLORS_GREEN, .reset_value = 0.5F, .button_text = "Height"},
-		           .drag_float_settings = {.drag_float_tag = "##Height", .value_speed = 0.1F}}}},
+		         {{.button_settings     = {.button_colors = panel_utils::BUTTON_COLORS_RED, .button_text = "X"},
+		           .drag_float_settings = {.drag_float_tag = "##X", .value_speed = 0.1F}},
+		          {.button_settings     = {.button_colors = panel_utils::BUTTON_COLORS_GREEN, .button_text = "Y"},
+		           .drag_float_settings = {.drag_float_tag = "##Y", .value_speed = 0.1F}}}},
+		    component.offset);
+
+		panel_utils::draw_drag_float(
+		    {.label               = "Size",
+		     .text_column_width   = units::pixels(70.F),
+		     .drag_float_settings = {{.button_settings     = {.button_colors = panel_utils::BUTTON_COLORS_RED,
+		                                                      .reset_value   = 0.5F,
+		                                                      .button_text   = "Width"},
+		                              .drag_float_settings = {.drag_float_tag = "##Width", .value_speed = 0.1F}},
+		                             {.button_settings     = {.button_colors = panel_utils::BUTTON_COLORS_GREEN,
+		                                                      .reset_value   = 0.5F,
+		                                                      .button_text   = "Height"},
+		                              .drag_float_settings = {.drag_float_tag = "##Height", .value_speed = 0.1F}}}},
 		    component.size);
 
 		float density               = component.density.in(units::densities);
@@ -344,32 +373,33 @@ void SceneHierarchyPanel::draw_box_collider_2d_component(Entity entity) {
 		float restitution           = component.restitution.in(au::unos);
 		float restitution_threshold = component.restitution_threshold.in(au::unos);
 
-		draw_drag_float(
+		panel_utils::draw_drag_float(
 		    {.label               = "Density",
 		     .text_column_width   = units::pixels(160.F),
 		     .drag_float_settings = {{.button_settings     = {.reset_value = 1.F},
 		                              .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F, .value_max = 1.F}}}},
 		    density);
 
-		draw_drag_float(
+		panel_utils::draw_drag_float(
 		    {.label               = "Friction",
 		     .text_column_width   = units::pixels(160.F),
 		     .drag_float_settings = {{.button_settings     = {.reset_value = 0.5F},
 		                              .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F, .value_max = 1.F}}}},
 		    friction);
 
-		draw_drag_float(
+		panel_utils::draw_drag_float(
 		    {.label               = "Restitution",
 		     .text_column_width   = units::pixels(160.F),
 		     .drag_float_settings = {{.button_settings     = {.reset_value = 0.F},
 		                              .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F, .value_max = 1.F}}}},
 		    restitution);
 
-		draw_drag_float({.label               = "Restitution Threshold",
-		                 .text_column_width   = units::pixels(160.F),
-		                 .drag_float_settings = {{.button_settings     = {.reset_value = 0.5F},
-		                                          .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F}}}},
-		                restitution_threshold);
+		panel_utils::draw_drag_float(
+		    {.label               = "Restitution Threshold",
+		     .text_column_width   = units::pixels(160.F),
+		     .drag_float_settings = {{.button_settings     = {.reset_value = 0.5F},
+		                              .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F}}}},
+		    restitution_threshold);
 
 		component.density               = units::densities(density);
 		component.friction              = units::newtons(friction);
@@ -379,13 +409,14 @@ void SceneHierarchyPanel::draw_box_collider_2d_component(Entity entity) {
 }
 
 void SceneHierarchyPanel::draw_circle_collider_2d_component(Entity entity) {
-	draw_component<component::CircleCollider2D>("Circle Collider 2D", entity, [this](auto& component) {
-		draw_drag_float(
-		    {.label               = "Offset",
-		     .drag_float_settings = {{.button_settings     = {.button_colors = BUTTON_COLORS_RED, .button_text = "X"},
-		                              .drag_float_settings = {.drag_float_tag = "##X", .value_speed = 0.1F}},
-		                             {.button_settings     = {.button_colors = BUTTON_COLORS_GREEN, .button_text = "Y"},
-		                              .drag_float_settings = {.drag_float_tag = "##Y", .value_speed = 0.1F}}}},
+	panel_utils::draw_component<component::CircleCollider2D>("Circle Collider 2D", entity, [this](auto& component) {
+		panel_utils::draw_drag_float(
+		    {.label = "Offset",
+		     .drag_float_settings =
+		         {{.button_settings     = {.button_colors = panel_utils::BUTTON_COLORS_RED, .button_text = "X"},
+		           .drag_float_settings = {.drag_float_tag = "##X", .value_speed = 0.1F}},
+		          {.button_settings     = {.button_colors = panel_utils::BUTTON_COLORS_GREEN, .button_text = "Y"},
+		           .drag_float_settings = {.drag_float_tag = "##Y", .value_speed = 0.1F}}}},
 		    component.offset);
 
 		float radius                = component.radius.in(au::meters);
@@ -394,38 +425,40 @@ void SceneHierarchyPanel::draw_circle_collider_2d_component(Entity entity) {
 		float restitution           = component.restitution.in(au::unos);
 		float restitution_threshold = component.restitution_threshold.in(au::unos);
 
-		draw_drag_float({.label               = "Radius",
-		                 .text_column_width   = units::pixels(160.F),
-		                 .drag_float_settings = {{.button_settings     = {.reset_value = 0.5F},
-		                                          .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.0000001F}}}},
-		                radius);
+		panel_utils::draw_drag_float(
+		    {.label               = "Radius",
+		     .text_column_width   = units::pixels(160.F),
+		     .drag_float_settings = {{.button_settings     = {.reset_value = 0.5F},
+		                              .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.0000001F}}}},
+		    radius);
 
-		draw_drag_float(
+		panel_utils::draw_drag_float(
 		    {.label               = "Density",
 		     .text_column_width   = units::pixels(160.F),
 		     .drag_float_settings = {{.button_settings     = {.reset_value = 1.F},
 		                              .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F, .value_max = 1.F}}}},
 		    density);
 
-		draw_drag_float(
+		panel_utils::draw_drag_float(
 		    {.label               = "Friction",
 		     .text_column_width   = units::pixels(160.F),
 		     .drag_float_settings = {{.button_settings     = {.reset_value = 0.5F},
 		                              .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F, .value_max = 1.F}}}},
 		    friction);
 
-		draw_drag_float(
+		panel_utils::draw_drag_float(
 		    {.label               = "Restitution",
 		     .text_column_width   = units::pixels(160.F),
 		     .drag_float_settings = {{.button_settings     = {.reset_value = 0.F},
 		                              .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F, .value_max = 1.F}}}},
 		    restitution);
 
-		draw_drag_float({.label               = "Restitution Threshold",
-		                 .text_column_width   = units::pixels(160.F),
-		                 .drag_float_settings = {{.button_settings     = {.reset_value = 0.5F},
-		                                          .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F}}}},
-		                restitution_threshold);
+		panel_utils::draw_drag_float(
+		    {.label               = "Restitution Threshold",
+		     .text_column_width   = units::pixels(160.F),
+		     .drag_float_settings = {{.button_settings     = {.reset_value = 0.5F},
+		                              .drag_float_settings = {.value_speed = 0.01F, .value_min = 0.F}}}},
+		    restitution_threshold);
 
 		component.radius                = au::meters(radius);
 		component.density               = units::densities(density);
@@ -435,29 +468,25 @@ void SceneHierarchyPanel::draw_circle_collider_2d_component(Entity entity) {
 	});
 }
 
-ImFont* SceneHierarchyPanel::get_font(const std::string& font_name) {
-	ImGuiIO& io                      = ImGui::GetIO();
-	auto [font_was_found, font_data] = fonts::FontLibrary::get_font_index_by_name("Roboto-Bold");
-	if (!font_was_found) {
-		EC_FATAL("The font was not found!");
-	}
-	return io.Fonts->Fonts[font_data.index];
-}
+void SceneHierarchyPanel::draw_sub_texture_component(Entity entity) {
+	panel_utils::draw_component<component::SubTexture>("Sub texture", entity, [&](auto& component) {
+		auto id           = static_cast<int>(component.sub_texture->get_texture()->get_renderer_id());
+		auto tile_index_x = component.sub_texture->get_index_x().in<int>(units::pixels);
+		auto tile_index_y = component.sub_texture->get_index_y().in<int>(units::pixels);
+		auto tile_width   = component.sub_texture->get_width().in<int>(units::pixels);
+		auto tile_height  = component.sub_texture->get_height().in<int>(units::pixels);
 
-ImVec2 SceneHierarchyPanel::get_button_size(const std::string& button_text) {
-	float line_height              = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0F;
-	auto [text_width, text_height] = ImGui::CalcTextSize(button_text.c_str());
-	return {line_height + text_width - 7.F, line_height};
-}
+		ImGui::Text(std::string("ID: " + std::to_string(id)).c_str());
+		ImGui::InputInt("Index X", &tile_index_x, 1, 2);
+		ImGui::InputInt("Index Y", &tile_index_y, 1, 2);
+		ImGui::InputInt("Width", &tile_width, 1, 2);
+		ImGui::InputInt("Height", &tile_height, 1, 2);
 
-void SceneHierarchyPanel::draw_labeled_drag_float(const CombinedButtonAndDragFloatSettings& settings, float& value) {
-	draw_button(settings.button_settings.button_text, settings.button_settings.button_colors,
-	            [&]() { value = settings.button_settings.reset_value; });
-
-	ImGui::SameLine();
-	ImGui::DragFloat(settings.drag_float_settings.drag_float_tag.c_str(), &value, settings.drag_float_settings.value_speed,
-	                 settings.drag_float_settings.value_min, settings.drag_float_settings.value_max,
-	                 settings.drag_float_settings.value_format.c_str());
+		component.sub_texture->set_index_x(units::pixels(tile_index_x));
+		component.sub_texture->set_index_y(units::pixels(tile_index_y));
+		component.sub_texture->set_tile_width(units::pixels(tile_width));
+		component.sub_texture->set_tile_height(units::pixels(tile_height));
+	});
 }
 
 }  // namespace eclipse

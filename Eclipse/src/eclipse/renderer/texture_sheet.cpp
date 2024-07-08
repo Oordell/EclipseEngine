@@ -9,6 +9,10 @@ TextureSheet::TextureSheet(const TextureSheetProperties& props)
       tile_height_(props.sub_tile_height),
       tile_spacing_x_(props.sub_tile_spacing_x),
       tile_spacing_y_(props.sub_tile_spacing_y) {
+	update_values();
+}
+
+void TextureSheet::update_values() {
 	if (tile_width_ > texture_->get_width()) {
 		tile_width_ = texture_->get_width();
 	}
