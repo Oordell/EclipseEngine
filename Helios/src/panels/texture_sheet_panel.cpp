@@ -35,15 +35,20 @@ void TextureSheetPanel::draw_add_texture_sheet_button() {
 			const wchar_t* path                = reinterpret_cast<const wchar_t*>(payload->Data);
 			std::filesystem::path texture_path = std::filesystem::path(ContentBrowserPanel::ASSETS_DIRECTORY) / path;
 			if (texture_path.has_extension() && texture_path.extension() == ".png") {
-				auto texture_sheet = Texture2D::create(texture_path.string());
-				component::TextureSheetComponent tsc;
-				tsc.texture_sheet = make_ref<TextureSheet>(TextureSheetProperties {.texture            = texture_sheet,
-				                                                                   .sub_tile_width     = units::pixels(16),
-				                                                                   .sub_tile_height    = units::pixels(16),
-				                                                                   .sub_tile_spacing_x = units::pixels(0),
-				                                                                   .sub_tile_spacing_y = units::pixels(0)});
-				auto entity       = context_->create_entity(texture_path.filename().string());
-				entity.add_component<component::TextureSheetComponent>(tsc);
+				auto all_texture_sheets_view = context_->get_view_of_all_entities_of_type<component::TextureSheetComponent>();
+				if (all_texture_sheets_view.size() < MAX_TEXTURE_SHEETS) {
+					auto texture_sheet = Texture2D::create(texture_path.string());
+					component::TextureSheetComponent tsc;
+					tsc.texture_sheet = make_ref<TextureSheet>(TextureSheetProperties {.texture            = texture_sheet,
+					                                                                   .sub_tile_width     = units::pixels(16),
+					                                                                   .sub_tile_height    = units::pixels(16),
+					                                                                   .sub_tile_spacing_x = units::pixels(0),
+					                                                                   .sub_tile_spacing_y = units::pixels(0)});
+					auto entity       = context_->create_entity(texture_path.filename().string());
+					entity.add_component<component::TextureSheetComponent>(tsc);
+				} else {
+					EC_CORE_DEBUG("Max number of loaded texture sheets reached!");
+				}
 			} else {
 				EC_CORE_TRACE("Only \".png\" is currently supported as textures.");
 			}

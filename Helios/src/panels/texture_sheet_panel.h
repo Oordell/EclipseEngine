@@ -36,6 +36,7 @@ private:
 
 	ref<Scene> context_;
 	std::vector<EntityDestroyedInterface*> entity_destroyed_subscribers_ {};
+	static constexpr uint32_t MAX_TEXTURE_SHEETS = 8;
 };
 
 }  // namespace eclipse
