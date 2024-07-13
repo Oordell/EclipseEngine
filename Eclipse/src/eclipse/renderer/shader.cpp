@@ -6,7 +6,7 @@
 
 namespace eclipse {
 
-ref<Shader> Shader::create(const FilePath& filepath) { return create_impl(filepath); }
+ref<Shader> Shader::create(const std::filesystem::path& filepath) { return create_impl(filepath); }
 
 ref<Shader> Shader::create(const ShaderInfo& info) { return create_impl(info); }
 
@@ -38,13 +38,13 @@ void ShaderLibrary::add(const std::string& name, const ref<Shader>& shader) {
 	shaders_[name] = shader;
 }
 
-ref<Shader> ShaderLibrary::load(const FilePath& filepath) {
+ref<Shader> ShaderLibrary::load(const std::filesystem::path& filepath) {
 	auto shader = Shader::create(filepath);
 	add(shader);
 	return shader;
 }
 
-ref<Shader> ShaderLibrary::load(const std::string& name, const FilePath& filepath) {
+ref<Shader> ShaderLibrary::load(const std::string& name, const std::filesystem::path& filepath) {
 	auto shader = Shader::create(filepath);
 	add(name, shader);
 	return shader;

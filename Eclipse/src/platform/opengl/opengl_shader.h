@@ -3,6 +3,8 @@
 #include "eclipse/renderer/shader.h"
 #include <glm/glm.hpp>
 
+#include <filesystem>
+
 // TODO: Remove!
 using GLenum = unsigned int;
 
@@ -10,7 +12,7 @@ namespace eclipse {
 
 class ECLIPSE_API OpenGLShader : public Shader {
 public:
-	OpenGLShader(const FilePath& filepath);
+	OpenGLShader(const std::filesystem::path& filepath);
 	OpenGLShader(const ShaderInfo& info);
 	virtual ~OpenGLShader();
 
@@ -38,7 +40,7 @@ public:
 	void upload_uniform_mat4(const std::string& name, const glm::mat4& matrix);
 
 private:
-	std::string read_file(const FilePath& filepath);
+	std::string read_file(const std::filesystem::path& filepath);
 	std::unordered_map<GLenum, std::string> pre_process(const std::string& vertes_src);
 	void compile_or_get_vulkan_binaries(const std::unordered_map<GLenum, std::string>& shader_sources);
 	void compile_or_get_opengl_binaries();
@@ -47,7 +49,7 @@ private:
 	void init(const std::unordered_map<GLenum, std::string>& sources);
 
 	uint32_t renderer_id_ = 0;
-	FilePath file_path_ {""};
+	std::filesystem::path file_path_ {""};
 	std::string name_ {};
 
 	std::unordered_map<GLenum, std::vector<uint32_t>> vulkan_spirv_;

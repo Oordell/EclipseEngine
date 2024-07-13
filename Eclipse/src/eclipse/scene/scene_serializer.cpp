@@ -278,7 +278,7 @@ static void serialize_entity(YAML::Emitter& out, Entity entity) {
 	out << YAML::EndMap;
 }
 
-void SceneSerializer::serialize_text(const FilePath& file_path) {
+void SceneSerializer::serialize_text(const std::filesystem::path& file_path) {
 	YAML::Emitter out;
 	out << YAML::BeginMap;
 	out << YAML::Key << serializer_keys::SCENE << YAML::Value << "Untitled scene";
@@ -293,18 +293,18 @@ void SceneSerializer::serialize_text(const FilePath& file_path) {
 	out << YAML::EndSeq;
 	out << YAML::EndMap;
 
-	std::ofstream fout(file_path.value());
+	std::ofstream fout(file_path.string());
 	fout << out.c_str();
 }
 
-void SceneSerializer::serialize_binary(const FilePath& file_path) {
+void SceneSerializer::serialize_binary(const std::filesystem::path& file_path) {
 	EC_CORE_ASSERT(false, "Binary serialization is not implemented yet!");
 }
 
-bool SceneSerializer::deserialize_text(const FilePath& file_path) {
+bool SceneSerializer::deserialize_text(const std::filesystem::path& file_path) {
 	YAML::Node data;
 	try {
-		data = YAML::LoadFile(file_path.value());
+		data = YAML::LoadFile(file_path.string());
 	} catch (YAML::ParserException& e) {
 		EC_CORE_ERROR("Error: {0}", e.msg);
 		return false;
@@ -509,7 +509,7 @@ bool SceneSerializer::deserialize_text(const FilePath& file_path) {
 	return true;
 }
 
-bool SceneSerializer::deserialize_binary(const FilePath& file_path) {
+bool SceneSerializer::deserialize_binary(const std::filesystem::path& file_path) {
 	EC_CORE_ASSERT(false, "Binary deserialization is not implemented yet!");
 	return false;
 }

@@ -7,7 +7,7 @@ namespace eclipse::fonts {
 
 FontLibrary FontLibrary::instance_ = FontLibrary();
 
-FontAdderResult FontLibrary::add_font(const FilePath& path, std::string_view name, float size_pixels) {
+FontAdderResult FontLibrary::add_font(const std::filesystem::path& path, std::string_view name, float size_pixels) {
 	return get().add_font_impl(path, name, size_pixels);
 }
 
@@ -15,10 +15,11 @@ FontGetterResult FontLibrary::get_font_index_by_name(std::string_view name) {
 	return get().get_font_index_by_name_impl(name);
 }
 
-FontAdderResult FontLibrary::add_font_impl(const FilePath& path, std::string_view name, float size_pixels) {
+FontAdderResult FontLibrary::add_font_impl(const std::filesystem::path& path, std::string_view name,
+                                           float size_pixels) {
 	ImGui::CreateContext();
 	ImGuiIO& io               = ImGui::GetIO();
-	ImFont* font              = io.Fonts->AddFontFromFileTTF(path.value().c_str(), size_pixels);
+	ImFont* font              = io.Fonts->AddFontFromFileTTF(path.string().c_str(), size_pixels);
 	auto current_num_of_fonts = static_cast<uint32_t>(fonts_added_.size());
 	fonts_added_.emplace_back(current_num_of_fonts, name, path);
 	return {current_num_of_fonts, true};

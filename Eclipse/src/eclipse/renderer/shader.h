@@ -1,12 +1,12 @@
 #pragma once
 
 #include "eclipse/core/core.h"
-#include "eclipse/common_types/file_path.h"
 
 #include <glm/glm.hpp>
 
 #include <string>
 #include <unordered_map>
+#include <filesystem>
 
 namespace eclipse {
 
@@ -32,7 +32,7 @@ public:
 	virtual void set_float4(const std::string& name, const glm::vec4& value)         = 0;
 	virtual const std::string& get_name() const                                      = 0;
 
-	static ref<Shader> create(const FilePath& filepath);
+	static ref<Shader> create(const std::filesystem::path& filepath);
 	static ref<Shader> create(const ShaderInfo& info);
 
 private:
@@ -44,8 +44,8 @@ class ECLIPSE_API ShaderLibrary {
 public:
 	void add(const ref<Shader>& shader);
 	void add(const std::string& name, const ref<Shader>& shader);
-	ref<Shader> load(const FilePath& filepath);
-	ref<Shader> load(const std::string& name, const FilePath& filepath);
+	ref<Shader> load(const std::filesystem::path& filepath);
+	ref<Shader> load(const std::string& name, const std::filesystem::path& filepath);
 	ref<Shader> get(const std::string& name);
 	bool exists(const std::string& name) const;
 

@@ -1,17 +1,18 @@
 #pragma once
 
 #include "scene.h"
-#include "eclipse/common_types/file_path.h"
+
+#include <filesystem>
 
 namespace eclipse {
 
 class ECLIPSE_API SceneSerializer {
 public:
 	SceneSerializer(const ref<Scene>& scene);
-	void serialize_text(const FilePath& file_path);
-	void serialize_binary(const FilePath& file_path);
-	bool deserialize_text(const FilePath& file_path);
-	bool deserialize_binary(const FilePath& file_path);
+	void serialize_text(const std::filesystem::path& file_path);
+	void serialize_binary(const std::filesystem::path& file_path);
+	bool deserialize_text(const std::filesystem::path& file_path);
+	bool deserialize_binary(const std::filesystem::path& file_path);
 
 private:
 	ref<Scene> scene_;

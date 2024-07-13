@@ -149,7 +149,6 @@
   <ItemGroup>
     <ClInclude Include="src\Eclipse.h" />
     <ClInclude Include="src\eclipse\common_types\dimensions\pixel.h" />
-    <ClInclude Include="src\eclipse\common_types\file_path.h" />
     <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h" />
     <ClInclude Include="src\eclipse\common_types\must_init.h" />
     <ClInclude Include="src\eclipse\common_types\orthographic.h" />

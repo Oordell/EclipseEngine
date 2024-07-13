@@ -11,6 +11,8 @@
 
 #include "ImGuizmo.h"
 
+#include <filesystem>
+
 namespace eclipse {
 
 ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer") {}
@@ -33,13 +35,16 @@ void ImGuiLayer::on_attach() {
 	//	io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
 	// Add fonts
-	fonts::FontLibrary::add_font(FilePath("assets/fonts/gochi-hand/GochiHand-Regular.ttf"), "GochiHand-Regular", 20.0F);
-	fonts::FontLibrary::add_font(FilePath("assets/fonts/rock-salt/RockSalt-Regular.ttf"), "RockSalt-Regular", 22.0F);
-	fonts::FontLibrary::add_font(FilePath("assets/fonts/rock-salt/RockSalt-Regular.ttf"), "RockSalt-Regular");
-	fonts::FontLibrary::add_font(FilePath("assets/fonts/roboto-mono/static/RobotoMono-Regular.ttf"), "RobotoMono-Regular");
-	fonts::FontLibrary::add_font(FilePath("assets/fonts/roboto/Roboto-Regular.ttf"), "Roboto-Regular");
-	fonts::FontLibrary::add_font(FilePath("assets/fonts/roboto/Roboto-Italic.ttf"), "Roboto-Italic");
-	fonts::FontLibrary::add_font(FilePath("assets/fonts/roboto/Roboto-Bold.ttf"), "Roboto-Bold");
+	fonts::FontLibrary::add_font(std::filesystem::path("assets/fonts/gochi-hand/GochiHand-Regular.ttf"),
+	                             "GochiHand-Regular", 20.0F);
+	fonts::FontLibrary::add_font(std::filesystem::path("assets/fonts/rock-salt/RockSalt-Regular.ttf"), "RockSalt-Regular",
+	                             22.0F);
+	fonts::FontLibrary::add_font(std::filesystem::path("assets/fonts/rock-salt/RockSalt-Regular.ttf"), "RockSalt-Regular");
+	fonts::FontLibrary::add_font(std::filesystem::path("assets/fonts/roboto-mono/static/RobotoMono-Regular.ttf"),
+	                             "RobotoMono-Regular");
+	fonts::FontLibrary::add_font(std::filesystem::path("assets/fonts/roboto/Roboto-Regular.ttf"), "Roboto-Regular");
+	fonts::FontLibrary::add_font(std::filesystem::path("assets/fonts/roboto/Roboto-Italic.ttf"), "Roboto-Italic");
+	fonts::FontLibrary::add_font(std::filesystem::path("assets/fonts/roboto/Roboto-Bold.ttf"), "Roboto-Bold");
 	auto [success, font_data] = fonts::FontLibrary::get_font_index_by_name("Roboto-Regular");
 	EC_CORE_ASSERT(success, "Font was not found!");
 
