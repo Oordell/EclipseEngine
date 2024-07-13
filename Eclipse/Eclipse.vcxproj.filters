@@ -87,9 +87,6 @@
     <ClInclude Include="src\eclipse\common_types\dimensions\pixel.h">
       <Filter>src\eclipse\common_types\dimensions</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\common_types\file_path.h">
-      <Filter>src\eclipse\common_types</Filter>
-    </ClInclude>
     <ClInclude Include="src\eclipse\common_types\mouse_scroll_offset.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>

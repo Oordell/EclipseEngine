@@ -4,6 +4,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <filesystem>
 
 ExampleLayer::ExampleLayer() : Layer("Example") {
 	static const int dimentions = 3;
@@ -113,7 +114,7 @@ ExampleLayer::ExampleLayer() : Layer("Example") {
 	flat_color_shader_ = eclipse::Shader::create(
 	    {.name = "FlatColor", .vertex_src = flat_color_vertex_src, .fragment_src = flat_color_fragments_src});
 
-	auto texture_shader = shader_library_.load(eclipse::FilePath("assets/shaders/texture.glsl"));
+	auto texture_shader = shader_library_.load(std::filesystem::path("assets/shaders/texture.glsl"));
 
 	texture_shader->bind();
 	texture_shader->set_int("u_texture", 0);

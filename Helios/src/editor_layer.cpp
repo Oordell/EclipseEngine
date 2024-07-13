@@ -29,7 +29,7 @@ void EditorLayer::on_attach() {
 	auto command_line_args = Application::get().get_command_line_args();
 	if (command_line_args.count > 1) {
 		EC_DEBUG("Loading command line arguments...");
-		auto scene_file_path = FilePath(command_line_args[1]);
+		auto scene_file_path = std::filesystem::path(command_line_args[1]);
 		SceneSerializer serializer(active_scene_);
 		serializer.deserialize_text(scene_file_path);
 	}
@@ -334,7 +334,7 @@ void EditorLayer::open_scene() {
 	auto result = FileDialogs::open_file(WINDOWS_FILE_DIALOG_FILTER.data());
 
 	if (result.has_value()) {
-		open_scene(std::filesystem::path(result.value().value()));
+		open_scene(result.value());
 	} else {
 		EC_CORE_ERROR("Couldn't open scene, as we didn't find a file path...");
 	}
@@ -354,7 +354,7 @@ void EditorLayer::open_scene(const std::filesystem::path& path) {
 	ref<Scene> new_scene = make_ref<Scene>();
 	new_scene->on_viewport_resize(viewport_size_);
 	SceneSerializer serializer(new_scene);
-	if (serializer.deserialize_text(FilePath(path.string()))) {
+	if (serializer.deserialize_text(path)) {
 		editor_scene_ = new_scene;
 		editor_scene_->on_viewport_resize(viewport_size_);
 		set_panel_context(editor_scene_);
@@ -367,8 +367,8 @@ void EditorLayer::save_scene_as() {
 	auto result = FileDialogs::save_file(WINDOWS_FILE_DIALOG_FILTER.data());
 
 	if (result.has_value()) {
-		serialize_scene(active_scene_, result.value().value());
-		editor_scene_path_ = result.value().value();
+		serialize_scene(active_scene_, result.value());
+		editor_scene_path_ = result.value();
 	} else {
 		EC_CORE_ERROR("Couldn't save scene, as we didn't find a file path...");
 	}
@@ -384,7 +384,7 @@ void EditorLayer::save_scene() {
 
 void EditorLayer::serialize_scene(ref<Scene> scene, const std::filesystem::path& path) {
 	SceneSerializer serializer(scene);
-	serializer.serialize_text(FilePath(path.string()));
+	serializer.serialize_text(std::filesystem::path(path.string()));
 }
 
 bool EditorLayer::on_key_pressed(KeyPressedEvent& event) {

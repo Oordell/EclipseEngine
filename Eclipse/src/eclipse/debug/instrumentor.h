@@ -1,12 +1,11 @@
 #pragma once
 
-#include "eclipse/common_types/file_path.h"
-
 #include <string>
 #include <chrono>
 #include <algorithm>
 #include <fstream>
 #include <thread>
+#include <filesystem>
 
 namespace eclipse::debug {
 
@@ -30,7 +29,7 @@ public:
 	Instrumentor(const Instrumentor&) = delete;
 	Instrumentor(Instrumentor&&)      = delete;
 
-	void begin_session(const std::string& name, FilePath filepath = FilePath("results.json")) {
+	void begin_session(const std::string& name, std::filesystem::path filepath = std::filesystem::path("results.json")) {
 		std::lock_guard lock(mutex_);
 		if (current_session_) {
 			// If there is already a current session, then close it before beginning new one. Subsequent profiling output meant
@@ -42,13 +41,13 @@ public:
 			internal_end_session();
 		}
 
-		output_stream_.open(filepath.value());
+		output_stream_.open(filepath.string());
 		if (output_stream_.is_open()) {
 			current_session_ = new InstrumentationSession {name};
 			write_header();
 		} else {
 			if (Log::get_core_logger()) {  // Edge case: begin_session() might be before Log::init()
-				EC_CORE_ERROR("Instrumentor could not open results file '{0}'.", filepath.value());
+				EC_CORE_ERROR("Instrumentor could not open results file '{0}'.", filepath.string());
 			}
 		}
 	}

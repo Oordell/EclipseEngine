@@ -48,16 +48,16 @@ static std::string gl_shader_stage_to_string(GLenum stage) {
 	return nullptr;
 }
 
-static FilePath get_cache_directory() {
+static std::filesystem::path get_cache_directory() {
 	// TODO: make sure the assets directory is valid
-	static const FilePath path {"assets/cache/shader/opengl"};
+	static const std::filesystem::path path {"assets/cache/shader/opengl"};
 	return path;
 }
 
 static void create_cache_directory_if_needed() {
 	auto cache_directory = get_cache_directory();
-	if (!std::filesystem::exists(cache_directory.value())) {
-		std::filesystem::create_directories(cache_directory.value());
+	if (!std::filesystem::exists(cache_directory)) {
+		std::filesystem::create_directories(cache_directory);
 	}
 }
 
@@ -89,13 +89,12 @@ static std::string gl_shader_stage_cached_vulkan_file_extension(GLenum stage) {
 
 }  // namespace utils
 
-OpenGLShader::OpenGLShader(const FilePath& filepath) : file_path_(filepath) {
+OpenGLShader::OpenGLShader(const std::filesystem::path& filepath) : file_path_(filepath) {
 	EC_PROFILE_FUNCTION();
 
 	utils::create_cache_directory_if_needed();
 
-	std::filesystem::path path = filepath.value();
-	name_                      = path.stem().string();  // Returns the file's name stripped of the extension.
+	name_ = file_path_.stem().string();  // Returns the file's name stripped of the extension.
 
 	auto source      = read_file(filepath);
 	auto shader_srcs = pre_process(source);
@@ -213,11 +212,11 @@ void OpenGLShader::upload_uniform_mat4(const std::string& name, const glm::mat4&
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-std::string OpenGLShader::read_file(const FilePath& filepath) {
+std::string OpenGLShader::read_file(const std::filesystem::path& filepath) {
 	EC_PROFILE_FUNCTION();
 
 	std::string result;
-	std::ifstream in(filepath.value(), std::ios::in | std::ios::binary);
+	std::ifstream in(filepath.string(), std::ios::in | std::ios::binary);
 	if (in) {
 		in.seekg(0, std::ios::end);
 		size_t size = in.tellg();
@@ -227,10 +226,10 @@ std::string OpenGLShader::read_file(const FilePath& filepath) {
 			in.read(&result[0], size);
 			in.close();
 		} else {
-			EC_CORE_ERROR("Could not read from file '{0}'", filepath.value());
+			EC_CORE_ERROR("Could not read from file '{0}'", filepath.string());
 		}
 	} else {
-		EC_CORE_ERROR("Couldn't open file '{0}'", filepath.value());
+		EC_CORE_ERROR("Couldn't open file '{0}'", filepath.string());
 	}
 	return result;
 }
@@ -274,14 +273,13 @@ void OpenGLShader::compile_or_get_vulkan_binaries(const std::unordered_map<GLenu
 		options.SetOptimizationLevel(shaderc_optimization_level_performance);
 	}
 
-	std::filesystem::path cache_directory = utils::get_cache_directory().value();
+	std::filesystem::path cache_directory = utils::get_cache_directory();
 
 	auto& shader_data = vulkan_spirv_;
 	shader_data.clear();
 	for (auto&& [stage, source] : shader_srcs) {
-		std::filesystem::path shader_file_path = file_path_.value();
-		std::filesystem::path cached_path      = cache_directory / (shader_file_path.filename().string() +
-                                                         utils::gl_shader_stage_cached_vulkan_file_extension(stage));
+		std::filesystem::path cached_path =
+		    cache_directory / (file_path_.filename().string() + utils::gl_shader_stage_cached_vulkan_file_extension(stage));
 
 		std::ifstream in(cached_path, std::ios::in | std::ios::binary);
 		if (in.is_open()) {
@@ -293,8 +291,8 @@ void OpenGLShader::compile_or_get_vulkan_binaries(const std::unordered_map<GLenu
 			data.resize(size / sizeof(uint32_t));
 			in.read((char*) data.data(), size);
 		} else {
-			shaderc::SpvCompilationResult module =
-			    compiler.CompileGlslToSpv(source, utils::gl_shader_stage_to_shaderc(stage), file_path_.value().c_str(), options);
+			shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(source, utils::gl_shader_stage_to_shaderc(stage),
+			                                                                 file_path_.string().c_str(), options);
 			if (module.GetCompilationStatus() != shaderc_compilation_status_success) {
 				EC_CORE_ERROR(module.GetErrorMessage());
 				EC_CORE_ASSERT(false, "Failed to compile shader!");
@@ -328,15 +326,14 @@ void OpenGLShader::compile_or_get_opengl_binaries() {
 		options.SetOptimizationLevel(shaderc_optimization_level_performance);
 	}
 
-	std::filesystem::path cache_directory = utils::get_cache_directory().value();
+	std::filesystem::path cache_directory = utils::get_cache_directory();
 
 	auto& shader_data = opengl_spirv_;
 	shader_data.clear();
 	opengl_source_code_.clear();
 	for (auto&& [stage, spirv] : vulkan_spirv_) {
-		std::filesystem::path shader_file_path = file_path_.value();
-		std::filesystem::path cached_path      = cache_directory / (shader_file_path.filename().string() +
-                                                         utils::gl_shader_stage_cached_opengl_file_extension(stage));
+		std::filesystem::path cached_path =
+		    cache_directory / (file_path_.filename().string() + utils::gl_shader_stage_cached_opengl_file_extension(stage));
 
 		std::ifstream in(cached_path, std::ios::in | std::ios::binary);
 		if (in.is_open()) {
@@ -353,7 +350,7 @@ void OpenGLShader::compile_or_get_opengl_binaries() {
 			auto& source               = opengl_source_code_[stage];
 
 			shaderc::SpvCompilationResult module =
-			    compiler.CompileGlslToSpv(source, utils::gl_shader_stage_to_shaderc(stage), file_path_.value().c_str());
+			    compiler.CompileGlslToSpv(source, utils::gl_shader_stage_to_shaderc(stage), file_path_.string().c_str());
 			if (module.GetCompilationStatus() != shaderc_compilation_status_success) {
 				EC_CORE_ERROR(module.GetErrorMessage());
 				EC_CORE_ASSERT(false, "Failed to compile shader code!");
@@ -396,7 +393,7 @@ void OpenGLShader::create_program() {
 
 		std::vector<GLchar> info_log(max_length);
 		glGetProgramInfoLog(program, max_length, &max_length, info_log.data());
-		EC_CORE_ERROR("Shader linking failed ({0}):\n{1}", file_path_.value(), info_log.data());
+		EC_CORE_ERROR("Shader linking failed ({0}):\n{1}", file_path_.string(), info_log.data());
 
 		glDeleteProgram(program);
 
@@ -417,7 +414,7 @@ void OpenGLShader::reflect(GLenum stage, const std::vector<uint32_t>& shader_dat
 	spirv_cross::Compiler compiler(shader_data);
 	spirv_cross::ShaderResources resources = compiler.get_shader_resources();
 
-	EC_CORE_TRACE("OpenGLShader::reflect - {0} {1}", utils::gl_shader_stage_to_string(stage), file_path_.value());
+	EC_CORE_TRACE("OpenGLShader::reflect - {0} {1}", utils::gl_shader_stage_to_string(stage), file_path_.string());
 	EC_CORE_TRACE("    {0} uniform buffers", resources.uniform_buffers.size());
 	EC_CORE_TRACE("    {0} resources", resources.sampled_images.size());
 

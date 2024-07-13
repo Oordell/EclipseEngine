@@ -1,9 +1,9 @@
 #pragma once
 
 #include "eclipse/core/core.h"
-#include "eclipse/common_types/file_path.h"
 
 #include <vector>
+#include <filesystem>
 
 namespace eclipse::fonts {
 
@@ -15,7 +15,7 @@ struct FontAdderResult {
 struct FontData {
 	uint16_t index {};
 	std::string_view name {};
-	FilePath file_path {"Nan"};
+	std::filesystem::path file_path {"Nan"};
 };
 
 struct FontGetterResult {
@@ -33,12 +33,12 @@ public:
 
 	static FontLibrary& get() { return instance_; }
 
-	static FontAdderResult add_font(const FilePath& path, std::string_view name, float size_pixels = 18.0F);
+	static FontAdderResult add_font(const std::filesystem::path& path, std::string_view name, float size_pixels = 18.0F);
 	static FontGetterResult get_font_index_by_name(std::string_view name);
 
 private:
 	FontLibrary() = default;
-	FontAdderResult add_font_impl(const FilePath& path, std::string_view name, float size_pixels);
+	FontAdderResult add_font_impl(const std::filesystem::path& path, std::string_view name, float size_pixels);
 	FontGetterResult get_font_index_by_name_impl(std::string_view name);
 
 	std::vector<FontData> fonts_added_ = {};

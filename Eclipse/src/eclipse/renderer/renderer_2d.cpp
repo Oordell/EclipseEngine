@@ -156,9 +156,9 @@ void Renderer2D::init() {
 		samplers[i] = i;
 	}
 
-	data.quad_shader   = Shader::create(FilePath("assets/shaders/renderer2d_quad.glsl"));
-	data.circle_shader = Shader::create(FilePath("assets/shaders/renderer2d_circle.glsl"));
-	data.line_shader   = Shader::create(FilePath("assets/shaders/renderer2d_line.glsl"));
+	data.quad_shader   = Shader::create(std::filesystem::path("assets/shaders/renderer2d_quad.glsl"));
+	data.circle_shader = Shader::create(std::filesystem::path("assets/shaders/renderer2d_circle.glsl"));
+	data.line_shader   = Shader::create(std::filesystem::path("assets/shaders/renderer2d_line.glsl"));
 
 	data.texture_slots[0] = data.white_texture;
 
