@@ -1582,6 +1582,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\scene\texture_sheets_components.h" />
+    <ClInclude Include="src\eclipse\common_types\pose_2d.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\core\application.cpp">

@@ -153,6 +153,7 @@
     <ClInclude Include="src\eclipse\common_types\must_init.h" />
     <ClInclude Include="src\eclipse\common_types\orthographic.h" />
     <ClInclude Include="src\eclipse\common_types\point_2d.h" />
+    <ClInclude Include="src\eclipse\common_types\pose_2d.h" />
     <ClInclude Include="src\eclipse\common_types\profile_results.h" />
     <ClInclude Include="src\eclipse\common_types\screen_velocity_2d.h" />
     <ClInclude Include="src\eclipse\common_types\transform.h" />

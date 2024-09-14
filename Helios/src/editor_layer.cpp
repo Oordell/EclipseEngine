@@ -475,12 +475,8 @@ void EditorLayer::render_overlay() {
 		auto box_view = active_scene_->get_view_of_all_entities_of_type<component::Transform, component::BoxCollider2D>();
 		for (auto entity : box_view) {
 			auto [transform, box] = box_view.get<component::Transform, component::BoxCollider2D>(entity);
-
-			glm::vec3 translation = transform.translation + glm::vec3(box.offset, 0.001F);
 			glm::vec3 scale       = transform.scale * glm::vec3(box.size * 2.F, 1.F);
-
-			auto trans = utils::create_transform(translation, transform.rotation, scale);
-
+			auto trans = utils::create_transform_with_offset(transform.translation, transform.rotation, scale, box.offset);
 			Renderer2D::draw_rectangle({.transform = trans, .color = outline_color});
 		}
 
@@ -488,12 +484,8 @@ void EditorLayer::render_overlay() {
 		    active_scene_->get_view_of_all_entities_of_type<component::Transform, component::CircleCollider2D>();
 		for (auto entity : circle_view) {
 			auto [transform, circle] = circle_view.get<component::Transform, component::CircleCollider2D>(entity);
-
-			glm::vec3 translation = transform.translation + glm::vec3(circle.offset, 0.001F);
-			glm::vec3 scale       = transform.scale * glm::vec3(circle.radius.in(au::meters) *2.F);
-
-			auto trans = utils::create_transform(translation, {0.F, 0.F, 0.F}, scale);
-
+			glm::vec3 scale          = transform.scale * glm::vec3(circle.radius.in(au::meters) *2.F);
+			auto trans = utils::create_transform_with_offset(transform.translation, transform.rotation, scale, circle.offset);
 			Renderer2D::draw_circle(
 			    {.transform = trans,
 			     .component = {.color = outline_color, .radius = circle.radius, .thickness = au::unos(0.05F)}});

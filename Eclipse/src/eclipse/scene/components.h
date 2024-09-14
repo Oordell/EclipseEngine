@@ -5,6 +5,7 @@
 #include "eclipse/core/uuid.h"
 #include "eclipse/common_types/units/newtons.h"
 #include "eclipse/common_types/units/densities.h"
+#include "eclipse/utils/math.h"
 
 #include <map>
 #include <glm/glm.hpp>
@@ -35,11 +36,7 @@ struct Transform {
 	~Transform()                = default;
 	Transform(const Transform&) = default;
 
-	glm::mat4 get_transform() const {
-		static const glm::mat4 IDENTITY_MATRIX = glm::mat4(1.0F);
-		return glm::translate(IDENTITY_MATRIX, translation) * glm::toMat4(glm::quat(rotation)) *
-		       glm::scale(IDENTITY_MATRIX, scale);
-	}
+	constexpr glm::mat4 get_transform() const { return utils::create_transform(translation, rotation, scale); }
 
 	glm::vec3 translation {0.0F, 0.0F, 0.0F};
 	glm::vec3 rotation {0.0F, 0.0F, 0.0F};

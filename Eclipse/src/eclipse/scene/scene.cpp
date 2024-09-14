@@ -236,22 +236,66 @@ void Scene::init_2d_physics() {
 }
 
 void Scene::update_2d_physics(const au::QuantityF<au::Seconds>& timestep) {
+	auto view = registry_.view<component::RigidBody2D>();
+	for (auto e : view) {
+		Entity entity {e, this};
+		auto& rigid_body_2d = entity.get_component<component::RigidBody2D>();
+
+		glm::vec2 offset {0.F, 0.F};
+		if (entity.has_component<component::BoxCollider2D>()) {
+			offset = entity.get_component<component::BoxCollider2D>().offset;
+		} else if (entity.has_component<component::CircleCollider2D>()) {
+			offset = entity.get_component<component::CircleCollider2D>().offset;
+		}
+
+		b2Body* body            = reinterpret_cast<b2Body*>(rigid_body_2d.runtime_body);
+		Pose2D offset_body_pose = utils::transform_pose2d({.x     = units::pixels(body->GetPosition().x),
+		                                                   .y     = units::pixels(body->GetPosition().y),
+		                                                   .theta = au::radians(body->GetAngle())},
+		                                                  {.x = units::pixels(offset.x), .y = units::pixels(offset.y)});
+
+		body->SetTransform({offset_body_pose.x.in<units::Pixels>(), offset_body_pose.y.in<units::Pixels>()},
+		                   offset_body_pose.theta.in<au::Radians>());
+	}
+
 	constexpr uint32_t velocity_iterations = 6;
 	constexpr uint32_t position_iterations = 2;
 	physics_world_->Step(timestep.in(au::seconds), velocity_iterations, position_iterations);
 
 	// Get transform from box2d
-	auto view = registry_.view<component::RigidBody2D>();
 	for (auto e : view) {
 		Entity entity {e, this};
 		auto& transform     = entity.get_component<component::Transform>();
 		auto& rigid_body_2d = entity.get_component<component::RigidBody2D>();
 
-		b2Body* body            = reinterpret_cast<b2Body*>(rigid_body_2d.runtime_body);
+		glm::vec2 offset {0.F, 0.F};
+		if (entity.has_component<component::BoxCollider2D>()) {
+			offset = entity.get_component<component::BoxCollider2D>().offset;
+		} else if (entity.has_component<component::CircleCollider2D>()) {
+			offset = entity.get_component<component::CircleCollider2D>().offset;
+		}
+
+		b2Body* body = reinterpret_cast<b2Body*>(rigid_body_2d.runtime_body);
+		Pose2D original_body_pose =
+		    utils::inverse_transform_pose2d({.x     = units::pixels(body->GetPosition().x),
+		                                     .y     = units::pixels(body->GetPosition().y),
+		                                     .theta = au::radians(body->GetAngle())},
+		                                    {.x = units::pixels(offset.x), .y = units::pixels(offset.y)});
+
+		body->SetTransform({original_body_pose.x.in<units::Pixels>(), original_body_pose.y.in<units::Pixels>()},
+		                   original_body_pose.theta.in<au::Radians>());
+
 		const auto& position    = body->GetPosition();
 		transform.translation.x = position.x;
 		transform.translation.y = position.y;
 		transform.rotation.z    = body->GetAngle();
+
+		/*body->SetTransform({offset_body_pose.x.in<units::Pixels>(), offset_body_pose.y.in<units::Pixels>()},
+		                   offset_body_pose.theta.in<au::Radians>());*/
+
+		/*transform.translation.x = offset_body_pose.x.in<units::Pixels>();
+		transform.translation.y = offset_body_pose.y.in<units::Pixels>();
+		transform.rotation.z    = offset_body_pose.theta.in<au::Radians>();*/
 	}
 }
 
