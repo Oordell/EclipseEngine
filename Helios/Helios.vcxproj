@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\bomberman\game_layer.hpp" />
     <ClInclude Include="src\editor_layer.h" />
     <ClInclude Include="src\panels\content_browser_panel.h" />
     <ClInclude Include="src\panels\entity_destroyed_interface.h" />
@@ -146,6 +147,7 @@
     <ClInclude Include="src\panels\texture_sheet_panel.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\bomberman\game_layer.cpp" />
     <ClCompile Include="src\editor_layer.cpp" />
     <ClCompile Include="src\helios_app.cpp" />
     <ClCompile Include="src\panels\content_browser_panel.cpp" />

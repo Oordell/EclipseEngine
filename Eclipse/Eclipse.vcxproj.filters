@@ -99,6 +99,9 @@
     <ClInclude Include="src\eclipse\common_types\point_2d.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
+    <ClInclude Include="src\eclipse\common_types\pose_2d.h">
+      <Filter>src\eclipse\common_types</Filter>
+    </ClInclude>
     <ClInclude Include="src\eclipse\common_types\profile_results.h">
       <Filter>src\eclipse\common_types</Filter>
     </ClInclude>
@@ -274,6 +277,9 @@
       <Filter>src\eclipse\scene</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\scene\scriptable_entity.h">
+      <Filter>src\eclipse\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eclipse\scene\texture_sheets_components.h">
       <Filter>src\eclipse\scene</Filter>
     </ClInclude>
     <ClInclude Include="src\eclipse\utils\math.h">
@@ -1581,8 +1587,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\eclipse\scene\texture_sheets_components.h" />
-    <ClInclude Include="src\eclipse\common_types\pose_2d.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eclipse\core\application.cpp">

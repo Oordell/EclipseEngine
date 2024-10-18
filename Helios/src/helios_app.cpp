@@ -2,6 +2,7 @@
 #include <eclipse/core/entry_point.h>
 
 #include "editor_layer.h"
+#include "bomberman/game_layer.hpp"
 
 namespace eclipse {
 
@@ -11,7 +12,8 @@ public:
 	    : Application({.title       = "Helios (Eclipse Editor)",
 	                   .window_size = {.width = units::pixels(1600), .height = units::pixels(900)}},
 	                  args) {
-		push_layer(new EditorLayer());
+		//	push_layer(new EditorLayer());
+		push_layer(new bomberman::GameLayer);
 	}
 
 	~Helios() {}

@@ -260,7 +260,9 @@ void Scene::update_2d_physics(const au::QuantityF<au::Seconds>& timestep) {
 
 	constexpr uint32_t velocity_iterations = 6;
 	constexpr uint32_t position_iterations = 2;
-	physics_world_->Step(timestep.in(au::seconds), velocity_iterations, position_iterations);
+	if (!view.empty()) {
+		physics_world_->Step(timestep.in(au::seconds), velocity_iterations, position_iterations);
+	}
 
 	// Get transform from box2d
 	for (auto e : view) {

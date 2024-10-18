@@ -20,6 +20,7 @@
 #include "eclipse/imgui/font_library.h"
 
 #include "eclipse/scene/scene.h"
+#include "eclipse/scene/scene_serializer.h"
 #include "eclipse/scene/components.h"
 #include "eclipse/scene/component_concept.h"
 #include "eclipse/scene/native_script_component.h"

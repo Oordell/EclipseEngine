@@ -10,12 +10,19 @@
     <ClInclude Include="src\panels\content_browser_panel.h">
       <Filter>panels</Filter>
     </ClInclude>
+    <ClInclude Include="src\panels\entity_destroyed_interface.h">
+      <Filter>panels</Filter>
+    </ClInclude>
+    <ClInclude Include="src\panels\panel_utils.h">
+      <Filter>panels</Filter>
+    </ClInclude>
     <ClInclude Include="src\panels\scene_hierarchy_panel.h">
       <Filter>panels</Filter>
     </ClInclude>
-    <ClInclude Include="src\panels\panel_utils.h" />
-    <ClInclude Include="src\panels\texture_sheet_panel.h" />
-    <ClInclude Include="src\panels\entity_destroyed_interface.h" />
+    <ClInclude Include="src\panels\texture_sheet_panel.h">
+      <Filter>panels</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bomberman\game_layer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\editor_layer.cpp" />
@@ -26,6 +33,9 @@
     <ClCompile Include="src\panels\scene_hierarchy_panel.cpp">
       <Filter>panels</Filter>
     </ClCompile>
-    <ClCompile Include="src\panels\texture_sheet_panel.cpp" />
+    <ClCompile Include="src\panels\texture_sheet_panel.cpp">
+      <Filter>panels</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bomberman\game_layer.cpp" />
   </ItemGroup>
 </Project>
