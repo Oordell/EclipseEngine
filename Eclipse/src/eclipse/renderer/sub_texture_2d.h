@@ -14,6 +14,8 @@ struct SubTexture2DProperties {
 	au::Quantity<units::Pixels, uint32_t> tile_index_y;
 	au::Quantity<units::Pixels, uint32_t> tile_width {units::pixels(1)};
 	au::Quantity<units::Pixels, uint32_t> tile_height {units::pixels(1)};
+	au::Quantity<units::Pixels, uint32_t> offset_x {units::pixels(0)};
+	au::Quantity<units::Pixels, uint32_t> offset_y {units::pixels(0)};
 };
 
 class SubTexture2D {
@@ -63,6 +65,8 @@ private:
 	au::Quantity<units::Pixels, uint32_t> y_min_;
 	au::Quantity<units::Pixels, uint32_t> tile_width_;
 	au::Quantity<units::Pixels, uint32_t> tile_height_;
+	au::Quantity<units::Pixels, uint32_t> offset_x_;
+	au::Quantity<units::Pixels, uint32_t> offset_y_;
 	glm::vec2 texture_coords_[4] {};
 };
 

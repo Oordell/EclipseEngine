@@ -11,8 +11,8 @@ public:
 	                   .window_size = {.width = eclipse::units::pixels(1600), .height = eclipse::units::pixels(900)}},
 	                  args) {
 		//	push_layer(new ExampleLayer());
-		push_layer(new Sandbox2D());
-		//	push_layer(new GameLayer());
+		//	push_layer(new Sandbox2D());
+		push_layer(new GameLayer());
 	}
 
 	~Sandbox() {}

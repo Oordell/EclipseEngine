@@ -2,6 +2,8 @@
 
 // For use by Eclipse applications
 
+#include "eclipse/common_types/map.h"
+
 #include "eclipse/core/application.h"
 #include "eclipse/layer/layer.h"
 #include "eclipse/core/log.h"
@@ -27,6 +29,7 @@
 #include "eclipse/scene/entity.h"
 #include "eclipse/scene/scriptable_entity.h"
 #include "eclipse/scene/particle_system.h"
+#include "eclipse/scene/texture_sheets_components.h"
 
 #include "eclipse/renderer/orthographic_camera_controller.h"
 

@@ -254,8 +254,8 @@ void Scene::update_2d_physics(const au::QuantityF<au::Seconds>& timestep) {
 		                                                   .theta = au::radians(body->GetAngle())},
 		                                                  {.x = units::pixels(offset.x), .y = units::pixels(offset.y)});
 
-		body->SetTransform({offset_body_pose.x.in<units::Pixels>(), offset_body_pose.y.in<units::Pixels>()},
-		                   offset_body_pose.theta.in<au::Radians>());
+		body->SetTransform({offset_body_pose.x.in(units::pixels), offset_body_pose.y.in(units::pixels)},
+		                   offset_body_pose.theta.in(au::radians));
 	}
 
 	constexpr uint32_t velocity_iterations = 6;
@@ -284,8 +284,8 @@ void Scene::update_2d_physics(const au::QuantityF<au::Seconds>& timestep) {
 		                                     .theta = au::radians(body->GetAngle())},
 		                                    {.x = units::pixels(offset.x), .y = units::pixels(offset.y)});
 
-		body->SetTransform({original_body_pose.x.in<units::Pixels>(), original_body_pose.y.in<units::Pixels>()},
-		                   original_body_pose.theta.in<au::Radians>());
+		body->SetTransform({original_body_pose.x.in(units::pixels), original_body_pose.y.in(units::pixels)},
+		                   original_body_pose.theta.in(au::radians));
 
 		const auto& position    = body->GetPosition();
 		transform.translation.x = position.x;

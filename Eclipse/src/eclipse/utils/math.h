@@ -32,7 +32,7 @@ inline static constexpr glm::mat4 create_transform_with_offset(const glm::vec3& 
 }
 
 inline static constexpr Pose2D transform_pose2d(const Pose2D& pose, const Pose2D& transform) {
-	const auto th    = transform.theta.in<au::Radians>();
+	const auto th    = transform.theta.in(au::radians);
 	const auto x_rot = pose.x * std::cos(th) - pose.y * std::sin(th);
 	const auto y_rot = pose.x * std::sin(th) + pose.y * std::cos(th);
 
@@ -47,7 +47,7 @@ inline static constexpr Pose2D inverse_transform_pose2d(const Pose2D& pose, cons
 	const auto x_translated = pose.x - transform.x;
 	const auto y_translated = pose.y - transform.y;
 
-	const auto th    = transform.theta.in<au::Radians>();
+	const auto th    = transform.theta.in(au::radians);
 	const auto x_new = x_translated * std::cos(-th) - y_translated * std::sin(-th);
 	const auto y_new = x_translated * std::sin(-th) + y_translated * std::cos(-th);
 

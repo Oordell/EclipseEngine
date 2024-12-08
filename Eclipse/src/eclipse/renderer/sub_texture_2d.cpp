@@ -8,29 +8,39 @@ SubTexture2D::SubTexture2D(const SubTexture2DProperties& props)
       x_min_(props.tile_index_x),
       y_min_(props.tile_index_y),
       tile_width_(props.tile_width),
-      tile_height_(props.tile_height) {
+      tile_height_(props.tile_height),
+      offset_x_(props.offset_x),
+      offset_y_(props.offset_y) {
 	recalculate_coordinates();
 }
 
 void SubTexture2D::recalculate_coordinates() {
-	float x0 = x_min_.in<float>(units::pixels) * texture_sheet_->get_tile_width_normalized() +
+	float x0 = offset_x_.in<float>(units::pixels) * texture_sheet_->get_pixel_width_normalized() +
+	           x_min_.in<float>(units::pixels) * texture_sheet_->get_tile_width_normalized() +
 	           x_min_.in<float>(units::pixels) * texture_sheet_->get_tile_spacing_x_normalized();
-	float y0 = y_min_.in<float>(units::pixels) * texture_sheet_->get_tile_height_normalized() +
+	float y0 = offset_y_.in<float>(units::pixels) * texture_sheet_->get_pixel_height_normalized() +
+	           y_min_.in<float>(units::pixels) * texture_sheet_->get_tile_height_normalized() +
 	           y_min_.in<float>(units::pixels) * texture_sheet_->get_tile_spacing_y_normalized();
 
-	float x1 = (x_min_ + tile_width_).in<float>(units::pixels) * texture_sheet_->get_tile_width_normalized() +
+	float x1 = offset_x_.in<float>(units::pixels) * texture_sheet_->get_pixel_width_normalized() +
+	           (x_min_ + tile_width_).in<float>(units::pixels) * texture_sheet_->get_tile_width_normalized() +
 	           x_min_.in<float>(units::pixels) * texture_sheet_->get_tile_spacing_x_normalized();
-	float y1 = y_min_.in<float>(units::pixels) * texture_sheet_->get_tile_height_normalized() +
+	float y1 = offset_y_.in<float>(units::pixels) * texture_sheet_->get_pixel_height_normalized() +
+	           y_min_.in<float>(units::pixels) * texture_sheet_->get_tile_height_normalized() +
 	           y_min_.in<float>(units::pixels) * texture_sheet_->get_tile_spacing_y_normalized();
 
-	float x2 = (x_min_ + tile_width_).in<float>(units::pixels) * texture_sheet_->get_tile_width_normalized() +
+	float x2 = offset_x_.in<float>(units::pixels) * texture_sheet_->get_pixel_width_normalized() +
+	           (x_min_ + tile_width_).in<float>(units::pixels) * texture_sheet_->get_tile_width_normalized() +
 	           x_min_.in<float>(units::pixels) * texture_sheet_->get_tile_spacing_x_normalized();
-	float y2 = (y_min_ + tile_height_).in<float>(units::pixels) * texture_sheet_->get_tile_height_normalized() +
+	float y2 = offset_y_.in<float>(units::pixels) * texture_sheet_->get_pixel_height_normalized() +
+	           (y_min_ + tile_height_).in<float>(units::pixels) * texture_sheet_->get_tile_height_normalized() +
 	           y_min_.in<float>(units::pixels) * texture_sheet_->get_tile_spacing_y_normalized();
 
-	float x3 = (x_min_.in<float>(units::pixels) + 0) * texture_sheet_->get_tile_width_normalized() +
+	float x3 = offset_x_.in<float>(units::pixels) * texture_sheet_->get_pixel_width_normalized() +
+	           (x_min_.in<float>(units::pixels) + 0) * texture_sheet_->get_tile_width_normalized() +
 	           x_min_.in<float>(units::pixels) * texture_sheet_->get_tile_spacing_x_normalized();
-	float y3 = (y_min_ + tile_height_).in<float>(units::pixels) * texture_sheet_->get_tile_height_normalized() +
+	float y3 = offset_y_.in<float>(units::pixels) * texture_sheet_->get_pixel_height_normalized() +
+	           (y_min_ + tile_height_).in<float>(units::pixels) * texture_sheet_->get_tile_height_normalized() +
 	           y_min_.in<float>(units::pixels) * texture_sheet_->get_tile_spacing_y_normalized();
 
 	texture_coords_[0] = {x0, y0};

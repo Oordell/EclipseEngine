@@ -17,7 +17,7 @@ public:
 	}
 
 	[[nodiscard]] constexpr au::QuantityF<au::Milli<au::Seconds>> elapsed_milliseconds() const {
-		return elapsed().as<au::Milli<au::Seconds>>();
+		return elapsed().as(au::milli(au::seconds));
 	}
 
 private:

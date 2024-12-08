@@ -23,6 +23,17 @@
       <Filter>panels</Filter>
     </ClInclude>
     <ClInclude Include="src\bomberman\game_layer.hpp" />
+    <ClInclude Include="src\bomberman\level.hpp" />
+    <ClInclude Include="src\bomberman\player.hpp" />
+    <ClInclude Include="src\bomberman\item.hpp" />
+    <ClInclude Include="src\bomberman\common_types.hpp" />
+    <ClInclude Include="src\bomberman\enemy.hpp" />
+    <ClInclude Include="src\bomberman\soft_wall.hpp" />
+    <ClInclude Include="src\bomberman\solid_wall.hpp" />
+    <ClInclude Include="src\bomberman\bomb.hpp" />
+    <ClInclude Include="src\bomberman\bomb_ray.hpp" />
+    <ClInclude Include="src\bomberman\playing_board.hpp" />
+    <ClInclude Include="src\bomberman\frame.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\editor_layer.cpp" />
@@ -37,5 +48,18 @@
       <Filter>panels</Filter>
     </ClCompile>
     <ClCompile Include="src\bomberman\game_layer.cpp" />
+    <ClCompile Include="src\bomberman\level.cpp" />
+    <ClCompile Include="src\bomberman\player.cpp" />
+    <ClCompile Include="src\bomberman\bomb.cpp" />
+    <ClCompile Include="src\bomberman\bomb_ray.cpp" />
+    <ClCompile Include="src\bomberman\playing_board.cpp" />
+    <ClCompile Include="src\bomberman\item.cpp" />
+    <ClCompile Include="src\bomberman\enemy.cpp" />
+    <ClCompile Include="src\bomberman\soft_wall.cpp" />
+    <ClCompile Include="src\bomberman\frame.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\bomberman\levels\level_0.txt" />
+    <Text Include="src\bomberman\levels\level_1.txt" />
   </ItemGroup>
 </Project>

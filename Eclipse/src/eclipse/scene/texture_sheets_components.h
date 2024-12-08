@@ -18,6 +18,9 @@ struct SubTexture {
 	SubTexture()                  = default;
 	~SubTexture()                 = default;
 	SubTexture(const SubTexture&) = default;
+
+	SubTexture(const ref<SubTexture2D>& st) : sub_texture(st) {}
+
 	ref<SubTexture2D> sub_texture = nullptr;
 };
 

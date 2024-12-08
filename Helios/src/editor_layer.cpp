@@ -37,6 +37,25 @@ void EditorLayer::on_attach() {
 	set_panel_context(active_scene_);
 	Renderer2D::set_line_width(units::pixels(4.F));
 	texture_sheet_panel_.add_entity_destroyed_subscriber(&scene_hierarchy_panel_);
+
+	ref<TextureSheet> texture_sheet_ = make_ref<TextureSheet>(
+	    TextureSheetProperties {.texture            = Texture2D::create("assets/games/bomberman/tilesheet.png"),
+	                            .sub_tile_width     = units::pixels(16),
+	                            .sub_tile_height    = units::pixels(16),
+	                            .sub_tile_spacing_x = units::pixels(0),
+	                            .sub_tile_spacing_y = units::pixels(0)});
+
+	ref<SubTexture2D> background_grass_ = make_ref<SubTexture2D>(SubTexture2DProperties {.texture_sheet = texture_sheet_,
+	                                                                                     .tile_index_x  = units::pixels(2),
+	                                                                                     .tile_index_y  = units::pixels(2),
+	                                                                                     .tile_width    = units::pixels(1),
+	                                                                                     .tile_height = units::pixels(1)});
+
+	/*auto e1 = active_scene_->create_entity();
+	e1.add_component<component::TextureSheetComponent>(texture_sheet_);*/
+
+	auto e2 = active_scene_->create_entity();
+	e2.add_component<component::SubTexture>(background_grass_);
 }
 
 void EditorLayer::on_detach() {

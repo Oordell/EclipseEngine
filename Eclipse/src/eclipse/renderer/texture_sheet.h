@@ -64,6 +64,14 @@ public:
 		return tile_height_.in<float>(units::pixels) / texture_->get_height().in<float>(units::pixels);
 	}
 
+	[[nodiscard]] inline constexpr float get_pixel_width_normalized() const {
+		return get_tile_width_normalized() / tile_width_.in<float>(units::pixels);
+	}
+
+	[[nodiscard]] inline constexpr float get_pixel_height_normalized() const {
+		return get_tile_height_normalized() / tile_height_.in<float>(units::pixels);
+	}
+
 	std::string get_debug_string() const;
 
 private:

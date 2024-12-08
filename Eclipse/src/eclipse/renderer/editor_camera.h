@@ -30,6 +30,11 @@ public:
 
 	inline void set_distance(float d) { distance_ = d; }
 
+	inline void set_position(const glm::vec3& pose) {
+		focal_point_ = pose;
+		update_view();
+	}
+
 	inline void set_viewport_size(const WindowSize& size) {
 		viewport_width_  = size.width;
 		viewport_height_ = size.height;
