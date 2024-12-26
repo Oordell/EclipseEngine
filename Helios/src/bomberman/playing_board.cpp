@@ -7,11 +7,9 @@
 #include "frame.hpp"
 
 namespace bomberman {
-PlayingBoard::PlayingBoard(const std::filesystem::path& file_path,
-                           eclipse::ref<eclipse::TextureSheet> texture_sheet_frames,
-                           eclipse::ref<eclipse::TextureSheet> texture_sheet_items,
+PlayingBoard::PlayingBoard(const std::filesystem::path& file_path, eclipse::ref<eclipse::TextureSheet> texture_sheet,
                            const eclipse::ref<eclipse::Scene>& context)
-    : texture_sheet_frames_(texture_sheet_frames), texture_sheet_items_(texture_sheet_items), context_(context) {
+    : texture_sheet_(texture_sheet), context_(context) {
 	create_level_from_file(file_path);
 }
 
@@ -20,7 +18,7 @@ bool PlayingBoard::is_coordinate_part_of_frame(const eclipse::Point2D& coordinat
 	       coordinate.y.in(eclipse::units::pixels) == 0 || coordinate.y.in(eclipse::units::pixels) == height_ - 1;
 }
 
-void PlayingBoard::add_frame_to_board() {
+void PlayingBoard::add_frame_to_board(au::Quantity<eclipse::units::Pixels, uint32_t> level_type) {
 	using eclipse::units::pixels;
 	eclipse::Point2D coordinate {.x = pixels(0.F), .y = pixels(0.F)};
 
@@ -29,28 +27,31 @@ void PlayingBoard::add_frame_to_board() {
 		coordinate.y      = pixels(static_cast<float>(height_ - 1));
 		auto frame_toggle = i % details::NUM_OF_DIFFERENT_FRAME_ELEMENTS;
 		if (frame_toggle == 1) {
-			board_[get_index(coordinate)] = TileData {
-			    .tile_content = {eclipse::make_ref<FrameTop1>(texture_sheet_frames_, coordinate, context_)}, .walkable = false};
+			board_[get_index(coordinate)] =
+			    TileData {.tile_content = {eclipse::make_ref<FrameTop1>(texture_sheet_, coordinate, context_, level_type)},
+			              .walkable     = false};
 		} else if (frame_toggle == 2) {
-			board_[get_index(coordinate)] = TileData {
-			    .tile_content = {eclipse::make_ref<FrameTop2>(texture_sheet_frames_, coordinate, context_)}, .walkable = false};
+			board_[get_index(coordinate)] =
+			    TileData {.tile_content = {eclipse::make_ref<FrameTop2>(texture_sheet_, coordinate, context_, level_type)},
+			              .walkable     = false};
 		} else {
-			board_[get_index(coordinate)] = TileData {
-			    .tile_content = {eclipse::make_ref<FrameTop3>(texture_sheet_frames_, coordinate, context_)}, .walkable = false};
+			board_[get_index(coordinate)] =
+			    TileData {.tile_content = {eclipse::make_ref<FrameTop3>(texture_sheet_, coordinate, context_, level_type)},
+			              .walkable     = false};
 		}
 
 		coordinate.y = pixels(0.F);
 		if (frame_toggle == 1) {
 			board_[get_index(coordinate)] =
-			    TileData {.tile_content = {eclipse::make_ref<FrameBottom1>(texture_sheet_frames_, coordinate, context_)},
+			    TileData {.tile_content = {eclipse::make_ref<FrameBottom1>(texture_sheet_, coordinate, context_, level_type)},
 			              .walkable     = false};
 		} else if (frame_toggle == 2) {
 			board_[get_index(coordinate)] =
-			    TileData {.tile_content = {eclipse::make_ref<FrameBottom2>(texture_sheet_frames_, coordinate, context_)},
+			    TileData {.tile_content = {eclipse::make_ref<FrameBottom2>(texture_sheet_, coordinate, context_, level_type)},
 			              .walkable     = false};
 		} else {
 			board_[get_index(coordinate)] =
-			    TileData {.tile_content = {eclipse::make_ref<FrameBottom3>(texture_sheet_frames_, coordinate, context_)},
+			    TileData {.tile_content = {eclipse::make_ref<FrameBottom3>(texture_sheet_, coordinate, context_, level_type)},
 			              .walkable     = false};
 		}
 	}
@@ -62,47 +63,51 @@ void PlayingBoard::add_frame_to_board() {
 
 		if (frame_toggle == 1) {
 			board_[get_index(coordinate)] =
-			    TileData {.tile_content = {eclipse::make_ref<FrameRight1>(texture_sheet_frames_, coordinate, context_)},
+			    TileData {.tile_content = {eclipse::make_ref<FrameRight1>(texture_sheet_, coordinate, context_, level_type)},
 			              .walkable     = false};
 		} else if (frame_toggle == 0) {
 			board_[get_index(coordinate)] =
-			    TileData {.tile_content = {eclipse::make_ref<FrameRight2>(texture_sheet_frames_, coordinate, context_)},
+			    TileData {.tile_content = {eclipse::make_ref<FrameRight2>(texture_sheet_, coordinate, context_, level_type)},
 			              .walkable     = false};
 		} else {
 			board_[get_index(coordinate)] =
-			    TileData {.tile_content = {eclipse::make_ref<FrameRight3>(texture_sheet_frames_, coordinate, context_)},
+			    TileData {.tile_content = {eclipse::make_ref<FrameRight3>(texture_sheet_, coordinate, context_, level_type)},
 			              .walkable     = false};
 		}
 
 		coordinate.x = pixels(0.F);
 		if (frame_toggle == 1) {
-			board_[get_index(coordinate)] = TileData {
-			    .tile_content = {eclipse::make_ref<FrameLeft1>(texture_sheet_frames_, coordinate, context_)}, .walkable = false};
+			board_[get_index(coordinate)] =
+			    TileData {.tile_content = {eclipse::make_ref<FrameLeft1>(texture_sheet_, coordinate, context_, level_type)},
+			              .walkable     = false};
 		} else if (frame_toggle == 0) {
-			board_[get_index(coordinate)] = TileData {
-			    .tile_content = {eclipse::make_ref<FrameLeft2>(texture_sheet_frames_, coordinate, context_)}, .walkable = false};
+			board_[get_index(coordinate)] =
+			    TileData {.tile_content = {eclipse::make_ref<FrameLeft2>(texture_sheet_, coordinate, context_, level_type)},
+			              .walkable     = false};
 		} else {
-			board_[get_index(coordinate)] = TileData {
-			    .tile_content = {eclipse::make_ref<FrameLeft3>(texture_sheet_frames_, coordinate, context_)}, .walkable = false};
+			board_[get_index(coordinate)] =
+			    TileData {.tile_content = {eclipse::make_ref<FrameLeft3>(texture_sheet_, coordinate, context_, level_type)},
+			              .walkable     = false};
 		}
 	}
 
-	coordinate = {.x = pixels(0.F), .y = pixels(0.F)};
-	board_[get_index(coordinate)] =
-	    TileData {.tile_content = {eclipse::make_ref<FrameCornerBottomLeft>(texture_sheet_frames_, coordinate, context_)},
-	              .walkable     = false};
-	coordinate = {.x = pixels(width_ - 1), .y = pixels(0.F)};
-	board_[get_index(coordinate)] =
-	    TileData {.tile_content = {eclipse::make_ref<FrameCornerBottomRight>(texture_sheet_frames_, coordinate, context_)},
-	              .walkable     = false};
-	coordinate = {.x = pixels(0.F), .y = pixels(height_ - 1)};
-	board_[get_index(coordinate)] =
-	    TileData {.tile_content = {eclipse::make_ref<FrameCornerTopLeft>(texture_sheet_frames_, coordinate, context_)},
-	              .walkable     = false};
-	coordinate = {.x = pixels(width_ - 1), .y = pixels(height_ - 1)};
-	board_[get_index(coordinate)] =
-	    TileData {.tile_content = {eclipse::make_ref<FrameCornerTopRight>(texture_sheet_frames_, coordinate, context_)},
-	              .walkable     = false};
+	// Corners of the frame
+	coordinate                    = {.x = pixels(0.F), .y = pixels(0.F)};
+	board_[get_index(coordinate)] = TileData {
+	    .tile_content = {eclipse::make_ref<FrameCornerBottomLeft>(texture_sheet_, coordinate, context_, level_type)},
+	    .walkable     = false};
+	coordinate                    = {.x = pixels(width_ - 1), .y = pixels(0.F)};
+	board_[get_index(coordinate)] = TileData {
+	    .tile_content = {eclipse::make_ref<FrameCornerBottomRight>(texture_sheet_, coordinate, context_, level_type)},
+	    .walkable     = false};
+	coordinate                    = {.x = pixels(0.F), .y = pixels(height_ - 1)};
+	board_[get_index(coordinate)] = TileData {
+	    .tile_content = {eclipse::make_ref<FrameCornerTopLeft>(texture_sheet_, coordinate, context_, level_type)},
+	    .walkable     = false};
+	coordinate                    = {.x = pixels(width_ - 1), .y = pixels(height_ - 1)};
+	board_[get_index(coordinate)] = TileData {
+	    .tile_content = {eclipse::make_ref<FrameCornerTopRight>(texture_sheet_, coordinate, context_, level_type)},
+	    .walkable     = false};
 }
 
 void PlayingBoard::create_level_from_file(const std::filesystem::path& file_path) {
@@ -131,7 +136,7 @@ void PlayingBoard::create_level_from_file(const std::filesystem::path& file_path
 	}
 
 	board_.resize(width_ * height_);
-	add_frame_to_board();
+	add_frame_to_board(pixels(level_type_));
 
 	// Read the grid
 	eclipse::Point2D coordinate;
@@ -173,37 +178,37 @@ constexpr std::optional<TileData> PlayingBoard::convert_char_to_tile_data(char f
 	TileData tile;
 
 	switch (cell_type) {
-		case solid_wall: {
-			tile.tile_content.push_back(eclipse::make_ref<SolidWall>(texture_sheet_frames_, coordinate, context_));
+		case wall_solid: {
+			tile.tile_content.push_back(eclipse::make_ref<SolidWall>(texture_sheet_, coordinate, context_, pixels(level_type_)));
 			tile.walkable = false;
 			return tile;
 		}
-		case soft_wall: {
-			tile.tile_content.push_back(eclipse::make_ref<SoftWall>(texture_sheet_frames_, coordinate, context_));
+		case wall_soft: {
+			tile.tile_content.push_back(eclipse::make_ref<SoftWall>(texture_sheet_, coordinate, context_, pixels(level_type_)));
 			tile.walkable = false;
 			return tile;
 		}
 		case item_bomb_increment: {
-			tile.tile_content.push_back(eclipse::make_ref<ItemBombIncrement>(texture_sheet_items_, coordinate, context_));
-			tile.tile_content.push_back(eclipse::make_ref<SoftWall>(texture_sheet_frames_, coordinate, context_));
+			tile.tile_content.push_back(eclipse::make_ref<ItemBombIncrement>(texture_sheet_, coordinate, context_));
+			tile.tile_content.push_back(eclipse::make_ref<SoftWall>(texture_sheet_, coordinate, context_, pixels(level_type_)));
 			tile.walkable = false;
 			return tile;
 		}
 		case item_bomb_reach: {
-			tile.tile_content.push_back(eclipse::make_ref<ItemBombReach>(texture_sheet_items_, coordinate, context_));
-			tile.tile_content.push_back(eclipse::make_ref<SoftWall>(texture_sheet_frames_, coordinate, context_));
+			tile.tile_content.push_back(eclipse::make_ref<ItemBombReach>(texture_sheet_, coordinate, context_));
+			tile.tile_content.push_back(eclipse::make_ref<SoftWall>(texture_sheet_, coordinate, context_, pixels(level_type_)));
 			tile.walkable = false;
 			return tile;
 		}
 		case item_invincibility: {
-			tile.tile_content.push_back(eclipse::make_ref<ItemInvincibility>(texture_sheet_items_, coordinate, context_));
-			tile.tile_content.push_back(eclipse::make_ref<SoftWall>(texture_sheet_frames_, coordinate, context_));
+			tile.tile_content.push_back(eclipse::make_ref<ItemInvincibility>(texture_sheet_, coordinate, context_));
+			tile.tile_content.push_back(eclipse::make_ref<SoftWall>(texture_sheet_, coordinate, context_, pixels(level_type_)));
 			tile.walkable = false;
 			return tile;
 		}
 		case item_speed_boost: {
-			tile.tile_content.push_back(eclipse::make_ref<ItemSpeedBoost>(texture_sheet_items_, coordinate, context_));
-			tile.tile_content.push_back(eclipse::make_ref<SoftWall>(texture_sheet_frames_, coordinate, context_));
+			tile.tile_content.push_back(eclipse::make_ref<ItemSpeedBoost>(texture_sheet_, coordinate, context_));
+			tile.tile_content.push_back(eclipse::make_ref<SoftWall>(texture_sheet_, coordinate, context_, pixels(level_type_)));
 			tile.walkable = false;
 			return tile;
 		}
@@ -213,11 +218,15 @@ constexpr std::optional<TileData> PlayingBoard::convert_char_to_tile_data(char f
 }
 
 constexpr void PlayingBoard::add_enemy(const eclipse::Point2D& coordinate, char file_character) {
-	using enum EnemyType;
 	using enum CellContent;
 	auto cell_type = char_to_cell_content.at(file_character);
-	if (cell_type == enemy_balloon || cell_type == enemy_drop || cell_type == enemy_striped || cell_type == enemy_round ||
-	    cell_type == enemy_water || cell_type == enemy_ghost || cell_type == enemy_bear) {
+	if (cell_type == enemy_red_balloon || cell_type == enemy_green_duck || cell_type == enemy_blue_frog ||
+	    cell_type == enemy_blue_bat || cell_type == enemy_white_ghost || cell_type == enemy_red_flower ||
+	    cell_type == enemy_red_bear || cell_type == enemy_red_coin || cell_type == enemy_green_fish ||
+	    cell_type == enemy_blue_cloud || cell_type == enemy_blue_fog || cell_type == enemy_green_smiley_bouncer ||
+	    cell_type == enemy_green_croc || cell_type == enemy_blue_jellyfish || cell_type == enemy_blue_spinning_top ||
+	    cell_type == enemy_green_frog || cell_type == enemy_green_bomb || cell_type == enemy_green_white_centipede ||
+	    cell_type == enemy_green_bold_roller) {
 		enemies_.push_back({.position = coordinate, .type = static_cast<EnemyType>(cell_type)});
 		return;
 	}

@@ -27,7 +27,10 @@ public:
 
 	[[nodiscard]] bool has_expired() const override { return bomb_state_ == BombState::expired; }
 
-	void destroy() override { context_->destroy_entity(entity_); }
+	void destroy() override {
+		entity_.remove_component<eclipse::component::SubTexture>();
+		context_->destroy_entity(entity_);
+	}
 
 	[[nodiscard]] bool bomb_is_exploding() const { return bomb_state_ == BombState::exploded; }
 
@@ -58,15 +61,15 @@ private:
 	static constexpr au::QuantityF<au::Seconds> bomb_detonation_counter_ {au::seconds(3.F)};
 
 	static constexpr eclipse::Map<BombPlacedAnimation, SubTextureIndex, 3> bomb_sprite_placed_ {
-	    {{{BombPlacedAnimation::big, {.x = pixels(0), .y = pixels(19)}},
-	      {BombPlacedAnimation::medium, {.x = pixels(1), .y = pixels(19)}},
-	      {BombPlacedAnimation::small, {.x = pixels(2), .y = pixels(19)}}}}};
+	    {{{BombPlacedAnimation::big, {.x = pixels(22), .y = pixels(18)}},
+	      {BombPlacedAnimation::medium, {.x = pixels(23), .y = pixels(18)}},
+	      {BombPlacedAnimation::small, {.x = pixels(24), .y = pixels(18)}}}}};
 
 	static constexpr eclipse::Map<BombExplodedAnimation, SubTextureIndex, 4> bomb_sprite_exploded_ {
-	    {{{BombExplodedAnimation::small, {.x = pixels(2), .y = pixels(16)}},
-	      {BombExplodedAnimation::medium, {.x = pixels(7), .y = pixels(16)}},
-	      {BombExplodedAnimation::big, {.x = pixels(2), .y = pixels(11)}},
-	      {BombExplodedAnimation::biggest, {.x = pixels(7), .y = pixels(11)}}}}};
+	    {{{BombExplodedAnimation::small, {.x = pixels(25), .y = pixels(17)}},
+	      {BombExplodedAnimation::medium, {.x = pixels(25), .y = pixels(16)}},
+	      {BombExplodedAnimation::big, {.x = pixels(25), .y = pixels(15)}},
+	      {BombExplodedAnimation::biggest, {.x = pixels(25), .y = pixels(14)}}}}};
 
 	static constexpr std::array<BombPlacedAnimation, 4> bomb_placed_animation_sequence_ {
 	    BombPlacedAnimation::big, BombPlacedAnimation::medium, BombPlacedAnimation::small, BombPlacedAnimation::medium};

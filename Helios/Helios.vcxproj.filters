@@ -34,6 +34,10 @@
     <ClInclude Include="src\bomberman\bomb_ray.hpp" />
     <ClInclude Include="src\bomberman\playing_board.hpp" />
     <ClInclude Include="src\bomberman\frame.hpp" />
+    <ClInclude Include="src\bomberman\movement_random.hpp" />
+    <ClInclude Include="src\bomberman\movement_interface.hpp" />
+    <ClInclude Include="src\bomberman\enemy_data.hpp" />
+    <ClInclude Include="src\bomberman\movement_none.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\editor_layer.cpp" />
@@ -57,9 +61,12 @@
     <ClCompile Include="src\bomberman\enemy.cpp" />
     <ClCompile Include="src\bomberman\soft_wall.cpp" />
     <ClCompile Include="src\bomberman\frame.cpp" />
+    <ClCompile Include="src\bomberman\movement_random.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="src\bomberman\levels\level_0.txt" />
-    <Text Include="src\bomberman\levels\level_1.txt" />
+    <Text Include="src\bomberman\levels\blank_map.txt" />
+    <Text Include="src\bomberman\levels\demo_content.txt" />
+    <Text Include="src\bomberman\levels\level1.txt" />
+    <Text Include="src\bomberman\levels\test.txt" />
   </ItemGroup>
 </Project>

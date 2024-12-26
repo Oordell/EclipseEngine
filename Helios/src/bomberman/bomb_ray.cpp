@@ -28,9 +28,7 @@ void BombRay::create_entity(const std::string& entity_name /* = "Bomb Ray" */) {
 	                                     .tile_index_x  = bomb_ray_sprites_.at(bomb_ray_state_).x,
 	                                     .tile_index_y  = bomb_ray_sprites_.at(bomb_ray_state_).y,
 	                                     .tile_width    = pixels(1),
-	                                     .tile_height   = pixels(1),
-	                                     .offset_x      = pixels(0),
-	                                     .offset_y      = pixels(15)});
+	                                     .tile_height   = pixels(1)});
 
 	entity_ = context_->create_entity(entity_name);
 	entity_.add_component<eclipse::component::SubTexture>(texture_bomb_ray_);

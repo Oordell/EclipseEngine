@@ -17,9 +17,7 @@ void Frame::create_entity(const std::string& entity_name /*= "Frame"*/) {
 	                                     .tile_index_x  = texture_sheet_coordinates_.x,
 	                                     .tile_index_y  = texture_sheet_coordinates_.y,
 	                                     .tile_width    = pixels(1),
-	                                     .tile_height   = pixels(1),
-	                                     .offset_x      = pixels(0),
-	                                     .offset_y      = pixels(0)});
+	                                     .tile_height   = pixels(1)});
 
 	entity_ = context_->create_entity(entity_name);
 	entity_.add_component<eclipse::component::SubTexture>(texture_frame_);

@@ -4,8 +4,9 @@
 namespace bomberman {
 
 SoftWall::SoftWall(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-                   const eclipse::ref<eclipse::Scene>& context)
-    : texture_sheet_(texture_sheet), position_(position), context_(context) {
+                   const eclipse::ref<eclipse::Scene>& context,
+                   au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+    : texture_sheet_(texture_sheet), position_(position), context_(context), level_type_(level_type) {
 	create_entity();
 }
 
@@ -37,19 +38,17 @@ void SoftWall::on_bomb_ray_hit() {
 void SoftWall::update_texture() {
 	const auto& sub_texture_index =
 	    wall_texture_index_.at(wall_destruction_animation_sequence_.at(current_wall_texture_index_));
-	texture_wall_->set_index_x(sub_texture_index.x);
+	texture_wall_->set_index_x(sub_texture_index.x + level_type_ * details::texture_sheet_level_separator_);
 	texture_wall_->set_index_y(sub_texture_index.y);
 }
 
 void SoftWall::create_entity(const std::string& entity_name /*= "Soft wall"*/) {
-	texture_wall_ = eclipse::make_ref<eclipse::SubTexture2D>(
-	    eclipse::SubTexture2DProperties {.texture_sheet = texture_sheet_,
-	                                     .tile_index_x  = texture_sheet_coordinates_.x,
-	                                     .tile_index_y  = texture_sheet_coordinates_.y,
-	                                     .tile_width    = pixels(1),
-	                                     .tile_height   = pixels(1),
-	                                     .offset_x      = pixels(0),
-	                                     .offset_y      = pixels(0)});
+	texture_wall_ = eclipse::make_ref<eclipse::SubTexture2D>(eclipse::SubTexture2DProperties {
+	    .texture_sheet = texture_sheet_,
+	    .tile_index_x  = texture_sheet_coordinates_.x + level_type_ * details::texture_sheet_level_separator_,
+	    .tile_index_y  = texture_sheet_coordinates_.y,
+	    .tile_width    = pixels(1),
+	    .tile_height   = pixels(1)});
 
 	entity_ = context_->create_entity(entity_name);
 	entity_.add_component<eclipse::component::SubTexture>(texture_wall_);

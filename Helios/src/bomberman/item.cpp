@@ -13,9 +13,7 @@ Item::Item(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Poi
 	                                     .tile_index_x  = texture_sheet_coordinates_.x,
 	                                     .tile_index_y  = texture_sheet_coordinates_.y,
 	                                     .tile_width    = eclipse::units::pixels(1),
-	                                     .tile_height   = eclipse::units::pixels(1),
-	                                     .offset_x      = eclipse::units::pixels(0),
-	                                     .offset_y      = eclipse::units::pixels(0)});
+	                                     .tile_height   = eclipse::units::pixels(1)});
 	create_entity();
 }
 
@@ -26,6 +24,9 @@ void Item::create_entity() {
 	entity_.get_component<eclipse::component::Transform>().translation.x = position_.x.in(eclipse::units::pixels);
 	entity_.get_component<eclipse::component::Transform>().translation.y = position_.y.in(eclipse::units::pixels);
 	entity_.get_component<eclipse::component::Transform>().translation.z = details::Z_ITEMS;
+
+	entity_.get_component<eclipse::component::Transform>().scale.x = 0.95F;
+	entity_.get_component<eclipse::component::Transform>().scale.y = 0.95F;
 }
 
 }  // namespace bomberman

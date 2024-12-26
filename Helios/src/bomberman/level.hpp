@@ -42,6 +42,7 @@ private:
 	void update_playing_board(au::QuantityF<au::Seconds> timestep);
 	void update_bombs(au::QuantityF<au::Seconds> timestep);
 	void update_bomb_rays(au::QuantityF<au::Seconds> timestep);
+	void check_collisions_with_bombs_and_rays();
 	void on_bomb_explosion(const eclipse::Point2D& position, uint32_t reach);
 	void on_bomb_ray_created(const eclipse::Point2D& position);
 	[[nodiscard]] bool is_position_ray_blocking(const eclipse::Point2D& position) const;
@@ -52,42 +53,24 @@ private:
 
 	template <typename EnemyType>
 	void add_enemy(const eclipse::Point2D& position) {
-		enemies_.push_back(eclipse::make_scope<EnemyType>(texture_sheet_, position, context_));
+		enemies_.push_back(
+		    eclipse::make_scope<EnemyType>(texture_sheet_maps_enemies_bombs_items_, position, context_, playing_board_));
 	}
 
-	eclipse::ref<eclipse::TextureSheet> texture_sheet_items_ = eclipse::make_ref<eclipse::TextureSheet>(
-	    eclipse::TextureSheetProperties {.texture         = eclipse::Texture2D::create("assets/games/bomberman/items.png"),
-	                                     .sub_tile_width  = eclipse::units::pixels(128),
-	                                     .sub_tile_height = eclipse::units::pixels(128),
-	                                     .sub_tile_spacing_x = eclipse::units::pixels(0),
-	                                     .sub_tile_spacing_y = eclipse::units::pixels(0)});
-	eclipse::ref<eclipse::TextureSheet> texture_sheet_frames_and_bombs_ =
+	eclipse::ref<eclipse::TextureSheet> texture_sheet_maps_enemies_bombs_items_ =
 	    eclipse::make_ref<eclipse::TextureSheet>(eclipse::TextureSheetProperties {
-	        .texture            = eclipse::Texture2D::create("assets/games/bomberman/frames_and_bombs2.png"),
-	        .sub_tile_width     = eclipse::units::pixels(16),
-	        .sub_tile_height    = eclipse::units::pixels(16),
-	        .sub_tile_spacing_x = eclipse::units::pixels(0),
-	        .sub_tile_spacing_y = eclipse::units::pixels(0)});
+	        .texture         = eclipse::Texture2D::create("assets/games/bomberman/maps_enemies_bombs_items_w_space.png"),
+	        .sub_tile_width  = eclipse::units::pixels(16),
+	        .sub_tile_height = eclipse::units::pixels(16),
+	        .sub_tile_spacing_x = eclipse::units::pixels(1),
+	        .sub_tile_spacing_y = eclipse::units::pixels(1)});
 	eclipse::ref<eclipse::TextureSheet> texture_sheet_player_ = eclipse::make_ref<eclipse::TextureSheet>(
-	    eclipse::TextureSheetProperties {.texture = eclipse::Texture2D::create("assets/games/bomberman/player2.png"),
+	    eclipse::TextureSheetProperties {.texture = eclipse::Texture2D::create("assets/games/bomberman/players.png"),
 	                                     .sub_tile_width     = eclipse::units::pixels(24),
 	                                     .sub_tile_height    = eclipse::units::pixels(24),
 	                                     .sub_tile_spacing_x = eclipse::units::pixels(0),
 	                                     .sub_tile_spacing_y = eclipse::units::pixels(0)});
-	eclipse::ref<eclipse::TextureSheet> texture_sheet_ = eclipse::make_ref<eclipse::TextureSheet>(
-	    eclipse::TextureSheetProperties {.texture = eclipse::Texture2D::create("assets/games/bomberman/tilesheet.png"),
-	                                     .sub_tile_width     = eclipse::units::pixels(16),
-	                                     .sub_tile_height    = eclipse::units::pixels(16),
-	                                     .sub_tile_spacing_x = eclipse::units::pixels(0),
-	                                     .sub_tile_spacing_y = eclipse::units::pixels(0)});
-	eclipse::ref<eclipse::SubTexture2D> background_grass_ = eclipse::make_ref<eclipse::SubTexture2D>(
-	    eclipse::SubTexture2DProperties {.texture_sheet = texture_sheet_,
-	                                     .tile_index_x  = eclipse::units::pixels(7),
-	                                     .tile_index_y  = eclipse::units::pixels(22),
-	                                     .tile_width    = eclipse::units::pixels(1),
-	                                     .tile_height   = eclipse::units::pixels(1),
-	                                     .offset_x      = eclipse::units::pixels(0),
-	                                     .offset_y      = eclipse::units::pixels(0)});
+	eclipse::ref<eclipse::SubTexture2D> background_grass_;
 
 	eclipse::ref<eclipse::Scene> context_;
 	Player player_ {texture_sheet_player_};

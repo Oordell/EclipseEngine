@@ -3,8 +3,11 @@
 
 namespace bomberman {
 Player::Player(eclipse::ref<eclipse::TextureSheet> texture_sheet,
-               const eclipse::Point2D& position /* = {.x = pixels(1), .y = pixels(13)}*/)
-    : texture_sheet_(texture_sheet), player_position_(position) {}
+               const eclipse::Point2D& position /* = {.x = pixels(1), .y = pixels(13)}*/,
+               PlayerColor player_color /* = PlayerColor::white*/)
+    : texture_sheet_(texture_sheet),
+      player_position_(position),
+      player_character_(pixels(static_cast<uint32_t>(player_color))) {}
 
 void Player::on_update(au::QuantityF<au::Seconds> timestep) {
 	time_elapsed_ += timestep;
@@ -52,8 +55,6 @@ void Player::set_player_state(PlayerState state) {
 
 void Player::set_player_direction(PlayerDirection direction) {
 	player_state_.direction = direction;
-	player_entity_.get_component<eclipse::component::Transform>().rotation.y =
-	    direction == PlayerDirection::left ? au::degrees(180.F).in(au::radians) : 0.F;
 
 	update_player_texture();
 }
@@ -69,6 +70,8 @@ void Player::create_player() {
 	player_entity_.get_component<eclipse::component::Transform>().translation.x = player_position_.x.in<float>(pixels);
 	player_entity_.get_component<eclipse::component::Transform>().translation.y = player_position_.y.in<float>(pixels);
 	player_entity_.get_component<eclipse::component::Transform>().translation.z = details::Z_PLAYER;
+	player_entity_.get_component<eclipse::component::Transform>().scale.x       = 1.25;
+	player_entity_.get_component<eclipse::component::Transform>().scale.y       = 1.25;
 }
 
 void Player::update_player_texture() {
@@ -84,7 +87,7 @@ void Player::update_player_texture() {
 		index = player_texture_index_dead_.at(DEAD_PLAYER_ANIMATION_SEQUENCE.at(sprite_animation_sequence_counter_));
 	}
 
-	texture_player_->set_index_x(index.x);
+	texture_player_->set_index_x(index.x + player_character_);
 	texture_player_->set_index_y(index.y);
 }
 }  // namespace bomberman

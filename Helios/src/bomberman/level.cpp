@@ -23,6 +23,8 @@ void Level::on_update(au::QuantityF<au::Seconds> timestep) {
 	update_playing_board(timestep);
 	update_bombs(timestep);
 	update_bomb_rays(timestep);
+	check_if_player_touched_by_enemy();
+	check_collisions_with_bombs_and_rays();
 }
 
 void Level::on_render() {}
@@ -42,47 +44,100 @@ void Level::set_context(const eclipse::ref<eclipse::Scene>& context) {
 void Level::setup_level() {
 	using enum CellContent;
 
-	playing_board_ = PlayingBoard(std::filesystem::path("src/bomberman/levels/level_1.txt"),
-	                              texture_sheet_frames_and_bombs_, texture_sheet_items_, context_);
+	playing_board_ = PlayingBoard(std::filesystem::path("src/bomberman/levels/level1.txt"),
+	                              texture_sheet_maps_enemies_bombs_items_, context_);
 
 	player_.create_player();
 	player_.set_player_position(playing_board_.get_player_start_coordinates());
 
 	for (const auto& enemy : playing_board_.get_enemies()) {
 		switch (enemy.type) {
-			case (EnemyType::balloon): {
-				add_enemy<EnemyBalloon>(enemy.position);
+			case (EnemyType::enemy_red_balloon): {
+				add_enemy<EnemyRedBalloon>(enemy.position);
 				break;
 			}
-			case (EnemyType::drop): {
-				add_enemy<EnemyDrop>(enemy.position);
+			case (EnemyType::enemy_green_duck): {
+				add_enemy<EnemyGreenDuck>(enemy.position);
 				break;
 			}
-			case (EnemyType::striped): {
-				add_enemy<EnemyStriped>(enemy.position);
+			case (EnemyType::enemy_blue_frog): {
+				add_enemy<EnemyBlueFrog>(enemy.position);
 				break;
 			}
-			case (EnemyType::round): {
-				add_enemy<EnemyRound>(enemy.position);
+			case (EnemyType::enemy_blue_bat): {
+				add_enemy<EnemyBlueBat>(enemy.position);
 				break;
 			}
-			case (EnemyType::water): {
-				add_enemy<EnemyWater>(enemy.position);
+			case (EnemyType::enemy_white_ghost): {
+				add_enemy<EnemyWhiteGhost>(enemy.position);
 				break;
 			}
-			case (EnemyType::ghost): {
-				add_enemy<EnemyGhost>(enemy.position);
+			case (EnemyType::enemy_red_flower): {
+				add_enemy<EnemyRedFlower>(enemy.position);
 				break;
 			}
-			case (EnemyType::bear): {
-				add_enemy<EnemyBear>(enemy.position);
+			case (EnemyType::enemy_red_bear): {
+				add_enemy<EnemyRedBear>(enemy.position);
 				break;
 			}
-			case (EnemyType::coin): {
+			case (EnemyType::enemy_red_coin): {
+				add_enemy<EnemyRedCoin>(enemy.position);
+				break;
+			}
+			case (EnemyType::enemy_green_fish): {
+				add_enemy<EnemyGreenFish>(enemy.position);
+				break;
+			}
+			case (EnemyType::enemy_blue_cloud): {
+				add_enemy<EnemyBlueCloud>(enemy.position);
+				break;
+			}
+			case (EnemyType::enemy_blue_fog): {
+				add_enemy<EnemyBlueFog>(enemy.position);
+				break;
+			}
+			case (EnemyType::enemy_green_smiley_bouncer): {
+				add_enemy<EnemyGreenSmileyBouncer>(enemy.position);
+				break;
+			}
+			case (EnemyType::enemy_green_croc): {
+				add_enemy<EnemyGreenCroc>(enemy.position);
+				break;
+			}
+			case (EnemyType::enemy_blue_jellyfish): {
+				add_enemy<EnemyBlueJellyfish>(enemy.position);
+				break;
+			}
+			case (EnemyType::enemy_blue_spinning_top): {
+				add_enemy<EnemyBlueSpinningTop>(enemy.position);
+				break;
+			}
+			case (EnemyType::enemy_green_frog): {
+				add_enemy<EnemyGreenFrog>(enemy.position);
+				break;
+			}
+			case (EnemyType::enemy_green_bomb): {
+				add_enemy<EnemyGreenBomb>(enemy.position);
+				break;
+			}
+			case (EnemyType::enemy_green_white_centipede): {
+				add_enemy<EnemyGreenWhiteCentipede>(enemy.position);
+				break;
+			}
+			case (EnemyType::enemy_green_bold_roller): {
+				add_enemy<EnemyGreenBoldRoller>(enemy.position);
 				break;
 			}
 		}
 	}
+
+	auto level_type   = eclipse::units::pixels(playing_board_.get_level_type());
+	background_grass_ = eclipse::make_ref<eclipse::SubTexture2D>(eclipse::SubTexture2DProperties {
+	    .texture_sheet = texture_sheet_maps_enemies_bombs_items_,
+	    .tile_index_x  = eclipse::units::pixels(2) + level_type * details::texture_sheet_level_separator_,
+	    .tile_index_y  = eclipse::units::pixels(22),
+	    .tile_width    = eclipse::units::pixels(1),
+	    .tile_height   = eclipse::units::pixels(1)});
 
 	eclipse::Entity grass_background_entity = context_->create_entity("grass");
 	grass_background_entity.add_component<eclipse::component::SubTexture>(background_grass_);
@@ -187,7 +242,6 @@ void Level::update_player_position(au::QuantityF<au::Seconds> timestep) {
 	}
 
 	on_item_pickup();
-	check_if_player_touched_by_enemy();
 }
 
 bool Level::on_key_pressed(eclipse::KeyPressedEvent& event) {
@@ -259,8 +313,8 @@ void Level::place_bomb() {
 	auto current_position = player_.get_player_position();
 	playing_board_.clamp_coordinates(current_position);
 	if (!position_contains_bomb(current_position)) {
-		bombs_.emplace_back(texture_sheet_, current_position, context_, EC_BIND_EVENT_FN(Level::on_bomb_explosion),
-		                    player_.get_bomb_reach());
+		bombs_.emplace_back(texture_sheet_maps_enemies_bombs_items_, current_position, context_,
+		                    EC_BIND_EVENT_FN(Level::on_bomb_explosion), player_.get_bomb_reach());
 		playing_board_[current_position].walkable = false;
 	}
 }
@@ -339,6 +393,38 @@ void Level::update_bomb_rays(au::QuantityF<au::Seconds> timestep) {
 	}
 }
 
+void Level::check_collisions_with_bombs_and_rays() {
+	auto player_position = player_.get_player_position();
+	playing_board_.clamp_coordinates(player_position);
+	for (const auto& bomb_ray : bomb_rays_) {
+		if (player_position == bomb_ray.get_position()) {
+			player_.on_bomb_ray_hit();
+		}
+		for (const auto& enemy : enemies_) {
+			auto enemy_position = enemy->get_position();
+			playing_board_.clamp_coordinates(enemy_position);
+			if (enemy_position == bomb_ray.get_position()) {
+				enemy->on_bomb_ray_hit();
+			}
+		}
+	}
+	for (const auto& bomb : bombs_) {
+		if (!bomb.bomb_is_exploding()) {
+			continue;
+		}
+		if (player_position == bomb.get_position()) {
+			player_.on_bomb_ray_hit();
+		}
+		for (const auto& enemy : enemies_) {
+			auto enemy_position = enemy->get_position();
+			playing_board_.clamp_coordinates(enemy_position);
+			if (enemy_position == bomb.get_position()) {
+				enemy->on_bomb_ray_hit();
+			}
+		}
+	}
+}
+
 void Level::on_bomb_explosion(const eclipse::Point2D& position, uint32_t reach) {
 	on_bomb_ray_collision(position);
 	playing_board_[position].walkable = true;
@@ -363,7 +449,7 @@ void Level::on_bomb_explosion(const eclipse::Point2D& position, uint32_t reach) 
 			left_blocked                = is_position_ray_blocking(ray_position);
 			on_bomb_ray_collision(ray_position);
 			if (!left_blocked && !does_position_contain_bomb_ray(ray_position) && !position_contains_bomb(ray_position)) {
-				bomb_rays_.emplace_back(texture_sheet_, ray_position, context_, initial_ray_state);
+				bomb_rays_.emplace_back(texture_sheet_maps_enemies_bombs_items_, ray_position, context_, initial_ray_state);
 				on_bomb_ray_created(ray_position);
 			}
 			ray_position = position;
@@ -375,7 +461,7 @@ void Level::on_bomb_explosion(const eclipse::Point2D& position, uint32_t reach) 
 			right_blocked               = is_position_ray_blocking(ray_position);
 			on_bomb_ray_collision(ray_position);
 			if (!right_blocked && !does_position_contain_bomb_ray(ray_position) && !position_contains_bomb(ray_position)) {
-				bomb_rays_.emplace_back(texture_sheet_, ray_position, context_, initial_ray_state);
+				bomb_rays_.emplace_back(texture_sheet_maps_enemies_bombs_items_, ray_position, context_, initial_ray_state);
 				on_bomb_ray_created(ray_position);
 			}
 			ray_position = position;
@@ -387,7 +473,7 @@ void Level::on_bomb_explosion(const eclipse::Point2D& position, uint32_t reach) 
 			up_blocked                  = is_position_ray_blocking(ray_position);
 			on_bomb_ray_collision(ray_position);
 			if (!up_blocked && !does_position_contain_bomb_ray(ray_position) && !position_contains_bomb(ray_position)) {
-				bomb_rays_.emplace_back(texture_sheet_, ray_position, context_, initial_ray_state);
+				bomb_rays_.emplace_back(texture_sheet_maps_enemies_bombs_items_, ray_position, context_, initial_ray_state);
 				on_bomb_ray_created(ray_position);
 			}
 			ray_position = position;
@@ -399,7 +485,7 @@ void Level::on_bomb_explosion(const eclipse::Point2D& position, uint32_t reach) 
 			down_blocked                = is_position_ray_blocking(ray_position);
 			on_bomb_ray_collision(ray_position);
 			if (!down_blocked && !does_position_contain_bomb_ray(ray_position) && !position_contains_bomb(ray_position)) {
-				bomb_rays_.emplace_back(texture_sheet_, ray_position, context_, initial_ray_state);
+				bomb_rays_.emplace_back(texture_sheet_maps_enemies_bombs_items_, ray_position, context_, initial_ray_state);
 				on_bomb_ray_created(ray_position);
 			}
 			ray_position = position;
@@ -435,7 +521,9 @@ void Level::on_bomb_ray_collision(const eclipse::Point2D& position) {
 		player_.on_bomb_ray_hit();
 	}
 	for (const auto& enemy : enemies_) {
-		if (enemy->get_position() == position) {
+		auto enemy_position = enemy->get_position();
+		playing_board_.clamp_coordinates(enemy_position);
+		if (enemy_position == position) {
 			enemy->on_bomb_ray_hit();
 		}
 	}
@@ -478,6 +566,9 @@ void Level::check_if_player_touched_by_enemy() {
 	auto player_position = player_.get_player_position();
 	playing_board_.clamp_coordinates(player_position);
 	for (const auto& enemy : enemies_) {
+		if (enemy->is_dying()) {
+			continue;
+		}
 		auto enemy_position = enemy->get_position();
 		playing_board_.clamp_coordinates(enemy_position);
 		if (enemy_position == player_position) {

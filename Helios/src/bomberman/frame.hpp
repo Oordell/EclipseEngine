@@ -18,7 +18,7 @@ public:
 
 	void on_bomb_ray_hit() override {}
 
-	CellContent on_player_interaction() override { return CellContent::solid_wall; }
+	CellContent on_player_interaction() override { return CellContent::wall_solid; }
 
 	[[nodiscard]] bool has_expired() const override { return false; }
 
@@ -41,113 +41,161 @@ private:
 class FrameCornerTopRight : public Frame {
 public:
 	explicit FrameCornerTopRight(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                             const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(4), .y = eclipse::units::pixels(18)}) {}
+	                             const eclipse::ref<eclipse::Scene>& context,
+	                             au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(4) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(23)}) {}
 };
 
 class FrameCornerTopLeft : public Frame {
 public:
 	explicit FrameCornerTopLeft(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                            const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(0), .y = eclipse::units::pixels(18)}) {}
+	                            const eclipse::ref<eclipse::Scene>& context,
+	                            au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(0) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(23)}) {}
 };
 
 class FrameCornerBottomRight : public Frame {
 public:
 	explicit FrameCornerBottomRight(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                                const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(0), .y = eclipse::units::pixels(14)}) {}
+	                                const eclipse::ref<eclipse::Scene>& context,
+	                                au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(4) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(19)}) {}
 };
 
 class FrameCornerBottomLeft : public Frame {
 public:
 	explicit FrameCornerBottomLeft(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                               const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(0), .y = eclipse::units::pixels(14)}) {}
+	                               const eclipse::ref<eclipse::Scene>& context,
+	                               au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(0) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(19)}) {}
 };
 
 class FrameLeft1 : public Frame {
 public:
 	explicit FrameLeft1(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                    const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(0), .y = eclipse::units::pixels(17)}) {}
+	                    const eclipse::ref<eclipse::Scene>& context,
+	                    au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(0) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(22)}) {}
 };
 
 class FrameLeft2 : public Frame {
 public:
 	explicit FrameLeft2(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                    const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(0), .y = eclipse::units::pixels(16)}) {}
+	                    const eclipse::ref<eclipse::Scene>& context,
+	                    au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(0) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(21)}) {}
 };
 
 class FrameLeft3 : public Frame {
 public:
 	explicit FrameLeft3(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                    const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(0), .y = eclipse::units::pixels(15)}) {}
+	                    const eclipse::ref<eclipse::Scene>& context,
+	                    au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(0) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(20)}) {}
 };
 
 class FrameRight1 : public Frame {
 public:
 	explicit FrameRight1(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                     const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(4), .y = eclipse::units::pixels(17)}) {}
+	                     const eclipse::ref<eclipse::Scene>& context,
+	                     au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(4) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(22)}) {}
 };
 
 class FrameRight2 : public Frame {
 public:
 	explicit FrameRight2(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                     const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(4), .y = eclipse::units::pixels(16)}) {}
+	                     const eclipse::ref<eclipse::Scene>& context,
+	                     au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(4) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(21)}) {}
 };
 
 class FrameRight3 : public Frame {
 public:
 	explicit FrameRight3(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                     const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(4), .y = eclipse::units::pixels(15)}) {}
+	                     const eclipse::ref<eclipse::Scene>& context,
+	                     au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(4) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(20)}) {}
 };
 
 class FrameTop1 : public Frame {
 public:
 	explicit FrameTop1(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                   const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(0), .y = eclipse::units::pixels(14)}) {}
+	                   const eclipse::ref<eclipse::Scene>& context,
+	                   au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(1) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(23)}) {}
 };
 
 class FrameTop2 : public Frame {
 public:
 	explicit FrameTop2(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                   const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(1), .y = eclipse::units::pixels(18)}) {}
+	                   const eclipse::ref<eclipse::Scene>& context,
+	                   au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(2) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(23)}) {}
 };
 
 class FrameTop3 : public Frame {
 public:
 	explicit FrameTop3(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                   const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(3), .y = eclipse::units::pixels(18)}) {}
+	                   const eclipse::ref<eclipse::Scene>& context,
+	                   au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(3) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(23)}) {}
 };
 
 class FrameBottom1 : public Frame {
 public:
 	explicit FrameBottom1(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                      const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(0), .y = eclipse::units::pixels(14)}) {}
+	                      const eclipse::ref<eclipse::Scene>& context,
+	                      au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(1) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(19)}) {}
 };
 
 class FrameBottom2 : public Frame {
 public:
 	explicit FrameBottom2(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                      const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(1), .y = eclipse::units::pixels(14)}) {}
+	                      const eclipse::ref<eclipse::Scene>& context,
+	                      au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(2) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(19)}) {}
 };
 
 class FrameBottom3 : public Frame {
 public:
 	explicit FrameBottom3(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
-	                      const eclipse::ref<eclipse::Scene>& context)
-	    : Frame(texture_sheet, position, context, {.x = eclipse::units::pixels(2), .y = eclipse::units::pixels(14)}) {}
+	                      const eclipse::ref<eclipse::Scene>& context,
+	                      au::Quantity<eclipse::units::Pixels, uint32_t> level_type)
+	    : Frame(texture_sheet, position, context,
+	            {.x = eclipse::units::pixels(3) + level_type * details::texture_sheet_level_separator_,
+	             .y = eclipse::units::pixels(19)}) {}
 };
 
 }  // namespace bomberman

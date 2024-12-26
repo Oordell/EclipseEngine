@@ -8,6 +8,17 @@ namespace bomberman {
 enum class PlayerState { idle, running };
 enum class PlayerStatus { alive, dead, game_over };
 enum class PlayerDirection { up, down, left, right };
+enum class DeadPlayerAnimation { first, second, third, forth, fifth, sixth, seventh, eight };
+enum class PlayerColor : uint32_t {
+	white     = 0,
+	black     = 1,
+	red       = 2,
+	yellow    = 3,
+	green     = 4,
+	turquoise = 5,
+	blue      = 6,
+	pink      = 7
+};
 
 struct PlayerStateDescription {
 	PlayerStatus status {PlayerStatus::alive};
@@ -18,19 +29,13 @@ struct PlayerStateDescription {
 	auto operator<=>(const PlayerStateDescription&) const = default;
 };
 
-enum class DeadPlayerAnimation { first, second, third, forth, fifth, sixth, seventh, eight };
-
-static constexpr std::array<DeadPlayerAnimation, 10> DEAD_PLAYER_ANIMATION_SEQUENCE = {
-    DeadPlayerAnimation::first,   DeadPlayerAnimation::second, DeadPlayerAnimation::third, DeadPlayerAnimation::second,
-    DeadPlayerAnimation::third,   DeadPlayerAnimation::forth,  DeadPlayerAnimation::fifth, DeadPlayerAnimation::sixth,
-    DeadPlayerAnimation::seventh, DeadPlayerAnimation::eight};
-
 using namespace eclipse::units;
 
 class Player {
 public:
 	explicit Player(eclipse::ref<eclipse::TextureSheet> texture_sheet,
-	                const eclipse::Point2D& position = {.x = pixels(1), .y = pixels(13)});
+	                const eclipse::Point2D& position = {.x = pixels(1), .y = pixels(13)},
+	                PlayerColor player_color         = PlayerColor::white);
 	~Player() = default;
 	void on_update(au::QuantityF<au::Seconds> timestep);
 	void set_player_position(const eclipse::Point2D& position);
@@ -53,15 +58,9 @@ public:
 
 	[[nodiscard]] const eclipse::Point2D& get_player_position() const { return player_position_; }
 
-	void on_bomb_ray_hit() {
-		EC_DEBUG("BOMB COLLISION!");
-		player_state_.status = PlayerStatus::dead;
-	}
+	void on_bomb_ray_hit() { player_state_.status = PlayerStatus::dead; }
 
-	void on_enemy_collision() {
-		EC_DEBUG("ENEMY COLLISION!");
-		player_state_.status = PlayerStatus::dead;
-	}
+	void on_enemy_collision() { player_state_.status = PlayerStatus::dead; }
 
 	void increase_total_number_of_bombs() { total_num_of_bombs_++; }
 
@@ -74,33 +73,39 @@ public:
 private:
 	void update_player_texture();
 
+	au::Quantity<eclipse::units::Pixels, uint32_t> player_character_;
 	static constexpr eclipse::Map<PlayerStateDescription, SubTextureIndex, 19> sprite_texture_index_ {
-	    {{{{.state = PlayerState::idle, .direction = PlayerDirection::down}, {.x = pixels(0), .y = pixels(5)}},
-	      {{.state = PlayerState::idle, .direction = PlayerDirection::up}, {.x = pixels(0), .y = pixels(4)}},
-	      {{.state = PlayerState::idle, .direction = PlayerDirection::left}, {.x = pixels(0), .y = pixels(6)}},
-	      {{.state = PlayerState::idle, .direction = PlayerDirection::right}, {.x = pixels(0), .y = pixels(6)}},
-	      {{.state = PlayerState::running, .direction = PlayerDirection::down}, {.x = pixels(1), .y = pixels(5)}},
-	      {{.state = PlayerState::running, .direction = PlayerDirection::up}, {.x = pixels(1), .y = pixels(4)}},
-	      {{.state = PlayerState::running, .direction = PlayerDirection::left}, {.x = pixels(1), .y = pixels(6)}},
-	      {{.state = PlayerState::running, .direction = PlayerDirection::right}, {.x = pixels(1), .y = pixels(6)}},
+	    {{{{.state = PlayerState::idle, .direction = PlayerDirection::down}, {.x = pixels(0), .y = pixels(19)}},
+	      {{.state = PlayerState::idle, .direction = PlayerDirection::up}, {.x = pixels(0), .y = pixels(10)}},
+	      {{.state = PlayerState::idle, .direction = PlayerDirection::left}, {.x = pixels(0), .y = pixels(13)}},
+	      {{.state = PlayerState::idle, .direction = PlayerDirection::right}, {.x = pixels(0), .y = pixels(16)}},
+	      {{.state = PlayerState::running, .direction = PlayerDirection::down}, {.x = pixels(0), .y = pixels(18)}},
+	      {{.state = PlayerState::running, .direction = PlayerDirection::up}, {.x = pixels(0), .y = pixels(9)}},
+	      {{.state = PlayerState::running, .direction = PlayerDirection::left}, {.x = pixels(0), .y = pixels(12)}},
+	      {{.state = PlayerState::running, .direction = PlayerDirection::right}, {.x = pixels(0), .y = pixels(15)}},
 	      {{.state = PlayerState::running, .direction = PlayerDirection::down, .texture_index = 1},
-	       {.x = pixels(2), .y = pixels(5)}},
+	       {.x = pixels(0), .y = pixels(17)}},
 	      {{.state = PlayerState::running, .direction = PlayerDirection::up, .texture_index = 1},
-	       {.x = pixels(2), .y = pixels(4)}},
+	       {.x = pixels(0), .y = pixels(8)}},
 	      {{.state = PlayerState::running, .direction = PlayerDirection::left, .texture_index = 1},
-	       {.x = pixels(2), .y = pixels(6)}},
+	       {.x = pixels(0), .y = pixels(11)}},
 	      {{.state = PlayerState::running, .direction = PlayerDirection::right, .texture_index = 1},
-	       {.x = pixels(2), .y = pixels(6)}}}}};
+	       {.x = pixels(0), .y = pixels(14)}}}}};
 
 	static constexpr eclipse::Map<DeadPlayerAnimation, SubTextureIndex, 8> player_texture_index_dead_ {
-	    {{{DeadPlayerAnimation::first, {.x = pixels(0), .y = pixels(5)}},
-	      {DeadPlayerAnimation::second, {.x = pixels(0), .y = pixels(3)}},
-	      {DeadPlayerAnimation::third, {.x = pixels(1), .y = pixels(3)}},
-	      {DeadPlayerAnimation::forth, {.x = pixels(2), .y = pixels(3)}},
-	      {DeadPlayerAnimation::fifth, {.x = pixels(3), .y = pixels(3)}},
-	      {DeadPlayerAnimation::sixth, {.x = pixels(4), .y = pixels(3)}},
-	      {DeadPlayerAnimation::seventh, {.x = pixels(5), .y = pixels(3)}},
-	      {DeadPlayerAnimation::eight, {.x = pixels(6), .y = pixels(3)}}}}};
+	    {{{DeadPlayerAnimation::first, {.x = pixels(0), .y = pixels(7)}},
+	      {DeadPlayerAnimation::second, {.x = pixels(0), .y = pixels(6)}},
+	      {DeadPlayerAnimation::third, {.x = pixels(0), .y = pixels(5)}},
+	      {DeadPlayerAnimation::forth, {.x = pixels(0), .y = pixels(4)}},
+	      {DeadPlayerAnimation::fifth, {.x = pixels(0), .y = pixels(3)}},
+	      {DeadPlayerAnimation::sixth, {.x = pixels(0), .y = pixels(2)}},
+	      {DeadPlayerAnimation::seventh, {.x = pixels(0), .y = pixels(1)}},
+	      {DeadPlayerAnimation::eight, {.x = pixels(0), .y = pixels(0)}}}}};
+
+	static constexpr std::array<DeadPlayerAnimation, 10> DEAD_PLAYER_ANIMATION_SEQUENCE = {
+	    DeadPlayerAnimation::first,   DeadPlayerAnimation::second, DeadPlayerAnimation::third, DeadPlayerAnimation::second,
+	    DeadPlayerAnimation::third,   DeadPlayerAnimation::forth,  DeadPlayerAnimation::fifth, DeadPlayerAnimation::sixth,
+	    DeadPlayerAnimation::seventh, DeadPlayerAnimation::eight};
 
 	eclipse::Point2D player_position_;
 	eclipse::Entity player_entity_;
@@ -114,7 +119,7 @@ private:
 	                                     .tile_width    = pixels(1),
 	                                     .tile_height   = pixels(1),
 	                                     .offset_x      = pixels(0),
-	                                     .offset_y      = pixels(7)});
+	                                     .offset_y      = pixels(0)});
 
 	float player_speed_                      = 2.5F;
 	uint32_t bomb_reach_                     = 1;

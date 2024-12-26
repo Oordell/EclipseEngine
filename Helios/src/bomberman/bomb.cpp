@@ -49,7 +49,7 @@ void Bomb::create_entity(const std::string& entity_name /* = "Bomb"*/) {
 	    .tile_width    = pixels(1),
 	    .tile_height   = pixels(1),
 	    .offset_x      = pixels(0),
-	    .offset_y      = pixels(15)});
+	    .offset_y      = pixels(0)});
 
 	entity_ = context_->create_entity(entity_name);
 	entity_.add_component<eclipse::component::SubTexture>(texture_bomb_);
@@ -70,7 +70,6 @@ void Bomb::update_texture() {
 	SubTextureIndex sub_texture_index;
 	if (bomb_state_ == BombState::placed) {
 		sub_texture_index = bomb_sprite_placed_.at(bomb_placed_animation_sequence_.at(sprite_animation_sequence_counter_));
-
 	} else if (bomb_state_ == BombState::exploded) {
 		sub_texture_index =
 		    bomb_sprite_exploded_.at(bomb_exploded_animation_sequence_.at(sprite_animation_sequence_counter_));

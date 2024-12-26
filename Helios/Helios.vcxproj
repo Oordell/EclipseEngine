@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\bomberman\enemy_data.hpp" />
     <ClInclude Include="src\bomberman\item.hpp" />
     <ClInclude Include="src\bomberman\bomb_ray.hpp" />
     <ClInclude Include="src\bomberman\enemy.hpp" />
@@ -146,6 +147,9 @@
     <ClInclude Include="src\bomberman\level.hpp" />
     <ClInclude Include="src\bomberman\common_types.hpp" />
     <ClInclude Include="src\bomberman\bomb.hpp" />
+    <ClInclude Include="src\bomberman\movement_interface.hpp" />
+    <ClInclude Include="src\bomberman\movement_none.hpp" />
+    <ClInclude Include="src\bomberman\movement_random.hpp" />
     <ClInclude Include="src\bomberman\player.hpp" />
     <ClInclude Include="src\bomberman\playing_board.hpp" />
     <ClInclude Include="src\bomberman\soft_wall.hpp" />
@@ -165,6 +169,7 @@
     <ClCompile Include="src\bomberman\frame.cpp" />
     <ClCompile Include="src\bomberman\game_layer.cpp" />
     <ClCompile Include="src\bomberman\level.cpp" />
+    <ClCompile Include="src\bomberman\movement_random.cpp" />
     <ClCompile Include="src\bomberman\player.cpp" />
     <ClCompile Include="src\bomberman\playing_board.cpp" />
     <ClCompile Include="src\bomberman\soft_wall.cpp" />
@@ -180,8 +185,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="src\bomberman\levels\level_0.txt" />
-    <Text Include="src\bomberman\levels\level_1.txt" />
+    <Text Include="src\bomberman\levels\level1.txt" />
+    <Text Include="src\bomberman\levels\blank_map.txt" />
+    <Text Include="src\bomberman\levels\demo_content.txt" />
+    <Text Include="src\bomberman\levels\test.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

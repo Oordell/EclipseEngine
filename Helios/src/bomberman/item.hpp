@@ -44,7 +44,7 @@ class ItemBombIncrement : public Item {
 public:
 	explicit class ItemBombIncrement(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
 	                                 const eclipse::ref<eclipse::Scene>& context)
-	    : Item(texture_sheet, position, context, {.x = eclipse::units::pixels(2), .y = eclipse::units::pixels(1)}) {}
+	    : Item(texture_sheet, position, context, {.x = eclipse::units::pixels(22), .y = eclipse::units::pixels(10)}) {}
 
 	CellContent on_player_interaction() override {
 		state_ = ItemState::taken;
@@ -56,7 +56,7 @@ class ItemBombReach : public Item {
 public:
 	explicit class ItemBombReach(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
 	                             const eclipse::ref<eclipse::Scene>& context)
-	    : Item(texture_sheet, position, context, {.x = eclipse::units::pixels(1), .y = eclipse::units::pixels(1)}) {}
+	    : Item(texture_sheet, position, context, {.x = eclipse::units::pixels(25), .y = eclipse::units::pixels(10)}) {}
 
 	CellContent on_player_interaction() override {
 		state_ = ItemState::taken;
@@ -68,7 +68,7 @@ class ItemSpeedBoost : public Item {
 public:
 	explicit class ItemSpeedBoost(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
 	                              const eclipse::ref<eclipse::Scene>& context)
-	    : Item(texture_sheet, position, context, {.x = eclipse::units::pixels(3), .y = eclipse::units::pixels(1)}) {}
+	    : Item(texture_sheet, position, context, {.x = eclipse::units::pixels(27), .y = eclipse::units::pixels(9)}) {}
 
 	CellContent on_player_interaction() override {
 		state_ = ItemState::taken;
@@ -80,7 +80,7 @@ class ItemInvincibility : public Item {
 public:
 	explicit class ItemInvincibility(eclipse::ref<eclipse::TextureSheet> texture_sheet, const eclipse::Point2D& position,
 	                                 const eclipse::ref<eclipse::Scene>& context)
-	    : Item(texture_sheet, position, context, {.x = eclipse::units::pixels(4), .y = eclipse::units::pixels(1)}) {}
+	    : Item(texture_sheet, position, context, {.x = eclipse::units::pixels(26), .y = eclipse::units::pixels(10)}) {}
 
 	CellContent on_player_interaction() override {
 		state_ = ItemState::taken;

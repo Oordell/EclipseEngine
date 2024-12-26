@@ -10,34 +10,34 @@ namespace details {
 static constexpr uint32_t NUM_OF_DIFFERENT_FRAME_ELEMENTS = 3;
 }
 
-enum class EnemyType {
-	balloon = CellContent::enemy_balloon,
-	drop    = CellContent::enemy_drop,
-	striped = CellContent::enemy_striped,
-	round   = CellContent::enemy_round,
-	water   = CellContent::enemy_water,
-	ghost   = CellContent::enemy_ghost,
-	bear    = CellContent::enemy_bear,
-	coin    = CellContent::enemy_coin
-};
-
-static constexpr eclipse::Map<char, CellContent, 16> char_to_cell_content = {
-    {{{'_', CellContent::solid_wall},
-      {'b', CellContent::grass},
-      {'c', CellContent::soft_wall},
-      {'d', CellContent::start_pose},
-      {'e', CellContent::enemy_balloon},
-      {'f', CellContent::enemy_drop},
-      {'g', CellContent::enemy_striped},
-      {'h', CellContent::enemy_round},
-      {'i', CellContent::enemy_water},
-      {'j', CellContent::enemy_ghost},
-      {'k', CellContent::enemy_bear},
-      {'l', CellContent::enemy_coin},
-      {'m', CellContent::item_bomb_increment},
-      {'n', CellContent::item_bomb_reach},
-      {'o', CellContent::item_speed_boost},
-      {'p', CellContent::item_invincibility}}}};
+static constexpr eclipse::Map<char, CellContent, 27> char_to_cell_content = {
+    {{{'*', CellContent::wall_solid},
+      {'_', CellContent::grass},
+      {'&', CellContent::start_pose},
+      {'#', CellContent::wall_soft},
+      {'a', CellContent::enemy_red_balloon},
+      {'b', CellContent::enemy_green_duck},
+      {'c', CellContent::enemy_blue_frog},
+      {'d', CellContent::enemy_blue_bat},
+      {'e', CellContent::enemy_white_ghost},
+      {'f', CellContent::enemy_red_flower},
+      {'g', CellContent::enemy_red_bear},
+      {'h', CellContent::enemy_red_coin},
+      {'i', CellContent::enemy_green_fish},
+      {'j', CellContent::enemy_blue_cloud},
+      {'k', CellContent::enemy_blue_fog},
+      {'l', CellContent::enemy_green_smiley_bouncer},
+      {'m', CellContent::enemy_green_croc},
+      {'n', CellContent::enemy_blue_jellyfish},
+      {'o', CellContent::enemy_blue_spinning_top},
+      {'p', CellContent::enemy_green_frog},
+      {'q', CellContent::enemy_green_bomb},
+      {'r', CellContent::enemy_green_white_centipede},
+      {'s', CellContent::enemy_green_bold_roller},
+      {'t', CellContent::item_bomb_increment},
+      {'u', CellContent::item_bomb_reach},
+      {'v', CellContent::item_speed_boost},
+      {'w', CellContent::item_invincibility}}}};
 
 struct TileData {
 	std::vector<eclipse::ref<EntityInterface>> tile_content;
@@ -51,8 +51,7 @@ struct EnemyInfo {
 
 class PlayingBoard {
 public:
-	explicit PlayingBoard(const std::filesystem::path& file_path, eclipse::ref<eclipse::TextureSheet> texture_sheet_frames,
-	                      eclipse::ref<eclipse::TextureSheet> texture_sheet_items,
+	explicit PlayingBoard(const std::filesystem::path& file_path, eclipse::ref<eclipse::TextureSheet> texture_sheet,
 	                      const eclipse::ref<eclipse::Scene>& context);
 	PlayingBoard()  = default;
 	~PlayingBoard() = default;
@@ -75,6 +74,8 @@ public:
 
 	[[nodiscard]] constexpr uint32_t get_height() const { return height_; }
 
+	[[nodiscard]] constexpr uint32_t get_level_type() const { return level_type_; }
+
 	[[nodiscard]] bool is_coordinate_valid(const eclipse::Point2D& coordinate) const {
 		return static_cast<uint32_t>(coordinate.y.in(eclipse::units::pixels) + 0.5F) <= height_ &&
 		       static_cast<uint32_t>(coordinate.x.in(eclipse::units::pixels) + 0.5F) <= width_;
@@ -95,7 +96,7 @@ public:
 
 private:
 	[[nodiscard]] bool is_coordinate_part_of_frame(const eclipse::Point2D& coordinate) const;
-	void add_frame_to_board();
+	void add_frame_to_board(au::Quantity<eclipse::units::Pixels, uint32_t> level_type);
 	[[nodiscard]] void create_level_from_file(const std::filesystem::path& file_path);
 	[[nodiscard]] constexpr std::optional<TileData> convert_char_to_tile_data(char file_character,
 	                                                                          const eclipse::Point2D& coordinate);
@@ -106,8 +107,7 @@ private:
 	uint32_t height_;
 	std::vector<TileData> board_;
 	std::vector<EnemyInfo> enemies_;
-	eclipse::ref<eclipse::TextureSheet> texture_sheet_frames_;
-	eclipse::ref<eclipse::TextureSheet> texture_sheet_items_;
+	eclipse::ref<eclipse::TextureSheet> texture_sheet_;
 	eclipse::ref<eclipse::Scene> context_;
 	eclipse::Point2D player_start_coordinate_ {.x = eclipse::units::pixels(1), .y = eclipse::units::pixels(13)};
 };
